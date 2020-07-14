@@ -1,0 +1,16 @@
+<html>
+<head>
+    <script type="text/javascript">
+      function onChangeTest(changeVal) {
+        alert("Value is " + changeVal.value);
+      }
+    </script>
+  </head>
+  <body>
+    <form>
+      <div>
+          <input type="text" id="test" value ="ABS" onchange="onChangeTest(this)">  
+      </div>
+    </form>
+  </body>
+</html>

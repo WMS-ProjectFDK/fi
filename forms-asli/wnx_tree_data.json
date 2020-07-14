@@ -1,0 +1,39 @@
+[{
+    "id":1,
+    "text":"BAMS",
+    "children":[{
+        "id":13,
+        "text":"Dashboard", 
+        "iconCls":"icon-home"
+
+    },{
+        "id":11,
+        "text":"Master",
+        "state":"open",
+        "children":[{
+            "id":111,
+            "text":"Brand",
+            "iconCls":"icon-brand"
+        },{
+            "id":112,
+            "text":"Vendor",
+            "iconCls":"icon-vendor"
+        },{
+            "id":113,
+            "text":"Crew Function Type",
+            "iconCls":"icon-user"
+        },{
+            "id":114,
+            "text":"Crew Function",
+            "iconCls":"icon-user"
+        },{
+            "id":115,
+            "text":"Crew Position",
+            "iconCls":"icon-user"
+        },{
+            "id":116,
+            "text":"Program Type",
+            "iconCls":"icon-program"
+        }]
+    }
+}]

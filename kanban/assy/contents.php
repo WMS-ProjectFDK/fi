@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>FDK-ASSEMBLY REPORT</title>
+</head>
+<body>
+<div style="width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 11px;">
+  <h4>Dear All</h1>
+  <div>
+    <p>OUTPUT RESULT</p>
+    <table border="1">
+      <tr>
+        <th>NO.</th>
+        <th>ASSY LINE</th>
+        <th>CELL TYPE</th>
+        <th>PLAN</th>
+        <th>ACTUAL</th>
+        <th>GAP</th>
+      </tr>
+      <?php
+      include("../../connect/conn.php");
+      $sql = "select assy_line, cell_type, revisi, bulan, tahun, plan_8, actual_8  from zvw_plan_assy_act
+        where tahun=to_char(sysdate,'yyyy') and bulan=to_char(to_number(to_char(sysdate,'mm')))";
+      $result = oci_parse($connect, $sql);
+      oci_execute($result);
+      $no=1;  $t_plan = 0;  $t_act = 0;   $t_gap = 0;
+      while ($data_cek=oci_fetch_array($result)){
+        $gp = $data_cek[6] - $data_cek[5];
+      ?>
+
+      <tr>
+        <td><?php echo $no++; ?></td>
+        <td><?php echo $data_cek[0]; ?></td>
+        <td><?php echo $data_cek[1]; ?></td>
+        <td><?php echo number_format($data_cek[5]); ?></td>
+        <td><?php echo number_format($data_cek[6]); ?></td>
+        <td><?php echo number_format($gp); ?></td>
+      </tr>
+
+      <?php 
+        $t_plan += $data_cek[5];
+        $t_act += $data_cek[6];
+        $t_gap += $gp;
+      } 
+      ?>
+      <tr>
+        <td colspan="3"><b>TOTAL</b></td>
+        <td><?php echo number_format($t_plan); ?></td>
+        <td><?php echo number_format($t_act); ?></td>
+        <td><?php echo number_format($t_gap); ?></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

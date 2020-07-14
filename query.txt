@@ -1,0 +1,81 @@
+
+    select xx.labelline,
+           xx.actual ActualDaily,
+           xx.planqty PlanDaily,
+           yy.actual  Accum,
+           yy.planqty PlanAccum
+           
+    from (
+          select labelline,
+                 sum(shift1+ shift2 + shift3) Actual,
+                
+                 (select sum(qty) from ztb_label_header r
+                    inner join ztb_label_detail l
+                    on r.wo_no = l.wo_no
+                    where trim(date_prod) = '06-MAR-18'  
+                          and item_type = labelline
+                ) PlanQty
+                 
+          from (
+              select nvl(substr(Labelline,0,instr(labelline,'#')-1),labelline) labelline,
+                     case when shift = 1 then sum(total) else 0 end Shift1,
+                     case when shift = 2 then sum(total) else 0 end Shift2,
+                     case when shift = 3 then sum(total) else 0 end Shift3
+              
+              from (
+              
+              select 
+                     case when (cast(substr(s.startdate,12,2) as int) >= 7 and cast(substr(s.startdate,12,2) as int) < 15) then 1 
+                     else case when (cast(substr(s.startdate,12,2) as int) >= 15 and cast(substr(s.startdate,12,2) as int) < 23) then 2 
+                     else 3 end end shift ,sum(battery_in) total,labelline   
+              from ZTB_KANBAN_LBL s
+              inner join ztb_l_plan b
+              on s.idkanban = b.id
+              inner join ztb_label_header x
+              on x.wo_no = b.wo_no
+              where mulai = '06-MAR-18' and labelline is not null
+              group by labelline ,
+                     case when (cast(substr(s.startdate,12,2) as int) >= 7 and cast(substr(s.startdate,12,2) as int) < 15) then 1 
+                     else case when (cast(substr(s.startdate,12,2) as int) >= 15 and cast(substr(s.startdate,12,2) as int) < 23) then 2 
+                     else 3 end end
+                )a
+                group by labelline,shift
+          )bbb group by labelline
+    )xx
+    inner join (  
+                select labelline,
+                 sum(shift1+ shift2 + shift3) Actual,
+                
+                 (select sum(qty) from ztb_label_header r
+                    inner join ztb_label_detail l
+                    on r.wo_no = l.wo_no
+                    where trim(date_prod) between '01-MAR-18' and  '06-MAR-18'  
+                          and item_type = labelline
+                ) PlanQty
+                 
+          from (
+              select nvl(substr(Labelline,0,instr(labelline,'#')-1),labelline) labelline,
+                     case when shift = 1 then sum(total) else 0 end Shift1,
+                     case when shift = 2 then sum(total) else 0 end Shift2,
+                     case when shift = 3 then sum(total) else 0 end Shift3
+              
+              from (
+              
+              select 
+                     case when (cast(substr(s.startdate,12,2) as int) >= 7 and cast(substr(s.startdate,12,2) as int) < 15) then 1 
+                     else case when (cast(substr(s.startdate,12,2) as int) >= 15 and cast(substr(s.startdate,12,2) as int) < 23) then 2 
+                     else 3 end end shift ,sum(battery_in) total,labelline   
+              from ZTB_KANBAN_LBL s
+              inner join ztb_l_plan b
+              on s.idkanban = b.id
+              inner join ztb_label_header x
+              on x.wo_no = b.wo_no
+              where mulai between '01-MAR-18' and  '06-MAR-18'   and labelline is not null
+              group by labelline ,
+                     case when (cast(substr(s.startdate,12,2) as int) >= 7 and cast(substr(s.startdate,12,2) as int) < 15) then 1 
+                     else case when (cast(substr(s.startdate,12,2) as int) >= 15 and cast(substr(s.startdate,12,2) as int) < 23) then 2 
+                     else 3 end end
+                )a
+                group by labelline,shift
+          )bbb group by labelline
+    )yy on xx.labelline = yy.labelline

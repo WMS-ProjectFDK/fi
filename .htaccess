@@ -1,0 +1,17 @@
+RewriteEngine on 
+
+# Where it's all about
+RewriteRule ^users/([a-zA-Z0-9]+)/?$ users.php?user=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f    
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteCond %{REQUEST_FILENAME}\.php -f 
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f    
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteCond %{REQUEST_FILENAME}\.html -f 
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+RewriteCond %{HTTP_HOST} ^www\.(daltonempire\.nl)$ [NC]
+RewriteRule ^ http://%1%{REQUEST_URI} [L,R=301,NE]
