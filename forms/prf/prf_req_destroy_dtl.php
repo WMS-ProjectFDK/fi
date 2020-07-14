@@ -2,7 +2,7 @@
 
 $id = strval($_REQUEST['idprf']);
 
-include("../connect/conn2.php");
+include("../../connect/conn2.php");
 
 $sql ="delete from ztb_prf_req_details where id='$id'";
 $result = oci_parse($connect, $sql);
