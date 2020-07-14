@@ -6,13 +6,13 @@
 	include("../connect/conn.php");
 
 	$rowno=0;
-	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, a.require_date, a.qty, a.amt, a.ohsas, 
-		nvl(pod.po_no,'-') as po_no, nvl(pod.qty,0) as po_qty,a.qty - nvl(pod.qty,0)  as ost";
+	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, cast(a.require_date as varchar(10))  equire_date, a.qty, a.amt, a.ohsas, 
+		isnull(pod.po_no,'-') as po_no, isnull(pod.qty,0) as po_qty,a.qty - isnull(pod.qty,0)  as ost";
 
 	include("../../connect/conn.php");
 
 	$rowno=0;
-	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, a.require_date, a.qty, a.amt, a.ohsas, 
+	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, cast(a.require_date as varchar(10))  require_date, a.qty, a.amt, a.ohsas, 
 		isnull(pod.po_no,'-') as po_no, isnull(pod.qty,0) as po_qty,a.qty - isnull(pod.qty,0)  as ost
 		from prf_details a
 		inner join item b on a.item_no = b.item_no
@@ -20,9 +20,8 @@
 		left join po_details pod on a.prf_no=pod.prf_no and a.line_no=pod.prf_line_no
 		where a.prf_no='$prf' order by a.line_no asc";
 
-
-
-	$data = sqlsrv_query($connect, $rs);
+    
+	$data = sqlsrv_query($connect, strtoupper($rs)	);
 
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {

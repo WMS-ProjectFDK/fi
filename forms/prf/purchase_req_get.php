@@ -41,15 +41,15 @@
 	#PRF 
   	$sql  = " 
   		select  top 150 a.prf_no, cast(a.prf_date as varchar(10)) as prf_date, a.section_code, replace(a.remark,char(10),'<br>') as remark, a.require_person_code,
-  		a.upto_date, a.reg_date, a.customer_po_no, a.approval_date, a.approval_person_code,
+  		cast(a.upto_date as varchar(10)) upto_date, cast(a.reg_Date as varchar(10))  reg_date, a.customer_po_no, cast(a.approval_date as varchar(10)) as  approval_date, a.approval_person_code,
   		0 as sts_design,
   		case when a.approval_date is null and a.approval_person_code is null then '0' else '1' end sts,
-		a.prf_date as prfdate, isnull(pod.n,0) as jum_po
+		  cast(a.prf_date as varchar(10)) as prfdate, isnull(pod.n,0) as jum_po
   		from prf_header a
   		left join (select prf_no, count(prf_no) as n from po_details group by prf_no) pod on a.prf_no = pod.prf_no
   		$where order by prf_date desc, prf_no desc
 		   "; 
-	$data = sqlsrv_query($connect, $sql);
+	$data = sqlsrv_query($connect, strtoupper($sql));
 	
 
 	$items = array();
@@ -59,53 +59,43 @@
 		array_push($items, $row);
 
 		if ($items[$rowno]->sts == '0'){
-			$datef = $items[$rowno]->prf_date;
-			$items[$rowno]->prf_date = $datef;
+		
 
-			$datef = $items[$rowno]->upto_date;
-			$items[$rowno]->upto_date = $datef;
+			
 
-			$datef = $items[$rowno]->reg_date;
-			$items[$rowno]->reg_date = $datef;
-			if (is_null($items[$rowno]->customer_po_no)) {
+			if (is_null($items[$rowno]->CUSTOMER_PO_NO)) {
 				$items[$rowno]->status = '<span style="color:red;font-size:11px;"><b>NOT APPROVED</b></span>';
 			}else {
 				$items[$rowno]->status = '<span style="color:red;font-size:11px;"><b>FROM MRP</b></span>';
 			}
 		}else{
-			$datef = $items[$rowno]->prf_date;
-			$items[$rowno]->prf_date = $datef;
+		
 
-			$datef = $items[$rowno]->upto_date;
-			$items[$rowno]->upto_date = $datef;
-
-			$datef = $items[$rowno]->reg_date;
-			$items[$rowno]->reg_date = $datef;
-			if (is_null($items[$rowno]->customer_po_no)) {
-				$items[$rowno]->status = '<span style="color:blue;font-size:11px;"><b>APPROVED</b></span>';
+			if (is_null($items[$rowno]->CUSTOMER_PO_NO)) {
+				$items[$rowno]->STATUS = '<span style="color:blue;font-size:11px;"><b>APPROVED</b></span>';
 			}else {
-				$items[$rowno]->status = '<span style="color:blue;font-size:11px;"><b>FROM MRP</b></span>';
+				$items[$rowno]->STATUS = '<span style="color:blue;font-size:11px;"><b>FROM MRP</b></span>';
 			}
 		}
 
-		if ($items[$rowno]->jum_po == '0'){
-			$items[$rowno]->jumlah_po = '<span style="color:red;font-size:11px;"><b>Not Order Processing</b></span>';
+		if ($items[$rowno]->JUM_PO == '0'){
+			$items[$rowno]->JUMLAH_PO = '<span style="color:red;font-size:11px;"><b>Not Order Processing</b></span>';
 		}else{
-			$items[$rowno]->jumlah_po = '<span style="color:blue;font-size:11px;"><b>Order Processing</b></span>';
+			$items[$rowno]->JUMLAH_PO = '<span style="color:blue;font-size:11px;"><b>Order Processing</b></span>';
 		}
 
 		$prf = $items[$rowno]->PRF_NO;
 		$dsign= "select distinct status from ztb_prf_sts where prf_no='$prf'";
-		$d_s = sqlsrv_query($connect, $dsign);
+		$d_s = sqlsrv_query($connect, strtoupper($dsign));
 		
 		$row_d = sqlsrv_fetch_object($d_s);
 		
-		if(intval($row_d->status) == 0 || $row_d->status == ''){
-			$items[$rowno]->sts_dsign = '-';
-			$items[$rowno]->sts_design = '0';
+		if(intval($row_d->STATUS) == 0 || $row_d->STATUS == ''){
+			$items[$rowno]->STS_DSIGN = '-';
+			$items[$rowno]->STS_DESIGN = '0';
 		}else{
-			$items[$rowno]->sts_dsign = '<span style="color:blue;font-size:11px;"><b>NEW DESIGN</b></span>';
-			$items[$rowno]->sts_design = '1';
+			$items[$rowno]->STS_DSIGN = '<span style="color:blue;font-size:11px;"><b>NEW DESIGN</b></span>';
+			$items[$rowno]->STS_DESIGN = '1';
 		}
 
 		$rowno++;

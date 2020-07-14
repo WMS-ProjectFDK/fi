@@ -331,19 +331,19 @@ $menu_id = $_GET['id'];
 				sortName: 'prf_date',
 				sortOrder: 'asc',
 			    columns:[[
-				    {field:'prf_no',title:'PRF NO.',width:75, halign: 'center', align: 'center'},
-				    {field:'prf_date',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true},
-				    {field:'prf_date_1',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true, hidden: true},
-				    {field:'require_person_code',title:'Require<br/>Person',width:60, halign: 'center', align: 'center'},
-				    {field:'approval_date',title:'Approval<br/>Date',width:60, halign: 'center', align: 'center'},
-				    {field:'remark',title:'REMARK', width:200, halign: 'center'},
-				    {field:'status',title:'STATUS', width:70, halign: 'center', align: 'center'},
-				    {field:'sts_dsign',title:'STATUS<br/>DESIGN', width:70, halign: 'center', align: 'center'},
-				    {field:'jumlah_po',title:'STATUS PO', width:100, halign: 'center', align: 'center'},
-				    {field:'sts', hidden: true},
-				    {field:'jum_po', hidden: true},
-				    {field:'customer_po_no', hidden: true},
-				    {field:'sts_dsign', hidden: true}
+				    {field:'PRF_NO',title:'PRF NO.',width:75, halign: 'center', align: 'center'},
+				    {field:'PRF_DATE',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true},
+				    {field:'PRF_DATE_1',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true, hidden: true},
+				    {field:'REQUIRE_PERSON_CODE',title:'Require<br/>Person',width:60, halign: 'center', align: 'center'},
+				    {field:'APPROVAL_DATE',title:'Approval<br/>Date',width:60, halign: 'center', align: 'center'},
+				    {field:'REMARK',title:'REMARK', width:200, halign: 'center'},
+				    {field:'STATUS',title:'STATUS', width:70, halign: 'center', align: 'center'},
+				    {field:'STS_DSIGN',title:'STATUS<br/>DESIGN', width:70, halign: 'center', align: 'center'},
+				    {field:'JUMLAH_PO',title:'STATUS PO', width:100, halign: 'center', align: 'center'},
+				    {field:'STS', hidden: true},
+				    {field:'JUM_PO', hidden: true},
+				    {field:'CUSTOMER_PO_NO', hidden: true},
+				    {field:'STS_DSIGN', hidden: true}
 			    ]],
 			    view: detailview,
 				detailFormatter: function(rowIndex, rowData){
@@ -351,6 +351,7 @@ $menu_id = $_GET['id'];
 				},
 				onExpandRow: function(index,row){
 					var listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
+					
 					listbrg.datagrid({
 	                	title: 'PRF Detail (No: '+row.PRF_NO+')',
 	                	url:'purchase_req_get_detail.php?prf='+row.PRF_NO,
@@ -362,18 +363,18 @@ $menu_id = $_GET['id'];
 						rownumbers: true,
 						fitColumns: true,
 						columns:[[
-			                {field:'item_no',title:'Material No.', halign:'center', align:'center', width:60, sortable: true},
-			                {field:'description', title:'Material Name', halign:'center', width:200},
-			                {field:'uom_q', hidden: true},
-			                {field:'unit_pl', title:'UoM', halign:'center', align:'center', width:40},
-			                {field:'estimate_price', title:'STANDARD<br/>PRICE', halign:'center', align:'right', width:70},
-			                {field:'qty', title:'QTY', halign:'center', align:'right', width:70},
-			                {field:'amt', title:'ESTIMATION<br/>PRICE', halign:'center', align:'right', width:70},
-			                {field:'require_date', title:'REQUIRE<br/>DATE', halign:'center', align:'center', width:70},
-			                {field:'ohsas', title:'DATE CODE', halign:'center', align:'center', width:70},
-			                {field:'po_no', title:'PO No.', halign:'center', align:'center', width:70},
-			                {field:'po_qty', title:'PO QTY', halign:'center', align:'right', width:70},
-			                {field:'ost', title:'OST', halign:'center', align:'right', width:70}
+			                {field:'ITEM_NO',title:'Material No.', halign:'center', align:'center', width:60, sortable: true},
+			                {field:'DESCRIPTION', title:'Material Name', halign:'center', width:200},
+			                {field:'UOM_Q', hidden: true},
+			                {field:'UNIT_PL', title:'UoM', halign:'center', align:'center', width:40},
+			                {field:'ESTIMATE_PRICE', title:'STANDARD<br/>PRICE', halign:'center', align:'right', width:70},
+			                {field:'QTY', title:'QTY', halign:'center', align:'right', width:70},
+			                {field:'AMT', title:'ESTIMATION<br/>PRICE', halign:'center', align:'right', width:70},
+			                {field:'REQUIRE_DATE', title:'REQUIRE<br/>DATE', halign:'center', align:'center', width:70},
+			                {field:'OHSAS', title:'DATE CODE', halign:'center', align:'center', width:70},
+			                {field:'PO_NO', title:'PO No.', halign:'center', align:'center', width:70},
+			                {field:'PO_QTY', title:'PO QTY', halign:'center', align:'right', width:70},
+			                {field:'OST', title:'OST', halign:'center', align:'right', width:70}
 						]],
 						onResize:function(){
 							$('#dg').datagrid('fixDetailRowHeight',index);

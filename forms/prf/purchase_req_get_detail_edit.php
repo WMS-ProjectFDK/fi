@@ -6,7 +6,7 @@
 
 	include("../../connect/conn.php");
 	$rowno=0;
-	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl as unit, a.estimate_price, a.require_date,
+	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl as unit, a.estimate_price, cast(a.require_date as varchar(10))  require_date,
 		a.qty, a.amt, a.ohsas from prf_details a
 		inner join item b on a.item_no = b.item_no
 		inner join unit c on a.uom_q = c.unit_code
