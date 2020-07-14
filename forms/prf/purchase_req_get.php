@@ -39,18 +39,18 @@
 	include("../../connect/conn.php");
 
 	#PRF 
-  	$sql  = "select * from (
-  		select distinct a.prf_no, a.prf_date, a.section_code, replace(a.remark,chr(10),'<br>')+'|' as remark, a.require_person_code,
+  	$sql  = " select top 150  * from (
+  		select  a.prf_no, a.prf_date, a.section_code, replace(a.remark,char(10),'<br>')+'|' as remark, a.require_person_code,
   		a.upto_date, a.reg_date, a.customer_po_no, a.approval_date, a.approval_person_code,
   		0 as sts_design,
   		case when a.approval_date is null and a.approval_person_code is null then '0' else '1' end sts,
-		a.prf_date as prfdate, nvl(pod.n,0) as jum_po
+		a.prf_date as prfdate, isnull(pod.n,0) as jum_po
   		from prf_header a
   		inner join prf_details b on a.prf_no = b.prf_no
   		inner join item d on b.item_no = d.item_no
   		left join (select prf_no, count(prf_no) as n from po_details group by prf_no) pod on a.prf_no = pod.prf_no
-  		$where order by a.prf_date desc, a.prf_no desc
-  		) where rownum <=150 ";
+  		$where)sa order by prf_date desc, prf_no desc
+  		 ";
 	$data = sqlsrv_query($connect, $sql);
 	
 
