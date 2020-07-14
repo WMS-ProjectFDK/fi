@@ -9,11 +9,11 @@ $menu_id = $_GET['id'];
     <head>
     <meta charset="UTF-8">
     <title>PURCHASE REQUESTION</title>
-<<<<<<< HEAD
-    <link rel="icon" type="image/png" href="../favicon.png">
-=======
+
     <link rel="icon" type="image/png" href="../../favicon.png">
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
 	<script language="javascript">
 			function confirmLogOut(){
 			var is_confirmed;
@@ -82,11 +82,9 @@ $menu_id = $_GET['id'];
 				</div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">PRF No.</span>
-<<<<<<< HEAD
+
 					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
-=======
-					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 					<label><input type="checkbox" name="ck_prf" id="ck_prf" checked="true">All</input></label>
 				</div>
 			</div>
