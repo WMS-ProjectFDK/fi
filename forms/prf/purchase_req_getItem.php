@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	$result = array();
-	include("../connect/conn.php");
+	include("../../connect/conn.php");
 	$s_item =  isset($_REQUEST['s_item']) ? strval($_REQUEST['s_item']) : '';
 
 	$rowno=0;
@@ -14,10 +14,10 @@
 	    i.stock_subject_code in (0,1,2,4,7) and
     	(c.ITEM_NO is null or c.ALTER_PROCEDURE = (select min(ALTER_PROCEDURE) from ITEMMAKER where ITEM_NO = i.ITEM_NO))
 		order by i.description";
-	$data = oci_parse($connect, $rs);
+	$data = sqlsrv_query($connect, $rs);
 	oci_execute($data);
 	$items = array();
-	while($row = oci_fetch_object($data)) {
+	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
 		$rowno++;
 	}

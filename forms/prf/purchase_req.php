@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $menu_id = $_GET['id'];
 ?>
@@ -9,7 +9,7 @@ $menu_id = $_GET['id'];
     <head>
     <meta charset="UTF-8">
     <title>PURCHASE REQUESTION</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="icon" type="image/png" href="../../favicon.png">
 	<script language="javascript">
 			function confirmLogOut(){
 			var is_confirmed;
@@ -17,16 +17,16 @@ $menu_id = $_GET['id'];
 			return is_confirmed;
 			}
 	</script> 
-	<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
-	<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-	<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-	<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-	<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/style.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+	<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+	<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
 	<style>
 	*{
 	font-size:12px;
@@ -62,7 +62,7 @@ $menu_id = $_GET['id'];
 	</style>
     </head>
     <body>
-	<?php include ('../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
+	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
 	
 	<table id="dg" title="PURCHASE REQUESTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
 

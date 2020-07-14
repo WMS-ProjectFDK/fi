@@ -10,9 +10,9 @@ $prf = isset($_REQUEST['prf']) ? strval($_REQUEST['prf']) : '';
 
 $sql_h = "select a.*, (select count(*) from prf_details where prf_no=a.prf_no) as jum_dtl, rtrim(replace(a.remark,chr(10),'<br/>'),'|') as remark1 
 	from prf_header a where a.prf_no='$prf' ";
-$head = oci_parse($connect, $sql_h);
-oci_execute($head);
-$dt_h = oci_fetch_object($head);
+$head = sqlsrv_query($connect, $sql_h);
+
+$dt_h = sqlsrv_fetch_object($head);
 
 if($dt_h->JUM_DTL<=10 OR $dt_h->JUM_DTL>=20){
 	$plus_ln = "";
@@ -28,8 +28,8 @@ $qry = "select a.*, b.item, b.description, c.unit_pl from prf_details a
 	inner join unit c on a.uom_q=c.unit_code
 	where a.prf_no='$prf'
 	order by a.line_no asc";
-$result = oci_parse($connect, $qry);
-oci_execute($result);
+$result = sqlsrv_query($connect, $qry);
+
 
 $date=date("d M y / H:i:s",time());
 $content = "	

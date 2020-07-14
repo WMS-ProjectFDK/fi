@@ -2,7 +2,7 @@
 header('Content-Type: text/plain; charset="UTF-8"');
 error_reporting(0);
 session_start();
-include("../connect/conn.php");
+include("../../connect/conn.php");
 
 if (isset($_SESSION['id_wms'])){
 	$data = isset($_REQUEST['data']) ? strval($_REQUEST['data']) : '';
@@ -59,10 +59,10 @@ if (isset($_SESSION['id_wms'])){
 
 		if($pu_line_ada == 'NEW'){
 			//INSERT PRF DETAILS
-			$q_max = "select cast(max(line_no) as number)+1 as line_no from prf_details where prf_no='$pu_prf'";
-			$data_max = oci_parse($connect, $q_max);
-			oci_execute($data_max);
-			$rowMax = oci_fetch_object($data_max);
+			$q_max = "select cast(max(line_no) as int)+1 as line_no from prf_details where prf_no='$pu_prf'";
+			$data_max = sqlsrv_query($connect, $q_max);
+			
+			$rowMax = sqlsrv_fetch_object($data_max);
 
 			$pu_line = $rowMax->LINE_NO;
 
@@ -73,9 +73,9 @@ if (isset($_SESSION['id_wms'])){
 			$field_dtl .= "uom_q,"              ; $value_dtl .= "$pu_unit,"								;
 			$field_dtl .= "estimate_price,"     ; $value_dtl .= "$pu_s_price,"							;
 			$field_dtl .= "amt,"                ; $value_dtl .= "round($pu_qty * $pu_s_price,2),"		;
-			$field_dtl .= "require_date,"       ; $value_dtl .= "to_date('$pu_require','yyyy-mm-dd'),"	;
-			$field_dtl .= "upto_date,"          ; $value_dtl .= "sysdate,"								;
-			$field_dtl .= "reg_date,"           ; $value_dtl .= "sysdate,"								;
+			$field_dtl .= "require_date,"       ; $value_dtl .= "$pu_require"	;
+			$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"								;
+			$field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"								;
 			
 			if($pu_sts=='1'){
 				$field_dtl .= "remainder_qty,"     ; $value_dtl .= "$pu_qty,"							;		
@@ -85,9 +85,9 @@ if (isset($_SESSION['id_wms'])){
 			chop($field_dtl) ;                  chop($value_dtl) ;
 
 			$ins2 = "insert into prf_details ($field_dtl) VALUES ($value_dtl)";
-			$data_ins2 = oci_parse($connect, $ins2);
-			oci_execute($data_ins2);
-			$pesan = oci_error($data_ins2);
+			$data_ins2 = sqlsrv_query($connect, $ins2);
+			
+			$pesan = sqlsrv_errors($data_ins2);
 			$msg .= $pesan['message'];
 			if($msg != ''){
 				$msg .= " Add New Item Process Error  : $ins2";
@@ -97,9 +97,9 @@ if (isset($_SESSION['id_wms'])){
 			$field_upd  = "qty=$pu_qty,"; 
 			$field_upd .= "estimate_price=$pu_s_price,"; 
 			$field_upd .= "amt=round($pu_qty * $pu_s_price,2),";
-			$field_upd .= "require_date=to_date('$pu_require','yyyy-mm-dd'),"; 
-			$field_upd .= "upto_date=sysdate,";
-			$field_upd .= "reg_date=sysdate,";
+			$field_upd .= "require_date='$pu_require',"; 
+			$field_upd .= "upto_date=getdate(),";
+			$field_upd .= "reg_date=getdate(),";
 			
 			if($pu_sts=='1'){
 				$field_upd .= "remainder_qty=$pu_qty,";	
@@ -108,10 +108,10 @@ if (isset($_SESSION['id_wms'])){
 			$field_upd .= "ohsas='$pu_ohsas'";
 
 			$upd2 = "update prf_details set $field_upd where prf_no='$pu_prf' and line_no=$pu_line_ada and item_no = $pu_item";
-			$data_upd2 = oci_parse($connect, $upd2);
-			oci_execute($data_upd2);
+			$data_upd2 = sqlsrv_query($connect, $upd2);
 			
-			$pesan = oci_error($data_upd2);
+			
+			$pesan = sqlsrv_errors($data_upd2);
 			$msg .= $pesan['message'];
 			if($msg != ''){
 				$msg .= " Update Item Process Error  : $upd2";
@@ -122,11 +122,11 @@ if (isset($_SESSION['id_wms'])){
 
 	//UPDATE GR_HEADERS
 	$upd = "update prf_header set 
-		prf_date=to_date('$pu_date','yyyy-mm-dd'), customer_po_no = '$pu_cust_po_no', remark = $pu_rmark_fix, require_person_code = '$user'
+		prf_date='$pu_date', customer_po_no = '$pu_cust_po_no', remark = $pu_rmark_fix, require_person_code = '$user'
 		where prf_no='$pu_prf'";
-	$data_upd = oci_parse($connect, $upd);
-	oci_execute($data_upd);
-	$pesan = oci_error($data_upd);
+	$data_upd = sqlsrv_query($connect, $upd);
+	
+	$pesan = sqlsrv_errors($data_upd);
 	$msg .= $pesan['message'];
 	if($msg != ''){
 		$msg .= " Update Header Process Error  : $upd";
@@ -134,9 +134,9 @@ if (isset($_SESSION['id_wms'])){
 	}
 
 	$upd3 = "update ztb_prf_sts set status=$sts where prf_no='$pu_prf'";
-	$data_upd3 = oci_parse($connect, $upd3);
-	oci_execute($data_upd3);
-	$pesan = oci_error($upd3);
+	$data_upd3 = sqlsrv_query($connect, $upd3);
+
+	$pesan = sqlsrv_errors($upd3);
 	$msg .= $pesan['message'];
 	if($msg != ''){
 		$msg .= " Update PRF Status Process Error  : $upd3";

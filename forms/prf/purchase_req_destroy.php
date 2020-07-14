@@ -4,9 +4,9 @@ include("../connect/conn.php");
 $msg = '';
 
 $del = "delete from prf_header where prf_no='".$prf_no."'";
-$data_del = oci_parse($connect, $del);
-oci_execute($data_del);
-$pesan = oci_error($data_del);
+$data_del = sqlsrv_query($connect, $del);
+
+$pesan = sqlsrv_errors($data_del);
 $msg .= $pesan['message'];
 
 if($msg != ''){
@@ -15,9 +15,9 @@ if($msg != ''){
 }
 
 $del2 = "delete from prf_details where prf_no='".$prf_no."'";
-$data_del2 = oci_parse($connect, $del2);
-oci_execute($data_del2);
-$pesan = oci_error($data_del2);
+$data_del2 = sqlsrv_query($connect, $del2);
+
+$pesan = sqlsrv_errors($data_del2);
 $msg .= $pesan['message'];
 
 if($msg != ''){
@@ -26,9 +26,8 @@ if($msg != ''){
 }
 
 $del3 = "delete from ztb_prf_sts where prf_no='".$prf_no."'";
-$data_del3 = oci_parse($connect, $del3);
-oci_execute($data_del3);
-$pesan = oci_error($data_del3);
+$data_del3 = sqlsrv_query($connect, $del3);
+$pesan = sqlsrv_errors($data_del3);
 $msg .= $pesan['message'];
 
 if($msg != ''){
