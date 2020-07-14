@@ -91,7 +91,7 @@ $menu_id = $_GET['id'];
 			<div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">Item No.</span>
-					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
 					onSelect:function(rec){
 						var spl = rec.id_name_item;
 						var sp = spl.split(' - ');
@@ -362,18 +362,18 @@ $menu_id = $_GET['id'];
 						rownumbers: true,
 						fitColumns: true,
 						columns:[[
-			                {field:'ITEM_NO',title:'Material No.', halign:'center', align:'center', width:60, sortable: true},
-			                {field:'DESCRIPTION', title:'Material Name', halign:'center', width:200},
-			                {field:'UOM_Q', hidden: true},
-			                {field:'UNIT_PL', title:'UoM', halign:'center', align:'center', width:40},
-			                {field:'ESTIMATE_PRICE', title:'STANDARD<br/>PRICE', halign:'center', align:'right', width:70},
-			                {field:'QTY', title:'QTY', halign:'center', align:'right', width:70},
-			                {field:'AMT', title:'ESTIMATION<br/>PRICE', halign:'center', align:'right', width:70},
-			                {field:'REQUIRE_DATE', title:'REQUIRE<br/>DATE', halign:'center', align:'center', width:70},
-			                {field:'OHSAS', title:'DATE CODE', halign:'center', align:'center', width:70},
-			                {field:'PO_NO', title:'PO No.', halign:'center', align:'center', width:70},
-			                {field:'PO_QTY', title:'PO QTY', halign:'center', align:'right', width:70},
-			                {field:'OST', title:'OST', halign:'center', align:'right', width:70}
+			                {field:'item_no',title:'Material No.', halign:'center', align:'center', width:60, sortable: true},
+			                {field:'description', title:'Material Name', halign:'center', width:200},
+			                {field:'uom_q', hidden: true},
+			                {field:'unit_pl', title:'UoM', halign:'center', align:'center', width:40},
+			                {field:'estimate_price', title:'STANDARD<br/>PRICE', halign:'center', align:'right', width:70},
+			                {field:'qty', title:'QTY', halign:'center', align:'right', width:70},
+			                {field:'amt', title:'ESTIMATION<br/>PRICE', halign:'center', align:'right', width:70},
+			                {field:'require_date', title:'REQUIRE<br/>DATE', halign:'center', align:'center', width:70},
+			                {field:'ohsas', title:'DATE CODE', halign:'center', align:'center', width:70},
+			                {field:'po_no', title:'PO No.', halign:'center', align:'center', width:70},
+			                {field:'po_qty', title:'PO QTY', halign:'center', align:'right', width:70},
+			                {field:'ost', title:'OST', halign:'center', align:'right', width:70}
 						]],
 						onResize:function(){
 							$('#dg').datagrid('fixDetailRowHeight',index);
