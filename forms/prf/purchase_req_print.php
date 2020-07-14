@@ -1,6 +1,10 @@
 <?php 
 //error_reporting(0);
+<<<<<<< HEAD
+include("../../connect/conn.php");
+=======
 include("../connect/conn.php");
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 session_start();
 date_default_timezone_set('Asia/Jakarta');
 $user_name = $_SESSION['id_wms'];
@@ -11,7 +15,10 @@ $prf = isset($_REQUEST['prf']) ? strval($_REQUEST['prf']) : '';
 $sql_h = "select a.*, (select count(*) from prf_details where prf_no=a.prf_no) as jum_dtl, rtrim(replace(a.remark,chr(10),'<br/>'),'|') as remark1 
 	from prf_header a where a.prf_no='$prf' ";
 $head = sqlsrv_query($connect, $sql_h);
+<<<<<<< HEAD
+=======
 
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 $dt_h = sqlsrv_fetch_object($head);
 
 if($dt_h->JUM_DTL<=10 OR $dt_h->JUM_DTL>=20){
@@ -23,14 +30,24 @@ if($dt_h->JUM_DTL<=10 OR $dt_h->JUM_DTL>=20){
 }
 
 $result = array();
+<<<<<<< HEAD
+$qry = "select a.*, b.item, b.description, c.unit_pl 
+	from prf_details a 
+	left join item b on a.item_no=b.item_no
+	left join unit c on a.uom_q=c.unit_code
+=======
 $qry = "select a.*, b.item, b.description, c.unit_pl from prf_details a 
 	inner join item b on a.item_no=b.item_no
 	inner join unit c on a.uom_q=c.unit_code
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	where a.prf_no='$prf'
 	order by a.line_no asc";
 $result = sqlsrv_query($connect, $qry);
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 $date=date("d M y / H:i:s",time());
 $content = "	
 	<style>
@@ -90,7 +107,11 @@ $content .= "
 		</tr>
 	</thead>";
 $total=0;
+<<<<<<< HEAD
+while ($data=sqlsrv_fetch_object($result)){
+=======
 while ($data=oci_fetch_object($result)){
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	$content .= "
 		<tr>
 			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->LINE_NO."</td>
