@@ -3,7 +3,7 @@
 	ini_set('memory_limit', '-1');
 
 	$serverName = "localhost"; 
-	$connectionInfo = array( "Database"=>"FDKSYS20","uid"=>"sa","pwd"=>"accpac");
+	$connectionInfo = array( "Database"=>"FDKSYS20","uid"=>"sa","pwd"=>"P@ssw0rd");
 	$connect = sqlsrv_connect( $serverName, $connectionInfo);
 	
 	if($connect) {
