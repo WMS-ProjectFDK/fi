@@ -36,6 +36,7 @@
 		$where ="where $prf_date $item_no $prf a.section_code=100 ";
 	}
 	
+<<<<<<< HEAD
 	include("../connect/conn.php");
 
 	#PRF 
@@ -45,19 +46,39 @@
   		0 as sts_design,
   		case when a.approval_date is null and a.approval_person_code is null then '0' else '1' end sts,
 		to_char(a.prf_date,'yyyy-mm-dd') as prfdate, nvl(pod.n,0) as jum_po
+=======
+	include("../../connect/conn.php");
+
+	#PRF 
+  	$sql  = "select * from (
+  		select distinct a.prf_no, a.prf_date, a.section_code, replace(a.remark,chr(10),'<br>')+'|' as remark, a.require_person_code,
+  		a.upto_date, a.reg_date, a.customer_po_no, a.approval_date, a.approval_person_code,
+  		0 as sts_design,
+  		case when a.approval_date is null and a.approval_person_code is null then '0' else '1' end sts,
+		a.prf_date as prfdate, nvl(pod.n,0) as jum_po
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
   		from prf_header a
   		inner join prf_details b on a.prf_no = b.prf_no
   		inner join item d on b.item_no = d.item_no
   		left join (select prf_no, count(prf_no) as n from po_details group by prf_no) pod on a.prf_no = pod.prf_no
   		$where order by a.prf_date desc, a.prf_no desc
   		) where rownum <=150 ";
+<<<<<<< HEAD
 	$data = oci_parse($connect, $sql);
 	oci_execute($data);
+=======
+	$data = sqlsrv_query($connect, $sql);
+	
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 
 	$items = array();
 	$rowno=0;
 	$FromMRP=0;
+<<<<<<< HEAD
 	while($row = oci_fetch_object($data)){
+=======
+	while($row = sqlsrv_fetch_object($data)){
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 		array_push($items, $row);
 
 		if ($items[$rowno]->STS == '0'){
@@ -82,9 +103,15 @@
 
 		$prf = $items[$rowno]->PRF_NO;
 		$dsign= "select distinct status from ztb_prf_sts where prf_no='$prf'";
+<<<<<<< HEAD
 		$d_s = oci_parse($connect, $dsign);
 		oci_execute($d_s);
 		$row_d = oci_fetch_object($d_s);
+=======
+		$d_s = sqlsrv_query($connect, $dsign);
+		
+		$row_d = sqlsrv_fetch_object($d_s);
+>>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 		
 		if(intval($row_d->STATUS) == 0 || $row_d->STATUS == ''){
 			$items[$rowno]->STS_DSIGN = '-';

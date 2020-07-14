@@ -1,19 +1,14 @@
 <?php 
 session_start();
-require_once('../___loginvalidation.php');
+require_once('___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
-$menu_id = $_GET['id'];
 ?>
 <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <title>PURCHASE REQUESTION</title>
-<<<<<<< HEAD
     <link rel="icon" type="image/png" href="../favicon.png">
-=======
-    <link rel="icon" type="image/png" href="../../favicon.png">
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	<script language="javascript">
 			function confirmLogOut(){
 			var is_confirmed;
@@ -21,16 +16,16 @@ $menu_id = $_GET['id'];
 			return is_confirmed;
 			}
 	</script> 
-	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
-	<link rel="stylesheet" type="text/css" href="../../css/style.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
-	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
-	<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
-	<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
+	<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="../themes/color.css" />
+	<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../js/datagrid-filter.js"></script>
+	<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
+	<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
 	<style>
 	*{
 	font-size:12px;
@@ -66,59 +61,8 @@ $menu_id = $_GET['id'];
 	</style>
     </head>
     <body>
-	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
+	<?php include ('../ico_logout.php'); ?>
 	
-	<table id="dg" title="PURCHASE REQUESTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
-
-	<div id="toolbar">
-		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:940px; height:75px; float:left;"><legend>Purchase Requestion Filter</legend>
-			<div style="width:470px; float:left;">
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">PRF Date</span>
-					<input style="width:85px;" name="date_awal" id="date_awal" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-					to 
-					<input style="width:85px;" name="date_akhir" id="date_akhir" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-					<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">PRF No.</span>
-<<<<<<< HEAD
-					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
-=======
-					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
-					<label><input type="checkbox" name="ck_prf" id="ck_prf" checked="true">All</input></label>
-				</div>
-			</div>
-			<div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Item No.</span>
-					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
-					onSelect:function(rec){
-						var spl = rec.id_name_item;
-						var sp = spl.split(' - ');
-						$('#txt_item_name').textbox('setValue', sp[1]);
-					}"></select>
-					<label><input type="checkbox" name="ck_item_no" id="ck_item_no" checked="true">All</input></label>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Item Name</span>
-					<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox" disabled=""/>
-				</div>
-			</div>
-		</fieldset>
-		<div style="clear:both;"></div>
-		<div style="margin-top: 5px;margin: 5px;">
-			<span style="width:50px;display:inline-block;">search</span>
-			<input style="width:150px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" />
-			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addPRF()"><i class="fa fa-plus" aria-hidden="true"></i> Add PRF</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="edit" class="easyui-linkbutton c2" onclick="editPRF()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit PRF</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="delete" class="easyui-linkbutton c2" onclick="destroyPRF()"><i class="fa fa-trash" aria-hidden="true"></i> Delete PRF</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="print" class="easyui-linkbutton c2" onclick="printPRF()"><i class="fa fa-print" aria-hidden="true"></i> Print PRF</a>
-		</div>
-	</div>
-
 	<!-- ADD -->
 	<div id='dlg_add' class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-add" data-options="modal:true">
 		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1045px; float:left; margin:5px;"><legend>Create Purchase Requestion</legend>
@@ -205,6 +149,51 @@ $menu_id = $_GET['id'];
 	</div>
 	<!-- END EDIT -->
 
+	<div id="toolbar">
+		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:940px; height:75px; float:left;"><legend>Purchase Requestion Filter</legend>
+			<div style="width:470px; float:left;">
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">PRF Date</span>
+					<input style="width:85px;" name="date_awal" id="date_awal" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+					to 
+					<input style="width:85px;" name="date_akhir" id="date_akhir" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">PRF No.</span>
+					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
+					<label><input type="checkbox" name="ck_prf" id="ck_prf" checked="true">All</input></label>
+				</div>
+			</div>
+			<div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">Item No.</span>
+					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+					onSelect:function(rec){
+						var spl = rec.id_name_item;
+						var sp = spl.split(' - ');
+						$('#txt_item_name').textbox('setValue', sp[1]);
+					}"></select>
+					<label><input type="checkbox" name="ck_item_no" id="ck_item_no" checked="true">All</input></label>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">Item Name</span>
+					<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox" disabled=""/>
+				</div>
+			</div>
+		</fieldset>
+		<div style="clear:both;"></div>
+		<div style="margin-top: 5px;margin: 5px;">
+			<span style="width:50px;display:inline-block;">search</span>
+			<input style="width:150px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" />
+			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
+			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" onclick="addPRF()"><i class="fa fa-plus" aria-hidden="true"></i> Add PRF</a>
+			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" onclick="editPRF()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit PRF</a>
+			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" onclick="destroyPRF()"><i class="fa fa-trash" aria-hidden="true"></i> Delete PRF</a>
+			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" onclick="printPRF()"><i class="fa fa-print" aria-hidden="true"></i> Print PRF</a>
+		</div>
+	</div>
+	<table id="dg" title="PURCHASE REQUESTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
+
 	<script type="text/javascript">
 		function myformatter(date){
 			var y = date.getFullYear();
@@ -255,56 +244,7 @@ $menu_id = $_GET['id'];
 		    }
 		}
 
-		function access_log(){
-			//ADD//UPDATE/T
-			//DELETE/T
-			//PRINT/T
-
-			var add = "<?=$exp[0]?>";
-			var upd = "<?=$exp[1]?>";
-			var del = "<?=$exp[2]?>";
-			var prn = "<?=$exp[4]?>";
-
-			if (add == 'ADD/T'){
-				$('#add').linkbutton('enable');
-			}else{
-				$('#add').linkbutton('disable');
-			}
-
-			if (upd == 'UPDATE/T'){
-				$('#edit').linkbutton('enable');
-			}else{
-				$('#edit').linkbutton('disable');
-			}
-
-			if (del == 'DELETE/T'){
-				$('#delete').linkbutton('enable');
-			}else{
-				$('#delete').linkbutton('disable');
-			}
-
-			if (prn == 'PRINT/T'){
-				$('#print').linkbutton('enable');
-			}else{
-				$('#print').linkbutton('disable');
-			}			
-		}
-
 		$(function(){
-			access_log();
-			$('#date_awal').datebox('disable');
-			$('#date_akhir').datebox('disable');
-			$('#ck_date').change(function(){
-				if ($(this).is(':checked')) {
-					$('#date_awal').datebox('disable');
-					$('#date_akhir').datebox('disable');
-				}
-				if (!$(this).is(':checked')) {
-					$('#date_awal').datebox('enable');
-					$('#date_akhir').datebox('enable');
-				};
-			})
-
 			$('#cmb_prf_no').combobox('disable');
 			$('#ck_prf').change(function(){
 				if ($(this).is(':checked')) {
@@ -338,12 +278,10 @@ $menu_id = $_GET['id'];
 				    {field:'PRF_DATE_1',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true, hidden: true},
 				    {field:'REQUIRE_PERSON_CODE',title:'Require<br/>Person',width:60, halign: 'center', align: 'center'},
 				    {field:'APPROVAL_DATE',title:'Approval<br/>Date',width:60, halign: 'center', align: 'center'},
-				    {field:'REMARK',title:'REMARK', width:200, halign: 'center'},
+				    {field:'REMARK',title:'REMARK', width:250, halign: 'center'},
 				    {field:'STATUS',title:'STATUS', width:70, halign: 'center', align: 'center'},
 				    {field:'STS_DSIGN',title:'STATUS<br/>DESIGN', width:70, halign: 'center', align: 'center'},
-				    {field:'JUMLAH_PO',title:'STATUS PO', width:100, halign: 'center', align: 'center'},
 				    {field:'STS', hidden: true},
-				    {field:'JUM_PO', hidden: true},
 				    {field:'CUSTOMER_PO_NO', hidden: true},
 				    {field:'STS_DESIGN', hidden: true}
 			    ]],
@@ -593,33 +531,19 @@ $menu_id = $_GET['id'];
 		})
 
 		function filterData(){
-			var ck_date = 'false';
-			var ck_item_no = 'false';
-			var ck_prf = 'false';
-			var flag = 0;
-
-			if($('#ck_date').attr("checked")){
-				ck_date='true';
-				flag += 1;
-			}
+			var ck_item_no='false';
+			var ck_prf='false';
 
 			if($('#ck_item_no').attr("checked")){
 				ck_item_no='true';
-				flag += 1;
 			}
 			if($('#ck_prf').attr("checked")){
 				ck_prf='true';
-				flag += 1;
 			}
 			
-			if(flag == 3) {
-				$.messager.alert('INFORMATION','No filter data, system only show 150 records','info');
-			}
-
 			$('#dg').datagrid('load', {
 				date_awal: $('#date_awal').datebox('getValue'),
 				date_akhir: $('#date_akhir').datebox('getValue'),
-				ck_date: ck_date,
 				cmb_item_no: $('#cmb_item_no').combobox('getValue'),
 				ck_item_no: ck_item_no,
 				cmb_prf_no: $('#cmb_prf_no').combobox('getValue'),
@@ -670,33 +594,35 @@ $menu_id = $_GET['id'];
 		function remove_item_add(){
 			var row = $('#dg_add').datagrid('getSelected');	
 			if (row){
-				var idx = $("#dg_add").datagrid("getRowIndex", row);
-				$('#dg_add').datagrid('deleteRow', idx);
+				$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+					if(r){
+						var idx = $("#dg_add").datagrid("getRowIndex", row);
+						$('#dg_add').datagrid('deleteRow', idx);
+					}	
+				});
 			}
 		}
 
-		function simpan(){
-			var rows = [];
+		function simpan(){	
 			var ck_dsign='false';
 			
 			if($('#ck_new_add').attr("checked")){
 				ck_dsign='true';
 			}
-//
+
 			var t = $('#dg_add').datagrid('getRows');
 			var total = t.length;
 			var jmrow=0;
-
 			for(i=0;i<total;i++){
 				jmrow = i+1;
 				$('#dg_add').datagrid('endEdit',i);
-				rows.push({
+				$.post('purchase_req_save.php',{
 					pu_prf: $('#prf_no_add').textbox('getValue'),
 					pu_line: jmrow,
 					pu_date: $('#prf_date_add').datebox('getValue'),
 					pu_cust_po_no: $('#cust_pono_add').textbox('getValue'),
 					pu_ck_new: ck_dsign,
-					pu_rmark: $('#remark_add').textbox('getValue').replace(/\n/g,"<br>"),
+					pu_rmark: $('#remark_add').textbox('getValue'),
 					pu_item: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,
 					pu_unit: $('#dg_add').datagrid('getData').rows[i].UOM_Q,
 					pu_s_price: $('#dg_add').datagrid('getData').rows[i].ESTIMATE_PRICE.replace(/,/g,''),
@@ -704,72 +630,21 @@ $menu_id = $_GET['id'];
 					pu_qty: $('#dg_add').datagrid('getData').rows[i].QTY.replace(/,/g,''),
 					pu_amt: $('#dg_add').datagrid('getData').rows[i].AMT,
 					pu_ohsas: $('#dg_add').datagrid('getData').rows[i].OHSAS
-				});
-			}
-			
-			var myJSON = JSON.stringify(rows);
-			var str_unescape=unescape(myJSON);
-			
-			$.post('purchase_req_save.php',{
-				data: unescape(str_unescape)
-			}).done(function(res){
-				if(res == '"success"'){
+				}).done(function(res){
+					//alert(res);
+					console.log(res);
 					$('#dlg_add').dialog('close');
 					$('#dg').datagrid('reload');
-					$.messager.alert('INFORMATION','Insert Data Success..!!<br/>PRF No. : '+$('#prf_no_add').textbox('getValue'),'info');
-					$.messager.progress('close');
-					$.messager.confirm('Confirm','Are you sure you want to print PRF?',function(r){
-					if(r){
-						window.open('purchase_req_print.php?prf='+$('#prf_no_add').textbox('getValue'));
-					}
-				});
-				}else{
-					$.post('purchase_req_destroy.php',{prf_no: $('#prf_no_add').textbox('getValue')},'json');
-					$.messager.alert('ERROR',res,'warning');
-					$.messager.progress('close');
-				}
-			});
-
-						/* COBA-I */
-			//$.ajax({
-			//	type: 'GET',
-			//	url: 'purchase_req_save.php?data='+unescape(str_unescape),
-			//	data: { kode:'kode' },
-			//	success: function(data){
-			//		if(data[0].saveMsg == 'SUCCESS'){
-			//			$('#dlg_add').dialog('close');
-			//			$('#dg').datagrid('reload');
-			//			$.messager.alert('INFORMATION','Insert Data Success..!!<br/>PRF No. : '+$('#prf_no_add').textbox('getValue'),'info');
-			//		}else{
-			//			$.messager.alert('WARNING',data[0].saveMsg+' simpan','warning');
-			//		}
-			//	}
-			//});
-
-						/* COBA-II */
-			//$.ajax({
-		    //    type: "POST",
-		    //    url: "purchase_req_save.php",
-		    //    contentType: 'application/json', // outbound header
-		    //    dataType: 'text',                // expected response
-		    //    data: JSON.stringify(a1),        // explicitly encode
-		    //    success: function(data){
-		    //        alert(data[0].kode);
-		    //    }
-		    //});
+				})
+			}
+			$.messager.alert('INFORMATION','Insert Data Success..!!<br/>PRF No. : '+$('#prf_no_add').textbox('getValue'),'info');
 		}
 
 		function savePRF(){
-			$.messager.progress({
-			    title:'Please waiting',
-			    msg:'Saving data...'
-			});
-
 			var url='';
 			var dt = $('#prf_date_add').datebox('getValue');
 			
 			if( dt == ''){
-				$.messager.progress('close');
 				$.messager.alert('WARNING','PRF date not found','warning');
 			}else{
 				$.ajax({
@@ -779,28 +654,22 @@ $menu_id = $_GET['id'];
 					success: function(data){
 						if(data[0].kode == 'UNDEFINIED'){
 							$.messager.alert('INFORMATION','kode PRF Error..!!','info');
-							$.messager.progress('close');
 						}else{
 							$('#prf_no_add').textbox('setValue', data[0].kode);
-							simpan();
+							simpan();	
 						}
 					}
 				});
 			}
 		}
 
-		var sts_approved = '';
-		var jumPO = '';
-
 		function editPRF(){
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
-				if(parseInt(row.STS)==1 && row.JUM_PO != 0){
+				if(parseInt(row.STS)==1){
 					$.messager.alert('INFORMATION','Already Approved..!!','info');
 				}else{
-					sts_approved = row.STS;
-					jumPO = row.JUM_PO;
-					$('#dlg_edit').dialog('open').dialog('setTitle','Update Purchase Requestion (No. '+row.PRF_NO+') STATUS : '+row.STATUS);
+					$('#dlg_edit').dialog('open').dialog('setTitle','Update Purchase Requestion (No. '+row.PRF_NO+')');
 					$('#prf_no_edit').textbox('setValue',row.PRF_NO);
 					$('#prf_date_edit').datebox('setValue',row.PRFDATE);
 					$('#cust_pono_edit').textbox('setValue',row.CUSTOMER_PO_NO);
@@ -811,7 +680,7 @@ $menu_id = $_GET['id'];
 						$('#ck_new_edit').attr("checked",false);
 					}
 
-					$('#remark_edit').textbox('setValue',row.REMARK.replace(/<br>/g,"\n"));
+					$('#remark_edit').textbox('setValue',row.REMARK);
 					$('#dg_edit').datagrid({
 						url:'purchase_req_get_detail_edit.php?prf_no='+row.PRF_NO
 					});
@@ -868,13 +737,6 @@ $menu_id = $_GET['id'];
 		}
 
 		function save_edit_PRF(){
-			//alert(sts_approved+'/'+jumPO);
-			/*$.messager.progress({
-			    title:'Please waiting',
-			    msg:'Editing data...'
-			});*/
-
-			var rows_edit = [];
 			var ck_dsign_e='false';
 			var dt_edit = $('#prf_date_edit').datebox('getValue');
 
@@ -889,17 +751,15 @@ $menu_id = $_GET['id'];
 				var total = t.length;
 				var jmrow_edit=0;
 				for(i=0;i<total;i++){
-					jmrow_edit = i+1;
+					++jmrow_edit;
 					$('#dg_edit').datagrid('endEdit',i);
-					rows_edit.push({
-						pu_sts: sts_approved,
-						pu_jumPO: jumPO,
+					$.post('purchase_req_edit.php',{
 						pu_prf: $('#prf_no_edit').textbox('getValue'),
 						pu_line: jmrow_edit,
 						pu_date: $('#prf_date_edit').datebox('getValue'),
 						pu_cust_po_no: $('#cust_pono_edit').textbox('getValue'),
 						pu_ck_new: ck_dsign_e,
-						pu_rmark: $('#remark_edit').textbox('getValue').replace(/\n/g,"<br>"),
+						pu_rmark: $('#remark_edit').textbox('getValue'),
 						pu_item: $('#dg_edit').datagrid('getData').rows[i].ITEM_NO,
 						pu_line_ada: $('#dg_edit').datagrid('getData').rows[i].LINE_NO,
 						pu_unit: $('#dg_edit').datagrid('getData').rows[i].UOM_Q,
@@ -908,54 +768,33 @@ $menu_id = $_GET['id'];
 						pu_qty: $('#dg_edit').datagrid('getData').rows[i].QTY.replace(/,/g,''),
 						pu_amt: $('#dg_edit').datagrid('getData').rows[i].AMT,
 						pu_ohsas: $('#dg_edit').datagrid('getData').rows[i].OHSAS
-					});
-				}
-
-				var myJSON_e = JSON.stringify(rows_edit);
-				var str_unescape_edit=unescape(myJSON_e);
-				//console.log(str_unescape_edit);
-				
-				$.post('purchase_req_edit.php',{
-					data: unescape(str_unescape_edit)
-				}).done(function(res){
-					console.log(res);
-					if(res == '"success"'){
+					}).done(function(res){
+						//alert(res);	
+						console.log(res);
 						$('#dlg_edit').dialog('close');
 						$('#dg').datagrid('reload');
-						$.messager.alert('INFORMATION','Update Data Success..!!<br/>PRF No. : '+$('#prf_no_edit').textbox('getValue'),'info');
-						$.messager.progress('close');
-					}else{
-						console.log(res);
-						$.messager.alert('ERROR',res,'warning');
-						$.messager.progress('close');
-					}
-				});
+					})
+				}
+				$.messager.alert('INFORMATION','Update Data Success..!!','info');
 			}
 		}
 
 		function destroyPRF(){
 			var row = $('#dg').datagrid('getSelected');	
 			if (row){
-				if(row.STS == '1' && row.JUM_PO != 0){
+				if(row.STS == '1'){
 					$.messager.alert('INFORMATION',"Data can't to remove, because it has approved",'info');
 				}else{
 					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
 						if(r){
-							$.messager.progress({
-							    title:'Please waiting',
-							    msg:'removing data...'
-							});
-
 							$.post('purchase_req_destroy.php',{prf_no: row.PRF_NO},function(result){
 								if (result.success){
 		                            $('#dg').datagrid('reload');
-		                            $.messager.progress('close');
 		                        }else{
 		                            $.messager.show({
 		                                title: 'Error',
 		                                msg: result.errorMsg
 		                            });
-		                            $.messager.progress('close');
 		                        }
 							},'json');
 						}

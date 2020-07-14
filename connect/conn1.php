@@ -1,15 +1,12 @@
 <?php
-	set_time_limit(0);
-	ini_set('memory_limit', '-1');
+$serverName = "localhost, 1542"; //serverName\instanceName, portNumber (1433 by default)
+$connectionInfo = array( "Database"=>"FDKSYS20", "UID"=>"sa", "PWD"=>"P@ssw0rd");
+$conn = mssql_connect( $serverName, $connectionInfo);
 
-	$serverName = "172.23.225.113";
-	$uid = "sa";
-	$pwd = "accpac";
-	$connect = new PDO( "sqlsrv:server=$serverName ; Database = FDKSYS20", "$uid", "$pwd");
-	
-	if($connect) {
-		$varConn = "Y";
-	}else{
-		$varConn = "N";
-	}
+if( $conn ) {
+     echo "Successfuly connected.<br />";
+}else{
+     echo "Connection error.<br />";
+     die( print_r( sqlsrv_errors(), true));
+}
 ?>
