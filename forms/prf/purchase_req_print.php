@@ -15,7 +15,6 @@ $head = sqlsrv_query($connect, strtoupper($sql_h));
 
 $dt_h = sqlsrv_fetch_object($head);
 
-
 if($dt_h->JUM_DTL<=10 OR $dt_h->JUM_DTL>=20){
 	$plus_ln = "";
 }else{
@@ -83,32 +82,35 @@ $content .= "
 			<th valign='middle' align='center' style='font-size:12px;width:120px;height:35px;'>ESTIMATED<br/>INCOMING DATE *</th>
 			<th valign='middle' align='center' style='font-size:12px;width:100px;height:35px;'>OHSAS (K3)<br/>ELEMENTS</th>
 		</tr>
-	</thead>";	
-$total=0;
+	</thead>";
 
 $result = array();
-$qry = "select prf_no,line_no,a.item_no,qty,a.uom_q,estimate_price,amt,require_date,a.upto_date,a.reg_date,ohsas,remainder_qty,a.supplier_code,confirm_date,a.confirm_date,confirm_person_code,delete_date,delete_person_code,a.curr_code,u_price,
-b.item, b.description, c.unit_pl from prf_details a inner join item b on a.item_no=b.item_no inner join unit c on a.uom_q=c.unit_code where a.prf_no='$prf' order by a.line_no asc";
-$result = sqlsrv_query($connect, strtoupper($qry));
+$qry = "select prf_no,line_no,a.item_no,qty,a.uom_q,estimate_price,amt,format(require_date,'dd-MMM-yy') as require_date,a.upto_date,a.reg_date,ohsas,remainder_qty,
+	a.supplier_code,confirm_date,a.confirm_date,confirm_person_code,delete_date,delete_person_code,a.curr_code,u_price,
+	b.item, b.description, c.unit_pl 
+	from prf_details a 
+	left join item b on a.item_no=b.item_no 
+	left join unit c on a.uom_q=c.unit_code 
+	where a.prf_no='$prf' 
+	order by a.line_no asc";
+$result = sqlsrv_query($connect, $qry);
 while ($data=sqlsrv_fetch_object($result)){
-	
 	$content .= "
 		<tr>
-			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->LINE_NO."</td>
-			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->ITEM_NO."</td>
-			<td valign='middle' align='left' style='font-size:12px;height:25px;'>&nbsp;".$data->ITEM."<br/>&nbsp;".$data->DESCRIPTION."</td>
-			<td valign='middle' align='right' style='font-size:12px;height:25px;'>".number_format($data->QTY)."&nbsp;</td>
-			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->UNIT_PL."</td>
-			<td valign='middle' align='right' style='font-size:12px;height:25px;'>".number_format($data->ESTIMATE_PRICE,2)."&nbsp;</td>
+			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->line_no."</td>
+			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->item_no."</td>
+			<td valign='middle' align='left' style='font-size:12px;height:25px;'>&nbsp;".$data->item."<br/>&nbsp;".$data->description."</td>
+			<td valign='middle' align='right' style='font-size:12px;height:25px;'>".number_format($data->qty)."&nbsp;</td>
+			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->unit_pl."</td>
+			<td valign='middle' align='right' style='font-size:12px;height:25px;'>".number_format($data->estimate_price,2)."&nbsp;</td>
+			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->require_date."</td>
 			<td valign='middle' align='center' style='font-size:12px;height:25px;'></td>
-			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->OHSAS."</td>
+			<td valign='middle' align='center' style='font-size:12px;height:25px;'>".$data->ohsas."</td>
 		</tr>";
-	$total += $data->AMT_O;
 	if($nourut % 10==0){
 		$content .= $plus_ln;
 	}
 	$nourut++;
-
 }
 
 $content .= "
@@ -137,9 +139,9 @@ $content .= "
 	</div>
 </page>";
 
-require_once(dirname(__FILE__).'../../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'../../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
-$html2pdf->Output('PO-'.$po.'.pdf');
-//	echo  $content;
+$html2pdf->Output('PO-'.$prf.'.pdf');
+	// echo  $content;
 ?>
