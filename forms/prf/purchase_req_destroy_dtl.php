@@ -16,7 +16,7 @@ $msg .= $pesan['message'];
 
 if($msg != ''){
 	echo json_encode(array('errorMsg'=>'Delete Item Process Error  : $del'));
-	break;
+
 }else{
 	echo json_encode(array('success'=>true));
 }
