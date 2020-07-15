@@ -2,11 +2,8 @@
 header('Content-Type: text/plain; charset="UTF-8"');
 error_reporting(0);
 session_start();
-<<<<<<< HEAD
 include("../../connect/conn.php");
-=======
-include("../connect/conn.php");
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 
 if (isset($_SESSION['id_wms'])){
 	$data = isset($_REQUEST['data']) ? strval($_REQUEST['data']) : '';
@@ -63,38 +60,22 @@ if (isset($_SESSION['id_wms'])){
 
 		//CEK GR_HEADERS
 		$cek = "select count(*) as jum_prf from prf_header where prf_no='$pu_prf'";
-<<<<<<< HEAD
-		$data = oci_parse($connect, $cek);
-		oci_execute($data);
-		$dt = oci_fetch_object($data);
-=======
+
 		$data = sqlsrv_query($connect, $cek);
 		
 		$dt = sqlsrv_fetch_object($data);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 
 		if(intval($dt->JUM_PRF) == 0){
 			# INSERT PRF HEADER
 			$field_prf .= "prf_no,"               ; $value_prf .= "'$pu_prf',"                          ;
-<<<<<<< HEAD
-			$field_prf .= "prf_date,"             ; $value_prf .= "to_date('$pu_date','yyyy-mm-dd'),"   ;
-=======
+
 			$field_prf .= "prf_date,"             ; $value_prf .= "'$pu_date',"   ;
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 			$field_prf .= "section_code,"         ; $value_prf .= "100,"                    			;
 			$field_prf .= "customer_po_no,"       ; $value_prf .= "'$pu_cust',"                  		;
 			$field_prf .= "remark,"               ; $value_prf .= "$pu_rmark_fix,"                      ;
 			$field_prf .= "require_person_code,"  ; $value_prf .= "'$user',"                     		;
-<<<<<<< HEAD
-			$field_prf .= "upto_date,"            ; $value_prf .= "sysdate,"                            ;
-			$field_prf .= "reg_date"              ; $value_prf .= "sysdate"                             ;
-			chop($field_prf) ;              	  chop($value_prf) ;
 
-			$ins1  = "insert into prf_header ($field_prf) values ($value_prf)";
-			$data_ins1 = oci_parse($connect, $ins1);
-			oci_execute($data_ins1);
-			$pesan = oci_error($data_ins1);
-=======
 			$field_prf .= "upto_date,"            ; $value_prf .= "getdate(),"                            ;
 			$field_prf .= "reg_date"              ; $value_prf .= "getdate()"                             ;
 			chop($field_prf) ;              	  chop($value_prf) ;
@@ -103,7 +84,6 @@ if (isset($_SESSION['id_wms'])){
 			$data_ins1 = sqlsrv_query($connect, $ins1);
 			oci_execute($data_ins1);
 			$pesan = sqlsrv_errors($data_ins1);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 			$msg .= $pesan['message'];
 
 			if($msg != ''){
@@ -113,15 +93,10 @@ if (isset($_SESSION['id_wms'])){
 
 			$ins3 = "insert into ztb_prf_sts (prf_no,status) VALUES ('$pu_prf',$sts)";
 			//echo $ins3."<br/>";
-<<<<<<< HEAD
-			$data_ins3 = oci_parse($connect, $ins3);
-			oci_execute($data_ins3);
-			$pesan = oci_error($data_ins3);
-=======
+
 			$data_ins3 = sqlsrv_query($connect, $ins3);
 			
 			$pesan = sqlsrv_errors($data_ins3);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 			$msg .= $pesan['message'];
 
 			if($msg != ''){
@@ -139,29 +114,19 @@ if (isset($_SESSION['id_wms'])){
 		$field_dtl .= "uom_q,"              ; $value_dtl .= "$pu_unit,"								;
 		$field_dtl .= "estimate_price,"     ; $value_dtl .= "$pu_s_price,"							;
 		$field_dtl .= "amt,"                ; $value_dtl .= "round($pu_qty * $pu_s_price,2),"		;
-<<<<<<< HEAD
-		$field_dtl .= "require_date,"       ; $value_dtl .= "to_date('$pu_require','yyyy-mm-dd'),"	;
-		$field_dtl .= "upto_date,"          ; $value_dtl .= "sysdate,"								;
-		$field_dtl .= "reg_date,"           ; $value_dtl .= "sysdate,"								;
-=======
 		$field_dtl .= "require_date,"       ; $value_dtl .= "'$pu_require',"	;
 		$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"								;
 		$field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"								;
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 		$field_dtl .= "ohsas"               ; $value_dtl .= "'$pu_ohsas'"							;
 		chop($field_dtl) ;                  chop($value_dtl) ;
 
 		$ins2 = "insert into prf_details ($field_dtl) VALUES ($value_dtl)";
 		//echo $ins2."<br/>";
-<<<<<<< HEAD
-		$data_ins2 = oci_parse($connect, $ins2);
-		oci_execute($data_ins2);
-		$pesan = oci_error($data_ins2);
-=======
+
 		$data_ins2 = sqlsrv_query($connect, $ins2);
 		oci_execute($data_ins2);
 		$pesan = sqlsrv_errors($data_ins2);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 		$msg .= $pesan['message'];
 
 		if($msg != ''){
@@ -170,21 +135,14 @@ if (isset($_SESSION['id_wms'])){
 		}
 
 		if($pu_sts == 'MRP'){
-<<<<<<< HEAD
-			$sql = "BEGIN ZSP_MRP_MATERIAL_ITEM(:V_ITEM_NO); END;";
-			$stmt = oci_parse($connect, $sql);
-			oci_bind_by_name($stmt, ':V_ITEM_NO', $pu_item);
-			$res = oci_execute($stmt);
-			$pesan = oci_error($stmt);
-=======
+
 			$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
 			
 			$params = array(
 				array($pu_item, SQLSRV_PARAM_IN)
-			)
-			$stmt = sqlsrv_query($connect, $sql,$params);
+			);
+			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
 			$pesan = sqlsrv_errors($stmt);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 			$msg .= $pesan['message'];
 
 			if($msg != ''){
@@ -192,24 +150,16 @@ if (isset($_SESSION['id_wms'])){
 				break;
 			}
 
-<<<<<<< HEAD
-			$sqlx = "BEGIN ZSP_MRP_PRF(:V_ITEM_NO,:V_PRF_NO); END;";
-			$stmt = oci_parse($connect, $sqlx);
-			oci_bind_by_name($stmt, ':V_ITEM_NO', $pu_item);
-			oci_bind_by_name($stmt, ':V_PRF_NO', $pu_prf);
-			$res = oci_execute($stmt);
-			$pesan = oci_error($stmt);
-=======
+
 			$sqlx = "{call ZSP_MRP_PRF(?,?)}";
-			paramsx = array(
+			$paramsx = array(
 				array($pu_item, SQLSRV_PARAM_IN),
 				array($pu_prf, SQLSRV_PARAM_IN)
-			)
+			);
 			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
 			
 			
 			$pesan = sqlsrv_errors($stmt);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 			$msg .= $pesan['message'];
 
 			if($msg != ''){
@@ -263,11 +213,8 @@ if($msg != ''){
 
 	//CEK GR_HEADERS
 	$cek = "select count(*) as jum_prf from prf_header where prf_no='$pu_prf'";
-<<<<<<< HEAD
-	$data = oci_parse($connect, $cek);
-=======
+
 	$data = sqlsrv_query($connect, $cek);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	oci_execute($data);
 	$dt = oci_fetch_object($data);
 
@@ -279,33 +226,23 @@ if($msg != ''){
 		$field_prf .= "customer_po_no,"       ; $value_prf .= "'$pu_cust',"                  		;
 		$field_prf .= "remark,"               ; $value_prf .= "'$pu_rmark',"                        ;
 		$field_prf .= "require_person_code,"  ; $value_prf .= "'$user',"                     		;
-<<<<<<< HEAD
-		$field_prf .= "upto_date,"            ; $value_prf .= "sysdate,"                            ;
-		$field_prf .= "reg_date"              ; $value_prf .= "sysdate"                             ;
-=======
+
 		$field_prf .= "upto_date,"            ; $value_prf .= "getdate(),"                            ;
 		$field_prf .= "reg_date"              ; $value_prf .= "getdate()"                             ;
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 		chop($field_prf) ;              	  chop($value_prf) ;
 
 		$ins1  = "insert into prf_header ($field_prf) values ($value_prf)";
 		//echo $ins1."<br/>";
-<<<<<<< HEAD
-		$data_ins1 = oci_parse($connect, $ins1);
-=======
+
 		$data_ins1 = sqlsrv_query($connect, $ins1);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 		oci_execute($data_ins1);
 
 		$ins3 = "insert into ztb_prf_sts (prf_no,status) VALUES ('$pu_prf',$sts)";
 		//echo $ins3."<br/>";
-<<<<<<< HEAD
-		$data_ins3 = oci_parse($connect, $ins3);
-		oci_execute($data_ins3);
-=======
+
 		$data_ins3 = sqlsrv_query($connect, $ins3);
 		
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	}
 
 	//INSERT PRF DETAILS
@@ -317,23 +254,16 @@ if($msg != ''){
 	$field_dtl .= "estimate_price,"     ; $value_dtl .= "$pu_s_price,"							;
 	$field_dtl .= "amt,"                ; $value_dtl .= "round($pu_qty * $pu_s_price,2),"		;
 	$field_dtl .= "require_date,"       ; $value_dtl .= "to_date('$pu_require','yyyy-mm-dd'),"	;
-<<<<<<< HEAD
-	$field_dtl .= "upto_date,"          ; $value_dtl .= "sysdate,"								;
-	$field_dtl .= "reg_date,"           ; $value_dtl .= "sysdate,"								;
-=======
+
 	$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"								;
 	$field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"								;
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
+
 	$field_dtl .= "ohsas"               ; $value_dtl .= "'$pu_ohsas'"							;
 	chop($field_dtl) ;                  chop($value_dtl) ;
 
 	$ins2 = "insert into prf_details ($field_dtl) VALUES ($value_dtl)";
 	//echo $ins2."<br/>";
-<<<<<<< HEAD
-	$data_ins2 = oci_parse($connect, $ins2);
-=======
 	$data_ins2 = sqlsrv_query($connect, $ins2);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 	oci_execute($data_ins2);
 
 
@@ -342,11 +272,7 @@ if($msg != ''){
 
 		$sql = "BEGIN ZSP_MRP_MATERIAL_ITEM(:V_ITEM_NO); END;";
 
-<<<<<<< HEAD
-		$stmt = oci_parse($connect, $sql);
-=======
 		$stmt = sqlsrv_query($connect, $sql);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 		oci_bind_by_name($stmt, ':V_ITEM_NO', $pu_item);
 		$res = oci_execute($stmt);
 
@@ -355,11 +281,7 @@ if($msg != ''){
 
 		$sqlx = "BEGIN ZSP_MRP_PRF(:V_ITEM_NO,:V_PRF_NO); END;";
 
-<<<<<<< HEAD
-		$stmt = oci_parse($connect, $sqlx);
-=======
 		$stmt = sqlsrv_query($connect, $sqlx);
->>>>>>> 77172d8c738f23e29278a5ce17a9606a9260d23e
 
 		oci_bind_by_name($stmt, ':V_ITEM_NO', $pu_item);
 		oci_bind_by_name($stmt, ':V_PRF_NO', $pu_prf);
