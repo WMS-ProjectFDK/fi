@@ -3,11 +3,11 @@
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
 	$sql = "select count(*) as j from itemmaker where item_no = $item_no";
-	$result = oci_parse($connect, $sql);
-	oci_execute($result);
+	$result = sqlsrv_query($connect, $sql);
+	
 	$arrData = array();
 	$arrNo = 0;
-	while ($row=oci_fetch_array($result)){
+	while ($row=sqlsrv_fetch_array($result)){
 		if($row[0] == 0){
 			$ket = "Item Maker not setting ";
 		}else{

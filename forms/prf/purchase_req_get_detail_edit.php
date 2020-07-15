@@ -11,7 +11,7 @@
 		inner join item b on a.item_no = b.item_no
 		inner join unit c on a.uom_q = c.unit_code
 		where a.prf_no='$prf_no' order by a.line_no asc";
-	$data = sqlsrv_query($connect, $rs);
+	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
