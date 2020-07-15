@@ -4,7 +4,7 @@
 	$sql = "select com.company_code, com.company from company com 
 		where com.company_type in (0,7)
 		order by com.company_type, com.company";
-	$result = sqlsrv_query($connect, $sql);
+	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrData = array();
 	$arrNo = 0;
 	while ($row=sqlsrv_fetch_array($result)){

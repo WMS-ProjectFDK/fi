@@ -8,7 +8,7 @@
 	$result = sqlsrv_query($connect, $sql);
 	$arrData = array();
 	$arrNo = 0;
-	while ($row=sqlsrsv_fetch_array($result)){
+	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
 			"id_item"=>rtrim($row[0]), 
 			"name_item"=>rtrim($row[1]),

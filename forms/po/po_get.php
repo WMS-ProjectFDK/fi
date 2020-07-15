@@ -60,7 +60,7 @@
 		left join currency c on a.curr_code= c.curr_code
     	left join country cnt on b.country_code=cnt.country_code
     	left join person prsn on a.req=prsn.person_code
-		
+		$where 
 		order by po_date desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
