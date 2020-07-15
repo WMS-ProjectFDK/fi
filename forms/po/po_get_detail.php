@@ -8,17 +8,17 @@
 
 	$rowno=0;
 	$rs = "select b.line_no, a.po_no, b.item_no, c.description, b.uom_q, d.unit_pl, 
-		b.qty, b.gr_qty, b.bal_qty, b.u_price, b.amt_o, b.amt_l, b.eta 
+		b.qty, b.gr_qty, b.bal_qty, b.u_price, b.amt_o, b.amt_l, cast(b.eta as varchar(10)) as eta 
 		from po_header a
 		left join po_details b on a.po_no=b.po_no
 		left join item c on b.item_no=c.item_no
 		left join unit d on b.uom_q=d.unit_code
 		where a.po_no='$po'
 		order by b.line_no asc";
-	$data = sqlsrv_query($connect, $rs);
+	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
-		array_push($items, strtoupper($row));
+		array_push($items, $row);
 		$q = $items[$rowno]->QTY;
 		$bq = $items[$rowno]->BAL_QTY;
 		$gq = $items[$rowno]->GR_QTY;

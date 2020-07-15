@@ -19,7 +19,7 @@
 	}
 
 	if ($ck_item_no != "true"){
-		$item_no = "exists(select * from PRF_DETAILS where item_no = $cmb_item_no and prf_no = a.PRF_NO)  ";
+		$item_no = " exists(select * from PRF_DETAILS where item_no = $cmb_item_no and prf_no = a.PRF_NO)  and ";
 	}else{
 		$item_no = "";
 	}

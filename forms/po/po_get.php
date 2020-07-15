@@ -14,7 +14,7 @@
 	$src = isset($_REQUEST['src']) ? strval($_REQUEST['src']) : '';
 
 	if ($ck_date != "true"){
-		$date_po = "to_char(a.po_date,'YYYY-MM-DD') between '$date_awal' and '$date_akhir' and ";
+		$date_po = "a.po_date between '$date_awal' and '$date_akhir' and ";
 	}else{
 		$date_po = "";
 	}	
@@ -38,7 +38,7 @@
 	}	
 
 	if ($ck_eta != "true"){
-		$eta = "a.po_no in (select po_no from po_details where ETA = to_date('$date_eta','yyyy-mm-dd')) and ";
+		$eta = "a.po_no in (select po_no from po_details where ETA = '$date_eta' and ";
 	}else{
 		$eta = "";
 	}
@@ -51,8 +51,8 @@
 	
 	include("../../connect/conn.php");
 
-	$sql = "select distinct top 150 a.po_no, format(a.po_date,'yyyy-MM-dd') as po_date, a.supplier_code, b.company, c.curr_short, c.curr_mark, a.amt_o, a.amt_l,
-		a.remark1,a.req, prsn.person,replace(remark1,'chr(10)','<br/>') as remark1_2, cast(b.pdays as varchar(10))+'-'+b.pdesc as pterm, 
+	$sql = "select top 150 a.PO_NO, cast(a.po_date as varchar(10)) as po_date, a.supplier_code, b.company, c.curr_short, c.curr_mark, a.amt_o, a.amt_l,
+		a.remark1,a.req, prsn.person,replace(remark1,'char(10)','<br/>') as remark1_2, cast(b.pdays as varchar(10))+'-'+b.pdesc as pterm, 
 		cast(b.country_code as varchar(20))+'-'+cnt.country as country, a.curr_code, a.attn, a.shipto_code,a.tterm, 
 		a.ex_rate, a.transport, a.marks1, a.di_output_type, a.revise, a.reason1
 		from po_header a
@@ -60,15 +60,14 @@
 		left join currency c on a.curr_code= c.curr_code
     	left join country cnt on b.country_code=cnt.country_code
     	left join person prsn on a.req=prsn.person_code
-		$where
+		
 		order by po_date desc";
-	$data = oci_parse($connect, $sql);
-	oci_execute($data);
+	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();
 	$rowno=0;
-	while($row = oci_fetch_object($data)){
-		array_push($items, strtoupper($row));
+	while($row = sqlsrv_fetch_object($data)){
+		array_push($items, $row);
 		$items[$rowno]->O = number_format($items[$rowno]->AMT_O,2);
 		$items[$rowno]->L = $items[$rowno]->CURR_MARK." ".number_format($items[$rowno]->AMT_L,2);
 		$items[$rowno]->REQ_2 =strtoupper($items[$rowno]->PERSON);
@@ -76,4 +75,6 @@
 	}
 	$result["rows"] = $items;
 	echo json_encode($result);
+
+	
 ?>
