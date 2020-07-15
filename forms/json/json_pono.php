@@ -5,17 +5,17 @@
 	$year = date('Y');
 	$yearplus = intval(date('Y')+1);
 	//echo $yearmin.$year.$yaerplus;
-	$sql = "select distinct prf_no from prf_header 
-		where format(prf_date,'yyyy') = '$yearmin' 
-		OR format(prf_date,'yyyy') = '$year'
-		OR format(prf_date,'yyyy') = '$yearplus' 
-		order by prf_no asc";
+	$sql = "select distinct po_no, format(po_date,'yyyy') from po_header 
+		where format(po_date,'yyyy') = '$yearmin'
+		OR format(po_date,'yyyy') = '$year' 
+		OR format(po_date,'yyyy') = '$yearplus' 
+		order by po_no asc";
 	$result = sqlsrv_query($connect, $sql);
 	$arrNo = 0;
 	$arrData = array();
 	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
-			"prf_no"=>rtrim($row[0])
+			"po_no"=>rtrim($row[0])
 		);
 		$arrNo++;
 	}
