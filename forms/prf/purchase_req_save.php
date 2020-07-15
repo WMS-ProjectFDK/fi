@@ -82,7 +82,6 @@ if (isset($_SESSION['id_wms'])){
 
 			$ins1  = "insert into prf_header ($field_prf) values ($value_prf)";
 			$data_ins1 = sqlsrv_query($connect, $ins1);
-			oci_execute($data_ins1);
 			$pesan = sqlsrv_errors($data_ins1);
 			$msg .= $pesan['message'];
 
@@ -125,7 +124,7 @@ if (isset($_SESSION['id_wms'])){
 		//echo $ins2."<br/>";
 
 		$data_ins2 = sqlsrv_query($connect, $ins2);
-		oci_execute($data_ins2);
+		
 		$pesan = sqlsrv_errors($data_ins2);
 		$msg .= $pesan['message'];
 
@@ -134,39 +133,39 @@ if (isset($_SESSION['id_wms'])){
 			break;
 		}
 
-		if($pu_sts == 'MRP'){
+		// if($pu_sts == 'MRP'){
 
-			$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
+		// 	$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
 			
-			$params = array(
-				array($pu_item, SQLSRV_PARAM_IN)
-			);
-			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
-			$pesan = sqlsrv_errors($stmt);
-			$msg .= $pesan['message'];
+		// 	$params = array(
+		// 		array($pu_item, SQLSRV_PARAM_IN)
+		// 	);
+		// 	$stmt = sqlsrv_query($connect, $sqlx,$paramss);
+		// 	$pesan = sqlsrv_errors($stmt);
+		// 	$msg .= $pesan['message'];
 
-			if($msg != ''){
-				$msg .= " Procedure I - MRP Process Error : $sql";
-				break;
-			}
+		// 	if($msg != ''){
+		// 		$msg .= " Procedure I - MRP Process Error : $sql";
+		// 		break;
+		// 	}	
 
 
-			$sqlx = "{call ZSP_MRP_PRF(?,?)}";
-			$paramsx = array(
-				array($pu_item, SQLSRV_PARAM_IN),
-				array($pu_prf, SQLSRV_PARAM_IN)
-			);
-			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
+		// 	$sqlx = "{call ZSP_MRP_PRF(?,?)}";
+		// 	$paramsx = array(
+		// 		array($pu_item, SQLSRV_PARAM_IN),
+		// 		array($pu_prf, SQLSRV_PARAM_IN)
+		// 	);
+		// 	$stmt = sqlsrv_query($connect, $sqlx,$paramss);
 			
 			
-			$pesan = sqlsrv_errors($stmt);
-			$msg .= $pesan['message'];
+		// 	$pesan = sqlsrv_errors($stmt);
+		// 	$msg .= $pesan['message'];
 
-			if($msg != ''){
-				$msg .= " Procedure II - MRP Process Error : $sqlx";
-				break;
-			}
-		}
+		// 	if($msg != ''){
+		// 		$msg .= " Procedure II - MRP Process Error : $sqlx";
+		// 		break;
+		// 	}
+		// }
 	};
 
 }else{

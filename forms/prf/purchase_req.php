@@ -451,6 +451,7 @@ $menu_id = $_GET['id'];
 	                {field:'STANDARD_PRICE',title:'STANDARD PRICE',width:80,halign:'center', align:'right'}
 	            ]],
 	            onDblClickRow:function(id,row){
+					
 					var t = $('#dg_add').datagrid('getRows');
 					var total = t.length;
 				   	var idxfield=0;
@@ -461,11 +462,10 @@ $menu_id = $_GET['id'];
 					}else{
 						idxfield=total;
 					}
-					
 					/*CEK DULU UDAH ADA DI ITEMMMAKER TIDAK, JIKA SUDAH ADA BARU INSERT KE DG_aDD*/
 					$.ajax({
 						type: 'GET',
-						url: 'json/json_cek_itemmaker.php?item_no='+row.ITEM_NO,
+						url: '../json/json_cek_itemmaker.php?item_no='+row.ITEM_NO,
 						data: { kode:'kode' },
 						success: function(data){
 							$.messager.confirm('INFORMATION', data[0].maker, function(x){
@@ -566,7 +566,7 @@ $menu_id = $_GET['id'];
 					/*CEK DULU UDAH ADA DI ITEMMMAKER TIDAK, JIKA SUDAH ADA BARU INSERT KE DG_aDD*/
 					$.ajax({
 						type: 'GET',
-						url: 'json/json_cek_itemmaker.php?item_no='+row.ITEM_NO,
+						url: '../json/json_cek_itemmaker.php?item_no='+row.ITEM_NO,
 						data: { kode:'kode' },
 						success: function(data){
 							$.messager.confirm('INFORMATION', data[0].maker, function(x){
@@ -773,7 +773,7 @@ $menu_id = $_GET['id'];
 			}else{
 				$.ajax({
 					type: 'GET',
-					url: 'json/json_kode_prf.php',
+					url: '../json/json_kode_prf.php',
 					data: { kode:'kode' },
 					success: function(data){
 						if(data[0].kode == 'UNDEFINIED'){

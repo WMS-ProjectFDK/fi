@@ -6,7 +6,7 @@
 	$s_item =  isset($_REQUEST['s_item']) ? strval($_REQUEST['s_item']) : '';
 
 	$rowno=0;
-	$rs = "select i.item_no, i.item, i.description, isnull(c.ESTIMATE_PRICE,i.standard_price) as standard_price, u.unit, i.uom_q
+	$rs = "select top 50 i.item_no, i.item, i.description, isnull(c.ESTIMATE_PRICE,i.standard_price) as standard_price, u.unit, i.uom_q
 		from item i 
 	    inner join unit u on i.uom_q= u.unit_code
 	    inner join ITEMMAKER c on i.item_no=c.item_no

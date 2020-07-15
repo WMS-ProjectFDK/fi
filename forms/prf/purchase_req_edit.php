@@ -60,8 +60,7 @@ if (isset($_SESSION['id_wms'])){
 		if($pu_line_ada == 'NEW'){
 			//INSERT PRF DETAILS
 			$q_max = "select cast(max(line_no) as int)+1 as line_no from prf_details where prf_no='$pu_prf'";
-			$data_max = sqlsrv_query($connect, $q_max);
-			
+			$data_max = sqlsrv_query($connect, strtoupper($q_max));
 			$rowMax = sqlsrv_fetch_object($data_max);
 
 			$pu_line = $rowMax->LINE_NO;
@@ -85,7 +84,7 @@ if (isset($_SESSION['id_wms'])){
 			chop($field_dtl) ;                  chop($value_dtl) ;
 
 			$ins2 = "insert into prf_details ($field_dtl) VALUES ($value_dtl)";
-			$data_ins2 = sqlsrv_query($connect, $ins2);
+			$data_ins2 = sqlsrv_query($connect, strtoupper($ins2));
 			
 			$pesan = sqlsrv_errors($data_ins2);
 			$msg .= $pesan['message'];
@@ -108,7 +107,7 @@ if (isset($_SESSION['id_wms'])){
 			$field_upd .= "ohsas='$pu_ohsas'";
 
 			$upd2 = "update prf_details set $field_upd where prf_no='$pu_prf' and line_no=$pu_line_ada and item_no = $pu_item";
-			$data_upd2 = sqlsrv_query($connect, $upd2);
+			$data_upd2 = sqlsrv_query($connect, strtoupprt($upd2));
 			
 			
 			$pesan = sqlsrv_errors($data_upd2);
@@ -124,27 +123,26 @@ if (isset($_SESSION['id_wms'])){
 	$upd = "update prf_header set 
 		prf_date='$pu_date', customer_po_no = '$pu_cust_po_no', remark = $pu_rmark_fix, require_person_code = '$user'
 		where prf_no='$pu_prf'";
-	$data_upd = sqlsrv_query($connect, $upd);
-	
+	$data_upd = sqlsrv_query($connect, strtoupper($upd));
 	$pesan = sqlsrv_errors($data_upd);
 	$msg .= $pesan['message'];
 	if($msg != ''){
 		$msg .= " Update Header Process Error  : $upd";
-		break;
+	
 	}
 
 	$upd3 = "update ztb_prf_sts set status=$sts where prf_no='$pu_prf'";
-	$data_upd3 = sqlsrv_query($connect, $upd3);
-
+	$data_upd3 = sqlsrv_query($connect, strtoupper($upd3));
 	$pesan = sqlsrv_errors($upd3);
 	$msg .= $pesan['message'];
 	if($msg != ''){
 		$msg .= " Update PRF Status Process Error  : $upd3";
-		break;
+		
 	}
 }else{
 	$msg .= 'Session Expired';
 }
+
 
 if($msg != ''){
 	echo json_encode($msg);
