@@ -59,7 +59,7 @@ if (isset($_SESSION['id_wms'])){
 
 		if($pu_line_ada == 'NEW'){
 			//INSERT PRF DETAILS
-			$q_max = "select cast(max(line_no) as int)+1 as line_no from prf_details where prf_no='$pu_prf'";
+			$q_max = "select isnull(cast(max(line_no) as int),0)+ as line_no from prf_details where prf_no='$pu_prf'";
 			$data_max = sqlsrv_query($connect, strtoupper($q_max));
 			$rowMax = sqlsrv_fetch_object($data_max);
 
@@ -72,10 +72,10 @@ if (isset($_SESSION['id_wms'])){
 			$field_dtl .= "uom_q,"              ; $value_dtl .= "$pu_unit,"								;
 			$field_dtl .= "estimate_price,"     ; $value_dtl .= "$pu_s_price,"							;
 			$field_dtl .= "amt,"                ; $value_dtl .= "round($pu_qty * $pu_s_price,2),"		;
-			$field_dtl .= "require_date,"       ; $value_dtl .= "$pu_require"	;
+			$field_dtl .= "require_date,"       ; $value_dtl .= "'$pu_require',"	;
 			$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"								;
 			$field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"								;
-			
+			$msg1 .= " Add New Item Process Error  : $ins2";
 			if($pu_sts=='1'){
 				$field_dtl .= "remainder_qty,"     ; $value_dtl .= "$pu_qty,"							;		
 			}
@@ -84,6 +84,7 @@ if (isset($_SESSION['id_wms'])){
 			chop($field_dtl) ;                  chop($value_dtl) ;
 
 			$ins2 = "insert into prf_details ($field_dtl) VALUES ($value_dtl)";
+
 			$data_ins2 = sqlsrv_query($connect, strtoupper($ins2));
 			
 			$pesan = sqlsrv_errors($data_ins2);
@@ -147,6 +148,6 @@ if (isset($_SESSION['id_wms'])){
 if($msg != ''){
 	echo json_encode($msg);
 }else{
-	echo json_encode('success');
+	echo json_encode($upd2 );
 }
 ?>
