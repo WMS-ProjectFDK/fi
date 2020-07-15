@@ -148,6 +148,6 @@ if (isset($_SESSION['id_wms'])){
 if($msg != ''){
 	echo json_encode($msg);
 }else{
-	echo json_encode($upd2 );
+	echo json_encode($upd2);
 }
 ?>

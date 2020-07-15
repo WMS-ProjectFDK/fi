@@ -16,7 +16,7 @@ if( $data_del === false ) {
 
 if($msg != ''){
 	$msg .= " Delete-Header Process Error : $del";
-	break;
+	//break;
 }
 
 $del2 = "delete from prf_details where prf_no='".$prf_no."'";
@@ -32,7 +32,7 @@ if( $data_del2 === false ) {
 
 if($msg != ''){
 	$msg .= " Delete-Details Process Error : $del2";
-	break;
+	//break;
 }
 
 $del3 = "delete from ztb_prf_sts where prf_no='".$prf_no."'";
@@ -49,7 +49,7 @@ if( $data_del3 === false ) {
 
 if($msg != ''){
 	$msg .= " Delete-PRF Status Process Error : $del3";
-	break;
+	// break;
 }
 
 if ($msg != ''){
