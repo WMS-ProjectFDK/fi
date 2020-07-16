@@ -79,7 +79,7 @@ if (isset($_SESSION['id_wms'])){
 			$q_max = "select cast(max(line_no) as number)+2 as line_no from po_details where po_no='$po_no'";
 		}
 		
-		$data_max = sqlsrv_query($connect, $q_max);
+		$data_max = sqlsrv_query($connect, strtoupper($q_max));
 		$rowMax = sqlsrv_fetch_object($data_max);
 
 		$po_line_new = $rowMax->LINE_NO;
@@ -122,7 +122,7 @@ if (isset($_SESSION['id_wms'])){
 		}
 
 		// $sql = "BEGIN ZSP_Insert_PO_1(:V_PO_NO,:V_SUPPLIER_CODE,:V_PO_DATE,:V_CURR_CODE,:V_EX_RATE,:V_TTERM,:V_PDAYS,:V_PDESC,:V_REQ,:V_REMARK1,:V_MARKS1,:V_ATTN,:V_PERSON_CODE,:V_ITEM_NO,:V_PBY,:V_SHIPTO_CODE,:V_TRANSPORT,:V_DI_OUTPUT_TYPE,:V_PRF_NO,:V_PRF_LINE_NO,:V_ORIGIN_CODE,:V_QTY,:V_UOM_Q,:V_U_PRICE,:V_D_AMT_O,:V_D_AMT_L,:V_ETA,:V_SCHEDULE,:V_BAL_QTY,:V_CARVED_STAMP,:V_FROM,:V_TO); end;";
-			$sql = "{call t_sp(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+			$sql = "{call ZSP_UPDATE_PO(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 			
 			$params = array(
 				array($v_from, SQLSRV_PARAM_IN),
@@ -156,46 +156,6 @@ if (isset($_SESSION['id_wms'])){
 				array($price_ubah, SQLSRV_PARAM_IN)
 				
 			);
-
-
-			
-
-		// $sql = "BEGIN ZSP_UPDATE_PO(:V_FROM,:V_TO,:V_PO_NO,:V_PO_DATE,:V_DI_OUTPUT_TYPE,:V_TRANSPORT,:V_REMARK1,:V_MARKS1,:V_PO_REV,:V_PO_REV_RES,:V_EX_RATE,:V_PO_LINE_NEW,:V_ITEM_NO,:V_PO_LINE,:V_UOM_Q,:V_ORIGIN_CODE,:V_U_PRICE,:V_PO_CURR,:V_PO_CURR_ITEM,:V_QTY,:V_GR_QTY,:V_BAL_QTY,:V_ETA,:V_PRF_NO,:V_PRF_LINE_NO,:V_PO_DT_CODE,:V_D_AMT_O,:V_D_AMT_L,:V_PRC_UBAH); end;";
-		
-		// $stmt = sqlsrv_query($connect, $sql);
-
-		//  /*Binding Parameters */
-		//  array( $v_from);
-		//  array($v_to); 
-		//  ':V_PO_NO' , $po_no);
-		//  ':V_PO_DATE', $newDate1);
-		//  ':V_DI_OUTPUT_TYPE', $po_di_type);
-		//  ':V_TRANSPORT', $po_trans);
-		//  ':V_REMARK1', $po_remark );
-		//  ':V_MARKS1', $po_ship_mark);
-		//  ':V_PO_REV', $po_rev);
-		//  ':V_PO_REV_RES', $po_rev_res);
-
-		//  ':V_EX_RATE', $po_rate);
-		//  ':V_PO_LINE_NEW', $po_line_new);
-		//  ':V_ITEM_NO', $po_item);
-		//  ':V_PO_LINE', $po_line);
-		//  ':V_UOM_Q', $po_unit);
-		//  ':V_ORIGIN_CODE', $po_orign);
-		//  ':V_U_PRICE', $po_price);
-		//  ':V_PO_CURR', $po_curr);
-		//  ':V_PO_CURR_ITEM', $po_curr_item);
-		//  ':V_QTY', $po_qty);
-		//  ':V_GR_QTY', $po_gr_qty);
-		//  ':V_BAL_QTY', $bal);
-		//  ':V_ETA', $newDate);
-		//  ':V_PRF_NO', $po_prf);
-		//  ':V_PRF_LINE_NO', $po_prf_line);
-		//  ':V_PO_DT_CODE', $po_dt_code);
-		//  ':V_D_AMT_O', $amt_o);
-		//  ':V_D_AMT_L', $amt_l);
-		//  ':V_PRC_UBAH', $price_ubah);
-
 		/* Execute */
 		if ($po_sts == "DETAILS") {
 			$stmt = sqlsrv_query($connect, $sql, $parameter);

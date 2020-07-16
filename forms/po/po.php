@@ -120,7 +120,7 @@ if ($varConn=='Y'){
 				<span style="width:50px;display:inline-block;">ATTN</span>
 				<input style="width:140px;" name="attn_add" id="attn_add" class="easyui-textbox"/>
 				<span style="width:50px;display:inline-block;">Ship To</span>
-				<select style="width:185px;" name="ship_add" id="ship_add" class="easyui-combobox" data-options=" url:'json/json_ship_to.php', method:'get', valueField:'com_code', textField:'com_name', panelHeight:'150px'"></select>
+				<select style="width:185px;" name="ship_add" id="ship_add" class="easyui-combobox" data-options=" url:'../json/json_ship_to.php', method:'get', valueField:'com_code', textField:'com_name', panelHeight:'150px'"></select>
 				<span style="width:40px;display:inline-block;">Trade</span>
 				<input style="width:142px;" name="trade_add" id="trade_add" class="easyui-textbox"/>
 			</div>
@@ -1260,7 +1260,7 @@ if ($varConn=='Y'){
 
 			var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
-
+			//$.messager.alert('Info',str_unescape);
 			$.post('po_save.php',{
 				data: unescape(str_unescape)
 			}).done(function(res){
