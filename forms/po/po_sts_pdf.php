@@ -23,7 +23,7 @@ $date_eta = isset($_REQUEST['date_eta']) ? strval($_REQUEST['date_eta']) : '';
 $ck_eta = isset($_REQUEST['ck_eta']) ? strval($_REQUEST['ck_eta']) : '';
 
 if ($ck_date != "true"){
-    $date_po = "to_char(h.po_date,'YYYY-MM-DD') between '$date_awal' and '$date_akhir' and ";
+    $date_po = "h.po_date between '$date_awal' and '$date_akhir' and ";
     $period = $date_awal." TO ".$date_akhir;
 }else{
     $date_po = "";
@@ -55,7 +55,7 @@ if ($ck_po != "true"){
 }   
 
 if ($ck_eta != "true"){
-    $eta = "d.eta = to_date('$date_eta','yyyy-mm-dd') and ";
+    $eta = "d.eta = '$date_eta' and ";
     $e = $date_eta;
 }else{
     $eta = "";
@@ -64,15 +64,18 @@ if ($ck_eta != "true"){
 
 $where ="where $supp $item_no $po $eta $date_po d.item_no is not null";
 
-$qry = "select h.supplier_code,company, d.po_no, h.po_date, d.item_no, itm.description, itm.item, line_no,d.eta, d.qty, d.gr_qty,gg.qty as Receipt_Qty, 
-    gg.gr_Date, c.accpac_company_code, format(d.eta,'yyyy-MM-dd') as etad, format(gg.gr_Date,'yyyy-MM-dd') as grd, d.eta - gg.gr_date as diff from po_header h
-    inner join po_details d on h.po_no = d.po_no
-    left join company c on h.supplier_code = c.company_code and c.company_type = 3
-    left outer join (select gr_date, gs.po_no, gs.po_line_no, gs.qty from gr_details gs inner join gr_header gh on gs.gr_no = gh.gr_no) gg
-    on gg.po_no = d.po_no and gg.po_line_no = d.line_no
-    left join item itm on d.item_no= itm.item_no
+$qry = "select h.supplier_code,company, d.po_no, cast(h.po_date as varchar(10)) as po_date, d.item_no, itm.description, itm.item, line_no,cast(d.eta as varchar(10)) as eta, d.qty, 
+d.gr_qty,gg.qty as Receipt_Qty, gg.gr_Date, c.accpac_company_code, cast(d.eta as varchar(10)) as etad, 
+cast(gg.gr_Date as varchar(10)) as grd, datediff(d,d.eta , gg.gr_date) as diff from po_header h inner join po_details d on h.po_no = d.po_no 
+left join company c on h.supplier_code = c.company_code and c.company_type = 3 
+left outer join 
+(select gr_date, gs.po_no, gs.po_line_no, gs.qty from gr_details gs 
+    inner join gr_header gh on gs.gr_no = gh.gr_no) 
+gg on gg.po_no = d.po_no and gg.po_line_no = d.line_no 
+left join item itm on d.item_no= itm.item_no 
     $where
-    order by h.po_no asc, line_no asc";
+	order by h.po_no asc, line_no asc";
+//echo $qry;	
 $result = sqlsrv_query($connect, $qry);
 
 $date=date("d M y / H:i:s",time());
@@ -97,7 +100,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:925px;font-size:9px'>
@@ -176,7 +179,7 @@ while ($data=sqlsrv_fetch_object($result)){
             $no_R = $nourut;
         }
         $nourut++;
-    }
+      }
 
 	$content .= "
 			<tr>
@@ -190,7 +193,7 @@ while ($data=sqlsrv_fetch_object($result)){
 				<td valign='middle' align='right' style='font-size:10px;height:25px;'>".number_format($data->gr_qty)."&nbsp;</td>
 				<td valign='middle' align='right' style='font-size:10px;height:25px;'>".number_format($data->Receipt_qty)."</td>
 				<td valign='middle' align='center' style='font-size:10px;height:25px;'>".$data->eta."</td>
-				<td valign='middle' align='center' style='font-size:10px;height:25px;'>".$data->gr_date."</td>
+				<td valign='middle' align='center' style='font-size:10px;height:25px;'>".$data->gr_Date."</td>
 				<td valign='middle' align='center' style='font-size:10px;height:25px;'>".$data->diff." DAY</td>
 			</tr>";
 	$p = $po;
@@ -201,8 +204,9 @@ $content .= "
 	</div>
 </page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('PO-STATUS'.$date.'.pdf');
+ //echo $content
 ?>
