@@ -4,17 +4,17 @@
 	$yearmin = intval(date('Y'))-1;
 	$year = date('Y');
 	$yearplus = intval(date('Y')+1);
-	$sql = "select distinct prf_no from prf_header 
-		where CAST(prf_date as char(4)) = '$yearmin' 
-		OR CAST(prf_date as char(4)) = '$year'
-		OR CAST(prf_date as char(4)) = '$yearplus' 
-		order by prf_no asc";
-	$result = sqlsrv_query($connect, $sql);
+	//echo $yearmin.$year.$yaerplus;
+	$sql = "select top 200 gr_no, gr_date from gr_header 
+		where CAST(gr_date as char(4)) between '2019' and '2020' 
+		order by gr_date desc, gr_no asc";
+	//echo $sql;
+	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrNo = 0;
 	$arrData = array();
 	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
-			"prf_no"=>rtrim($row[0])
+			"gr_no"=>rtrim($row[0])
 		);
 		$arrNo++;
 	}
