@@ -206,49 +206,52 @@ IF @PRC_UBAH = 'UPD' BEGIN
   end
 
   GO
+--exec ZSP_INSERT_PO '123'
 
-  create procedure ZSP_INSERT_PO (
-    @PO_NO  nvarchar(20),
-    @SUPPLIER_CODE nvarchar(50),
-    @PO_DATE  date,
-    @CURR_CODE nvarchar(50), 
-    @EX_RATE  nvarchar(50), 
-    @TTERM nvarchar(50),
-    @PDAYS nvarchar(50),
-    @PDESC nvarchar(50),
-    @REQ nvarchar(50),
-    @REMARK1 nvarchar(50),
-    @MARKS1 nvarchar(50),
-    @ATTN nvarchar(50),
-    @PERSON_CODE nvarchar(50),
-    @ITEM_NO nvarchar(50),
-    @PBY nvarchar(50),
-    @SHIPTO_CODE nvarchar(50),
-    @TRANSPORT nvarchar(50),
-    @DI_OUTPUT_TYPE nvarchar(50),
-    @PRF_NO nvarchar(50), 
-    @PRF_LINE_NO nvarchar(50),
-    @ORIGIN_CODE nvarchar(50),
-    @QTY nvarchar(50),
-    @UOM_Q nvarchar(50),
-    @U_PRICE nvarchar(50),
-    @D_AMT_O nvarchar(50),
-    @D_AMT_L nvarchar(50), 
-    @ETA nvarchar(50),
-    @SCHEDULE nvarchar(50),
-    @BAL_QTY nvarchar(50),
-    @CARVED_STAMP nvarchar(50),
-    @FROM int,
-    @TO int 
+alter procedure ZSP_INSERT_PO (
+     @PO_NO  nvarchar(20) null,
+    @SUPPLIER_CODE nvarchar(50) null,
+    @PO_DATE  date null,
+    @CURR_CODE int null, 
+    @EX_RATE  decimal(14,6) null, 
+    @TTERM nvarchar(50) null,
+    @PDAYS int null,
+    @PDESC nvarchar(50) null,
+    @REQ nvarchar(50) null,
+    @REMARK1 nvarchar(50) null,
+    @MARKS1 nvarchar(50) null,
+    @ATTN nvarchar(50) null,
+    @PERSON_CODE nvarchar(50)null,
+    @PBY nvarchar(50)null,
+    @ITEM_NO int null,
+    @SHIPTO_CODE int null,
+    @TRANSPORT int,
+    @DI_OUTPUT_TYPE int null,
+    @PRF_NO nvarchar(50)null,
+    @PRF_LINE_NO int null,
+    @ORIGIN_CODE int null,
+    @QTY decimal(11, 3) null,
+    @UOM_Q varchar(3) null,
+    @U_PRICE decimal(14, 6) null,
+    @D_AMT_O decimal(14, 2) null,
+    @D_AMT_L decimal(14, 2) null, 
+    @ETA date null,
+    @SCHEDULE date null,
+    @BAL_QTY decimal(11, 3) null,
+    @CARVED_STAMP nvarchar(50) null,
+    @FROM int null,
+    @TO int null
 )as
 
 
-delete from po_details where po_no = @po_no  and line_no = @from
+
+delete from po_details where po_no = @po_no  and line_no = @FROM
+delete from PO_HEADER where po_no = @po_no  
 
 insert into po_details (po_no,
                        line_no,
                        prf_no,
-                      prf_line_no,
+                       prf_line_no,
                         item_no,
                         origin_code,
                         qty,
@@ -265,7 +268,8 @@ insert into po_details (po_no,
                         upto_date,
                         reg_date,
                         carved_stamp
-)values ( @po_no ,
+)values (
+     @po_no ,
            @from ,
              @prf_no,
          @prf_line_no,
@@ -311,7 +315,8 @@ IF EXISTS(select isnull(count(po_no),0) from po_details where po_no = @po_no) BE
                              transport,
                              di_output_type
                              ) 
-  values (@supplier_code,
+  values (
+          @supplier_code,
           @po_no,
           @po_date,
           @curr_code,
@@ -331,7 +336,7 @@ IF EXISTS(select isnull(count(po_no),0) from po_details where po_no = @po_no) BE
           @shipto_code,
           @transport,
           @di_output_type
-          );
+         );
 
 END
 
