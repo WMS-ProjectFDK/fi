@@ -17,20 +17,22 @@ if($by == 'check_line'){
 
 $sql_h = "select a.*, com.*, a.tterm as trade_term, cou.country, c.curr_short, c.curr_mark, 
 	(select coalesce(count(CARVED_STAMP),0) from po_details s where s.po_no = a.po_no) as date_code,
-	rtrim(replace(reason1,'chr(10)','<br/>'),'|') as reason1,
-	rtrim(replace(remark1,'chr(10)','<br/>'),'|') as remark1,
-  	(select count(*) from po_details where po_no=a.po_no) as jum_dtl
+	replace(reason1,'chr(10)','<br/>') as reason1,
+	replace(remark1,'chr(10)','<br/>') as remark1,
+  	(select count(*) from po_details where po_no=a.po_no) as jum_dtl,
+  	case when a.REVISE is null then 'N' else a.revise end as revise
 	from po_header a
-	inner join company com on a.supplier_code=com.company_code
-	inner join country cou on com.country_code=cou.country_code
-	inner join currency c on a.curr_code= c.curr_code
+	left join company com on a.supplier_code=com.company_code
+	left join country cou on com.country_code=cou.country_code
+	left join currency c on a.curr_code= c.curr_code
 	where a.po_no='$po'";
-$head = sqlsrv_query($connect, $sql_h);
+// echo $sql_h;
+$head = sqlsrv_query($connect, strtoupper($sql_h));
 $dt_h = sqlsrv_fetch_object($head);
-$dc = $dt_h->date_code;
-$j = $dt_h->jum_dtl;
+$dc = $dt_h->DATE_CODE;
+$j = $dt_h->JUM_DTL;
 
-if($dt_h->revise=='Y'){
+if($dt_h->REVISE=='Y'){
 	$ket = "<div style='border: 1px solid #000000;margin-top:20px;margin-left:620px;font-size:25px;width:115px;'>
 				<b><i>REVISED</i></b>
 			</div>";
@@ -81,18 +83,18 @@ if($dt_h->TRANSPORT == '1'){
 	$trans = "TRUCK";
 }
 
-$result = array();
-$qry = "select a.line_no, a.item_no, b.item, b.description, a.eta, a.qty, a.uom_q, c.unit_pl, c.unit, a.u_price, 
+
+$qry = "select a.line_no, a.item_no, b.item, b.description, cast(a.eta as varchar(10)) as eta, a.qty, a.uom_q, c.unit_pl, c.unit, a.u_price, 
 	po.curr_code,e.curr_short,e.curr_mark, a.amt_l, a.amt_o, a.CARVED_STAMP
 	from po_details a
-	inner join po_header po on a.po_no=po.po_no
-	inner join item b on a.item_no=b.item_no
-	inner join unit c on a.uom_q=c.unit_code
-	inner join country d on a.origin_code= d.country_code
-	inner join currency e on po.curr_code=e.curr_code
+	left join po_header po on a.po_no=po.po_no
+	left join item b on a.item_no=b.item_no
+	left join unit c on a.uom_q=c.unit_code
+	left join country d on a.origin_code= d.country_code
+	left join currency e on po.curr_code=e.curr_code
 	where po.po_no='$po'
 	$order ";
-$result = sqlsrv_query($connect, $qry);
+$result = sqlsrv_query($connect, strtoupper($qry));
 
 $date=date("d M y / H:i:s",time());
 $content = "	
@@ -115,7 +117,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:620px;font-size:9px'>
@@ -178,7 +180,7 @@ $content = "
 			            <tr>
 			              <td style='font-size:12px;border:0px solid #ffffff;'><b>PO DATE</b></td>
 			              <td style='font-size:12px;border:0px solid #ffffff;'>:</td>
-			              <td style='width:50px;font-size:12px;border:0px solid #ffffff;'>".$dt_h->PO_DATE."</td>
+			              <td style='width:50px;font-size:12px;border:0px solid #ffffff;'></td>
 			            </tr>
 			        </table>
 				</td>
@@ -354,5 +356,5 @@ require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('PO-'.$po.'.pdf');
-//echo  $content;
+// echo  $content;
 ?>
