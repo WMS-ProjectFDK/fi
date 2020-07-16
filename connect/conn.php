@@ -5,7 +5,7 @@
 	
 
 	$serverName = "localhost,1433"; 
-	$connectionInfo = array( "Database"=>"FDKSYS20","uid"=>"sa","pwd"=>"P@ssw0rd");
+	$connectionInfo = array( "Database"=>"FDKSYS20","uid"=>"sa","pwd"=>"P@ssw0rd","TraceOn"=>"0");
 	$connect = sqlsrv_connect( $serverName, $connectionInfo);
 	
 	if($connect) {
