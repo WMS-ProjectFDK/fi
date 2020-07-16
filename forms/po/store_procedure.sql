@@ -1,34 +1,37 @@
   
+
+
+
 create PROCEDURE "ZSP_UPDATE_PO" (
-    @FROM int,
-    @TO int,
-    @PO_NO nvarchar(200),
-    @PO_DATE nvarchar(200),
-    @DI_OUTPUT_TYPE nvarchar(200),
-    @TRANSPORT nvarchar(200), 
-    @REMARK1 nvarchar(200),
-    @MARKS1 nvarchar(200),
-     @po_rev nvarchar(200),
-    @po_re@res nvarchar(200),
-     @EX_RATE  nvarchar(200), 
-     @po_line_new   nvarchar(10),
-       @ITEM_NO nvarchar(200),
-     @po_line nvarchar(200),
-      @UOM_Q nvarchar(200),
-       @ORIGIN_CODE nvarchar(200),
-       @U_PRICE nvarchar(200),
-     @PO_CURR nvarchar(200),
-     @PO_CURR_ITEM nvarchar(200),
-     @QTY nvarchar(200),
-     @GR_QTY nvarchar(200),
-       @BAL_QTY nvarchar(200),
-        @ETA nvarchar(200),
-         @PRF_NO nvarchar(200), 
-    @PRF_LINE_NO nvarchar(200),
-   @PO_DT_CODE nvarchar(200),
-    @D_AMT_O nvarchar(200),
-    @D_AMT_L nvarchar(200),
-    @PRC_UBAH nvarchar(200)
+    @FROM int  null,
+    @TO int  null,
+    @PO_NO nvarchar(200)  null,
+    @PO_DATE date  null,
+    @DI_OUTPUT_TYPE int  null,
+    @TRANSPORT int  null, 
+    @REMARK1 nvarchar(200)  null,
+    @MARKS1 nvarchar(200)  null,
+     @po_rev nvarchar(200)  null,
+    @po_rev_res nvarchar(200)  null,
+     @EX_RATE  decimal(14,6)  null,  
+     @po_line_new   nvarchar(10)  null,
+       @ITEM_NO int  null,
+     @po_line NVARCHAR(5)  null,
+      @UOM_Q nvarchar(200)  null,
+       @ORIGIN_CODE nvarchar(200)  null,
+       @U_PRICE decimal(14, 6)  null,
+     @PO_CURR int  null,
+     @PO_CURR_ITEM nvarchar(20)  null,
+     @QTY decimal(11, 3)  null,
+     @GR_QTY decimal(11, 3)  null,
+       @BAL_QTY decimal(11, 3) null,
+        @ETA date  null,
+         @PRF_NO nvarchar(200)  null, 
+    @PRF_LINE_NO int null,
+   @PO_DT_CODE nvarchar(200)  null,
+    @D_AMT_O decimal(14, 6)  null,
+    @D_AMT_L decimal(14, 6)  null,
+    @PRC_UBAH nvarchar(200)  null
      )as
      
 -- @hitungPO number :=0;  
@@ -80,7 +83,7 @@ IF @po_line = 'NEW' BEGIN
           getdate(),
           getdate());
 END ELSE IF @po_line = 'PARSIAL' BEGIN          
-  select  @line_parsial = count(*)+1  from po_details where po_no= @po_no;
+  
   insert into po_details(po_no, 
                              line_no,
                              prf_no,
@@ -102,7 +105,7 @@ END ELSE IF @po_line = 'PARSIAL' BEGIN
                              reg_date
                              )
   values (@po_no,
-          @line_parsial,
+          (select  count(*)+1  from po_details where po_no= @po_no),
           @prf_no,
           @prf_line_no,
           @item_no,
@@ -121,7 +124,6 @@ END ELSE IF @po_line = 'PARSIAL' BEGIN
           getdate(),
           getdate());          
 END ELSE BEGIN
-  
   update po_details 
   set qty = @qty,
       bal_qty = @bal_qty,
@@ -151,7 +153,7 @@ update po_header set
       remark1        = @remark1,
       marks1         = @marks1,
       revise         = @po_rev,
-      reason1        = @po_re@res,
+      reason1        = @po_rev_res,
       -- start --update ueng (25-aug-17)
       curr_code      = @po_curr,
       ex_rate        = @ex_rate,

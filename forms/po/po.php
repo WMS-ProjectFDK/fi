@@ -1780,7 +1780,6 @@ if ($varConn=='Y'){
 				var str_unescape_e=unescape(myJSON_e);
 
 				console.log(dataRows_Edit);
-
 				$.post('po_edit.php',{
 					data: unescape(str_unescape_e)
 				}).done(function(res){

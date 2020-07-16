@@ -5,7 +5,7 @@
 	$rowno=0;
 
 	$rs = "select remark_type,remark_description from remarks where remark_type = 'PO' order by remark_type";
-	$data = sqlsrv_query($connect, $rs);
+	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, strtoupper($row));

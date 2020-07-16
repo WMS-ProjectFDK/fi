@@ -7,7 +7,7 @@
 	include("../../connect/conn.php");
 	$rowno=0;
 	$rs = "select a.item_no, a.line_no, b.item, b.description, a.uom_q, c.unit, a.origin_code, d.country, a.u_price as ESTIMATE_PRICE, a.carved_stamp,
-		po.curr_code, e.curr_short, e.curr_mark, format(a.eta,'yyyy-MM-dd') as eta_date, a.QTY, a.gr_qty, a.bal_qty, a.prf_no, a.prf_no as prf_nomor, a.PRF_LINE_NO
+		po.curr_code, e.curr_short, e.curr_mark, cast(a.eta as varchar(10)) as eta_date, a.QTY, a.gr_qty, a.bal_qty, a.prf_no, a.prf_no as prf_nomor, a.PRF_LINE_NO
 		from po_details a
 		left join po_header po on a.po_no=po.po_no
 		left join item b on a.item_no=b.item_no
@@ -17,7 +17,7 @@
 		where po.po_no='$po_no'
 		order by a.line_no asc";
 
-	$data = sqlsrv_query($connect, $rs);
+	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);

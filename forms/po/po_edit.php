@@ -57,11 +57,10 @@ if (isset($_SESSION['id_wms'])){
 
 		$bal = intval($po_qty - $po_gr_qty);
 
-		$cek_jum = "select count(*) as jum from
-				(select to_char(u_price,'99,999,990.0000')from po_details
+		$cek_jum = "select count(u_price) as jum from po_details
 					where po_no = '$po_no' AND line_no = $po_line
 					AND u_price != '$po_price'
-				)";
+				";
 		$data_jum = sqlsrv_query($connect, $cek_jum);
 		$dt_jum = sqlsrv_fetch_object($data_jum);
 		//echo $cek_jum."<br/>";
@@ -122,7 +121,7 @@ if (isset($_SESSION['id_wms'])){
 		}
 
 		// $sql = "BEGIN ZSP_Insert_PO_1(:V_PO_NO,:V_SUPPLIER_CODE,:V_PO_DATE,:V_CURR_CODE,:V_EX_RATE,:V_TTERM,:V_PDAYS,:V_PDESC,:V_REQ,:V_REMARK1,:V_MARKS1,:V_ATTN,:V_PERSON_CODE,:V_ITEM_NO,:V_PBY,:V_SHIPTO_CODE,:V_TRANSPORT,:V_DI_OUTPUT_TYPE,:V_PRF_NO,:V_PRF_LINE_NO,:V_ORIGIN_CODE,:V_QTY,:V_UOM_Q,:V_U_PRICE,:V_D_AMT_O,:V_D_AMT_L,:V_ETA,:V_SCHEDULE,:V_BAL_QTY,:V_CARVED_STAMP,:V_FROM,:V_TO); end;";
-			$sql = "{call ZSP_UPDATE_PO(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+			$sql = "{call ZSP_UPDATE_PO(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 			
 			$params = array(
 				array($v_from, SQLSRV_PARAM_IN),
@@ -158,7 +157,8 @@ if (isset($_SESSION['id_wms'])){
 			);
 		/* Execute */
 		if ($po_sts == "DETAILS") {
-			$stmt = sqlsrv_query($connect, $sql, $parameter);
+			
+			$stmt = sqlsrv_query($connect, $sql, $params);
 			if( $stmt === false )
 			{
 				echo "Error in executing statement 3.\n";
