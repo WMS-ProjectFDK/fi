@@ -30,9 +30,9 @@ $endorder=isset($_REQUEST['endorder']) ? strval($_REQUEST['endorder']) : '';
 
 if($ck_date!='true'){
     if($date_sts== 'check_eta'){
-        $dt = "aa.eta between to_date('$date_awal','yyyy-mm-dd') AND to_date('$date_akhir','yyyy-mm-dd') AND ";
+        $dt = "aa.eta between '$date_awal AND '$date_akhir' AND ";
     }elseif($date_sts== 'check_po'){
-        $dt = "aa.po_date between to_date('$date_awal','yyyy-mm-dd') AND to_date('$date_akhir','yyyy-mm-dd') AND ";
+        $dt = "aa.po_date between '$date_awal' AND '$date_akhir' AND ";
     }
 }else{
     $dt = "";
@@ -66,20 +66,25 @@ $where = "where $dt $po $supp $itm $order ";
 
 $result = array();
 
-$qry = "select * from (select r.po_no, s.line_no, r.po_date, r.supplier_code, cc.company, r.remark1, s.item_no, ii.description,
-       s.qty, s.bal_qty, s.gr_qty, s.eta, tt.slip_no, tt.slip_quantity, tt.slip_date, 
-       case when qty <> bal_qty+ gr_qty then 1 else case when totalGR <> gr_qty then 1 else 0 end end as StatusBalance,
-       case when qty > gr_qty then 1 else 0 end StatusPO
-       from po_header r
-       inner join po_details s on r.po_no = s.po_no
-       inner join company cc on r.supplier_code = cc.company_code
-       inner join (select item_no,description from item) ii on s.item_no = ii.item_no
-       left outer join (select order_number,line_no, slip_no,slip_quantity,slip_date from transaction)tt on s.po_no = tt.order_number and s.line_no = tt.line_no
-       left outer join (select order_number,line_no, Sum(slip_quantity) totalGR from transaction group by order_number,line_no)ttx 
-       on s.po_no = ttx.order_number and s.line_no =ttx.line_no) aa
+
+$qry = "select * from (select r.po_no, s.line_no, cast(r.po_date as varchar(10)) po_date,  r.supplier_code, cc.company, r.remark1, s.item_no, 
+ii.description, s.qty, s.bal_qty, s.gr_qty, cast(s.eta as varchar(10)) eta, tt.slip_no, tt.slip_quantity, cast(tt.slip_date as varchar(10)) as slip_date, 
+case when qty <> bal_qty+ gr_qty then 1 else case when totalGR <> gr_qty then 1 else 0 end end as StatusBalance, 
+case when qty > gr_qty then 1 else 0 end StatusPO 
+from po_header r 
+inner join po_details s on r.po_no = s.po_no 
+inner join company cc on r.supplier_code = cc.company_code 
+inner join (select item_no,description from item) ii on s.item_no = ii.item_no 
+left outer join (select order_number,line_no, slip_no,slip_quantity,slip_date from [transaction])tt 
+on s.po_no = tt.order_number and s.line_no = tt.line_no 
+left outer join (select order_number,line_no, Sum(slip_quantity) totalGR 
+                   from [transaction]
+                   group by order_number,line_no)ttx 
+on s.po_no = ttx.order_number and s.line_no =ttx.line_no) aa 
        $where
        order by po_no,po_date,line_no, slip_date asc";
-$result = sqlsrv_query($connect, $qry);
+ 
+//$result = sqlsrv_query($connect, $qry);
 
 $date=date("d M y / H:i:s",time());
 
@@ -96,6 +101,7 @@ function cellColor($cells,$color){
 
 $objPHPExcel = new PHPExcel(); 
 $sheet = $objPHPExcel->getActiveSheet();
+
 
 $no=2;
 $pono='';   
@@ -249,10 +255,10 @@ while ($data=sqlsrv_fetch_object($result)) {
             $no++;
 
             $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A'.$no, $data->PO_NO)
-                        ->setCellValue('B'.$no, $data->PO_DATE)
-                        ->setCellValue('C'.$no, $data->SUPPLIER_CODE)
-                        ->setCellValue('D'.$no, $data->COMPANY);
+                        ->setCellValue('A'.$no, $data->po_no)
+                        ->setCellValue('B'.$no, $data->po_date)
+                        ->setCellValue('C'.$no, $data->supplier_code)
+                        ->setCellValue('D'.$no, $data->company);
 
             $sheet->getStyle('A'.$no.':D'.$no)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
             $sheet->getStyle('A'.$no.':D'.$no)->getAlignment()->applyFromArray(
@@ -416,13 +422,13 @@ $objPHPExcel->setActiveSheetIndex(0);
 /*$objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('FDK');
 $objDrawing->setDescription('FDK');
-$objDrawing->setPath('../images/fdk8.png');
-$objDrawing->setWidth('100px');
+$objDrawing->setPath('../../images/fdk8.png');
+$objDrawing->setWidth('100px');  
 $objDrawing->setCoordinates('B2');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());*/
-// Save Excel 2007 file
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+// // Save Excel 2007 file
+ $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+ $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 
 // We'll be outputting an excel file
 header('Content-type: application/vnd.ms-excel');
