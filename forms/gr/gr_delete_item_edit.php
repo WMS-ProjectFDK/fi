@@ -12,8 +12,8 @@ while ($dt_result = oci_fetch_object($result)){
 	$data_upd = sqlsrv_query($connect, strtoupper($upd));
 	
 	if($data_upd){
-		$split = explode('-', $dt_result->GR_DATE)
-		$thisM = trim($split[0].$split[1]);
+		$split = explode('-', $dt_result->GR_DATE);
+		//$thisM = trim($split[0].$split[1]);
 
 		$upd2 = "update whinventory set receive1 = receive1-".$dt_result->QTY.", this_inventory = this_inventory-".$dt_result->QTY." 
 			where item_no = '".$dt_result->ITEM_NO."' and this_month = ".$thisM."";

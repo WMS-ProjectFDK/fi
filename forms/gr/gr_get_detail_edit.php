@@ -7,8 +7,8 @@
 	include("../../connect/conn.php");
 	$rowno=0;
 
-	$rs = "select distinct b.line_no as line_no_gr, a.gr_no, b.po_line_no as line_no_po, b.po_no, g.po_date, b.item_no, c.item, c.description, c.STOCK_SUBJECT_CODE, c.COST_PROCESS_CODE, c.COST_SUBJECT_CODE, c.STANDARD_PRICE, coalesce(c.SUPPLIERS_PRICE,0) as SUPPLIERS_PRICE,
-		b.uom_q, d.unit, a.curr_code, e.curr_mark, e.curr_short, f.qty, f.gr_qty - b.qty as gr_qty, b.qty as act_qty, f.origin_code, b.u_price, a.ex_rate, f.eta,
+	$rs = "select distinct b.line_no as line_no_gr, a.gr_no, b.po_line_no as line_no_po, b.po_no, cast(g.po_date as varchar(10)) as po_date, b.item_no, c.item, c.description, c.STOCK_SUBJECT_CODE, c.COST_PROCESS_CODE, c.COST_SUBJECT_CODE, c.STANDARD_PRICE, coalesce(c.SUPPLIERS_PRICE,0) as SUPPLIERS_PRICE,
+		b.uom_q, d.unit, a.curr_code, e.curr_mark, e.curr_short, f.qty, f.gr_qty - b.qty as gr_qty, b.qty as act_qty, f.origin_code, b.u_price, a.ex_rate, cast(f.eta as varchar(10)) eta,
 		a.pdays, a.pdesc, b.amt_o, b.amt_l, a.slip_type, (CASE WHEN b.item_no=whi.item_no THEN '1' ELSE '0' END) as sts_wh, f.qty - (f.gr_qty - b.qty) as blnc
 		from gr_header a
 		inner join gr_details b on a.gr_no=b.gr_no
