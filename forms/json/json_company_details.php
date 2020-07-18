@@ -19,14 +19,14 @@
 	$arrNo = 0;
 	while ($row=sqlsrv_fetch_object($result)){
 		array_push($arrData, $row);
-		$crc = $row->curr_code;
+		$crc = $row->CURR_CODE;
 		if(intval($crc)!=0){
 			$qry="select coalesce(rate,0) as rate from ex_rate 
 				where curr_code='".$crc."' 
 				and ex_date=(select max(ex_date) from ex_rate where curr_code='".$crc."')";
 			$data = sqlsrv_query($connect,strtoupper($qry));
 			$dt = sqlsrv_fetch_object($data);
-			$rate = $dt->rate;
+			$rate = $dt->RATE;
 			$row->ex_rate = $rate;
 		}else{
 			$row->ex_rate = '';

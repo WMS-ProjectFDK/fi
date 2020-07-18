@@ -124,7 +124,7 @@ if (isset($_SESSION['id_wms'])){
 	
 	if($msg != ''){
 		$msg .= " Procedure Insert - GR Process Error : $sql";
-		break;
+		
 	}
 }else{
 	$msg .= 'Session Expired';
