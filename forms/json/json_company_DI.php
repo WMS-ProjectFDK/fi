@@ -3,7 +3,8 @@
 	$idx = isset($_REQUEST['index']) ? strval($_REQUEST['index']) : '';
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
-	$sql = "select company_code, company, company_code||' - '||company as comb_company from company where company_type=3 order by company asc";
+	$sql = "select company_code, company, cast(company_code as varchar)+' - '+company as comb_company 
+        from company where company_type=3 order by company asc";
 	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrData = array();
 	$arrNo = 0;

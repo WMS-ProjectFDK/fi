@@ -30,10 +30,11 @@
 	
 	include("../../connect/conn.php");
 
-	$sql = "select distinct a.di_no, a.di_date, a.req, a.shipto_code, b.company, a.person_code, a.upto_date from di_header a
-		left join company b on a.shipto_code=b.company_code
-		left join di_details c on a.di_no=c.di_no
-		$where order by a.di_date desc";
+	$sql = "select distinct a.di_no, CAST(a.di_date as varchar(10)) as di_date, a.req, a.shipto_code, b.company, a.person_code, CAST(a.upto_date as varchar(10)) as upto_date from di_header a
+    left join company b on a.shipto_code=b.company_code
+    inner join di_details c on a.di_no=c.di_no
+        $where 
+        order by CAST(a.di_date as varchar(10)) desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();
