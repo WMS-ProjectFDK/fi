@@ -5,7 +5,7 @@ require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $menu_id = $_GET['id'];
 
-$q= "select count(*) as jum from whinventory where this_month=RIGHT('0' + RTRIM(MONTH(getdate())), 2)" ;
+$q= "select count(*) as jum from whinventory where this_month=(SELECT CONVERT(nvarchar(6), getdate(), 112))" ;
 $data_q = sqlsrv_query($connect, strtoupper($q));
 $dt_q = sqlsrv_fetch_object($data_q);
 ?>
@@ -948,7 +948,6 @@ $dt_q = sqlsrv_fetch_object($data_q);
 
 					var myJSON=JSON.stringify(dataRows);
 					var str_unescape=unescape(myJSON);
-
 					$.post('gr_save.php',{
 						data: unescape(str_unescape)
 					}).done(function(res){
@@ -967,19 +966,20 @@ $dt_q = sqlsrv_fetch_object($data_q);
 			}
 
 			function saveAdd(){
-				$.messager.progress({
-				    title:'Please waiting',
-				    msg:'Save data...'
-				});
+				// $.messager.progress({
+				//     title:'Please waiting',
+				//     msg:'Save data...'
+				// });
 
 				$('#save_add').linkbutton('disable');
 				$('#cancel_add').linkbutton('disable');
 				var url='';
 				var grno = $('#gr_no_add').textbox('getValue');
 				var grdt = $('#gr_date_add').datebox('getValue');
+				
 				$.ajax({
 					type: 'GET',
-					url: 'json/json_kode_gr.php?gr='+grno+'&gr_date='+grdt,
+					url: '../json/json_kode_gr.php?gr='+grno+'&gr_date='+grdt,
 					data: { kode:'kode' },
 					success: function(data){
 						if(data[0].kode=='SUCCESS'){

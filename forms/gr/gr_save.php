@@ -58,7 +58,7 @@ if (isset($_SESSION['id_wms'])){
 		$cc_field  = "GR_STS,"				;	$cc_value  =  "'$gr_sts',"									;
 		$cc_field .= "GR_NO,"				;	$cc_value .=  "'$gr_no',"									;
 		$cc_field .= "LINE_NO,"				;	$cc_value .=  "$gr_line,"									;
-		$cc_field .= "GR_DATE,"				;	$cc_value .=  "CAST('$gr_date' as varchar(10)),"			;
+		$cc_field .= "GR_DATE,"				;	$cc_value .=  "'$gr_date',"			;
 		$cc_field .= "GR_QTY,"				;	$cc_value .=  "$gr_qty_act,"								;
 		$cc_field .= "GR_UOM_Q,"			;	$cc_value .=  "$gr_uomq,"									;
 		$cc_field .= "GR_U_PRICE,"			;	$cc_value .=  "$gr_price,"									;
@@ -88,10 +88,12 @@ if (isset($_SESSION['id_wms'])){
 		$cc_field .= "PO_DATE,"				;	$cc_value .=  "'$gr_po_date',"								;
 		$cc_field .= "PO_LINE_NO,"			;	$cc_value .=  "$gr_po_line,"								;
 		$cc_field .= "PERSON_CODE,"			;	$cc_value .=  "'$user',"									;
-		$cc_field .= "DUE_DATE"				;	$cc_value .=  "CAST('$due_date' as varchar(10))"			;
+		$cc_field .= "DUE_DATE"				;	$cc_value .=  "'$due_date'"			;
 		chop($cc_field);              			chop($cc_value);
 
-		$ins_cc = "insert into ztb_gr_temp ($cc_field) select $cc_value from dual";
+		$ins_cc = "insert into ztb_gr_temp ($cc_field) select $cc_value ";
+		
+		
 		$data_cc = sqlsrv_query($connect, strtoupper($ins_cc));
 		
 		if($data_cc === false ) {
@@ -108,11 +110,17 @@ if (isset($_SESSION['id_wms'])){
 		}
 	}
 
-	$sql = "BEGIN ZSP_INSERT_GR(:V_USER); END;";
-	$stmt = sqlsrv_query($connect, $sql);
-	oci_bind_by_name($stmt, ':V_USER' , trim($user));
-	$pesan = oci_error($stmt);
-	$msg .= $pesan['message'];
+	
+
+	$sql = "{call ZSP_INSERT_GR(?)}";		
+	$params = array(  
+		array(  $user  , SQLSRV_PARAM_IN)
+	);
+	
+	$stmt = sqlsrv_query($connect, $sql,$params);
+	// oci_bind_by_name($stmt, ':V_USER' , trim($user));
+	// $pesan = oci_error($stmt);
+	// $msg .= $pesan['message'];
 
 	if($stmt === false ) {
 		if(($errors = sqlsrv_errors() ) != null) {  
