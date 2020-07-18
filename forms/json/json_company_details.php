@@ -27,7 +27,11 @@
 			$data = sqlsrv_query($connect,strtoupper($qry));
 			$dt = sqlsrv_fetch_object($data);
 			$rate = $dt->RATE;
+<<<<<<< HEAD
 			$row->EX_RATE = $rate;
+=======
+			$row->ex_rate = $rate;
+>>>>>>> 25108b6fd2b1572cf26ef267c5aa454ddc166f96
 		}else{
 			$row->EX_RATE = '';
 		}

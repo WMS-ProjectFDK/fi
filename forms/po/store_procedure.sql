@@ -2,36 +2,38 @@
 
 
 
-create PROCEDURE "ZSP_UPDATE_PO" (
-    @FROM int  null,
-    @TO int  null,
-    @PO_NO nvarchar(200)  null,
-    @PO_DATE date  null,
-    @DI_OUTPUT_TYPE int  null,
-    @TRANSPORT int  null, 
-    @REMARK1 nvarchar(200)  null,
-    @MARKS1 xnvarchar(200)  null,
-     @po_rev nvarchar(200)  null,
-    @po_rev_res nvarchar(200)  null,
-     @EX_RATE  decimal(14,6)  null,  
-     @po_line_new   nvarchar(10)  null,
-       @ITEM_NO int  null,
-     @po_line NVARCHAR(5)  null,
-      @UOM_Q nvarchar(200)  null,
-       @ORIGIN_CODE nvarchar(200)  null,
-       @U_PRICE decimal(14, 6)  null,
-     @PO_CURR int  null,
-     @PO_CURR_ITEM nvarchar(20)  null,
-     @QTY decimal(11, 3)  null,
-     @GR_QTY decimal(11, 3)  null,
-       @BAL_QTY decimal(11, 3) null,
-        @ETA date  null,
-         @PRF_NO nvarchar(200)  null, 
-    @PRF_LINE_NO int null,
-   @PO_DT_CODE nvarchar(200)  null,
-    @D_AMT_O decimal(14, 6)  null,
-    @D_AMT_L decimal(14, 6)  null,
-    @PRC_UBAH nvarchar(200)  null
+
+
+create PROCEDURE [dbo].[ZSP_UPDATE_PO] (
+    @FROM int  = null,
+    @TO int  = null,
+    @PO_NO nvarchar(200)  = null,
+    @PO_DATE date  = null,
+    @DI_OUTPUT_TYPE int  = null,
+    @TRANSPORT int  = null, 
+    @REMARK1 nvarchar(200)  = null,
+    @MARKS1 nvarchar(200)  = null,
+     @po_rev nvarchar(200)  = null,
+    @po_rev_res nvarchar(200)  = null,
+     @EX_RATE  decimal(14,6)  = null,  
+     @po_line_new   nvarchar(10)  = null,
+       @ITEM_NO int  = null,
+     @po_line NVARCHAR(10)  = null,
+      @UOM_Q nvarchar(200)  = null,
+       @ORIGIN_CODE nvarchar(200)  = null,
+       @U_PRICE decimal(14, 6)  = null,
+     @PO_CURR int  = null,
+     @PO_CURR_ITEM nvarchar(20)  = null,
+     @QTY decimal(11, 3)  = null,
+     @GR_QTY decimal(11, 3)  = null,
+       @BAL_QTY decimal(11, 3) = null,
+        @ETA date  = null,
+         @PRF_NO nvarchar(200)  = null, 
+    @PRF_LINE_NO int = null,
+   @PO_DT_CODE nvarchar(200)  = null,
+    @D_AMT_O decimal(14, 6)  = null,
+    @D_AMT_L decimal(14, 6)  = null,
+    @PRC_UBAH nvarchar(200)  = null
      )as
      
 -- @hitungPO number :=0;  
@@ -64,7 +66,7 @@ IF @po_line = 'NEW' BEGIN
                              reg_date
                              )
   values (@po_no,
-          @po_line_new,
+          (select  count(*)+1  from po_details where po_no= @po_no),
           @prf_no,
           @prf_line_no,
           @item_no,
@@ -206,6 +208,8 @@ IF @PRC_UBAH = 'UPD' BEGIN
   where order_number = @po_no AND line_no= @po_line
 
   end
+GO
+
 
   GO
 --exec ZSP_INSERT_PO '123'
