@@ -21,13 +21,13 @@
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
-		$q = $items[$rowno]->qty;
+		$q = $items[$rowno]->QTY;
 		$items[$rowno]->qty = number_format($q,2);
 
-		$qb = $items[$rowno]->bal_qty;
+		$qb = $items[$rowno]->BAL_QTY;
 		$items[$rowno]->bal_qty = number_format($qb,2);
 
-		$qg = $items[$rowno]->gr_qty;
+		$qg = $items[$rowno]->GR_QTY;
 		$items[$rowno]->gr_qty = number_format($qg,2);
 
 		$rowno++;
