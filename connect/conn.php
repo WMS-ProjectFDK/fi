@@ -8,10 +8,16 @@
 
 	$connect = sqlsrv_connect( $serverName, $connectionInfo);
 
+
+	
+
 	if($connect) {
 		$varConn = "Y";
 	}else{
 		$varConn = "N";
 		die(print_r(sqlsrv_errors(),true));
-	}
+	};
+
+
+	
 ?>

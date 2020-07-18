@@ -1,0 +1,91 @@
+@startuml
+
+  title  GET credit-card/v1/auto-installment/eligible
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Define Diagram Participants
+  ' http://plantuml.com/skinparam
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  actor Requestor as requestor #DeepSkyBlue
+  box "Credit Card Microservice" #PowderBlue
+    entity "Credit Card" as casa #DeepSkyBlue
+    database "credit_card_account" as block #DeepSkyBlue
+    ' database "config" as config #DeepSkyBlue
+  endbox
+
+  box "Everest" #PeachPuff
+    ' entity "config" as config #lightcoral
+    ' entity "card" as card #lightcoral
+  endbox
+
+
+  box "Surrounding System" #PeachPuff
+    entity "ESB:ICS" as emas #lightcoral
+  endbox
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Formatting Options
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  hide footbox
+  'autonumber
+  skinparam defaultFontName Comic Sans MS
+  skinparam sequence {
+  ParticipantFontSize 15
+  ActorFontSize 15
+  ArrowFontName Comic Sans MS
+  ParticipantFontName Comic Sans MS
+  }
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Microservice Logic Goes Here
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  == Get list of credit card ==
+
+  requestor -> casa: eligibleListRequest
+
+activate casa
+            casa -> block : getDataCard(transactionCode,cif,userId)
+activate block
+note right casa
+  filter for validationCode == "00"
+  Order by ccList.isMaim == "1" to top list
+end note
+block --> casa : ccList
+deactivate block
+
+break cardBlockUnblock record not found
+casa -> requestor : Error 409, status code 30326: Failed Update Card Status
+
+end
+
+            
+            loop ccList
+                loop settledTrxMoreRecordsIndicator == "N" and unSettledTrxMoreRecordsIndicator == "N"
+                    casa -> emas: POST CoreBankCreditCardAutoInstallmentInquiry/1.0/CreditCardAutoInstallmentInquiry(cardNumberRequest)                        
+                    activate emas           
+                    emas --> casa:  installmentListesponse
+                    deactivate emas
+                end loop
+                break
+            else payload.responseCode != ("00")
+                casa --> requestor: Error 409, code: 30306, Unsuccesful Call ICS
+            end break
+        
+               
+            end  loop 
+
+        
+deactivate casa
+          casa --> requestor : eligibleListResponse
+         
+   
+	
+
+   
+
+ 
+@enduml
+
