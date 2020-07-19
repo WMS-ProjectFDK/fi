@@ -1228,33 +1228,36 @@ $dt_q = sqlsrv_fetch_object($data_q);
 
 			function remove_po_edit(){
 				var row = $('#dg_edit').datagrid('getSelected');
-				if (row){
-					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-						if(r){
-							if(row.LINE_NO_GR=='NEW'){
-								var idx = $("#dg_edit").datagrid("getRowIndex", row);
-								$('#dg_edit').datagrid('deleteRow', idx);
-							}else{
-								$.messager.progress({
-								    title:'Please waiting',
-								    msg:'removing data...'
-								});
-								$.post('gr_delete_item_edit.php',{gr_no: $('#gr_no_edit').textbox('getValue'), item_no: row.ITEM_NO},function(result){
-									if (result.success){
-										$.messager.progress('close');
-		                                $('#dg_edit').datagrid('reload');
-		                            }else{
-		                                $.messager.show({
-		                                    title: 'Error',
-		                                    msg: result.errorMsg
-		                                });
-		                            }
-								},'json');
-								$('#dg_edit').datagrid('deleteRow', idx);	
-							}	
-						}	
-					});
-				}
+				var idx = $("#dg_edit").datagrid("getRowIndex", row);
+				$('#dg_edit').datagrid('deleteRow', idx);
+				$('#cancel_edit').linkbutton('disable');
+				// if (row){
+				// 	$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+				// 		if(r){
+				// 			if(row.LINE_NO_GR=='NEW'){
+				// 				var idx = $("#dg_edit").datagrid("getRowIndex", row);
+				// 				$('#dg_edit').datagrid('deleteRow', idx);
+				// 			}else{
+				// 				$.messager.progress({
+				// 				    title:'Please waiting',
+				// 				    msg:'removing data...'
+				// 				});
+				// 				$.post('gr_delete_item_edit.php',{gr_no: $('#gr_no_edit').textbox('getValue'), item_no: row.ITEM_NO},function(result){
+				// 					if (result.success){
+				// 						$.messager.progress('close');
+		        //                         $('#dg_edit').datagrid('reload');
+		        //                     }else{
+		        //                         $.messager.show({
+		        //                             title: 'Error',
+		        //                             msg: result.errorMsg
+		        //                         });
+		        //                     }
+				// 				},'json');
+				// 				$('#dg_edit').datagrid('deleteRow', idx);	
+				// 			}	
+				// 		}	
+				// 	});
+				// }
 			}
 
 			function simpan_edit(){

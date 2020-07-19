@@ -9,7 +9,7 @@
 	$rowno=0;
 	$rs = "select distinct a.po_no, a.po_line_no, a.origin_code, a.item_no, b.item, b.description, a.uom_q, 
 		case e.sts_bundle when 'Y' then 'BUNDLE' else c.unit end as unit,
-		a.qty, a.data_date, CAST(d.po_date as varchar(10)) as po_date
+		a.qty, CAST(a.data_date as varchar(10)) as data_date, CAST(d.po_date as varchar(10)) as po_date
 		from di_details a
 		inner join item b on a.item_no=b.item_no
 		inner join unit c on a.uom_q= c.unit_code
