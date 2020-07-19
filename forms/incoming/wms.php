@@ -335,6 +335,7 @@ $user_name = $_SESSION['id_wms'];
 				data: unescape(str_unescape)
 			}).done(function(res){
 				if(res == '"success"'){
+					console.log(res);
 					$('#dlg').dialog('close');
 					$('#dg').datagrid('reload');
 					$.messager.alert('INFORMATION','Data Saved!','info');
