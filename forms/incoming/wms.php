@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require_once('../	.php');
+require_once('../../connect/conn.php');
 $user_name = $_SESSION['id_wms'];
 ?>
 <!DOCTYPE html>
