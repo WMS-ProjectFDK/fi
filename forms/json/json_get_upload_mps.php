@@ -3,9 +3,10 @@
 	$idx = isset($_REQUEST['index']) ? strval($_REQUEST['index']) : '';
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
-	$sql = "select distinct to_char(UPLOAD_DATE,'yyyy-mm-dd hh24miss') LASTED,upload_date from mps_header_rireki where upload_date > (select sysdate - 100 from dual ) 
-and to_char(UPLOAD_DATE,'yyyy-mm-dd hh24miss') <> (select distinct to_char(UPLOAD_DATE,'yyyy-mm-dd hh24miss') LISTED from mps_header where rownum < 2)
-order by upload_date desc";
+	$sql = "select distinct CAST(upload_date as varchar(20)) as LASTED, UPLOAD_DATE from MPS_HEADER_RIREKI
+		where UPLOAD_DATE > (select CAST(DATEADD(day,-100,getdate()) as date))
+		and CAST(upload_date as varchar(10)) <> (select distinct CAST(upload_date as varchar(10)) from mps_header)
+		order by upload_date desc";
 	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrData = array();
 	$arrNo = 0;

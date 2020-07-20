@@ -152,11 +152,14 @@ $user_name = $_SESSION['id_wms'];
 			dcur = dcur.split("-").join("");
 
 			if (flag==2){
-				url_download = "http://172.23.206.21/pglosas/entry/mps/mps_download2y.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				// url_download = "http://172.23.20f6.21/pglosas/entry/mps/mps_download2y.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				url_download = 'mps_download_xls_y.php?DATE_OLD='+dold+'&DATE_CUR='+dcur;
 			}else if (flag==1){
-				url_download = "http://172.23.206.21/pglosas/entry/mps/mps_download2x.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				// url_download = "http://172.23.206.21/pglosas/entry/mps/mps_download2x.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				url_download = 'mps_download_xls_x.php?DATE_OLD='+dold+'&DATE_CUR='+dcur;
 			}else{
-				url_download = "http://172.23.206.21/pglosas/entry/mps/mps_download2.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				// url_download = "http://172.23.206.21/pglosas/entry/mps/mps_download2.asp?KEYWORD=FI0111&DATE_OLD="+dold+"&DATE_CUR="+dcur+"";
+				url_download = 'mps_download_xls.php?DATE_OLD='+dold+'&DATE_CUR='+dcur;
 			}
 			
 			// alert(url_download);

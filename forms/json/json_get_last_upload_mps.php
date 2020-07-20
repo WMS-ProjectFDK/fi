@@ -3,22 +3,16 @@
 	$idx = isset($_REQUEST['index']) ? strval($_REQUEST['index']) : '';
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
-	$sql = "select 
-		(select distinct to_char(UPLOAD_DATE,'yyyy-mm-dd hh24:mi:ss') LISTED from mps_header where rownum < 2)LISTED,
-		(select listed from (
-			select distinct to_char(UPLOAD_DATE,'yyyy-mm-dd hh24:mi:ss') listed,upload_date 
-			from mps_header_rireki 
-			where upload_date > (select sysdate - 100 from dual) 
-			and to_char(UPLOAD_DATE,'yyyy-mm-dd hh24:mi:ss') <> (select distinct to_char(UPLOAD_DATE,'yyyy-mm-dd hh24:mi:ss') LISTED from mps_header where rownum < 2)
-			order by upload_date desc
-		)aa where rownum  <2
-		)LASTED
-		from dual";
-	$result = oci_parse($connect, $sql);
-	oci_execute($result);
+	$sql = "select
+		(select distinct top 1 CAST(upload_date as varchar(20)) as LASTED from MPS_HEADER) as LISTED,
+		(select distinct top 1 CAST(upload_date as varchar(20)) as listed from mps_header_rireki 
+					where upload_date > (select CAST(DATEADD(day,-100,getdate()) as date)) 
+					and CAST(upload_date as varchar(10)) <> (select distinct top 1 CAST(upload_date as varchar(10)) LISTED from mps_header)
+		) as LASTED";
+	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrData = array();
 	$arrNo = 0;
-	while ($row=oci_fetch_array($result)){
+	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
 			"LISTED"=>rtrim($row[0]), 
 			"LASTED"=>rtrim($row[1])
