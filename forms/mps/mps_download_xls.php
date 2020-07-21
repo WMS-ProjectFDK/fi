@@ -9,14 +9,11 @@ $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
-$book = isset($_REQUEST['book']) ? strval($_REQUEST['book']) : '';
-$cont = isset($_REQUEST['cont']) ? strval($_REQUEST['cont']) : '';
-
 // Get the contents of the JSON file 
-// $data = file_get_contents("mps_download_result.json");
-// $dt = json_decode(json_encode($data));
-// $str = preg_replace('/\\\\\"/',"\"", $dt);
-// $someArray = json_decode($str,true);
+$data = file_get_contents("mps_download_result.json");
+$dt = json_decode(json_encode($data));
+$str = preg_replace('/\\\\\"/',"\"", $dt);
+$someArray = json_decode($str,true);
 
 $objPHPExcel = new PHPExcel(); 
 $sheet = $objPHPExcel->getActiveSheet();
@@ -65,17 +62,6 @@ $objPHPExcel->setActiveSheetIndex(0)
             ;
 
             $sheet = $objPHPExcel->getActiveSheet();
-            // foreach(range('A',$noRow) as $columnID) {
-            //     $sheet->getColumnDimension($columnID)->setAutoSize(true);
-            // }
-
-            // $sheet->getStyle('A'.$noRow.':U'.$noRow)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
-            // $sheet->getStyle('A'.$noRow.':U'.$noRow)->getAlignment()->applyFromArray(
-            //     array(
-            //         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-            //         'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
-            //     )
-            // );
     
             $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
                 array(
@@ -118,6 +104,45 @@ $objPHPExcel->setActiveSheetIndex(0)
                     )
                 )
             );
+
+$noRow++;
+foreach ($someArray as $key => $value) {
+    $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$noRow, $value['ITEM_NO'])
+                ->setCellValue('B'.$noRow, $value['ITEM_NAME'])
+                ->setCellValue('C'.$noRow, $value['BATERY_TYPE'])
+                ->setCellValue('D'.$noRow, $value['CELL_GRADE'])
+                ->setCellValue('E'.$noRow, $value['PO_NO'])
+                ->setCellValue('F'.$noRow, $value['PO_LINE_NO'])
+                ->setCellValue('G'.$noRow, $value['WORK_ORDER'])
+                ->setCellValue('H'.$noRow, $value['CONSIGNEE'])
+                ->setCellValue('I'.$noRow, $value['PACKAGE_TYPE'])
+                ->setCellValue('J'.$noRow, $value['DATE_CODE'])
+                ->setCellValue('K'.$noRow, $value['CR_DATE'])
+                ->setCellValue('L'.$noRow, $value['REQUESTED_ETD'])
+                ->setCellValue('M'.$noRow, $value['STATUS'])
+                ->setCellValue('N'.$noRow, $value['LABEL_ITEM_NUMBER'])
+                ->setCellValue('O'.$noRow, $value['LABEL_NAME'])
+                ->setCellValue('P'.$noRow, $value['QTY'])
+                ->setCellValue('Q'.$noRow, $value['MAN_POWER'])
+                ->setCellValue('R'.$noRow, $value['OPERATION_TIME'])
+                ->setCellValue('S'.$noRow, $value['PACKAGE_TYPE'])
+                ->setCellValue('T'.$noRow, $value['CAPACITY'])
+                ->setCellValue('U'.$noRow, $value['REMARK']);
+    
+    if ($value['FLG'] != 'MPS') {
+        $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
+            array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'FFD966')
+                )
+            )
+        );
+    }
+    $noRow++;
+}
+
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 $objWriter->save(str_replace('.php', '.xls', __FILE__));
 header('Content-type: application/vnd.ms-excel');

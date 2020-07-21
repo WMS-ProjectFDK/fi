@@ -155,22 +155,22 @@ $user_name = $_SESSION['id_wms'];
 		}
 		
 		function saveMenu(){
-			console.log(url);
+			// console.log(url);
 			$('#fm').form('submit',{
 				url: url,
 				onSubmit: function(){
 					return $(this).form('validate');
 				},
 				success: function(result){
-					// alert(result);
+					// console.log(result);
 					var result = eval('('+result+')');
 					
 					if (result.errorMsg){
-						$.messager.alert('Menu','Error','info');
 						$.messager.show({
 							title: 'Error',
 							msg: result.errorMsg
 						});
+						// console.log(result.errorMsg);
 					} else {
 						$('#dlg').dialog('close');		// close the dialog
 						$('#dg').datagrid('reload');	// reload data

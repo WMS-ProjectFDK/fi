@@ -129,6 +129,38 @@ $user_name = $_SESSION['id_wms'];
 		});
 
 		function downloadmps(){
+			$.post('mps_download_process.php',{
+				// data: unescape(str_unescape2),
+				// bookingHeader: b,
+				// containerHeader: c,
+				// asinHeader: $('#dg').datagrid('getData').rows[1].ASIN.trim()
+			}).done(function(res){
+				console.log(res);
+				if (res == '"success"'){
+					$.messager.confirm('Confirm','Do you want to download file to excel?',function(r){
+						if(r){
+							download_excel();
+						}
+					})
+				}else{
+					$.messager.show({
+						title: 'Error',
+						msg: res
+					});
+				}
+
+				// $.messager.progress('close');
+				// $.messager.progress({
+	            //     title:'Please waiting',
+	            //     msg:'Saving carton data...'
+	            // });
+				// $.messager.progress('close');
+
+				
+			});
+		}	
+			
+		function download_excel(){
 			var dcur;
 			var dold;
 			var flag = 0;

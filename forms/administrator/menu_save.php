@@ -8,7 +8,7 @@ if (isset($_SESSION['id_wms'])){
 	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
 	$link  = htmlspecialchars($_REQUEST['link']);
 
-	$split_parent = split('-',$parent);
+	$split_parent = explode('-',$parent);
 	$parent_id = $split_parent[0];
 	$parent_name = $split_parent[1];
 
@@ -43,7 +43,7 @@ if (isset($_SESSION['id_wms'])){
 		if ($data_equ){
 			echo json_encode("Success");
 		} else {
-			echo json_encode(array('errorMsg'=>'Dupplicate Name'));
+			echo json_encode(array('errorMsg'=>$sql_equ.'- Dupplicate Name'));
 		}
 	}else{
 		echo json_encode(array('errorMsg'=>'MENU ID Already Exist'));
