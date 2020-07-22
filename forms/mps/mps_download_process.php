@@ -4,7 +4,7 @@ error_reporting(0);
 session_start();
 include("../../connect/conn.php");
 
-$response = array();
+$response = array();        $response2 = array();
 $rowno=0;
 
 if (isset($_SESSION['id_wms'])){
@@ -97,12 +97,27 @@ if (isset($_SESSION['id_wms'])){
     
     while($dt = sqlsrv_fetch_object($data)){
         array_push($response, $dt);
-    }
 
+        $sqlD = "select PO_NO, PO_LINE_NO, convert(nvarchar(10),MPS_DATE, 105) as MPS_DATE_FORMAT, MPS_QTY
+            from MPS_DETAILS 
+            where PO_NO = '".$dt->PO_NO."'
+            and PO_LINE_NO = '".$dt->PO_LINE_NO."'
+            --and MPS_DATE >= getdate()-7
+            and MPS_DATE >= '2020-06-01'
+            order by MPS_DATE";
+        $dataD = sqlsrv_query($connect, strtoupper($sqlD));
+        while($dtD = sqlsrv_fetch_object($dataD)){
+            array_push($response2, $dtD);
+        }
+    }
 
     $fp = fopen('mps_download_result.json', 'w');
 	fwrite($fp, json_encode($response));
-	fclose($fp);
+    fclose($fp);
+    
+    $fp2 = fopen('mps_download_result_details.json', 'w');
+	fwrite($fp2, json_encode($response2));
+	fclose($fp2);
 }else{
 	$msg .= 'Session Expired';
 }

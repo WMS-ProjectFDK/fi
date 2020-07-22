@@ -109,4 +109,4 @@ where    PO_NO      = '$po_no'
 and   PO_LINE_NO = '$po_line_no'
 and   trunc(MPS_DATE) >= trunc(sysdate) - 7
 and   trunc(MPS_DATE) >= trunc(add_months(trunc(sysdate), -1),'mm')
-order by MPS_DATE "
+order by MPS_DATE 

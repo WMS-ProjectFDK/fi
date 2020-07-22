@@ -12,7 +12,7 @@ $q_date = "select RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)
     RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as off_plus_2,
     RIGHT(CONVERT(nvarchar(10), dateadd(month,+2,getdate()), 105),8) as m_plus2,
     RIGHT(CAST(eomonth(dateadd(month,+3,getdate())) as varchar(10)),2) as off_plus_3,
-    RIGHT(CONVERT(nvarchar(6), dateadd(month,+3,getdate()), 105),8) as m_plus3,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,+3,getdate()), 105),8) as m_plus3,
     CAST(RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) AS INT) +
     CAST(RIGHT(CAST(eomonth(getdate()) as varchar(10)),2) as INT) +
     CAST(RIGHT(CAST(eomonth(dateadd(month,+1,getdate())) as varchar(10)),2) as INT) +
@@ -23,11 +23,11 @@ $dt = sqlsrv_fetch_object($data);
 
 $t = intval($dt->JUM_HARI);
 
-$Aold = intval(OFF_OLD);    $Anow = intval(OFF_NOW);    $Apl1 = intval(OFF_PLUS_1);    $Apl2 = intval(OFF_PLUS_2);    $Apl3 = intval(OFF_PLUS_3);
+$Aold = intval($dt->OFF_OLD);    $Anow = intval($dt->OFF_NOW);    $Apl1 = intval($dt->OFF_PLUS_1);    $Apl2 = intval($dt->OFF_PLUS_2);    $Apl3 = intval($dt->OFF_PLUS_3);
 $Dold = $dt->M_OLD;         $Dnow = $dt->M_NOW;         $Dpl1 = $dt->M_PLUS1;          $Dpl2 = $dt->M_PLUS2;          $Dpl3 = $dt->M_PLUS3;
 
 $sts = "OLD";
-
+$r_aRR = array();       $r_aRR_fix = array();
 $arrHr = array ('V','W','X','Y','Z',
                 'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM',
                 'AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
@@ -44,7 +44,11 @@ $arrHr = array ('V','W','X','Y','Z',
                 'GA','GB','GC','GD','GE','GF','GG','GH','GI','GJ','GK','GL','GM',
                 'GN','GO','GP','GQ','GR','GS','GT','GU','GV','GW','GX','GY','GZ'
             );
-$tgl = 1;
+
+function s_day($a){
+    $timestamp = strtotime($a);
+    return strtoupper(date("D", $timestamp));
+}
 
 /* START CONTENT ATACHMENT*/
 require_once '../../class/phpexcel/PHPExcel.php';
@@ -57,6 +61,11 @@ $data = file_get_contents("mps_download_result.json");
 $dt = json_decode(json_encode($data));
 $str = preg_replace('/\\\\\"/',"\"", $dt);
 $someArray = json_decode($str,true);
+
+$data2 = file_get_contents("mps_download_result_details.json");
+$dt2 = json_decode(json_encode($data2));
+$str2 = preg_replace('/\\\\\"/',"\"", $dt2);
+$someArray2 = json_decode($str2,true);
 
 $objPHPExcel = new PHPExcel(); 
 $sheet = $objPHPExcel->getActiveSheet();
@@ -103,44 +112,211 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('T'.$noRow, 'CAPACITY (GROUP/DAY)')
             ->setCellValue('U'.$noRow, 'REMARK');
             
-            for ($i=0;$i<$t; $i++) {
-                if($sts == "OLD"){ 
-                    $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue($arrHr[$i].$noRow, $tgl.$old)
-                    ;
-                    $tgl++;
+            $tgl = 1;
+            for ($i=0;$i<$Aold; $i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $r_aRR[$i] = array($tglR.$Dold => $arrHr[$i]);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dold)
+                ;
+
+                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
                 }
+
+                $tgl++;
+            }
+
+            $tgl = 1;
+            for ($i=$Aold;$i<$Aold+$Anow;$i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $r_aRR[$i] = array($tglR.$Dnow => $arrHr[$i]);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dnow)
+                ;
+
+                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }
+                $tgl++;
+            }
+
+            $tgl = 1;
+            for ($i=$Aold+$Anow;$i<$Aold+$Anow+$Apl1;$i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $r_aRR[$i] = array($tglR.$Dpl1 => $arrHr[$i]);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl1)
+                ;
+
+                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }
+
+                $tgl++;
+            }
+
+            $tgl = 1;
+            for ($i=$Aold+$Anow+$Apl1;$i<$Aold+$Anow+$Apl1+$Apl2;$i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $r_aRR[$i] = array($tglR.$Dpl2 => $arrHr[$i]);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl2)
+                ;
+
+                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }
+
+                $tgl++;
+            }
+
+            $tgl = 1;
+            for ($i=$Aold+$Anow+$Apl1+$Apl2;$i<$Aold+$Anow+$Apl1+$Apl2+$Apl3;$i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $r_aRR[$i] = array($tglR.$Dpl3 => $arrHr[$i]);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl3)
+                ;
+
+                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }
+
+                $tgl++;
             }
 
             $sheet = $objPHPExcel->getActiveSheet();
-    
-            $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => 'D2D2D2')
-                    ),
-                    'borders' => array(
-                        'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN
-                        )
-                    )
-                )
-            );
-    
-            $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
-                array(
-                    'fill' => array(
-                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => 'FFD966')
-                    ),
-                    'borders' => array(
-                        'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN
-                        )
-                    )
-                )
-            );
     
             $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
                 array(
@@ -179,8 +355,36 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('R'.$noRow, $value['OPERATION_TIME'])
                 ->setCellValue('S'.$noRow, $value['PACKAGE_TYPE'])
                 ->setCellValue('T'.$noRow, $value['CAPACITY'])
-                ->setCellValue('U'.$noRow, $value['REMARK']);
-    
+                ->setCellValue('U'.$noRow, $value['REMARK'])
+                // ->setCellValue('V'.$noRow, $r_aRR['V'])
+            ;
+    // $r_date = json_decode(json_encode($r_aRR));
+    // array_push($r_aRR_fix,$r_aRR);
+    // $dt3 = json_decode(json_encode($r_aRR_fix));
+    // $str3 = preg_replace('/\\\\\"/',"\"", $dt3);
+    // $someArray3 = json_decode($str3,true);
+
+    foreach ($someArray2 as $key => $value2) {
+        // $mps_d = $value2['MPS_DATE_FORMAT'];
+        if($value['PO_NO'] == $value2['PO_NO'] AND $value['PO_LINE_NO'] == $value2['PO_LINE_NO']){
+            // foreach ($someArray3 as $key => $value3) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('V'.$noRow, $value2['MPS_QTY'].'@'.$value2['MPS_DATE_FORMAT'].'@'.$r_aRR)
+                ;
+            // }
+            // $r_aRR[$i] = array($arrHr[$i] => $tglR.$Dold);
+            // $j = 0;
+            // while ($j < count($r_aRR)){
+            //     $objPHPExcel->setActiveSheetIndex(0)
+            //         ->setCellValue('V'.$noRow, count($r_aRR[]));     //$value2['MPS_QTY'])
+            //     ;     
+            // }
+
+            // $search_sheet = array_search($value2['MPS_DATE_FORMAT'],$r_date,true);
+            
+        }
+    }
+
     if ($value['FLG'] != 'MPS') {
         $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
             array(
