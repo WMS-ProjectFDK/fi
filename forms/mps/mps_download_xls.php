@@ -3,6 +3,49 @@ set_time_limit(0);
 date_default_timezone_set('Asia/Jakarta');
 include("../../connect/conn.php");
 
+$q_date = "select RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) as off_old,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,-1,getdate()), 105),8) as m_old,
+    RIGHT(CAST(eomonth(getdate()) as varchar(10)),2) as off_now,
+    RIGHT(CONVERT(nvarchar(10), getdate(), 105),8) as m_now,
+    RIGHT(CAST(eomonth(dateadd(month,+1,getdate())) as varchar(10)),2) as off_plus_1,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,+1,getdate()), 105),8) as m_plus1,
+    RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as off_plus_2,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,+2,getdate()), 105),8) as m_plus2,
+    RIGHT(CAST(eomonth(dateadd(month,+3,getdate())) as varchar(10)),2) as off_plus_3,
+    RIGHT(CONVERT(nvarchar(6), dateadd(month,+3,getdate()), 105),8) as m_plus3,
+    CAST(RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) AS INT) +
+    CAST(RIGHT(CAST(eomonth(getdate()) as varchar(10)),2) as INT) +
+    CAST(RIGHT(CAST(eomonth(dateadd(month,+1,getdate())) as varchar(10)),2) as INT) +
+    CAST(RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as INT) +
+    CAST(RIGHT(CAST(eomonth(dateadd(month,+3,getdate())) as varchar(10)),2) as INT) as JUM_HARI";
+$data = sqlsrv_query ($connect, strtoupper($q_date));
+$dt = sqlsrv_fetch_object($data);
+
+$t = intval($dt->JUM_HARI);
+
+$Aold = intval(OFF_OLD);    $Anow = intval(OFF_NOW);    $Apl1 = intval(OFF_PLUS_1);    $Apl2 = intval(OFF_PLUS_2);    $Apl3 = intval(OFF_PLUS_3);
+$Dold = $dt->M_OLD;         $Dnow = $dt->M_NOW;         $Dpl1 = $dt->M_PLUS1;          $Dpl2 = $dt->M_PLUS2;          $Dpl3 = $dt->M_PLUS3;
+
+$sts = "OLD";
+
+$arrHr = array ('V','W','X','Y','Z',
+                'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM',
+                'AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
+                'BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM',
+                'BN','BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ',
+                'CA','CB','CC','CD','CE','CF','CG','CH','CI','CJ','CK','CL','CM',
+                'CN','CO','CP','CQ','CR','CS','CT','CU','CV','CW','CX','CY','CZ',
+                'DA','DB','DC','DD','DE','DF','DG','DH','DI','DJ','DK','DL','DM',
+                'DN','DO','DP','DQ','DR','DS','DT','DU','DV','DW','DX','DY','DZ',
+                'EA','EB','EC','ED','EE','EF','EG','EH','EI','EJ','EK','EL','EM',
+                'EN','EO','EP','EQ','ER','ES','ET','EU','EV','EW','EX','EY','EZ',
+                'FA','FB','FC','FD','FE','FF','FG','FH','FI','FJ','FK','FL','FM',
+                'FN','FO','FP','FQ','FR','FS','FT','FU','FV','FW','FX','FY','FZ',
+                'GA','GB','GC','GD','GE','GF','GG','GH','GI','GJ','GK','GL','GM',
+                'GN','GO','GP','GQ','GR','GS','GT','GU','GV','GW','GX','GY','GZ'
+            );
+$tgl = 1;
+
 /* START CONTENT ATACHMENT*/
 require_once '../../class/phpexcel/PHPExcel.php';
 $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
@@ -58,8 +101,16 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('R'.$noRow, 'OT(MAN SECOND/PCS')
             ->setCellValue('S'.$noRow, 'PACKAGING GROUPING')
             ->setCellValue('T'.$noRow, 'CAPACITY (GROUP/DAY)')
-            ->setCellValue('U'.$noRow, 'REMARK')
-            ;
+            ->setCellValue('U'.$noRow, 'REMARK');
+            
+            for ($i=0;$i<$t; $i++) {
+                if($sts == "OLD"){ 
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($arrHr[$i].$noRow, $tgl.$old)
+                    ;
+                    $tgl++;
+                }
+            }
 
             $sheet = $objPHPExcel->getActiveSheet();
     
