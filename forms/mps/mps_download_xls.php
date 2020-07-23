@@ -27,7 +27,7 @@ $Aold = intval($dt->OFF_OLD);    $Anow = intval($dt->OFF_NOW);    $Apl1 = intval
 $Dold = $dt->M_OLD;         $Dnow = $dt->M_NOW;         $Dpl1 = $dt->M_PLUS1;          $Dpl2 = $dt->M_PLUS2;          $Dpl3 = $dt->M_PLUS3;
 
 $sts = "OLD";
-$r_aRR = array();       $r_aRR_fix = array();
+$r_aRR = array();
 $arrHr = array ('V','W','X','Y','Z',
                 'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM',
                 'AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
@@ -115,12 +115,13 @@ $objPHPExcel->setActiveSheetIndex(0)
             $tgl = 1;
             for ($i=0;$i<$Aold; $i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $r_aRR[$i] = array($tglR.$Dold => $arrHr[$i]);
+                $n_hari = s_day($tglR.$Dold);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dold, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dold)
                 ;
 
-                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
                     $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
                         array(
                             'fill' => array(
@@ -156,12 +157,13 @@ $objPHPExcel->setActiveSheetIndex(0)
             $tgl = 1;
             for ($i=$Aold;$i<$Aold+$Anow;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $r_aRR[$i] = array($tglR.$Dnow => $arrHr[$i]);
+                $n_hari = s_day($tglR.$Dnow);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dnow, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dnow)
                 ;
 
-                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
                     $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
                         array(
                             'fill' => array(
@@ -196,12 +198,14 @@ $objPHPExcel->setActiveSheetIndex(0)
             $tgl = 1;
             for ($i=$Aold+$Anow;$i<$Aold+$Anow+$Apl1;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $r_aRR[$i] = array($tglR.$Dpl1 => $arrHr[$i]);
+                $n_hari = s_day($tglR.$Dpl1);
+                $r_aRR[$i] = array('D_'.$tglR.$Dpl1 => $arrHr[$i]);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dpl1, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl1)
                 ;
 
-                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
                     $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
                         array(
                             'fill' => array(
@@ -237,12 +241,13 @@ $objPHPExcel->setActiveSheetIndex(0)
             $tgl = 1;
             for ($i=$Aold+$Anow+$Apl1;$i<$Aold+$Anow+$Apl1+$Apl2;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $r_aRR[$i] = array($tglR.$Dpl2 => $arrHr[$i]);
+                $n_hari = s_day($tglR.$Dpl2);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dpl2, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl2)
                 ;
 
-                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
                     $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
                         array(
                             'fill' => array(
@@ -278,12 +283,13 @@ $objPHPExcel->setActiveSheetIndex(0)
             $tgl = 1;
             for ($i=$Aold+$Anow+$Apl1+$Apl2;$i<$Aold+$Anow+$Apl1+$Apl2+$Apl3;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $r_aRR[$i] = array($tglR.$Dpl3 => $arrHr[$i]);
+                $n_hari = s_day($tglR.$Dpl3);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dpl3, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl3)
                 ;
 
-                if (s_day($tglR.$Dold) == 'SAT' OR s_day($tglR.$Dold) == 'SUN'){
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
                     $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
                         array(
                             'fill' => array(
@@ -316,6 +322,10 @@ $objPHPExcel->setActiveSheetIndex(0)
                 $tgl++;
             }
 
+            $fp = fopen('mps_download_result_table.json', 'w');
+            fwrite($fp, json_encode($r_aRR));
+            fclose($fp);
+
             $sheet = $objPHPExcel->getActiveSheet();
     
             $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
@@ -333,6 +343,12 @@ $objPHPExcel->setActiveSheetIndex(0)
             );
 
 $noRow++;
+
+$data3 = file_get_contents("mps_download_result_table.json");
+$dt3 = json_decode(json_encode($data3));
+$str3 = preg_replace('/\\\\\"/',"\"", $dt3);
+$someArray3 = json_decode($str3,true);
+
 foreach ($someArray as $key => $value) {
     $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$noRow, $value['ITEM_NO'])
@@ -356,32 +372,18 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('S'.$noRow, $value['PACKAGE_TYPE'])
                 ->setCellValue('T'.$noRow, $value['CAPACITY'])
                 ->setCellValue('U'.$noRow, $value['REMARK'])
-                // ->setCellValue('V'.$noRow, $r_aRR['V'])
             ;
-    // $r_date = json_decode(json_encode($r_aRR));
-    // array_push($r_aRR_fix,$r_aRR);
-    // $dt3 = json_decode(json_encode($r_aRR_fix));
-    // $str3 = preg_replace('/\\\\\"/',"\"", $dt3);
-    // $someArray3 = json_decode($str3,true);
 
     foreach ($someArray2 as $key => $value2) {
-        // $mps_d = $value2['MPS_DATE_FORMAT'];
         if($value['PO_NO'] == $value2['PO_NO'] AND $value['PO_LINE_NO'] == $value2['PO_LINE_NO']){
-            // foreach ($someArray3 as $key => $value3) {
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('V'.$noRow, $value2['MPS_QTY'].'@'.$value2['MPS_DATE_FORMAT'].'@'.$r_aRR)
-                ;
-            // }
-            // $r_aRR[$i] = array($arrHr[$i] => $tglR.$Dold);
-            // $j = 0;
-            // while ($j < count($r_aRR)){
-            //     $objPHPExcel->setActiveSheetIndex(0)
-            //         ->setCellValue('V'.$noRow, count($r_aRR[]));     //$value2['MPS_QTY'])
-            //     ;     
-            // }
-
-            // $search_sheet = array_search($value2['MPS_DATE_FORMAT'],$r_date,true);
-            
+            $mps_d = $value2['MPS_DATE_FORMAT'];
+            foreach ($someArray3 as $key => $value3) {
+                if($value3['KOLOM_DATE'] == $mps_d){
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($value3['KOLOM_URUT'].$noRow, $value2['MPS_QTY'])
+                    ;
+                }
+            }
         }
     }
 
