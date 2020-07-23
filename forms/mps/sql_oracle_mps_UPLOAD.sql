@@ -55,7 +55,7 @@ substrb( &  SET_SQL_NULL(xlsSheet.Cells(row, 21).Value)  & ,1,50)  'REMARK '
 ) 
 '
 
--------------------------------- MPS DETAILS
+-------------------------------- INSERT MPS DETAILS
 
 insert into MPS_DETAILS (PO_NO, PO_LINE_NO, MPS_DATE, MPS_QTY, UPLOAD_DATE) 
 VALUES ( 

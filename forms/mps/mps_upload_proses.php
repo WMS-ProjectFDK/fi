@@ -13,13 +13,29 @@ $hasildata = $data->rowcount($sheet_index=0);
 
 $success = 0;       $failed = 0;
 
-for($i=2;$i<=$hasildata;$i++){
+for($i=5;$i<=$hasildata;$i++){
     // $item = trim($data->val($i,1));
     // $bln = intval($data->val($i,2));
     // $year = trim($data->val($i,3));
     // $qty = trim($data->val($i,4));
     // $sts_bundle = trim($data->val($i,5));
     // $qty_b = trim($data->val($i,6));
+    
+    // delete MPS_HEADER
+    // delete from MPS_DETAILS
+    // INSERT MPS HEADER
+    // INSERT MPS DETAILS
+    // INSERT MPS_HEADER_RIREKI
+    // INSERT MPS_DETAILS_RIREKI
+    // DELETE MPS_REMAIN_HISTORY
+    // INSERT MPS_REMAIN_HISTORY
+    // INSERT MPS_REMAIN
+    // UPDATE MPS_REMAIN
+    // DELETE PRODUCT_PLAN_HISTORY
+    // INSERT PRODUCT_PLAN_HISTORY
+    // INSERT PRODUCT_PLAN
+    
+    
 
     // if ($qty_b==''){
     // 	$qty_bundle = 1;
