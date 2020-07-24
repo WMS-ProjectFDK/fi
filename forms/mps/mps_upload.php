@@ -90,9 +90,8 @@ $user_name = $_SESSION['id_wms'];
 			data: data,
 			success: function (data) {
 				document.getElementById("LastUpload").innerHTML = '[' + data[0].LISTED+ ']';
-				document.getElementById("LastestCompare").innerHTML = '[' + data[0].LASTED+ ']';
-				DATECUR = data[0].LISTED;
-				DATEOLD = data[0].LASTED;
+				var DATECUR = data[0].LISTED;
+				varDATEOLD = data[0].LASTED;
 				}
 			});
 		});
@@ -105,9 +104,9 @@ $user_name = $_SESSION['id_wms'];
 			},
 			success: function(result){
 				$.messager.alert('MPS UPLOAD',result,'info');
-				//alert(result);
+				// console.log(result);
 		 		$('#fileexcel').filebox('clear');
-				$('#dg').datagrid('reload');
+				// $('#dg').datagrid('reload');
 				}
 			});
 		}
