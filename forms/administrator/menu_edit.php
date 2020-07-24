@@ -1,12 +1,19 @@
 <?php
 session_start();
 if (isset($_SESSION['id_wms'])){
+	// $menu_id = isset($_REQUEST['menu_id']) ? $_REQUEST['menu_id']) : NULL;
+	// $parent = isset($_REQUEST['menu_parent']) ? $_REQUEST['menu_parent']) : NULL;
+	// $kode_menu = isset($_REQUEST['kode_menu']) ? $_REQUEST['kode_menu']) : NULL;
+	// $nama_menu  = isset($_REQUEST['nama_menu']) ? $_REQUEST['nama_menu']) : NULL;
+	
+	// $link  = isset($_REQUEST['link']) ? $_REQUEST['link']) : NULL;
+	
 	$menu_id = htmlspecialchars($_REQUEST['menu_id']);
 	$parent = htmlspecialchars($_REQUEST['menu_parent']);
 	$kode_menu = htmlspecialchars($_REQUEST['kode_menu']);
 	$nama_menu  = htmlspecialchars($_REQUEST['nama_menu']);
-	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']);
-	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
+	$kode_submenu = $_REQUEST['kode_submenu'] != '' ? $_REQUEST['kode_submenu'] : NULL;
+	$nama_submenu = $_REQUEST['nama_submenu'] != '' ? $_REQUEST['nama_submenu'] : NULL;
 	$link  = htmlspecialchars($_REQUEST['link']);
 
 	$split_parent = explode('-', $parent);
@@ -27,6 +34,7 @@ if (isset($_SESSION['id_wms'])){
 									id_sub_parent = '$kode_submenu',
 									menu_sub_parent = '$nama_submenu'
 				where id=$menu_id";
+	// echo $sql_equ;
 	$result = sqlsrv_query($connect, $sql_equ);
 	
 	if ($result){

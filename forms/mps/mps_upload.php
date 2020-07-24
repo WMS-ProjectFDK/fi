@@ -74,7 +74,10 @@ $user_name = $_SESSION['id_wms'];
                 </a>
             </div>
         </form>
-	</div>
+        <br/>
+        <hr>
+        <br/>
+    </div>
 	<table id="dg" title="UPLOAD MPS" class="easyui-datagrid" toolbar="#toolbar" style="width:100%;height:auto;"></table>
 	
     <script type="text/javascript">

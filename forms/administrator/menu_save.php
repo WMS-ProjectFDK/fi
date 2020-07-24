@@ -2,10 +2,20 @@
 session_start();
 if (isset($_SESSION['id_wms'])){
 	$parent = htmlspecialchars($_REQUEST['menu_parent']);
+	// $kode_menu = isset(htmlspecialchars($_REQUEST['kode_menu'])) ? htmlspecialchars($_REQUEST['kode_menu']) : NULL ;
+	// $nama_menu = isset(htmlspecialchars($_REQUEST['nama_menu'])) ? htmlspecialchars($_REQUEST['nama_menu']) : NULL ;
+	// $kode_submenu = isset(htmlspecialchars($_REQUEST['kode_submenu'])) ? htmlspecialchars($_REQUEST['kode_submenu']) : NULL ;
+	// $nama_submenu = isset(htmlspecialchars($_REQUEST['nama_submenu'])) ? htmlspecialchars($_REQUEST['nama_submenu']) : NULL ;
+	// $link = isset(htmlspecialchars($_REQUEST['link'])) ? htmlspecialchars($_REQUEST['link']) : NULL ;
+
 	$kode_menu = htmlspecialchars($_REQUEST['kode_menu']);
 	$nama_menu = htmlspecialchars($_REQUEST['nama_menu']);
-	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']);
-	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
+
+	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']) != '' ? htmlspecialchars($_REQUEST['kode_submenu']) : NULL ;
+	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']) != '' ? htmlspecialchars($_REQUEST['nama_submenu']) : NULL ;
+	// $kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']);
+	// $nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
+	
 	$link  = htmlspecialchars($_REQUEST['link']);
 
 	$split_parent = explode('-',$parent);
