@@ -4,17 +4,13 @@ session_start();
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $menu_id = $_GET['id'];
-
-$q= "select count(*) as jum from whinventory where this_month=(SELECT CONVERT(nvarchar(6), getdate(), 112))" ;
-$data_q = sqlsrv_query($connect, strtoupper($q));
-$dt_q = sqlsrv_fetch_object($data_q);
 ?>
 
 <!DOCTYPE html>
    	<html>
    	<head>
    	<meta charset="UTF-8">
-   	<title>Goods Receive</title>
+   	<title>SALES ORDER</title>
    	<link rel="icon" type="image/png" href="../../favicon.png">
 	<script language="javascript">
  		function confirmLogOut(){
@@ -143,166 +139,9 @@ $dt_q = sqlsrv_fetch_object($data_q);
 	    		<a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="upload_bc_show()"><i class="fa fa-upload" aria-hidden="true"></i> Upload Data BC</a>
 				<a href="javascript:void(0)" style="width: 170px;" class="easyui-linkbutton c2" onclick="upload_bc_show_sp()"><i class="fa fa-upload" aria-hidden="true"></i> Upload Data BC Sparts</a>
 	    	</div></div>
-		</div>
+        </div>
 
-		<!-- ADD GR -->
-		<!-- 
-
-		<div class="easyui-dialog" title="Fluid Dialog" style="width:80%;height:200px;max-width:800px;padding:10px" data-options="
-	            iconCls:'icon-save',
-	            onResize:function(){
-	                $(this).dialog('center');
-	            }">
-	        <p>width: 80%; height: 200px</p>
-	    </div> -->
-		<div id="dlg_add" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-add" data-options="modal:true, position: 'center'">
-			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Supplier</span>
-					<input required="true" style="width:100px;" name="supp_no_add" id="supp_no_add" class="easyui-textbox" disabled="disabled" data-options="" />
-					<select style="width:300px;" name="cmb_supp_add" id="cmb_supp_add" class="easyui-combobox" data-options=" url:'../json/json_company.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
-					onSelect:function(rec){
-						$('#supp_no_add').textbox('setValue', rec.company_code);	
-					}
-					" required="">
-					</select>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Receive Date</span>
-					<input style="width:100px;" name="gr_date_add" id="gr_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-					<span style="width:80px;display:inline-block;">Receive No.</span>
-					<input required="true" style="width:215px;" name="gr_no_add" id="gr_no_add" class="easyui-textbox"/>
-				</div>
-			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Remarks</span>
-				</div>
-				<div class="fitem">
-					<input style="width:525px;height: 30px;" name="gr_remark_add" id="gr_remark_add" class="easyui-textbox" data-options="multiline:true"/>
-				</div>
-			</fieldset>
-			<div style="clear:both;margin-bottom:10px;"></div>
-			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:250px;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
-			<div id="toolbar_add" style="padding: 5px 5px;">
-				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_po_add()">Add PO</a>
-	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_po_add()">Remove PO</a>
-			</div>
-
-			<div id="dlg_addPO" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addPO" data-options="modal:true">
-				<table id="dg_addPO" class="easyui-datagrid" toolbar="#toolbar_addPO" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
-			</div>
-			<div id="toolbar_addPO" style="padding:3px 3px;">
-				<span style="width:80px;display:inline-block;">Search By</span>
-				<select style="width:85px;" name="cmb_search" id="cmb_search" class="easyui-combobox" data-options="panelHeight:'70px'">
-					<option value="PO_NO" selected="">PO NO</option>
-					<option value="ITEM_NO">ITEM NO</option>
-				</select>
-				<input style="width:200px;height: 20px;border-radius: 4px;" name="s_po_add" id="s_po_add" onkeypress="sch_po_add(event)"/>
-				<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_po_add()">SEARCH</a>
-			</div>
-
-		</div>
-		<div id="dlg-buttons-add">
-			<a href="javascript:void(0)" id="save_add" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveAdd()" style="width:90px">Save</a>
-			<a href="javascript:void(0)" id="cancel_add" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
-		</div>
-		<!-- END ADD GR -->
-
-		<!-- EDIT GR -->
-		<div id="dlg_edit" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true, position: 'center'">
-			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Supplier</span>
-					<input required="true" style="width:100px;" name="supp_no_edit" id="supp_no_edit" class="easyui-textbox" disabled="disabled" data-options="" />
-					<select style="width:300px;" name="cmb_supp_edit" id="cmb_supp_edit" class="easyui-combobox" data-options=" url:'../json/json_company.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
-					onSelect:function(rec){
-						$('#supp_no_edit').textbox('setValue', rec.company_code);	
-					}
-					" required="" disabled="">
-					</select>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Receive Date</span>
-					<input style="width:100px;" name="gr_date_edit" id="gr_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
-					<span style="width:80px;display:inline-block;">Receive No.</span>
-					<input required="true" style="width:215px;" name="gr_no_edit" id="gr_no_edit" class="easyui-textbox" disabled=""/>
-				</div>
-			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">Remarks</span>
-				</div>
-				<div class="fitem">
-					<input style="width:525px;height: 30px;" name="gr_remark_edit" id="gr_remark_edit" class="easyui-textbox" data-options="multiline:true"/>
-				</div>
-			</fieldset>
-			<div style="clear:both;margin-bottom:10px;"></div>
-			<table id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:100%;height:250px;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true">
-				
-			</table>
-			<div id="toolbar_edit" style="padding: 5px 5px;">
-				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_po_edit()">Add PO</a>
-	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_po_edit()">Remove PO</a>
-			</div>
-
-			<div id="dlg_editPO" class="easyui-dialog" style="width: 880px;height: 270px;" closed="true" buttons="#dlg-buttons_editPO" data-options="modal:true">
-				<table id="dg_editPO" class="easyui-datagrid" toolbar="#toolbar_editPO" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
-			</div>
-			<div id="toolbar_editPO" style="padding:3px 3px;">
-				<span style="width:80px;display:inline-block;">Search By</span>
-				<select style="width:85px;" name="cmb_search_e" id="cmb_search_e" class="easyui-combobox" data-options="panelHeight:'70px'">
-					<option value="PO_NO" selected="">PO NO</option>
-					<option value="ITEM_NO">ITEM NO</option>
-				</select>
-				<input style="width:200px;height: 20px;border-radius: 4px;" name="s_po_edit" id="s_po_edit" onkeypress="sch_po_edit(event)"/>
-				<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_po_edit()">SEARCH</a>
-			</div>
-		</div>
-		<div id="dlg-buttons-edit">
-			<a href="javascript:void(0)" id="save_edit" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveEdit()" style="width:90px">Save</a> <!-- disabled="true"  -->
-			<a href="javascript:void(0)" id="cancel_edit" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
-		</div>
-		<!-- END EDIT GR -->
-
-		<div id="dlg-uploadbc" class="easyui-dialog" style="width: 450px;height: 180px;" closed="true" buttons="#dlg-buttons-print-rec" data-options="modal:true">
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:410px; height:120px; float:left;"><legend>Upload Data BC</legend>
-			<div class="fitem">
-				
-				<form id="uploaddatabc" method="post" enctype="multipart/form-data">
-					<input class="easyui-filebox" name="fileexcel" id="fileexcel" style="width:400px;">
-					<br></br>
-					<a href="javascript:void(0)" style="width:100px;display:inline-block;margin-left: 5px;" class="easyui-linkbutton c2" type="submit" onclick="uploaddatabc()">
-						<i class="fa fa-upload" aria-hidden="true"></i> Upload 
-					</a>
-				
-				</form>	
-			</div>
-			</fieldset>
-		</div>
-
-		<div id="dlg-uploadbcsp" class="easyui-dialog" style="width: 450px;height: 180px;" closed="true" buttons="#dlg-buttons-print-rec" data-options="modal:true">
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:410px; height:120px; float:left;"><legend>Upload BC Sparepparts</legend>
-			<div class="fitem">
-				
-				<form id="uploaddatabcsp" method="post" enctype="multipart/form-data">
-					<input class="easyui-filebox" name="fileexcelbc" id="fileexcelbc" style="width:400px;">
-					<br></br>
-					<a href="javascript:void(0)" style="width:100px;display:inline-block;margin-left: 5px;" class="easyui-linkbutton c2" type="submit" onclick="uploaddatabcsp()">
-						<i class="fa fa-upload" aria-hidden="true"></i> Upload 
-					</a>
-				
-				</form>	
-			</div>
-			</fieldset>
-		</div>
-
-		<table id="dg" title="Goods Receive & Invoice Report" class="easyui-datagrid" toolbar="#toolbar	" style="width:auto;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
-
-		<!-- <div id="progress" class="easyui-dialog" style="background-opacity:0.6; width:460px;padding:10px 20px" data-options="modal:true, collapsible:false, minimizable:false,maximizable:false,
-			closable:false,closed:true">
-			<div id="p" class="easyui-progressbar" data-options="value:0" style="width:400px;"></div>
-		</div> -->
+		<table id="dg" title="SALES ORDER" class="easyui-datagrid" toolbar="#toolbar	" style="width:auto;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
 
 		<script type="text/javascript">
 			function upload_bc_show(){

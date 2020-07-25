@@ -84,7 +84,7 @@ h2 {
 	<fieldset style="position:absolute;margin-left:425px;border-radius:4px;width: 500px;height: 70px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>
 		<div class="fitem">
 			<span style="width:80px;display:inline-block;">Item No.</span>
-			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
 			onSelect:function(rec){
 				//alert(rec.id_name_item);
 				var spl = rec.id_name_item;
@@ -115,7 +115,7 @@ h2 {
 	<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:720px; height: 100px; float:left;"><legend><span class="style3"><strong>Select Vendor</strong></span></legend>
 		<div class="fitem">
 			<span style="width:100px;display:inline-block;margin-left: 5px;">VENDOR</span>
-			<select style="width:400px;" name="cmb_company" id="cmb_company" class="easyui-combobox" data-options=" url:'json/json_company_DI.php', method:'get', valueField:'COMPANY_CODE', textField:'COMB_COMPANY', panelHeight:'40px'" required=""></select>
+			<select style="width:400px;" name="cmb_company" id="cmb_company" class="easyui-combobox" data-options=" url:'../json/json_company_DI.php', method:'get', valueField:'COMPANY_CODE', textField:'COMB_COMPANY', panelHeight:'40px'" required=""></select>
 			<a href="javascript:void(0)" style="width: 200px;" class="easyui-linkbutton c2" onclick="search_item();"><i class="fa fa-search" aria-hidden="true"></i> SEARCH ITEM</a>
 		</div>
 		<div class="fitem">
@@ -258,46 +258,7 @@ h2 {
                 {field:'LINE_PO_NO',hidden: true},
                 {field:'ORIGIN_CODE',hidden: true},
                 {field:'UOM_Q',hidden: true}
-			]]/*,
-			onDblClickRow:function(id,row){
-				var vendor = row.VENDOR;
-		    	var itm = row.ITEM_NO;
-		    	var selectedrow = $("#dg_create").datagrid("getSelected");
-		        var rowIndex = $("#dg_create").datagrid("getRowIndex", selectedrow);
-
-		    	//alert(rowIndex);
-
-		    	$('#dlg_PO').dialog('open').dialog('center').dialog('setTitle','SELECT PO');
-		    	$('#dg_po').datagrid({
-		    		url:'di_select_po.php?supp='+vendor+'&item='+itm,
-		    		singleSelect:true,
-					loadMsg:'load data ...',
-					height:'auto',
-					rownumbers: true,
-					fitColumns: true,
-					columns:[[
-						{field:'PO_NO',title:'PO NO.', halign:'center', width:100},
-						{field:'PO_DATE',title:'PO DATE', halign:'center', width:80},
-						{field:'LINE_NO', hidden: true},
-						{field:'ITEM_NO',title:'ITEM NO.', halign:'center', width:80},
-						{field:'ITEM',title:'ITEM', halign:'center', width:80, hidden: true},
-						{field:'DESCRIPTION',title:'DESCRIPTION', halign:'center', width:250},
-						{field:'QTY',title:'QTY PO', halign:'center', align:'right', width:80},
-						{field:'GR_QTY',title:'QTY<br/>DELIVERY', halign:'center', align: 'right', width:80},
-						{field:'BALANCE',title:'ACTUAL<br/>QTY', halign:'center', align:'right', width:80},
-					]],
-					onClickRow:function(id,row2){
-							$('#dg_create').datagrid('updateRow',{
-								index: rowIndex,
-								row: {
-									PO_NO: row2.PO_NO,
-									LINE_PO_NO: row2.LINE_NO
-								}
-							});
-					
-					}
-				});
-			}*/
+			]]
 		});
 	});
 
@@ -377,7 +338,7 @@ h2 {
 		$('#dg_create').datagrid('loadData',[]);
 		$.ajax({
 			type: 'GET',
-			url: 'json/json_cek_safety_stock.php',
+			url: '../json/json_cek_safety_stock.php',
 			data: { kode:'kode' },
 			success: function(data){
 				var z = data[0].jum;
@@ -394,7 +355,7 @@ h2 {
 		$('#dg_create').datagrid({url: 'di_get_create.php'});
 		$.ajax({
 			type: 'GET',
-			url: 'json/json_company_dtl.php?id='+comp,
+			url: '../json/json_company_dtl.php?id='+comp,
 			data: { kode:'kode' },
 			success: function(data){
 				$('#txt_attn').textbox('setValue',data[0].attn);
@@ -405,7 +366,7 @@ h2 {
 	function save_create_di(){
 		$.ajax({
 			type: 'GET',
-			url: 'json/json_cek_di_no.php?di='+ $('#txt_di_no').textbox('getValue'),
+			url: '../json/json_cek_di_no.php?di='+ $('#txt_di_no').textbox('getValue'),
 			data: { kode:'kode' },
 			success: function(data){
 				if((data[0].kode)=='0'){
@@ -438,8 +399,8 @@ h2 {
 					di_date: didate,
 					di_line: jmrow,
 					di_req: $('#txt_req').textbox('getValue'),
-					di_po: $('#dg_create').datagrid('getData').rows[i].PO_NO,
-					di_po_line: $('#dg_create').datagrid('getData').rows[i].LINE_PO_NO,
+					// di_po: $('#dg_create').datagrid('getData').rows[i].PO_NO,
+					// di_po_line: $('#dg_create').datagrid('getData').rows[i].LINE_PO_NO,
 					di_item: $('#dg_create').datagrid('getData').rows[i].ITEM_NO,
 					di_org_code: $('#dg_create').datagrid('getData').rows[i].ORIGIN_CODE,
 					di_qty: $('#dg_create').datagrid('getData').rows[i].BALANCE.replace(/,/g,''),
@@ -447,7 +408,7 @@ h2 {
 					di_unit: $('#dg_create').datagrid('getData').rows[i].UNIT
 				}).done(function(res){
 					//alert(res);
-					//console.log(res);
+					console.log(res);
 					$('#dlg').dialog('close');
 					$('#dg').datagrid('reload');
 				})

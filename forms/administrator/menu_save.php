@@ -2,13 +2,23 @@
 session_start();
 if (isset($_SESSION['id_wms'])){
 	$parent = htmlspecialchars($_REQUEST['menu_parent']);
+	// $kode_menu = isset(htmlspecialchars($_REQUEST['kode_menu'])) ? htmlspecialchars($_REQUEST['kode_menu']) : NULL ;
+	// $nama_menu = isset(htmlspecialchars($_REQUEST['nama_menu'])) ? htmlspecialchars($_REQUEST['nama_menu']) : NULL ;
+	// $kode_submenu = isset(htmlspecialchars($_REQUEST['kode_submenu'])) ? htmlspecialchars($_REQUEST['kode_submenu']) : NULL ;
+	// $nama_submenu = isset(htmlspecialchars($_REQUEST['nama_submenu'])) ? htmlspecialchars($_REQUEST['nama_submenu']) : NULL ;
+	// $link = isset(htmlspecialchars($_REQUEST['link'])) ? htmlspecialchars($_REQUEST['link']) : NULL ;
+
 	$kode_menu = htmlspecialchars($_REQUEST['kode_menu']);
 	$nama_menu = htmlspecialchars($_REQUEST['nama_menu']);
-	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']);
-	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
+
+	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']) != '' ? htmlspecialchars($_REQUEST['kode_submenu']) : NULL ;
+	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']) != '' ? htmlspecialchars($_REQUEST['nama_submenu']) : NULL ;
+	// $kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']);
+	// $nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']);
+	
 	$link  = htmlspecialchars($_REQUEST['link']);
 
-	$split_parent = split('-',$parent);
+	$split_parent = explode('-',$parent);
 	$parent_id = $split_parent[0];
 	$parent_name = $split_parent[1];
 
@@ -43,7 +53,7 @@ if (isset($_SESSION['id_wms'])){
 		if ($data_equ){
 			echo json_encode("Success");
 		} else {
-			echo json_encode(array('errorMsg'=>'Dupplicate Name'));
+			echo json_encode(array('errorMsg'=>$sql_equ.'- Dupplicate Name'));
 		}
 	}else{
 		echo json_encode(array('errorMsg'=>'MENU ID Already Exist'));
