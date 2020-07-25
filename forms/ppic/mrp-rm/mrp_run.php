@@ -1,7 +1,8 @@
 <?php 
-include("../connect/conn.php");
+error_reporting(0);
+include("../../../connect/conn.php");
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 
 $arrBulan = array('1' => 'JAN',
@@ -34,52 +35,52 @@ if($b1 == 11){
 
 
 
-$q= "select tahun||bulan as period,bulan, tahun, tot, upload_time,
-	case when tot=0 then 'N' else 'Y' end as ket
-	from (
-	SELECT aa.bulan, aa.tahun, bb.tot, bb.upload_time  FROM (
+$q= "
+SELECT aa.bulan+aa.tahun as period, aa.bulan, aa.tahun, bb.tot, 
+bb.upload_time, case when bb.tot=0 then 'N' else 'Y' end as KET
+FROM (
 	select distinct bulan, tahun from ztb_assy_plan
-	where ((bulan = $b1 and tahun=$t1) OR (bulan = $b2 and tahun=$t2) OR (bulan = $b3 and tahun=$t3))
+	where bulan = 7 and tahun=2020 OR bulan = 8 and tahun=2020 OR bulan = 9 and tahun=2020
 	) aa
 	left outer join
-	(select bulan, tahun, upload_time, nvl(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
+	(select bulan, tahun, upload_time, coalesce(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
 	group by bulan, tahun, upload_time) bb 
 	on aa.bulan=bb.bulan AND aa.tahun=bb.tahun
-	) where rownum <= 3
-	order by tahun
-	";
-
+";
 
 $sq = "
-	select substr(assy_line, 0, 4)||cell_type as Grade,sum(qty) TotalProduksi, upload_time,bulan,tahun,tot ,case when tot=0 then 'N' else 'Y' end as ket
+select substring(assy_line, 0, 4)+cell_type as Grade,
+sum(qty) TotalProduksi, upload_time,bulan,tahun,tot ,
+case when tot=0 then 'N' else 'Y' end as ket
   from ztb_assy_plan aa
   left outer join
-	(select bulan bulanx, tahun tahunx, upload_time up, nvl(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
+	(select bulan bulanx, tahun tahunx, upload_time up, coalesce(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
 	group by bulan, tahun, upload_time) bb 
 	on aa.bulan=bb.bulanx AND aa.tahun=bb.tahunx
-	where ((bulan = $b1 and tahun=$t1) OR (bulan = $b2 and tahun=$t2) OR (bulan = $b3 and tahun=$t3))  and used=1 
-  group by bulan,tahun,upload_time,substr(assy_line, 0, 4)||cell_type,tot";
+	where ((bulan = 7 and tahun=2020) OR (bulan = 8 and tahun=2020) OR (bulan = 9 and tahun=2020))  and used=1 
+  group by bulan,tahun,upload_time,substring(assy_line, 0, 4)+cell_type,tot";
 
 
-$data = oci_parse($connect, $q);
-oci_execute($data);
+$data = sqlsrv_query($connect, strtoupper($q));
 $rowno=0;
 $items = array();
 $sts = 1;
-while($row = oci_fetch_object($data)) {
+while($row = sqlsrv_fetch_object($data)) {
 	array_push($items, $row);
-	if ($items->KET == 'N'){
+	$n_ket = $items->KET;
+	if ($n_ket == 'N'){
 		$sts = 0;
 	}
 	$rowno++;
 }
+// echo json_encode($items);
 ?>
 <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <title>MRP</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="icon" type="image/png" href="../../../favicon.png">
 	<script language="javascript">
  		function confirmLogOut(){
 			var is_confirmed;
@@ -87,13 +88,13 @@ while($row = oci_fetch_object($data)) {
 			return is_confirmed;
  		}
   	</script> 
-    <link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="../themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="../themes/color.css">
-    <script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../js/datagrid-filter.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../../../themes/color.css">
+    <script type="text/javascript" src="../../../js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../js/datagrid-filter.js"></script>
 	<style>
 	*{
 	font-size:12px;
@@ -130,8 +131,7 @@ while($row = oci_fetch_object($data)) {
     </head>
     <body>
 	<?php 
-	include ('../ico_logout.php'); 
-	//include ('sync_get2.php'); 
+	include ('../../../ico_logout.php');
 	?>
 	
 	<div id="toolbar" style="margin-top: 5px;margin-bottom: 5px;width: 100%;">
@@ -141,9 +141,7 @@ while($row = oci_fetch_object($data)) {
 		<br/>
 		<div id="progress" class="easyui-progressbar" style="margin-left: 20px; width: 96%;"></div><br/>
 		<div style="margin-left: 20px; height:375px; width: 96%;">
-
 			<fieldset style="float:left;width:380px;height:350px;border-radius:4px;"><legend><span class="style3"><strong><?php echo $arrBulan[$b1]; ?></strong></span>
-
 			</legend>
 				<label><input type="checkbox" name="ck_cr_b1" id="ck_cr_b1" >Lock <?php echo $arrBulan[$b1]; ?> </input></label>
 				<div class="fitem">
@@ -156,10 +154,8 @@ while($row = oci_fetch_object($data)) {
 	    			<a href="javascript:void(0)" class="easyui-linkbutton c2" onclick="print_assy1()" style="width:200px;"><i class="fa fa-download" aria-hidden="true"></i> Download Assembly Plan</a>
 	    		</div>
 	    		<div class="fitem">
-
 	    			<table id="dg1" title="Summary Production " class="easyui-datagrid" style="width:96%;height:250px;" rownumbers="true"> </table>
 	    		</div>
-				
 			</fieldset>
 
 			<fieldset style="position:absolute;margin-left:410px;height:350px;border-radius:4px;width: 405px;"><legend><span class="style3"><strong><?php echo $arrBulan[$b2]; ?></strong></span></legend>
@@ -176,8 +172,8 @@ while($row = oci_fetch_object($data)) {
 	    		<div class="fitem">
 	    			<table id="dg2" title="Summary Production" class="easyui-datagrid" style="width:96%;height:250px;" rownumbers="true"> </table>
 	    		</div>
-
 			</fieldset>
+
 			<fieldset style="margin-left: 845px;border-radius:4px;height:350px;width: 380px;"><legend><span class="style3"><strong><?php echo $arrBulan[$b3]; ?></strong></span></legend>
 				<label><input type="checkbox" name="ck_cr_b3" id="ck_cr_b3" >Lock <?php echo $arrBulan[$b3]; ?> </input></label>
 				<div class="fitem">
@@ -225,73 +221,47 @@ while($row = oci_fetch_object($data)) {
 				$('#start_mrp').linkbutton('disable');
 			}
 
-
 			$('#dg1').datagrid('load', {
-			Bulan: <?php Print($b1); ?>,
-			tahun: <?php Print($t1); ?>
-			
+				Bulan: <?php Print($b1); ?>,
+				Tahun: <?php Print($t1); ?>
 			});
 
 			$('#dg1').datagrid( {
-			url: 'mrp_run_detail_get.php',
-			
-			singleSelect: true,
-			
-			columns:[[
-			    {field:'CELL_GRADE',title:'CELL_GRADE', halign:'center', width:150},
-                {field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
-             
-			]],
-			onLoadSuccess: function (data) {
-
-			}
+				url: 'mrp_run_detail_get.php',
+				singleSelect: true,
+				columns:[[
+					{field:'CELL_GRADE',title:'CELL_GRADE', halign:'center', width:150},
+					{field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
+				]]
 			})	
 
 			$('#dg2').datagrid('load', {
-			Bulan: <?php Print($b2); ?>,
-			tahun: <?php Print($t2); ?>
-			
+				Bulan: <?php Print($b2); ?>,
+				Tahun: <?php Print($t2); ?>
 			});
 
-			$('#dg2').datagrid( {
-			
-			url: 'mrp_run_detail_get.php',
-			singleSelect: true,
-			
-			columns:[[
-			    {field:'CELL_GRADE',title:'CELL & GRADE', halign:'center', width:150},
-                {field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
-             
-			]],
-			onLoadSuccess: function (data) {
-
-			}
+			$('#dg2').datagrid( {			
+				url: 'mrp_run_detail_get.php',
+				singleSelect: true,
+				
+				columns:[[
+					{field:'CELL_GRADE',title:'CELL & GRADE', halign:'center', width:150},
+					{field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
+				]]
 			})
 
-
-
-
 			$('#dg3').datagrid('load', {
-			
-			Bulan: <?php Print($b3); ?>,
-			tahun: <?php Print($t3); ?>
-			
-			
+				Bulan: <?php Print($b3); ?>,
+				Tahun: <?php Print($t3); ?>
 			});
 
 			$('#dg3').datagrid( {
-			url: 'mrp_run_detail_get.php',
-			
-			singleSelect: true,
-			
-			columns:[[
-			    {field:'CELL_GRADE',title:'CELL & GRADE', halign:'center', width:150},
-                {field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
-             
-			]],
-			onLoadSuccess: function (data) {
-
-			}
+				url: 'mrp_run_detail_get.php',		
+				singleSelect: true,
+				columns:[[
+					{field:'CELL_GRADE',title:'CELL & GRADE', halign:'center', width:150},
+					{field:'QUANTITY', title:'QUANTITY', halign:'center',align:'right', width:150}
+				]]
 			})
 		});
 
@@ -300,8 +270,7 @@ while($row = oci_fetch_object($data)) {
 		function cek_jumlah(){
 			$.ajax({
 				type: 'GET',
-				url: 'json/json_jumlah_mrp.php',
-				data: { kode:'kode' },
+				url: '../../json/json_jumlah_mrp.php',
 				success: function(data){
 					n = data[0].persen;
 				}
@@ -323,7 +292,6 @@ while($row = oci_fetch_object($data)) {
 		}
 
 		function run_mrp(){
-			
 			if ($('#ck_cr_b1').attr("checked") && $('#ck_cr_b2').attr("checked") && $('#ck_cr_b3').attr("checked")) {
 				$('#start_mrp').linkbutton('disable');
 				$.post('mrp_run_get.php');
@@ -331,33 +299,23 @@ while($row = oci_fetch_object($data)) {
 				p_bar();
 			}else{
 				alert("Please Lock The Plan First !!");
-			
 			};
-
-			
-
-			
         }
 
         function print_assy1(){
-				pdf_url = "?pl_bulan="+<?php Print($b1); ?>+
-		   			  "&pl_tahun="+<?php Print($t1); ?>+
-		   			  "&pl_cdate="+false+
-					  "&pl_aline="+1+
-					  "&pl_cline="+true+
-					  "&pl_cltyp="+1+
-					  "&pl_cktyp="+true+
-					  "&pl_revis="+
-					  "&pl_crev="+true+
-					  "&pl_day="+1+
-					  "&pl_cday="+true+
-					  "&pl_cuse="+true;
-
-			
-			
-				window.open('assy_plan_xls.php'+pdf_url, '_blank');
-			
-			
+			pdf_url = "?pl_bulan="+<?php Print($b1); ?>+
+					"&pl_tahun="+<?php Print($t1); ?>+
+					"&pl_cdate="+false+
+					"&pl_aline="+1+
+					"&pl_cline="+true+
+					"&pl_cltyp="+1+
+					"&pl_cktyp="+true+
+					"&pl_revis="+
+					"&pl_crev="+true+
+					"&pl_day="+1+
+					"&pl_cday="+true+
+					"&pl_cuse="+true;
+			window.open('assy_plan_xls.php'+pdf_url, '_blank');
 		}
 
 		function print_assy2(){
@@ -373,14 +331,10 @@ while($row = oci_fetch_object($data)) {
 					  "&pl_day="+1+
 					  "&pl_cday="+true+
 					  "&pl_cuse="+true;
-
-			
-			
-				window.open('assy_plan_xls.php'+pdf_url, '_blank');
+			window.open('assy_plan_xls.php'+pdf_url, '_blank');
 		}
 
 		function print_assy3(){
-
 			pdf_url = "?pl_bulan="+<?php Print($b3); ?>+
 		   			  "&pl_tahun="+<?php Print($t3); ?>+
 		   			  "&pl_cdate="+false+
@@ -393,10 +347,7 @@ while($row = oci_fetch_object($data)) {
 					  "&pl_day="+1+
 					  "&pl_cday="+true+
 					  "&pl_cuse="+true;
-
-			
-			
-				window.open('assy_plan_xls.php'+pdf_url, '_blank');
+			window.open('assy_plan_xls.php'+pdf_url, '_blank');
 		}
 	</script>
     </body>
