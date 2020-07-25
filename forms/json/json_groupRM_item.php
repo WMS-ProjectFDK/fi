@@ -8,7 +8,6 @@
 		//where a.devided=0
 	$data = sqlsrv_query($connect, strtoupper($sql));
 	
-
 	while($dt_result = sqlsrv_fetch_object($data)){
 		$arrData[] = array("item_no"=>$dt_result->ITEM_NO,
 						   "id_name_item"=>$dt_result->ITEM_NO.' - '.$dt_result->DESCRIPTION
