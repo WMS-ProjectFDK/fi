@@ -13,6 +13,22 @@ $hasildata = $data->rowcount($sheet_index=0);
 
 $success = 0;       $failed = 0;
 
+
+
+ //Insert MPS_HEADER_RIREKI
+ $qry = "insert into MPS_HEADER_RIREKI select * from MPS_HEADER";
+ sqlsrv_query($connect, $qry);
+
+
+ //delete MPS_HEADER
+ $del1 = "delete from MPS_HEADER";
+ sqlsrv_query($connect, $del1);
+
+//delete from MPS_DETAILS
+$del2 = "delete from MPS_DETAILS";
+sqlsrv_query($connect, $del2);
+
+
 for($i=5;$i<=$hasildata;$i++){
     $a = trim($data->val($i,1));
     $b = trim($data->val($i,2));
@@ -36,14 +52,21 @@ for($i=5;$i<=$hasildata;$i++){
     $t = trim($data->val($i,20));
     $u = trim($data->val($i,21));
 
-    // delete MPS_HEADER
-    $del1 = "delete from MPS_HEADER";
-    $data_del1 = sqlsrv_query($connect, $del1);
-
-    // delete from MPS_DETAILS
-    // $del2 = "delete from MPS_DETAIL";
-    // $data_del2 = sqlsrv_query($connect, $del2);
-
+    if($data->val($i,1) == ""){
+        break;
+    }
+    
+    if($t == ""){
+        $t = 0;
+    }
+    if($r == ""){
+        $r = 0;
+    }
+    if($q == ""){
+        $q = 0;
+    }
+    
+   
     // INSERT MPS HEADER
     $field1 = "ITEM_NO,";                    $value1 = "$a,";
     $field1 .= "ITEM_NAME,";                 $value1 .= "'$b',";
@@ -71,8 +94,50 @@ for($i=5;$i<=$hasildata;$i++){
 
     $ins1 = "INSERT INTO MPS_HEADER ($field1) VALUES ($value1)";
     $data_ins1 = sqlsrv_query($connect, $ins1);
-    // echo $ins1;
+    
+    if(!$data_ins1) {
+        
+		die(print_r(sqlsrv_errors(),true));
+    };
+    
+    for($ix=22;$ix<200;$ix++){
+       $PO_NO = trim($data->val($i,5));
+       $PO_LINE_NO = trim($data->val($i,6));
+       $MPS_DATE = trim($data->val(4,$ix));
+       $MPS_QTY = trim($data->val($i,$ix));
 
+     
+
+        // INSERT MPS DETAILS
+        $mps_date = trim($data->val($i,21));
+        $field2 = "PO_NO,";                     $value2 =  "'$PO_NO',";
+        $field2 .= "PO_LINE_NO,";               $value2 .= "'$PO_LINE_NO',";
+        $field2 .= "MPS_DATE,";                 $value2 .= "convert(date,'$MPS_DATE',103),";
+        $field2 .= "MPS_QTY,";                  $value2 .= "$MPS_QTY,";
+        $field2 .= "UPLOAD_DATE";               $value2 .= "SYSDATETIME()";
+        
+        if($MPS_QTY != ""){
+            $ins2 = "insert into MPS_DETAILS (".$field2.") VALUES (".$value2.")";
+            $data_ins2 = sqlsrv_query($connect, $ins2);
+            
+            if(!$data_ins2) {
+                echo $ins2;
+                die(print_r(sqlsrv_errors(),true));
+            };
+        }
+    
+        
+        // if($data->val(4,$ix) == ""){
+        //     break;
+        // }
+    }
+
+    
+    
+
+   
+    //echo $ins1;
+}
     // INSERT MPS DETAILS
     // $field2 = "PO_NO,";                     $value2 = trim($data->val($i,5));
     // $field2 .= "PO_LINE_NO,";               $value2 .= trim($data->val($i,6));
@@ -268,6 +333,7 @@ for($i=5;$i<=$hasildata;$i++){
     // and  i.SECTION_CODE = s.SECTION_CODE (+) 
     // and  d.MPS_QTY      > 0";
     // $data_ins7 = sqlsrv_query($connect, $ins7);
-}
-echo json_encode("Success = ".$ins1);//.", Failed = ".$failed);
+// }
+echo json_encode("Success = ");
+//.", Failed = ".$failed);
 ?>
