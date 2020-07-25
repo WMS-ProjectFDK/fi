@@ -5,7 +5,6 @@
 	header("Content-type: application/json");
 	$sql = "select max(purchase_leadtime) lead from itemmaker where item_no = $item_no";
 	$result = sqlsrv_query($connect, strtoupper($sql));
-	oci_execute($result);
 	$arrData = array();
 	$arrNo = 0;
 	while ($row=sqlsrv_fetch_array($result)){
