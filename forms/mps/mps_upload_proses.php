@@ -134,16 +134,22 @@ for($i=5;$i<=$hasildata;$i++){
         }
     
         
-        // if($data->val(4,$ix) == ""){
-        //     break;
-        // }
+       
     }
+
+
 
     
     
 
    
     //echo $ins1;
+}
+
+$sql = "{call zsp_mps_remain}";
+$stmt = sqlsrv_query($connect, $sql);
+if( $stmt === false ) {
+    die( print_r( sqlsrv_errors(), true));
 }
     // INSERT MPS DETAILS
     // $field2 = "PO_NO,";                     $value2 = trim($data->val($i,5));
