@@ -104,7 +104,7 @@ $user_name = $_SESSION['id_wms'];
 			},
 			success: function(result){
 				$.messager.alert('MPS UPLOAD',result,'info');
-				// console.log(result);
+				console.log(result);
 		 		$('#fileexcel').filebox('clear');
 				// $('#dg').datagrid('reload');
 				}
