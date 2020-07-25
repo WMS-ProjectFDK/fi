@@ -16,7 +16,14 @@ $success = 0;       $failed = 0;
 
 
  //Insert MPS_HEADER_RIREKI
- $qry = "insert into MPS_HEADER_RIREKI select * from MPS_HEADER";
+ $qry = "insert into MPS_HEADER_RIREKI 
+         select ITEM_NO,ITEM_NAME,BATERY_TYPE,CELL_GRADE,PO_NO,PO_LINE_NO,WORK_ORDER,CONSIGNEE,PACKAGING_TYPE,DATE_CODE,CR_DATE,REQUESTED_ETD,STATUS,LABEL_ITEM_NUMBER,LABEL_NAME,QTY,MAN_POWER,OPERATEION_TIME,LABEL_TYPE,CAPACITY,getdate(),REMARK,BOM_LEVEL,BOM_EDIT_STAT 
+         from MPS_HEADER";
+ sqlsrv_query($connect, $qry);
+
+ //Insert MPS_HEADER_RIREKI
+ $qry = "insert into MPS_DETAILS_RIREKI 
+         select PO_NO,PO_LINE_NO,MPS_DATE,MPS_QTY,getdate() from MPS_DETAILS";
  sqlsrv_query($connect, $qry);
 
 
