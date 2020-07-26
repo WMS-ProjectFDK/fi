@@ -75,14 +75,14 @@ h2 {
 				</div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">PRF No.</span>
-					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
+					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
 					<label><input type="checkbox" name="ck_prf" id="ck_prf" checked="true">All</input></label>
 				</div>
 			</div>
 			<div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">Item No.</span>
-					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+					<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
 					onSelect:function(rec){
 						var spl = rec.id_name_item;
 						var sp = spl.split(' - ');
