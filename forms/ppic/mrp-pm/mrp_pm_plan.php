@@ -1291,7 +1291,7 @@ if ($sts == 'lower'){
             });
 		}else{
 			$('#dlg_viewPLAN').dialog('open').dialog('setTitle','VIEW INFO MPS ('+AddDateII(f)+')');
-			//alert('mrp_rm_plan_info_ASSY.php?item_no='+g+'&tgl_plan='+tgl_plan);
+			console.log('mrp_pm_plan_info_mps.php?item_no='+g+'&tgl_plan='+tgl_plan);
 			$('#dg_viewPLAN').datagrid({
 				url: 'mrp_pm_plan_info_mps.php?item_no='+g+'&tgl_plan='+tgl_plan,
 				singleSelect: true,

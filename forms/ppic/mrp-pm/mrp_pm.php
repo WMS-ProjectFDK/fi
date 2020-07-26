@@ -187,19 +187,16 @@ h2 {
 
 			$.post('mrp_pm_run.php',{}).done(function(res){
 				if(res == '"success"'){
-					$('#dlg_add').dialog('close');
-					$('#dg').datagrid('reload');
 					$.messager.alert('INFORMATION','Running MRP Success..!!','info');
-					$.messager.progress('close');
+					filterData();
 				}else{
 					$.messager.alert('ERROR',res,'warning');
-					$.messager.progress('close');
 				}
+				$.messager.progress('close');
 			});
 		} else {
 		    alert("Process cancelled");
 		}
-		
 	}
 
 	function AddDate(count) {
