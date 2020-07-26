@@ -134,9 +134,12 @@ if (isset($_SESSION['id_wms'])){
 		}
 
 		if($pu_sts == 'MRP'){
-
-			$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
 			
+			if($pu_sts == 'MRP'){
+				$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
+			}else{
+				$sql = "{call zsp_mrp_pm_item(?)}";
+			}
 			$params = array(
 				array($pu_item, SQLSRV_PARAM_IN)
 			);
@@ -148,21 +151,16 @@ if (isset($_SESSION['id_wms'])){
 			}	
 
 
-		// 	$sqlx = "{call ZSP_MRP_PRF(?,?)}";
-		// 	$paramsx = array(
-		// 		array($pu_item, SQLSRV_PARAM_IN),
-		// 		array($pu_prf, SQLSRV_PARAM_IN)
-		// 	);
-		// 	$stmt = sqlsrv_query($connect, $sqlx,$paramss);
-			
-			
-		// 	$pesan = sqlsrv_errors($stmt);
-		// 	$msg .= $pesan['message'];
-
-		// 	if($msg != ''){
-		// 		$msg .= " Procedure II - MRP Process Error : $sqlx";
-		// 		break;
-		// 	}
+			$sqlx = "{call ZSP_MRP_PRF(?,?)}";
+			$paramsx = array(
+				array($pu_item, SQLSRV_PARAM_IN),
+				array($pu_prf, SQLSRV_PARAM_IN)
+			);
+			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
+			if($stmt === false){
+				$msg .= " Procedure I - MRP Process Error : $sql";
+				break;
+			}	
 		}
 	};
 
