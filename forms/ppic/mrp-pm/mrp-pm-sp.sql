@@ -71,8 +71,9 @@ GO
 
 --select * from ztb_mrp_data_pck where item_no in (select lower_item_no from tableplan_used)
 
-ALTER PROCEDURE [dbo].[zsp_mrp_pm] AS
-
+CREATE PROCEDURE [dbo].[zsp_mrp_pm_item] (
+    @item_no int = null
+) AS
 
 declare @table table(
    ID  int identity(1,1),
@@ -98,6 +99,7 @@ declare @table_m_details table(
 --##################################CACL MPS START #####################################
 
 delete from ZTB_MPS_DETAILS 
+where ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
 
 insert into @table_produksi
 select distinct r.po_no, r.po_line_no,  r.qty - isnull(qty_prod,isnull(cc.production,0)) - isnull(sum(s.mps_qty),0) Qty
@@ -117,6 +119,7 @@ where r.status is not null --and r.work_order = '0010194-LR03C1-1'--and r.po_no 
         on r.po_no = s.po_no and r.po_line_no = s.po_line_no
         where s.po_no is null
       )
+      and r.ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
 group by r.po_no, r.po_line_no,production,r.qty,qty_prod
 having r.qty - isnull(cc.production,0) - isnull(sum(s.mps_qty),0) > 0;
 
@@ -226,6 +229,7 @@ on st.UPPER_ITEM_NO = r.ITEM_NO
 inner join item it 
 on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
 where   s.mps_date > cast(getdate() as date) 
+        and case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = @item_no
 
 
 
@@ -241,7 +245,7 @@ where   s.mps_date > cast(getdate() as date)
 --    flag int
 -- )
  
-delete from tableplan_used
+delete from tableplan_used where lower_item_no = @item_no
 
 --inventory 4
 insert into tableplan_used 
@@ -500,9 +504,9 @@ select getdate(),* from ZTB_MRP_DATA_pck
    
           
           
-          insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
-          select '5','PURCHASE2 ',lower_item_no,desk
-          from @table 
+        --   insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
+        --   select '5','PURCHASE2 ',lower_item_no,desk
+        --   from @table 
 
 
 
@@ -541,12 +545,12 @@ DECLARE @date date = getdate()
            
             exec (@qry)
             
-            set @qry = ''
+            -- set @qry = ''
 
-            set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
-                        where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
+            -- set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
+            --             where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
            
-            exec (@qry)
+            -- exec (@qry)
             
             set @qry = ''  
             if(@start = 1) BEGIN
@@ -1193,8 +1197,6 @@ DECLARE @date date = getdate()
 
 
 GO
-
-
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1268,9 +1270,8 @@ GO
 
 --select * from ztb_mrp_data_pck where item_no in (select lower_item_no from tableplan_used)
 
-ALTER PROCEDURE [dbo].[zsp_mrp_pm_item] (
-    @item_no int = null
-) AS
+CREATE PROCEDURE [dbo].[zsp_mrp_pm] AS
+
 
 declare @table table(
    ID  int identity(1,1),
@@ -1296,7 +1297,6 @@ declare @table_m_details table(
 --##################################CACL MPS START #####################################
 
 delete from ZTB_MPS_DETAILS 
-where ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
 
 insert into @table_produksi
 select distinct r.po_no, r.po_line_no,  r.qty - isnull(qty_prod,isnull(cc.production,0)) - isnull(sum(s.mps_qty),0) Qty
@@ -1316,7 +1316,6 @@ where r.status is not null --and r.work_order = '0010194-LR03C1-1'--and r.po_no 
         on r.po_no = s.po_no and r.po_line_no = s.po_line_no
         where s.po_no is null
       )
-      and r.ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
 group by r.po_no, r.po_line_no,production,r.qty,qty_prod
 having r.qty - isnull(cc.production,0) - isnull(sum(s.mps_qty),0) > 0;
 
@@ -1426,7 +1425,6 @@ on st.UPPER_ITEM_NO = r.ITEM_NO
 inner join item it 
 on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
 where   s.mps_date > cast(getdate() as date) 
-        and case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = @item_no
 
 
 
@@ -1442,7 +1440,7 @@ where   s.mps_date > cast(getdate() as date)
 --    flag int
 -- )
  
-delete from tableplan_used where lower_item_no = @item_no
+delete from tableplan_used
 
 --inventory 4
 insert into tableplan_used 
@@ -1701,9 +1699,9 @@ select getdate(),* from ZTB_MRP_DATA_pck
    
           
           
-        --   insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
-        --   select '5','PURCHASE2 ',lower_item_no,desk
-        --   from @table 
+          insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
+          select '5','PURCHASE2 ',lower_item_no,desk
+          from @table 
 
 
 
@@ -1742,12 +1740,12 @@ DECLARE @date date = getdate()
            
             exec (@qry)
             
-            -- set @qry = ''
+            set @qry = ''
 
-            -- set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
-            --             where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
+            set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
+                        where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
            
-            -- exec (@qry)
+            exec (@qry)
             
             set @qry = ''  
             if(@start = 1) BEGIN

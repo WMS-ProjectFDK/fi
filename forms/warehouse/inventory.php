@@ -10,7 +10,7 @@ $user_name = $_SESSION['id_wms'];
 <head>
 <meta charset="UTF-8">
 <title>WAREHOUSE INVENTORY</title>
-<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="icon" type="image/png" href="../favicon.png">
 <script language="javascript">
 		function confirmLogOut(){
 		var is_confirmed;
@@ -63,7 +63,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../../ico_logout.php'); ?>
+<?php include ('../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
 	<fieldset style="float:left;width:500px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong> PERIOD & ITEM FILTER </strong></span></legend>
@@ -74,7 +74,7 @@ h2 {
 			</div>
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;">Period</span>
-				<input style="width:120px;" name="cmb_bln" id="cmb_bln" class="easyui-combobox" data-options="url:'json/json_period.php', method:'get', valueField:'bln', textField:'blnA', panelHeight:'50px'" required=""/>
+				<input style="width:120px;" name="cmb_bln" id="cmb_bln" class="easyui-combobox" data-options="url:'../json/json_period.php', method:'get', valueField:'bln', textField:'blnA', panelHeight:'50px'" required=""/>
 			</div>
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;"></span>
