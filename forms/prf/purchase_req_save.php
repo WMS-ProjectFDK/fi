@@ -133,21 +133,19 @@ if (isset($_SESSION['id_wms'])){
 			break;
 		}
 
-		// if($pu_sts == 'MRP'){
+		if($pu_sts == 'MRP'){
 
-		// 	$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
+			$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
 			
-		// 	$params = array(
-		// 		array($pu_item, SQLSRV_PARAM_IN)
-		// 	);
-		// 	$stmt = sqlsrv_query($connect, $sqlx,$paramss);
-		// 	$pesan = sqlsrv_errors($stmt);
-		// 	$msg .= $pesan['message'];
+			$params = array(
+				array($pu_item, SQLSRV_PARAM_IN)
+			);
+			$stmt = sqlsrv_query($connect, $sqlx,$paramss);
 
-		// 	if($msg != ''){
-		// 		$msg .= " Procedure I - MRP Process Error : $sql";
-		// 		break;
-		// 	}	
+			if($stmt === false){
+				$msg .= " Procedure I - MRP Process Error : $sql";
+				break;
+			}	
 
 
 		// 	$sqlx = "{call ZSP_MRP_PRF(?,?)}";
@@ -165,7 +163,7 @@ if (isset($_SESSION['id_wms'])){
 		// 		$msg .= " Procedure II - MRP Process Error : $sqlx";
 		// 		break;
 		// 	}
-		// }
+		}
 	};
 
 }else{
