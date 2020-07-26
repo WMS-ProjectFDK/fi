@@ -15,7 +15,7 @@
 		where lower_item_no in ($item_no,70000000 + $item_no) and mps_date='$tgl_plan' 
 		order by a.cr_date asc";
 	$data_cek = sqlsrv_query($connect, strtoupper($cek));
-	
+	echo $cek;
 	$items = array();
 	$rowno=0;
 
