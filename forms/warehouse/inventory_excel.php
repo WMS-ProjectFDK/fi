@@ -1,11 +1,11 @@
 <?php
 ini_set('memory_limit', '-1');
 set_time_limit(-1);
-require_once '../class/phpexcel/PHPExcel.php';
+require_once '../../class/phpexcel/PHPExcel.php';
 $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
-include("../connect/conn.php");
+include("../../connect/conn.php");
 
 $cmbBln = isset($_REQUEST['cmbBln']) ? strval($_REQUEST['cmbBln']) : '';
 $cmbBln_txt = isset($_REQUEST['cmbBln_txt']) ? strval($_REQUEST['cmbBln_txt']) : '';
@@ -41,9 +41,8 @@ if ($src !='') {
 }
 
 $sql = "select distinct max(this_month) as this_month, max(last_month) as last_month from whinventory";
-$data = oci_parse($connect, $sql);
-oci_execute($data);
-$dt_result = oci_fetch_object($data);
+$data = sqlsrv_query($connect, strtoupper($sql));
+$dt_result = sqlsrv_fetch_object($data);
 
 
 if($dt_result->THIS_MONTH == $cmbBln){
@@ -54,13 +53,13 @@ if($dt_result->THIS_MONTH == $cmbBln){
         a.issue1,
         a.other_issue1,
         a.last_inventory,
-        (select sum(slip_quantity)from transaction where item_no=a.item_no and to_char(slip_date,'yyyymm')='$cmbBln') as qty_act
+        (select sum(slip_quantity)from [transaction] where item_no=a.item_no and LEFT(CONVERT(varchar, slip_date,112),6)='$cmbBln') as qty_act
         from whinventory a
         inner join item b on a.item_no=b.item_no
         inner join unit c on b.uom_q=c.unit_code
         $where order by b.item asc, b.description asc"; 
-    $result = oci_parse($connect, $sql);
-    oci_execute($result); 
+    $result = sqlsrv_query($connect, strtoupper($sql));
+    
 }else{
     $sql = "select a.item_no, b.item, b.description, b.uom_q, c.unit, a.this_month, 
         a.last_inventory as this_inventory, 
@@ -69,13 +68,13 @@ if($dt_result->THIS_MONTH == $cmbBln){
         issue2 as issue1,
         other_issue2 as other_issue1,
         last2_inventory as last_inventory,
-        (select sum(slip_quantity)from transaction where item_no=a.item_no and to_char(slip_date,'yyyymm')='$cmbBln') as qty_act
+        (select sum(slip_quantity)from [transaction] where item_no=a.item_no and LEFT(CONVERT(varchar, slip_date,112),6)='$cmbBln') as qty_act
         from whinventory a
         inner join item b on a.item_no=b.item_no
         inner join unit c on b.uom_q=c.unit_code
         $where order by b.item asc, b.description asc"; 
-    $result = oci_parse($connect, $sql);
-    oci_execute($result); 
+    $result = sqlsrv_query($connect, strtoupper($sql));
+  
 }
 
 function cellColor($cells,$color){
@@ -133,7 +132,7 @@ $sheet->getStyle('A1:L1')->applyFromArray(
 $noUrut = 1;    
 $no=2;
 
-while ($data=oci_fetch_object($result)){
+while ($data=sqlsrv_fetch_object($result)){
     $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$no, ($noUrut))
                 ->setCellValue('B'.$no, $data->ITEM_NO)
@@ -230,23 +229,27 @@ while ($data=oci_fetch_object($result)){
     $nourut_dtl = 1;
 
     $l_inv = $data->LAST_INVENTORY;
-    $sql = "select to_char(t.operation_date,'dd/mm/yyyy') operation_date, t.section_code, sc.section, i.stock_subject_code, st.stock_subject, 
-          t.slip_date, t.slip_type, sl.slip_name slip_name, t.slip_no, sl.in_out_flag,
-          decode(sl.table_position,1,t.slip_quantity) receive,
-          decode(sl.table_position,2,t.slip_quantity) other_receive,
-          decode(sl.table_position,3,t.slip_quantity) issue,
-          decode(sl.table_position,4,t.slip_quantity) other_issue,
-          trunc(decode(sl.in_out_flag,'I',nvl(t.slip_quantity,0),'O',nvl(-t.slip_quantity,0)),4) qty,
-          t.cost_process_code, t.cost_subject_code, t.remark1, t.remark2, t.unit_stock, t.company_code, c.company, t.ex_rate
-          from transaction t,item i,section sc, unit u, stock_subject st,sliptype sl, company c, currency cu
-          where t.item_no = i.item_no (+) and i.delete_type  is null and t.section_code = sc.section_code (+) and t.unit_stock = u.unit_code (+)
-          and t.section_code = sc.section_code (+) and t.slip_type = sl.slip_type (+) and t.company_code = c.company_code (+) 
-          and t.stock_subject_code = st.stock_subject_code (+) and t.curr_code = cu.curr_code (+) and 
-          t.section_code = '100' and t.item_no = ".$data->ITEM_NO." and to_char(t.slip_date,'yyyymm') = '".$data->THIS_MONTH."'
-          order by t.slip_date,t.slip_type,t.SLIP_NO";
-    $detail = oci_parse($connect, $sql);
-    oci_execute($detail);
-    while ($dta = oci_fetch_object($detail) ){
+    $sql = "
+          select cast(t.operation_date as varchar(10)) operation_date, t.section_code, sc.section, i.stock_subject_code, st.stock_subject, 
+		  cast(t.slip_date as varchar(10))  slip_date, t.slip_type, sl.slip_name slip_name, t.slip_no, sl.in_out_flag,
+			case sl.table_position when 1 then t.slip_quantity end  receive,
+			case sl.table_position when 2 then t.slip_quantity end other_receive,
+			case sl.table_position when 3 then t.slip_quantity end issue,
+			case sl.table_position when 4 then t.slip_quantity end  other_issue,
+			case sl.in_out_flag
+				  when 'I' then isnull(t.slip_quantity,0)
+				  when 'O' then isnull(-t.slip_quantity,0)
+			   end qty,
+			t.cost_process_code, t.cost_subject_code, t.remark1, t.remark2, t.unit_stock, t.company_code, c.company, t.ex_rate
+			from [transaction] t, item i, section sc, unit u, stock_subject st,sliptype sl, company c, currency cu
+			where t.item_no = i.item_no  and i.delete_type  is null and t.section_code = sc.section_code  and t.unit_stock = u.unit_code 
+			and t.section_code = sc.section_code  and t.slip_type = sl.slip_type  and t.company_code = c.company_code  
+			and t.stock_subject_code = st.stock_subject_code  and t.curr_code = cu.curr_code  
+			and t.section_code = '100' and t.item_no = ".$data->ITEM_NO." and  t.accounting_month = '".$data->THIS_MONTH."' 
+			order by t.slip_date,t.slip_type,t.SLIP_NO ";
+    $detail = sqlsrv_query($connect, strtoupper($sql));
+   
+    while ($dta = sqlsrv_fetch_object($detail) ){
         $q = $dta->QTY;
         $total = intval($l_inv) + $q;
 

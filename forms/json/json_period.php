@@ -14,6 +14,5 @@
 		$arrData[] = array("bln"=>$dt_result->THIS_MONTH, "blnA"=>$dt_result->THIS_MONTH_TEXT, "selected"=>true);
 		$arrData[] = array("bln"=>$dt_result->LAST_MONTH, "blnA"=>$dt_result->LAST_MONTH_TEXT);
 	}
-
 	echo json_encode($arrData);
 ?>
