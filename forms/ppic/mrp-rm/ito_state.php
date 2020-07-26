@@ -270,9 +270,6 @@ h2 {
 					  '&ckday='+ck_day+
 					  '&sts_ito='+sts+
 					  '&ck_ai='+ck_ai;
-		
-		console.log(pdf_url_ito);
-
 		$('#dg').datagrid({
 	    	url:'ito_state_get.php',
 	    	singleSelect: true,

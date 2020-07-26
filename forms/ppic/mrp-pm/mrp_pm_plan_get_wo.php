@@ -8,7 +8,7 @@
 	$qry =  "select work_order,
 	item_no,
 	item_name,
-  	cr_date,
+  	CAST(cr_date as varchar) as cr_date,
   	qty, status, date_code,
 	sum(n_1) n_1,
 	sum(n_2) n_2,
@@ -234,7 +234,7 @@ from
       cr_date,
       qty, date_code
 order by cr_date,status,item_no";
-	$data_qry = sqlsrv_query($connect, $qry);
+	$data_qry = sqlsrv_query($connect, strtoupper($qry));
 	$items = array();
 	while ($row = sqlsrv_fetch_object($data_qry)) {
 		array_push($items, $row);

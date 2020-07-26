@@ -28,12 +28,14 @@ if ($ck_week != "true"){
 		}
 	}
 }else{
+	$value = '';
+	$vBal = '';
 	$n = 'N_';		$nBal = '+BALANCE as NBAL_';
 	for ($i=1; $i <= 90 ; $i++) { 
 		$value .= $n.$i.',';
 		$vBal .= $n.$i.$nBal.$i.',';
 	}
-	$result = '';
+	$r = '';
 }
 
 if ($ck_fg != "true"){
@@ -50,7 +52,7 @@ if($ck_item != "true") {
 }
 
 $where = "where $fg $item $r 
-	item_no in (select distinct case when lower_item_no > 70000000 then lower_item_no - 70000000 else lower_item_no end lower_item_no from structure where upper_item_no=$itemNya
+	aa.item_no in (select distinct case when lower_item_no > 70000000 then lower_item_no - 70000000 else lower_item_no end lower_item_no from structure where upper_item_no=$itemNya
 				and level_no = $levelNya
 			   ) and no_id = 4 ";
 
@@ -67,7 +69,7 @@ $cek = "select no_id, description, $value aaa.item_no, item_desc, $vBal balance 
 			$where)aaa order by aaa.item_no, description" ;
 $data_cek = sqlsrv_query($connect, strtoupper($cek));
 
-//echo $cek;
+// echo $cek;
 
 $items = array();
 $rowno=0;

@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	error_reporting(0);
+	// error_reporting(0);
 	set_time_limit(0);
 	include("../../../connect/conn.php");
 	$cmb_item_no = isset($_REQUEST['cmb_item_no']) ? strval($_REQUEST['cmb_item_no']) : '';
@@ -29,7 +29,7 @@
 	
 
 	//cek item to DI
-	$filename = "json/json_item_to_DI_MRP.json";
+	$filename = "../../json/json_item_to_DI_MRP.json";
 	$string = file_get_contents($filename);
 	$json_a = json_decode($string, true);
 	$itemNya = '';
@@ -67,14 +67,14 @@
 	    	)ab on aa.item_no = ab.item_no
 			order by aa.item_no, aa.no_id";
 	$data_qry = sqlsrv_query($connect, strtoupper($qry));
-	
+	// echo $qry;
 
 	$items = array();		$minArr = array();			$maxArr = array();
 	$rowno=0;
 	$no=1;
 	$nilai = 'N_';		$itm = "";
 
-	while ($row = sqlsvr_fetch_object($data_qry)) {
+	while ($row = sqlsrv_fetch_object($data_qry)) {
 		array_push($items, $row);
 		$id = intval($items[$rowno]->NO_ID);
 		$desc = strtoupper($items[$rowno]->DESCRIPTION);

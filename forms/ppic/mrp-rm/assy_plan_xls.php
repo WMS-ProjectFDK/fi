@@ -6,8 +6,6 @@ $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 include("../../../connect/conn.php");
 
-// http://localhost:8088/fi/forms/ppic/mrp-rm/assy_plan_xls.php?pl_bulan=7&pl_tahun=2020&pl_cdate=false&pl_aline=1&pl_cline=true&pl_cltyp=1&pl_cktyp=true&pl_revis=&pl_crev=true&pl_day=1&pl_cday=true&pl_cuse=true
-
 $pl_bulan = isset($_REQUEST['pl_bulan']) ? strval($_REQUEST['pl_bulan']) : '';
 $pl_tahun = isset($_REQUEST['pl_tahun']) ? strval($_REQUEST['pl_tahun']) : '';
 $pl_cdate = isset($_REQUEST['pl_cdate']) ? strval($_REQUEST['pl_cdate']) : '';

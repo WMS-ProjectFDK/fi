@@ -31,6 +31,19 @@ if (isset($_SESSION['id_wms'])){
 	// oci_bind_by_name($stmt1, ':V_ITEM_NO', $item);
 	// $res1 = oci_execute($stmt1);
 
+	$sql = "{call ZSP_MRP_MATERIAL_ITEM(?)}";
+    $params = array(  
+        array(trim($item), SQLSRV_PARAM_IN)
+    );
+    
+    $stmt = sqlsrv_query($connect, $sql,$params);
+	
+	if ($stmt){
+		echo json_encode(array('successMsg'=>'success MRP'));	
+	}else{
+		echo json_encode(array('errorMsg'=>'Error MRP'));	
+	}
+
 	// $sqlx = "BEGIN ZSP_MRP_PRF(:V_ITEM_NO,:V_PRF_NO); END;";
 	// $stmt2 = sqlsrv_query($connect, $sqlx);
 	// oci_bind_by_name($stmt2, ':V_ITEM_NO', $item);

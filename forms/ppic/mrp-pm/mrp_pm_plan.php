@@ -1,7 +1,7 @@
 <?php
 require("../../../connect/conn.php");
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $upper_item_no = isset($_REQUEST['upper_item_no']) ? strval($_REQUEST['upper_item_no']) : '';
 $cmb_item_no = isset($_REQUEST['cmb_item_no']) ? strval($_REQUEST['cmb_item_no']) : '';
@@ -23,15 +23,13 @@ left outer join
 (select distinct max(line_no) line_no, item_no,isnull(purchase_leadtime,0) as purchase_leadtime 
 	from itemmaker 
 	group by item_no,purchase_leadtime)bb on aa.item_no=bb.item_no";
-$data = sqlsrv_query($connect, $sql);
+$data = sqlsrv_query($connect, strtoupper($sql));
 $row = sqlsrv_fetch_object($data);
+$ld_time = '';
 
 if($from == 'ITO'){
 	$ld_time = ', Lead Time = '.$row->PURCHASE_LEADTIME.' Days';
-}else{
-	$ld_time = '';
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +37,7 @@ if($from == 'ITO'){
 <head>
 <meta charset="UTF-8">
 <title>PACKAGING MATERIAL ANALISYST</title>
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="../../../favicon.png">
 <script language="javascript">
 	function confirmLogOut(){
 		var is_confirmed;
@@ -47,20 +45,18 @@ if($from == 'ITO'){
 		return is_confirmed;
 	}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-
-
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.patch.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
-<script type="text/javascript" src="../js/canvasjs.min.js"></script>
-<script type="text/javascript" src="../js/datagrid-export.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../../themes/color.css" />
+<script type="text/javascript" src="../../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery.easyui.patch.js"></script>
+<script type="text/javascript" src="../../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../../js/jquery.edatagrid.js"></script>
+<script type="text/javascript" src="../../../js/canvasjs.min.js"></script>
+<script type="text/javascript" src="../../../js/datagrid-export.js"></script>
 
 <style>
 *{
@@ -119,7 +115,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../../ico_logout.php'); ?>
 
 <table id="dg_plan" title="VIEW PLAN <?php echo  $cmb_item_no.' ('.$row->DESCRIPTION.')'; ?>" class="easyui-datagrid" style="width:100%;height:auto;"></table>
 
@@ -172,7 +168,7 @@ if ($sts == 'lower'){
 	<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:720px; height: 70px; float:left;"><legend><span class="style3"><strong>Select Vendor</strong></span></legend>
 		<div class="fitem">
 			<span style="width:100px;display:inline-block;margin-left: 5px;">VENDOR</span>
-			<select style="width:400px;" name="cmb_company" id="cmb_company" class="easyui-combobox" data-options=" url:'json/json_company_DI_byMRP.php', method:'get', valueField:'COMPANY_CODE', textField:'COMB_COMPANY', panelHeight:'100px',
+			<select style="width:400px;" name="cmb_company" id="cmb_company" class="easyui-combobox" data-options=" url:'../../json/json_company_DI_byMRP.php', method:'get', valueField:'COMPANY_CODE', textField:'COMB_COMPANY', panelHeight:'100px',
 			onSelect: function(rec){
 				$('#txt_attn').textbox('setValue',rec.ATTN);
 			}"
@@ -228,7 +224,7 @@ if ($sts == 'lower'){
 <!-- END VIEW INFO PLAN ASSEMBLING-->
 
 <!-- START VIEW INFO PLAN WO-->
-<div id='dlg_viewPLANWO' class="easyui-dialog" style="width:1450px;height:500px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true">
+<div id='dlg_viewPLANWO' class="easyui-dialog" style="width:1300px;height:500px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true">
 	<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" 
 	onclick="print_wo()" style="width:90px">Print Plan</a>
 	<table id="dg_viewPLANWO" class="easyui-datagrid" style="width:100%;height:90%;"></table>
@@ -818,7 +814,7 @@ if ($sts == 'lower'){
 	function info_ost(p){
 		$('#dlg_ost').dialog('open').dialog('setTitle','VIEW INFO OUTSTANDING ('+p+')');
 		$('#dg_ost').datagrid({
-			url: 'mrp_rm_plan_info_ost.php?item_no='+p,
+			url: '../mrp-rm/mrp_rm_plan_info_ost.php?item_no='+p,
 			singleSelect: true,
 			rownumbers: true,
 		    columns:[[
@@ -1327,6 +1323,7 @@ if ($sts == 'lower'){
 		}*/
 	}
 
+	console.log('mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>');
 	$('#dg_plan').datagrid({
 		url:'mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>',
 		singleSelect: true,

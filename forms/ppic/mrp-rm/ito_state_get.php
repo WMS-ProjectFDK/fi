@@ -3101,12 +3101,11 @@
 			select tipe, average,remark from ztb_config_rm 
 			) dd on aa.item_desc=dd.tipe
 			$where
-			group by item_desc, min, max, average, $fieldNya,remark 
-			order by cast(remark as int),item_desc asc
-		)";
+			group by item_desc, min, max, average, $fieldNya,remark)aa 
+			order by cast(remark as int),item_desc asc";
 
 
-	echo $sql;
+	// echo $sql;
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

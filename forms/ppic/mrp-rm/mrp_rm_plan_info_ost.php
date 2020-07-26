@@ -11,7 +11,7 @@
 		from po_details a
 		inner join item b on a.item_no=b.item_no
 		where a.eta < cast(getdate() as date) and a.eta > '01-JAN-18' and a.item_no = $item_no and bal_qty!=0" ;
-	$data_cek = sqlsrv_query($connect, $cek);
+	$data_cek = sqlsrv_query($connect, strtoupper($cek));
 	
 	//echo $cek;
 	$items = array();

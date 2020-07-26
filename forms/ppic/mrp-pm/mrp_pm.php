@@ -179,7 +179,23 @@ h2 {
 	function RunMRP(){
 		if (confirm("This process will takes time around 20-25 minutes, also MRP data now will be erased. if you agree please confirm ?")) {
 			alert("Please do not close browser while MRP running.");
-		    window.open('http://172.23.225.85/wms/schedule/execute_sp.php');
+		    // window.open('http://172.23.225.85/wms/schedule/execute_sp.php');
+			$.messager.progress({
+				title:'Please waiting',
+				msg:'Save data...'
+			});
+
+			$.post('mrp_pm_run.php',{}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Running MRP Success..!!','info');
+					$.messager.progress('close');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
+			});
 		} else {
 		    alert("Process cancelled");
 		}

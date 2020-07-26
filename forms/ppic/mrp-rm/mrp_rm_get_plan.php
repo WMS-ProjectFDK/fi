@@ -48,9 +48,10 @@
 		$where
 		)aa
 		left outer join
-		(select distinct max(line_no), item_no,purchase_leadtime from itemmaker group by item_no,purchase_leadtime)bb on aa.item_no=bb.item_no
+		(select distinct max(line_no) as max_line, item_no,purchase_leadtime from itemmaker group by item_no,purchase_leadtime)bb on aa.item_no=bb.item_no
 		order by aa.item_no, aa.no_id";
 	
+	// echo $qry;
 	$data_qry = sqlsrv_query($connect, strtoupper($qry));
 	
 
