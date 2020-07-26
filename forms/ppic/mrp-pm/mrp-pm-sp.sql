@@ -4,6 +4,55 @@ SET QUOTED_IDENTIFIER ON
 GO
 --exec zsp_mrp_pm
 
+-- select * from ztb_mps_details where po_no = 'FI/20-163'
+
+--select * from ZTB_MRP_DATA_PCK where item_no = '2225326'
+
+-- select 
+--        distinct
+--        case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end lower_item_no,
+--        it.description
+-- select *       
+-- from mps_header r
+-- inner join ztb_mps_details s 
+-- on r.po_no = s.po_no and s.po_line_no = r.po_line_no
+-- inner join (  
+--             select * from structure s
+--             inner join (
+--                           select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+--                           group by UPPER_ITEM_NO 
+--               )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
+--               where LOWER_ITEM_NO = 2225326
+--             ) st
+-- on st.UPPER_ITEM_NO = r.ITEM_NO 
+-- -- inner join item it 
+-- -- on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
+-- where   st.LOWER_ITEM_NO = 2225326
+        
+--         -- and upper_item_no = '88680'
+--   group by mps_date,case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end,quantity_base,quantity,failure_rate
+  
+
+--  select case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end lower_item_no,
+--         mps_date,
+--         CAST(sum(s.mps_qty) * quantity / quantity_base as decimal(18,2)) * (1 + (failure_rate /100))   qty_p,
+--         1
+--    select *     
+--   from mps_header r
+--   inner join ZTB_MPS_DETAILS s 
+--   on r.po_no = s.po_no and s.po_line_no = r.po_line_no
+--   inner join (  
+--             select * from structure s
+--               ) st
+--   on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(s.bom_level as  varchar(10))
+--   inner join item it 
+--   on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
+--   where  mps_date > cast(getdate() as date) and datediff(d,getdate(),mps_date) <=90
+        
+--         -- and upper_item_no = '88680'
+--   group by mps_date,case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end,quantity_base,quantity,failure_rate
+  
+
 --1232160	2020-07-27	5000000.000	5
 
 -- update ztb_mrp_data_pck set N_1 = bb.jum from ztb_mrp_data_pck aa inner join (
@@ -48,12 +97,14 @@ declare @table_m_details table(
 
 --##################################CACL MPS START #####################################
 
+delete from ZTB_MPS_DETAILS 
+
 insert into @table_produksi
 select distinct r.po_no, r.po_line_no,  r.qty - isnull(qty_prod,isnull(cc.production,0)) - isnull(sum(s.mps_qty),0) Qty
 from mps_header r
 left outer join (select * from mps_details where mps_date > cast(getdate() + 90 as date)) s
 on r.po_line_no = s.po_line_no and r.po_no = s.po_no
-left outer join (select sum(case when slip_type = 87 then slip_quantity *-1 else SLIP_QUANTITY end ) Production, wo_no from production_income group by wo_no) cc
+left outer join (select isnull(sum(case when slip_type = 87 then slip_quantity *-1 else SLIP_QUANTITY end ),0) Production, wo_no from production_income group by wo_no) cc
 on r.work_order = cc.wo_no
 left outer join (select wo_no,isnull(sum(qty_prod),0) qty_prod from 
                     (select distinct wo_no,plt_no,qty_prod,qty_order from ztb_m_plan where upload = 1 )aa group by wo_no)dd
@@ -97,7 +148,8 @@ declare @mps_date date
     from @table_produksi
  )
 
-delete from ZTB_MPS_DETAILS
+
+
     
 while @start <= @end BEGIN
     
@@ -115,7 +167,7 @@ while @start <= @end BEGIN
 
 
     select @end_x = isnull(max(ID),0) 
-    from @table_produksi
+    from @table_m_details
     
     while @start_x <= @end_x
     BEGIN
@@ -127,10 +179,12 @@ while @start <= @end BEGIN
         where id = @start_x
 
         IF  @qty > @mps_qty  BEGIN
+            insert into ZTB_MPS_DETAILS(PO_NO,PO_LINE_NO,MPS_QTY,MPS_DATE,UPLOAD_DATE)
+            select @PO_no,@po_line_no,@mps_qty,@mps_date,cast(getdate() as date)
             set @qty = @qty - @mps_qty
         END ELSE BEGIN
             insert into ZTB_MPS_DETAILS(PO_NO,PO_LINE_NO,MPS_QTY,MPS_DATE,UPLOAD_DATE)
-            select @PO_no,@po_line_no,@mps_qty - @qty,@mps_date,cast(getdate() as date)
+            select @PO_no,@po_line_no,@qty,@mps_date,cast(getdate() as date)
             set @qty = 0
             set @start_x = @end_x
         END 
@@ -139,7 +193,7 @@ while @start <= @end BEGIN
         set @start_x = @start_x + 1
     END
     
-    delete from @table_produksi
+    delete from @table_m_details
     set @start = @start + 1
 end 
 
@@ -162,9 +216,13 @@ from mps_header r
 inner join mps_details s 
 on r.po_no = s.po_no and s.po_line_no = r.po_line_no
 inner join (  
-          select * from structure 
+            select * from structure s
+            inner join (
+                          select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+                          group by UPPER_ITEM_NO 
+              )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
             ) st
-on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(bom_level as  varchar(10))
+on st.UPPER_ITEM_NO = r.ITEM_NO 
 inner join item it 
 on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
 where   s.mps_date > cast(getdate() as date) 
@@ -394,8 +452,12 @@ order by aa.item_no,eta;
   on r.po_no = s.po_no and s.po_line_no = r.po_line_no
   inner join (  
             select * from structure s
-              ) st
-  on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(s.bom_level as  varchar(10))
+            inner join (
+                          select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+                          group by UPPER_ITEM_NO 
+              )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
+            ) st
+  on st.UPPER_ITEM_NO = r.ITEM_NO 
   inner join item it 
   on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
   where  mps_date > cast(getdate() as date) and datediff(d,getdate(),mps_date) <=90
@@ -1129,8 +1191,8 @@ DECLARE @date date = getdate()
 
 
 
-GO
 
+GO
 
 
 SET ANSI_NULLS ON
@@ -1138,6 +1200,55 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 --exec zsp_mrp_pm
+
+-- select * from ztb_mps_details where po_no = 'FI/20-163'
+
+--select * from ZTB_MRP_DATA_PCK where item_no = '2225326'
+
+-- select 
+--        distinct
+--        case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end lower_item_no,
+--        it.description
+-- select *       
+-- from mps_header r
+-- inner join ztb_mps_details s 
+-- on r.po_no = s.po_no and s.po_line_no = r.po_line_no
+-- inner join (  
+--             select * from structure s
+--             inner join (
+--                           select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+--                           group by UPPER_ITEM_NO 
+--               )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
+--               where LOWER_ITEM_NO = 2225326
+--             ) st
+-- on st.UPPER_ITEM_NO = r.ITEM_NO 
+-- -- inner join item it 
+-- -- on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
+-- where   st.LOWER_ITEM_NO = 2225326
+        
+--         -- and upper_item_no = '88680'
+--   group by mps_date,case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end,quantity_base,quantity,failure_rate
+  
+
+--  select case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end lower_item_no,
+--         mps_date,
+--         CAST(sum(s.mps_qty) * quantity / quantity_base as decimal(18,2)) * (1 + (failure_rate /100))   qty_p,
+--         1
+--    select *     
+--   from mps_header r
+--   inner join ZTB_MPS_DETAILS s 
+--   on r.po_no = s.po_no and s.po_line_no = r.po_line_no
+--   inner join (  
+--             select * from structure s
+--               ) st
+--   on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(s.bom_level as  varchar(10))
+--   inner join item it 
+--   on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
+--   where  mps_date > cast(getdate() as date) and datediff(d,getdate(),mps_date) <=90
+        
+--         -- and upper_item_no = '88680'
+--   group by mps_date,case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end,quantity_base,quantity,failure_rate
+  
 
 --1232160	2020-07-27	5000000.000	5
 
@@ -1157,16 +1268,144 @@ GO
 
 --select * from ztb_mrp_data_pck where item_no in (select lower_item_no from tableplan_used)
 
-CREATE PROCEDURE [dbo].[zsp_mrp_pm_item] (
+ALTER PROCEDURE [dbo].[zsp_mrp_pm_item] (
     @item_no int = null
 ) AS
-
 
 declare @table table(
    ID  int identity(1,1),
    lower_item_no int,
    desk NVARCHAR(100)
 )
+
+declare @table_produksi table (
+    id INT IDENTITY(1,1),
+    po_no varchar(30),
+    po_line_no int,
+    qty decimal(14,6)
+)
+
+declare @table_m_details table(
+    ID INT IDENTITY(1,1),
+    po_no varchar(30),
+    po_line_no int,
+    mps_date date,
+    mps_qty decimal(14,6)
+)
+
+--##################################CACL MPS START #####################################
+
+delete from ZTB_MPS_DETAILS 
+where ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
+
+insert into @table_produksi
+select distinct r.po_no, r.po_line_no,  r.qty - isnull(qty_prod,isnull(cc.production,0)) - isnull(sum(s.mps_qty),0) Qty
+from mps_header r
+left outer join (select * from mps_details where mps_date > cast(getdate() + 90 as date)) s
+on r.po_line_no = s.po_line_no and r.po_no = s.po_no
+left outer join (select isnull(sum(case when slip_type = 87 then slip_quantity *-1 else SLIP_QUANTITY end ),0) Production, wo_no from production_income group by wo_no) cc
+on r.work_order = cc.wo_no
+left outer join (select wo_no,isnull(sum(qty_prod),0) qty_prod from 
+                    (select distinct wo_no,plt_no,qty_prod,qty_order from ztb_m_plan where upload = 1 )aa group by wo_no)dd
+on r.work_order = dd.wo_no
+where r.status is not null --and r.work_order = '0010194-LR03C1-1'--and r.po_no = '0010194'--and r.po_no = '18FI075' and r.po_line_no = 1
+      and r.po_no+ r.po_line_no not in (
+        select distinct r.po_no+ r.po_line_no 
+        from mps_header r
+        left outer join mps_details s
+        on r.po_no = s.po_no and r.po_line_no = s.po_line_no
+        where s.po_no is null
+      )
+      and r.ITEM_NO in (select upper_item_no from STRUCTURE where LOWER_ITEM_NO = @item_no)
+group by r.po_no, r.po_line_no,production,r.qty,qty_prod
+having r.qty - isnull(cc.production,0) - isnull(sum(s.mps_qty),0) > 0;
+
+declare @start int = 1
+declare @end int
+
+declare @start_x int = 1
+declare @end_x int
+
+select @end = isnull(max(ID),0)
+from @table_produksi
+ 
+
+declare @po_no VARCHAR(10)
+declare @po_line_no INT
+declare @qty decimal(16,4)  
+
+declare @po_no_x VARCHAR(10)
+declare @po_line_no_x INT
+declare @mps_qty decimal(16,4)  
+declare @mps_date date 
+
+ insert into ZTB_MPS_DETAILS(PO_NO,PO_LINE_NO,MPS_QTY,MPS_DATE,UPLOAD_DATE)
+ select PO_no,po_line_no,mps_qty,mps_date,cast(getdate() as date)
+ from mps_details
+ where mps_date between cast(getdate() as date) and cast(getdate()+90 as date)  
+ and po_no + cast(po_line_no as varchar(10)) not in ( 
+    select po_no + cast(po_line_no as varchar(10))
+    from @table_produksi
+ )
+
+
+
+    
+while @start <= @end BEGIN
+    
+    select @po_no = po_no,
+           @po_line_no = po_line_no,
+           @qty = qty
+    from @table_produksi
+    where id = @start
+
+     insert into @table_m_details
+     select po_no, po_line_no, mps_date, mps_qty from mps_details
+     where mps_date between cast(getdate() as date) and cast(getdate()+90 as date)  
+     and po_no = @po_no and PO_LINE_NO = @po_line_no
+     order by mps_date;
+
+
+    select @end_x = isnull(max(ID),0) 
+    from @table_m_details
+    
+    while @start_x <= @end_x
+    BEGIN
+        select @po_no_x = po_no,
+               @po_line_no_x = po_line_no,
+               @mps_date = mps_date,
+               @mps_qty = mps_qty
+        from @table_m_details
+        where id = @start_x
+
+        IF  @qty > @mps_qty  BEGIN
+            insert into ZTB_MPS_DETAILS(PO_NO,PO_LINE_NO,MPS_QTY,MPS_DATE,UPLOAD_DATE)
+            select @PO_no,@po_line_no,@mps_qty,@mps_date,cast(getdate() as date)
+            set @qty = @qty - @mps_qty
+        END ELSE BEGIN
+            insert into ZTB_MPS_DETAILS(PO_NO,PO_LINE_NO,MPS_QTY,MPS_DATE,UPLOAD_DATE)
+            select @PO_no,@po_line_no,@qty,@mps_date,cast(getdate() as date)
+            set @qty = 0
+            set @start_x = @end_x
+        END 
+
+
+        set @start_x = @start_x + 1
+    END
+    
+    delete from @table_m_details
+    set @start = @start + 1
+end 
+
+
+--##################################CACL MPS END #####################################
+
+
+
+
+
+
+
 
 insert into @table
 select 
@@ -1177,12 +1416,17 @@ from mps_header r
 inner join mps_details s 
 on r.po_no = s.po_no and s.po_line_no = r.po_line_no
 inner join (  
-          select * from structure 
+            select * from structure s
+            inner join (
+                          select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+                          group by UPPER_ITEM_NO 
+              )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
             ) st
-on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(bom_level as  varchar(10))
+on st.UPPER_ITEM_NO = r.ITEM_NO 
 inner join item it 
 on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
-where   s.mps_date > cast(getdate() as date)  and st.LOWER_ITEM_NO = @item_no
+where   s.mps_date > cast(getdate() as date) 
+        and case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = @item_no
 
 
 
@@ -1198,7 +1442,7 @@ where   s.mps_date > cast(getdate() as date)  and st.LOWER_ITEM_NO = @item_no
 --    flag int
 -- )
  
-delete from tableplan_used
+delete from tableplan_used where lower_item_no = @item_no
 
 --inventory 4
 insert into tableplan_used 
@@ -1296,7 +1540,7 @@ where item_no in ('2211524',
                               '2223131',
                               '2123131'
                               )
-and datediff(d,cast(getdate() as date),aa.di_date) > 0  and bb.ITEM_NO = @item_no                            
+and datediff(d,cast(getdate() as date),aa.di_date) > 0                               
 group by bb.item_no,di_Date
 order by bb.item_no,di_Date;
 
@@ -1309,8 +1553,8 @@ select  aa.item_no,
         sum(isnull(case when remainder_qty < 0 then 0 else remainder_qty end,0)) JumPre,
         5
 from prf_details aa
-inner join (select distinct lower_item_no as item_no
-            from @table) bb  
+inner join (select distinct item_no
+            from ztb_mrp_data_pck) bb  
 on aa.item_no = bb.item_no
 where aa.require_date > cast(getdate() as date)
       and aa.remainder_qty <> 0 or remainder_qty is null
@@ -1405,19 +1649,26 @@ order by aa.item_no,eta;
         CAST(sum(s.mps_qty) * quantity / quantity_base as decimal(18,2)) * (1 + (failure_rate /100))   qty_p,
         1
   from mps_header r
-  inner join mps_details s 
+  inner join ZTB_MPS_DETAILS s 
   on r.po_no = s.po_no and s.po_line_no = r.po_line_no
   inner join (  
             select * from structure s
-              ) st
-  on cast(st.upper_item_no as   varchar(10))+cast(level_no  as varchar(10)) = cast(r.item_no  as varchar(10))+cast(bom_level as  varchar(10))
+            inner join (
+                          select max(level_no)level_no_max, upper_item_no as UPPER_ITEM_NOS from STRUCTURE 
+                          group by UPPER_ITEM_NO 
+              )ss on s.UPPER_ITEM_NO = ss.UPPER_ITEM_NOS and s.LEVEL_NO = ss.level_no_max
+            ) st
+  on st.UPPER_ITEM_NO = r.ITEM_NO 
   inner join item it 
   on case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end = it.item_no
   where  mps_date > cast(getdate() as date) and datediff(d,getdate(),mps_date) <=90
-        and st.LOWER_ITEM_NO = @item_no
+        
         -- and upper_item_no = '88680'
   group by mps_date,case when st.lower_item_no > 70000000 then st.lower_item_no - 70000000 else st.lower_item_no end,quantity_base,quantity,failure_rate
   
+insert into ZTB_MRP_DATA_pck_DELETE
+select getdate(),* from ZTB_MRP_DATA_pck
+ 
  delete from ztb_mrp_data_pck
     
 
@@ -1450,20 +1701,19 @@ order by aa.item_no,eta;
    
           
           
-          insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
-          select '5','PURCHASE2 ',lower_item_no,desk
-          from @table 
+        --   insert into ztb_mrp_data_pck (NO_ID,description,item_no,item_desc)
+        --   select '5','PURCHASE2 ',lower_item_no,desk
+        --   from @table 
 
 
 
 
 DECLARE @date date = getdate()
-declare @start int 
-    declare @end int
+
+  
     declare @qry nvarchar(max)
     set @start = 1
     set @end = 90
-    declare @qty bigint 
     declare @dateStart date 
     set @dateStart = dateadd(d,1,@date)
     
@@ -1492,12 +1742,12 @@ declare @start int
            
             exec (@qry)
             
-            set @qry = ''
+            -- set @qry = ''
 
-            set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
-                        where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
+            -- set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = bb.jum from ztb_mrp_data_pck aa inner join (select sum(qty_p) as jum,lower_item_no as item_no from tableplan_used
+            --             where  mps_date  = '''+ cast(@date as nvarchar(10)) +''' and flag = 5 group by lower_item_no )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 5'
            
-            exec (@qry)
+            -- exec (@qry)
             
             set @qry = ''  
             if(@start = 1) BEGIN
@@ -1511,7 +1761,7 @@ declare @start int
                                     group by bb.ITEM_NO,bb.THIS_INVENTORY  
 
                                 )bb on bb.ITEM_NO = aa.ITEM_NO where no_id = 4'
-             
+            
        exec (@qry)
       end ELSE BEGIN
                 set @qry = 'update ztb_mrp_data_pck set N_' + cast(@start as varchar(2)) + ' = cc.jum from ztb_mrp_data_pck aa                     
@@ -1530,7 +1780,7 @@ declare @start int
                         )bb on aa.item_no  = bb.item_no                       
                 )cc on cc.ITEM_NO = aa.ITEM_NO where no_id = 4'
 
-              
+                
        exec (@qry)
       END 
       
@@ -2138,6 +2388,8 @@ declare @start int
 -- --  end loop;
 
 -- END;
+
+
 
 
 
