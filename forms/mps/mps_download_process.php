@@ -4,11 +4,38 @@ error_reporting(0);
 session_start();
 include("../../connect/conn.php");
 
+
+$date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
+$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';
+
 $response = array();        $response2 = array();
 $rowno=0;
 
 if (isset($_SESSION['id_wms'])){
-    $sql = "
+
+    //RUN procedure
+	$sql = "{call zsp_compare_mps(?,?)}";
+	$params = array(  
+        array(  trim($date_awal)  , SQLSRV_PARAM_IN),
+        array(  trim($date_akhir)  , SQLSRV_PARAM_IN),
+	);
+	$stmt = sqlsrv_query($connect, $sql,$params);
+
+
+
+    $sql = "select SYS_DATE,
+                   FLG,
+                   UPLOAD_DATE,
+                   ITEM_NO,
+                   ITEM_NAME,
+                   BATERY_TYPE,
+                   CELL_GRADE,
+                   PO_NO,PO_LINE_NO,
+                   WORK_ORDER,
+                   CONSIGNEE,PACKAGE_TYPE,
+                   DATE_CODE,CR_DATE,REQUESTED_ETD,STATUS,LABEL_ITEM_NUMBER,
+                   LABEL_NAME,QTY,MAN_POWER,OPERATION_TIME,LABEL_TYPE,CAPACITY,REMARK
+                   from zvw_mps
     select distinct upper(cast(SYSDATETIME() as varchar(16))) as SYS_DATE, main.FLG, main.UPLOAD_DATE, main.ITEM_NO, i.DESCRIPTION as ITEM_NAME, 
     c.CLASS_1 + c.CLASS_2 as BATERY_TYPE, i.GRADE_CODE as CELL_GRADE, main.PO_NO, main.PO_LINE_NO, 
     case when main.STATUS = 'FM' then case when main.FLG = 'MPS' then  coalesce(main.WORK_ORDER, main.PO_NO + '-' + c.CLASS_1 + c.CLASS_2 + i.GRADE_CODE + '-' + main.PO_LINE_NO) 
@@ -94,6 +121,8 @@ if (isset($_SESSION['id_wms'])){
             }  
         }
     }
+
+    
     
     while($dt = sqlsrv_fetch_object($data)){
         array_push($response, $dt);

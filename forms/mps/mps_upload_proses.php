@@ -14,7 +14,8 @@ $hasildata = $data->rowcount($sheet_index=0);
 
 $success = 0;       $failed = 0;
 
-$now = new Date('Y-m-d H:m:s');
+$now = Date('Y-m-d H:i:s');
+
 
  //Insert MPS_HEADER_RIREKI
  $qry = "insert into MPS_HEADER_RIREKI 
