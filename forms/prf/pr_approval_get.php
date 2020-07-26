@@ -11,7 +11,7 @@
 	$ck_prf = isset($_REQUEST['ck_prf']) ? strval($_REQUEST['ck_prf']) : '';
 
 	if ($ck_date != "true"){
-		$date = "a.prf_date between '$date_awal and $date_akhir  and ";
+		$date = "a.prf_date between '$date_awal' and '$date_akhir'  and ";
 	}else{
 		$date = "";
 	}
@@ -28,11 +28,9 @@
 		$prf = "";
 	}	
 
-	if ($src !='') {
-		$where="";
-	}else{
-		$where ="where $item_no $prf $date a.section_code=100 and approval_date is null and approval_person_code is null";
-	}
+	
+	$where ="where $item_no $prf $date a.section_code=100 and approval_date is null and approval_person_code is null";
+	
 
   	$sql  = "select top 150  a.prf_no, cast(a.prf_date as varchar(10)) as prf_date, a.section_code, replace(a.remark,char(10),'<br>') as remark, a.require_person_code,
 	  cast(a.upto_date as varchar(10)) upto_date, cast(a.reg_Date as varchar(10))  reg_date, a.customer_po_no, cast(a.approval_date as varchar(10)) as  approval_date, a.approval_person_code,
