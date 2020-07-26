@@ -21,10 +21,10 @@
 		) aa 
 		left join item it on aa.item = it.item_no
 		order by aa.type asc";
-	$data = oci_parse($connect, strtoupper($rs));
-	oci_execute($data);
+	$data = sqlsrv_query($connect, strtoupper($rs));
+
 	
-	while($row = oci_fetch_object($data)) {
+	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
 		$rowno++;
 	}
