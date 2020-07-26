@@ -1,7 +1,7 @@
 <?php
 require("../../../connect/conn.php");
 session_start();
-//require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $cmb_type = isset($_REQUEST['cmb_type']) ? strval($_REQUEST['cmb_type']) : '';
 $cmb_item_no = isset($_REQUEST['cmb_item_no']) ? strval($_REQUEST['cmb_item_no']) : '';
@@ -137,7 +137,7 @@ h2 {
 <body>
 <?php include ('../../../ico_logout.php'); ?>
 
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<!-- <div id="chartContainer" style="height: 300px; width: 100%;"></div> -->
 
 <table id="dg_plan" title="VIEW PLAN <?php echo  $cmb_type.' ('.$item_name.')'; ?>" class="easyui-datagrid" style="width:100%;height:auto;"></table>
 
@@ -415,9 +415,7 @@ var d90 = new Date(y,m,d+90);
    
 
 	$(function(){
-
-		addGraph()
-
+		// addGraph()
 	})
 
 	function addPRF(t,i){
@@ -536,11 +534,11 @@ var d90 = new Date(y,m,d+90);
 			var myJSON = JSON.stringify(rows);
 			var str_unescape=unescape(myJSON);
 
-			$.post('purchase_req_save.php',{
+			$.post('../../prf/purchase_req_save.php',{
 				data: unescape(str_unescape)	
 			}).done(function(res){
 				//alert(res);
-				//console.log(res);
+				console.log(res);
 			})
 			
 			$.post('mrp_plan_update.php',{
@@ -548,7 +546,7 @@ var d90 = new Date(y,m,d+90);
 			}).done(function(res){
 				$.messager.confirm('Confirm','Are you sure you want to print PRF?',function(r){
 					if(r){
-						window.open('purchase_req_print.php?prf='+$('#prf_no_add').textbox('getValue'));
+						window.open('../../prf/purchase_req_print.php?prf='+$('#prf_no_add').textbox('getValue'));
 					}
 				});
 				//alert(res);
@@ -580,7 +578,7 @@ var d90 = new Date(y,m,d+90);
 	function infoPRF(a,b){
 		var tgl_plan = AddDate(a);
 		$('#dlg_viewPRF').dialog('open').dialog('setTitle','VIEW INFO PURCHASE REQUESTION ('+AddDateII(a)+')');
-		//alert('mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan);
+		console.log('mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan);
 		$('#dg_viewPRF').datagrid({
 			url: 'mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan,
 			singleSelect: true,
@@ -675,351 +673,345 @@ var d90 = new Date(y,m,d+90);
 		});
 	}
 
-	function addGraph(){
-		var pesan = '';	
-		//alert('view_mrp_get.php?item_no=<?php echo $parm;?>&flag=<?php echo $flag;?>');
-        var data;
-        var sts = 'RUNNING'
-		$.ajax({
-			type: 'GET',
-			dataType: "json",
-			url: 'view_mrp_get.php?item_no=<?php echo $parm;?>&flag=<?php echo $flag;?>',
-			data: data,
-			success: function (data) {
+	// function addGraph(){
+	// 	var pesan = '';	
+	// 	//alert('view_mrp_get.php?item_no=<?php echo $parm;?>&flag=<?php echo $flag;?>');
+    //     var data;
+    //     var sts = 'RUNNING'
+	// 	$.ajax({
+	// 		type: 'GET',
+	// 		dataType: "json",
+	// 		url: 'view_mrp_get.php?item_no=<?php echo $parm;?>&flag=<?php echo $flag;?>',
+	// 		data: data,
+	// 		success: function (data) {
 
-			// ####################################################### CHART 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-			var namaitem = "MATERIAL INVENTORY FOR  " + data[0].ITEM_DESC ;
+	// 		// ####################################################### CHART 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	// 		var namaitem = "MATERIAL INVENTORY FOR  " + data[0].ITEM_DESC ;
 		
 			
-			var chart = new CanvasJS.Chart("chartContainer", {
-				animationEnabled: true,
-				exportEnabled: true,
-				title:{
-					text: namaitem  
+	// 		var chart = new CanvasJS.Chart("chartContainer", {
+	// 			animationEnabled: true,
+	// 			exportEnabled: true,
+	// 			title:{
+	// 				text: namaitem  
 
-				}, 
-				axisY:{
-					title: "ITO Days",
-					labelFontSize: 12,
-				},
-				axisX:{
-					title: "Date",
-					labelFontSize: 10,
-				},
+	// 			}, 
+	// 			axisY:{
+	// 				title: "ITO Days",
+	// 				labelFontSize: 12,
+	// 			},
+	// 			axisX:{
+	// 				title: "Date",
+	// 				labelFontSize: 10,
+	// 			},
 
 
-				toolTip: {
-					shared: true
-				},
+	// 			toolTip: {
+	// 				shared: true
+	// 			},
 				
-				data: [
+	// 			data: [
 				
-				{        
-					type: "line",  
-					name: "Max ITO Days",  
+	// 			{        
+	// 				type: "line",  
+	// 				name: "Max ITO Days",  
 
-					showInLegend: true,
-					dataPoints: [
-						{ label: d1.toLocaleDateString(), y: parseInt(data[1].N_1) },     
-						{ label: d2.toLocaleDateString(), y: parseInt(data[1].N_2) },     
-						{ label: d3.toLocaleDateString(), y: parseInt(data[1].N_3) },     
-						{ label: d4.toLocaleDateString(), y: parseInt(data[1].N_4) },     
-						{ label: d5.toLocaleDateString(), y: parseInt(data[1].N_5) },
-						{ label: d6.toLocaleDateString(), y: parseInt(data[1].N_6) },
-						{ label: d7.toLocaleDateString(), y: parseInt(data[1].N_7) },     
-						{ label: d8.toLocaleDateString(), y: parseInt(data[1].N_8) },     
-						{ label: d9.toLocaleDateString(), y: parseInt(data[1].N_9) },     
-						{ label: d10.toLocaleDateString(), y: parseInt(data[1].N_10) },
-						{ label: d11.toLocaleDateString(), y: parseInt(data[1].N_11) },     
-						{ label: d12.toLocaleDateString(), y: parseInt(data[1].N_12) },     
-						{ label: d13.toLocaleDateString(), y: parseInt(data[1].N_13) },     
-						{ label: d14.toLocaleDateString(), y: parseInt(data[1].N_14) },     
-						{ label: d15.toLocaleDateString(), y: parseInt(data[1].N_15) },
-						{ label: d16.toLocaleDateString(), y: parseInt(data[1].N_16) },
-						{ label: d17.toLocaleDateString(), y: parseInt(data[1].N_17) },     
-						{ label: d18.toLocaleDateString(), y: parseInt(data[1].N_18) },     
-						{ label: d19.toLocaleDateString(), y: parseInt(data[1].N_19) }, 
-						{ label: d20.toLocaleDateString(), y: parseInt(data[1].N_20) },
-						{ label: d21.toLocaleDateString(), y: parseInt(data[1].N_21) },
-						{ label: d22.toLocaleDateString(), y: parseInt(data[1].N_22) },
-						{ label: d23.toLocaleDateString(), y: parseInt(data[1].N_23) },
-						{ label: d24.toLocaleDateString(), y: parseInt(data[1].N_24) },
-						{ label: d25.toLocaleDateString(), y: parseInt(data[1].N_25) },
-						{ label: d26.toLocaleDateString(), y: parseInt(data[1].N_26) },
-						{ label: d27.toLocaleDateString(), y: parseInt(data[1].N_27) },
-						{ label: d28.toLocaleDateString(), y: parseInt(data[1].N_28) },
-						{ label: d29.toLocaleDateString(), y: parseInt(data[1].N_29) },
-						{ label: d30.toLocaleDateString(), y: parseInt(data[1].N_30) }, 
-						{ label: d31.toLocaleDateString(), y: parseInt(data[1].N_31) }, 
-						{ label: d32.toLocaleDateString(), y: parseInt(data[1].N_32) }, 
-						{ label: d33.toLocaleDateString(), y: parseInt(data[1].N_33) }, 
-						{ label: d34.toLocaleDateString(), y: parseInt(data[1].N_34) }, 
-						{ label: d35.toLocaleDateString(), y: parseInt(data[1].N_35) }, 
-						{ label: d36.toLocaleDateString(), y: parseInt(data[1].N_36) }, 
-						{ label: d37.toLocaleDateString(), y: parseInt(data[1].N_37) }, 
-						{ label: d38.toLocaleDateString(), y: parseInt(data[1].N_38) }, 
-						{ label: d39.toLocaleDateString(), y: parseInt(data[1].N_39) }, 
-						{ label: d40.toLocaleDateString(), y: parseInt(data[1].N_40) }, 
-						{ label: d41.toLocaleDateString(), y: parseInt(data[1].N_41) }, 
-						{ label: d42.toLocaleDateString(), y: parseInt(data[1].N_42) }, 
-						{ label: d43.toLocaleDateString(), y: parseInt(data[1].N_43) }, 
-						{ label: d44.toLocaleDateString(), y: parseInt(data[1].N_44) }, 
-						{ label: d45.toLocaleDateString(), y: parseInt(data[1].N_45) }, 
-						{ label: d46.toLocaleDateString(), y: parseInt(data[1].N_46) }, 
-						{ label: d47.toLocaleDateString(), y: parseInt(data[1].N_47) }, 
-						{ label: d48.toLocaleDateString(), y: parseInt(data[1].N_48) }, 
-						{ label: d49.toLocaleDateString(), y: parseInt(data[1].N_49) }, 
-						{ label: d50.toLocaleDateString(), y: parseInt(data[1].N_50) },
-						{ label: d51.toLocaleDateString(), y: parseInt(data[1].N_51) },
-						{ label: d52.toLocaleDateString(), y: parseInt(data[1].N_52) },
-						{ label: d53.toLocaleDateString(), y: parseInt(data[1].N_53) },
-						{ label: d54.toLocaleDateString(), y: parseInt(data[1].N_54) },
-						{ label: d55.toLocaleDateString(), y: parseInt(data[1].N_55) },
-						{ label: d56.toLocaleDateString(), y: parseInt(data[1].N_56) },
-						{ label: d57.toLocaleDateString(), y: parseInt(data[1].N_57) },
-						{ label: d58.toLocaleDateString(), y: parseInt(data[1].N_58) },
-						{ label: d59.toLocaleDateString(), y: parseInt(data[1].N_59) },
-						{ label: d60.toLocaleDateString(), y: parseInt(data[1].N_60) },
-						{ label: d61.toLocaleDateString(), y: parseInt(data[1].N_61) },
-						{ label: d62.toLocaleDateString(), y: parseInt(data[1].N_62) },
-						{ label: d63.toLocaleDateString(), y: parseInt(data[1].N_63) },
-						{ label: d64.toLocaleDateString(), y: parseInt(data[1].N_64) },
-						{ label: d65.toLocaleDateString(), y: parseInt(data[1].N_65) },
-						{ label: d66.toLocaleDateString(), y: parseInt(data[1].N_66) },
-						{ label: d67.toLocaleDateString(), y: parseInt(data[1].N_67) },
-						{ label: d68.toLocaleDateString(), y: parseInt(data[1].N_68) },
-						{ label: d69.toLocaleDateString(), y: parseInt(data[1].N_69) },
-						{ label: d70.toLocaleDateString(), y: parseInt(data[1].N_70) },
-						{ label: d71.toLocaleDateString(), y: parseInt(data[1].N_71) },
-						{ label: d72.toLocaleDateString(), y: parseInt(data[1].N_72) },
-						{ label: d73.toLocaleDateString(), y: parseInt(data[1].N_73) },
-						{ label: d74.toLocaleDateString(), y: parseInt(data[1].N_74) },
-						{ label: d75.toLocaleDateString(), y: parseInt(data[1].N_75) },
-						{ label: d76.toLocaleDateString(), y: parseInt(data[1].N_76) },
-						{ label: d77.toLocaleDateString(), y: parseInt(data[1].N_77) },
-						{ label: d78.toLocaleDateString(), y: parseInt(data[1].N_78) },
-						{ label: d79.toLocaleDateString(), y: parseInt(data[1].N_79) },
-						{ label: d80.toLocaleDateString(), y: parseInt(data[1].N_80) },
-						{ label: d81.toLocaleDateString(), y: parseInt(data[1].N_81) },
-						{ label: d82.toLocaleDateString(), y: parseInt(data[1].N_82) },
-						{ label: d83.toLocaleDateString(), y: parseInt(data[1].N_83) },
-						{ label: d84.toLocaleDateString(), y: parseInt(data[1].N_84) },
-						{ label: d85.toLocaleDateString(), y: parseInt(data[1].N_85) },
-						{ label: d86.toLocaleDateString(), y: parseInt(data[1].N_86) },
-						{ label: d87.toLocaleDateString(), y: parseInt(data[1].N_87) },
-						{ label: d88.toLocaleDateString(), y: parseInt(data[1].N_88) },
-						{ label: d89.toLocaleDateString(), y: parseInt(data[1].N_89) },
-						{ label: d90.toLocaleDateString(), y: parseInt(data[1].N_90) }
-					]
-				},
-				{        
-					type: "line",  
-					name: "MIN ITO Days",        
-					showInLegend: true,
-					dataPoints: [
-						{ label: d1.toLocaleDateString(), y: parseInt(data[3].N_1) },     
-						{ label: d2.toLocaleDateString(), y: parseInt(data[3].N_2) },     
-						{ label: d3.toLocaleDateString(), y: parseInt(data[3].N_3) },     
-						{ label: d4.toLocaleDateString(), y: parseInt(data[3].N_4) },     
-						{ label: d5.toLocaleDateString(), y: parseInt(data[3].N_5) },
-						{ label: d6.toLocaleDateString(), y: parseInt(data[3].N_6) },
-						{ label: d7.toLocaleDateString(), y: parseInt(data[3].N_7) },     
-						{ label: d8.toLocaleDateString(), y: parseInt(data[3].N_8) },     
-						{ label: d9.toLocaleDateString(), y: parseInt(data[3].N_9) },     
-						{ label: d10.toLocaleDateString(), y: parseInt(data[3].N_10) },
-						{ label: d11.toLocaleDateString(), y: parseInt(data[3].N_11) },     
-						{ label: d12.toLocaleDateString(), y: parseInt(data[3].N_12) },     
-						{ label: d13.toLocaleDateString(), y: parseInt(data[3].N_13) },     
-						{ label: d14.toLocaleDateString(), y: parseInt(data[3].N_14) },     
-						{ label: d15.toLocaleDateString(), y: parseInt(data[3].N_15) },
-						{ label: d16.toLocaleDateString(), y: parseInt(data[3].N_16) },
-						{ label: d17.toLocaleDateString(), y: parseInt(data[3].N_17) },     
-						{ label: d18.toLocaleDateString(), y: parseInt(data[3].N_18) },     
-						{ label: d19.toLocaleDateString(), y: parseInt(data[3].N_19) }, 
-						{ label: d20.toLocaleDateString(), y: parseInt(data[3].N_20) },
-						{ label: d21.toLocaleDateString(), y: parseInt(data[3].N_21) },
-						{ label: d22.toLocaleDateString(), y: parseInt(data[3].N_22) },
-						{ label: d23.toLocaleDateString(), y: parseInt(data[3].N_23) },
-						{ label: d24.toLocaleDateString(), y: parseInt(data[3].N_24) },
-						{ label: d25.toLocaleDateString(), y: parseInt(data[3].N_25) },
-						{ label: d26.toLocaleDateString(), y: parseInt(data[3].N_26) },
-						{ label: d27.toLocaleDateString(), y: parseInt(data[3].N_27) },
-						{ label: d28.toLocaleDateString(), y: parseInt(data[3].N_28) },
-						{ label: d29.toLocaleDateString(), y: parseInt(data[3].N_29) },
-						{ label: d30.toLocaleDateString(), y: parseInt(data[3].N_30) }, 
-						{ label: d31.toLocaleDateString(), y: parseInt(data[3].N_31) }, 
-						{ label: d32.toLocaleDateString(), y: parseInt(data[3].N_32) }, 
-						{ label: d33.toLocaleDateString(), y: parseInt(data[3].N_33) }, 
-						{ label: d34.toLocaleDateString(), y: parseInt(data[3].N_34) }, 
-						{ label: d35.toLocaleDateString(), y: parseInt(data[3].N_35) }, 
-						{ label: d36.toLocaleDateString(), y: parseInt(data[3].N_36) }, 
-						{ label: d37.toLocaleDateString(), y: parseInt(data[3].N_37) }, 
-						{ label: d38.toLocaleDateString(), y: parseInt(data[3].N_38) }, 
-						{ label: d39.toLocaleDateString(), y: parseInt(data[3].N_39) }, 
-						{ label: d40.toLocaleDateString(), y: parseInt(data[3].N_40) }, 
-						{ label: d41.toLocaleDateString(), y: parseInt(data[3].N_41) }, 
-						{ label: d42.toLocaleDateString(), y: parseInt(data[3].N_42) }, 
-						{ label: d43.toLocaleDateString(), y: parseInt(data[3].N_43) }, 
-						{ label: d44.toLocaleDateString(), y: parseInt(data[3].N_44) }, 
-						{ label: d45.toLocaleDateString(), y: parseInt(data[3].N_45) }, 
-						{ label: d46.toLocaleDateString(), y: parseInt(data[3].N_46) }, 
-						{ label: d47.toLocaleDateString(), y: parseInt(data[3].N_47) }, 
-						{ label: d48.toLocaleDateString(), y: parseInt(data[3].N_48) }, 
-						{ label: d49.toLocaleDateString(), y: parseInt(data[3].N_49) }, 
-						{ label: d50.toLocaleDateString(), y: parseInt(data[3].N_50) },
-						{ label: d51.toLocaleDateString(), y: parseInt(data[3].N_51) },
-						{ label: d52.toLocaleDateString(), y: parseInt(data[3].N_52) },
-						{ label: d53.toLocaleDateString(), y: parseInt(data[3].N_53) },
-						{ label: d54.toLocaleDateString(), y: parseInt(data[3].N_54) },
-						{ label: d55.toLocaleDateString(), y: parseInt(data[3].N_55) },
-						{ label: d56.toLocaleDateString(), y: parseInt(data[3].N_56) },
-						{ label: d57.toLocaleDateString(), y: parseInt(data[3].N_57) },
-						{ label: d58.toLocaleDateString(), y: parseInt(data[3].N_58) },
-						{ label: d59.toLocaleDateString(), y: parseInt(data[3].N_59) },
-						{ label: d60.toLocaleDateString(), y: parseInt(data[3].N_60) },
-						{ label: d61.toLocaleDateString(), y: parseInt(data[3].N_61) },
-						{ label: d62.toLocaleDateString(), y: parseInt(data[3].N_62) },
-						{ label: d63.toLocaleDateString(), y: parseInt(data[3].N_63) },
-						{ label: d64.toLocaleDateString(), y: parseInt(data[3].N_64) },
-						{ label: d65.toLocaleDateString(), y: parseInt(data[3].N_65) },
-						{ label: d66.toLocaleDateString(), y: parseInt(data[3].N_66) },
-						{ label: d67.toLocaleDateString(), y: parseInt(data[3].N_67) },
-						{ label: d68.toLocaleDateString(), y: parseInt(data[3].N_68) },
-						{ label: d69.toLocaleDateString(), y: parseInt(data[3].N_69) },
-						{ label: d70.toLocaleDateString(), y: parseInt(data[3].N_70) },
-						{ label: d71.toLocaleDateString(), y: parseInt(data[3].N_71) },
-						{ label: d72.toLocaleDateString(), y: parseInt(data[3].N_72) },
-						{ label: d73.toLocaleDateString(), y: parseInt(data[3].N_73) },
-						{ label: d74.toLocaleDateString(), y: parseInt(data[3].N_74) },
-						{ label: d75.toLocaleDateString(), y: parseInt(data[3].N_75) },
-						{ label: d76.toLocaleDateString(), y: parseInt(data[3].N_76) },
-						{ label: d77.toLocaleDateString(), y: parseInt(data[3].N_77) },
-						{ label: d78.toLocaleDateString(), y: parseInt(data[3].N_78) },
-						{ label: d79.toLocaleDateString(), y: parseInt(data[3].N_79) },
-						{ label: d80.toLocaleDateString(), y: parseInt(data[3].N_80) },
-						{ label: d81.toLocaleDateString(), y: parseInt(data[3].N_81) },
-						{ label: d82.toLocaleDateString(), y: parseInt(data[3].N_82) },
-						{ label: d83.toLocaleDateString(), y: parseInt(data[3].N_83) },
-						{ label: d84.toLocaleDateString(), y: parseInt(data[3].N_84) },
-						{ label: d85.toLocaleDateString(), y: parseInt(data[3].N_85) },
-						{ label: d86.toLocaleDateString(), y: parseInt(data[3].N_86) },
-						{ label: d87.toLocaleDateString(), y: parseInt(data[3].N_87) },
-						{ label: d88.toLocaleDateString(), y: parseInt(data[3].N_88) },
-						{ label: d89.toLocaleDateString(), y: parseInt(data[3].N_89) },
-						{ label: d90.toLocaleDateString(), y: parseInt(data[3].N_90) }
-					]
+	// 				showInLegend: true,
+	// 				dataPoints: [
+	// 					{ label: d1.toLocaleDateString(), y: parseInt(data[1].N_1) },     
+	// 					{ label: d2.toLocaleDateString(), y: parseInt(data[1].N_2) },     
+	// 					{ label: d3.toLocaleDateString(), y: parseInt(data[1].N_3) },     
+	// 					{ label: d4.toLocaleDateString(), y: parseInt(data[1].N_4) },     
+	// 					{ label: d5.toLocaleDateString(), y: parseInt(data[1].N_5) },
+	// 					{ label: d6.toLocaleDateString(), y: parseInt(data[1].N_6) },
+	// 					{ label: d7.toLocaleDateString(), y: parseInt(data[1].N_7) },     
+	// 					{ label: d8.toLocaleDateString(), y: parseInt(data[1].N_8) },     
+	// 					{ label: d9.toLocaleDateString(), y: parseInt(data[1].N_9) },     
+	// 					{ label: d10.toLocaleDateString(), y: parseInt(data[1].N_10) },
+	// 					{ label: d11.toLocaleDateString(), y: parseInt(data[1].N_11) },     
+	// 					{ label: d12.toLocaleDateString(), y: parseInt(data[1].N_12) },     
+	// 					{ label: d13.toLocaleDateString(), y: parseInt(data[1].N_13) },     
+	// 					{ label: d14.toLocaleDateString(), y: parseInt(data[1].N_14) },     
+	// 					{ label: d15.toLocaleDateString(), y: parseInt(data[1].N_15) },
+	// 					{ label: d16.toLocaleDateString(), y: parseInt(data[1].N_16) },
+	// 					{ label: d17.toLocaleDateString(), y: parseInt(data[1].N_17) },     
+	// 					{ label: d18.toLocaleDateString(), y: parseInt(data[1].N_18) },     
+	// 					{ label: d19.toLocaleDateString(), y: parseInt(data[1].N_19) }, 
+	// 					{ label: d20.toLocaleDateString(), y: parseInt(data[1].N_20) },
+	// 					{ label: d21.toLocaleDateString(), y: parseInt(data[1].N_21) },
+	// 					{ label: d22.toLocaleDateString(), y: parseInt(data[1].N_22) },
+	// 					{ label: d23.toLocaleDateString(), y: parseInt(data[1].N_23) },
+	// 					{ label: d24.toLocaleDateString(), y: parseInt(data[1].N_24) },
+	// 					{ label: d25.toLocaleDateString(), y: parseInt(data[1].N_25) },
+	// 					{ label: d26.toLocaleDateString(), y: parseInt(data[1].N_26) },
+	// 					{ label: d27.toLocaleDateString(), y: parseInt(data[1].N_27) },
+	// 					{ label: d28.toLocaleDateString(), y: parseInt(data[1].N_28) },
+	// 					{ label: d29.toLocaleDateString(), y: parseInt(data[1].N_29) },
+	// 					{ label: d30.toLocaleDateString(), y: parseInt(data[1].N_30) }, 
+	// 					{ label: d31.toLocaleDateString(), y: parseInt(data[1].N_31) }, 
+	// 					{ label: d32.toLocaleDateString(), y: parseInt(data[1].N_32) }, 
+	// 					{ label: d33.toLocaleDateString(), y: parseInt(data[1].N_33) }, 
+	// 					{ label: d34.toLocaleDateString(), y: parseInt(data[1].N_34) }, 
+	// 					{ label: d35.toLocaleDateString(), y: parseInt(data[1].N_35) }, 
+	// 					{ label: d36.toLocaleDateString(), y: parseInt(data[1].N_36) }, 
+	// 					{ label: d37.toLocaleDateString(), y: parseInt(data[1].N_37) }, 
+	// 					{ label: d38.toLocaleDateString(), y: parseInt(data[1].N_38) }, 
+	// 					{ label: d39.toLocaleDateString(), y: parseInt(data[1].N_39) }, 
+	// 					{ label: d40.toLocaleDateString(), y: parseInt(data[1].N_40) }, 
+	// 					{ label: d41.toLocaleDateString(), y: parseInt(data[1].N_41) }, 
+	// 					{ label: d42.toLocaleDateString(), y: parseInt(data[1].N_42) }, 
+	// 					{ label: d43.toLocaleDateString(), y: parseInt(data[1].N_43) }, 
+	// 					{ label: d44.toLocaleDateString(), y: parseInt(data[1].N_44) }, 
+	// 					{ label: d45.toLocaleDateString(), y: parseInt(data[1].N_45) }, 
+	// 					{ label: d46.toLocaleDateString(), y: parseInt(data[1].N_46) }, 
+	// 					{ label: d47.toLocaleDateString(), y: parseInt(data[1].N_47) }, 
+	// 					{ label: d48.toLocaleDateString(), y: parseInt(data[1].N_48) }, 
+	// 					{ label: d49.toLocaleDateString(), y: parseInt(data[1].N_49) }, 
+	// 					{ label: d50.toLocaleDateString(), y: parseInt(data[1].N_50) },
+	// 					{ label: d51.toLocaleDateString(), y: parseInt(data[1].N_51) },
+	// 					{ label: d52.toLocaleDateString(), y: parseInt(data[1].N_52) },
+	// 					{ label: d53.toLocaleDateString(), y: parseInt(data[1].N_53) },
+	// 					{ label: d54.toLocaleDateString(), y: parseInt(data[1].N_54) },
+	// 					{ label: d55.toLocaleDateString(), y: parseInt(data[1].N_55) },
+	// 					{ label: d56.toLocaleDateString(), y: parseInt(data[1].N_56) },
+	// 					{ label: d57.toLocaleDateString(), y: parseInt(data[1].N_57) },
+	// 					{ label: d58.toLocaleDateString(), y: parseInt(data[1].N_58) },
+	// 					{ label: d59.toLocaleDateString(), y: parseInt(data[1].N_59) },
+	// 					{ label: d60.toLocaleDateString(), y: parseInt(data[1].N_60) },
+	// 					{ label: d61.toLocaleDateString(), y: parseInt(data[1].N_61) },
+	// 					{ label: d62.toLocaleDateString(), y: parseInt(data[1].N_62) },
+	// 					{ label: d63.toLocaleDateString(), y: parseInt(data[1].N_63) },
+	// 					{ label: d64.toLocaleDateString(), y: parseInt(data[1].N_64) },
+	// 					{ label: d65.toLocaleDateString(), y: parseInt(data[1].N_65) },
+	// 					{ label: d66.toLocaleDateString(), y: parseInt(data[1].N_66) },
+	// 					{ label: d67.toLocaleDateString(), y: parseInt(data[1].N_67) },
+	// 					{ label: d68.toLocaleDateString(), y: parseInt(data[1].N_68) },
+	// 					{ label: d69.toLocaleDateString(), y: parseInt(data[1].N_69) },
+	// 					{ label: d70.toLocaleDateString(), y: parseInt(data[1].N_70) },
+	// 					{ label: d71.toLocaleDateString(), y: parseInt(data[1].N_71) },
+	// 					{ label: d72.toLocaleDateString(), y: parseInt(data[1].N_72) },
+	// 					{ label: d73.toLocaleDateString(), y: parseInt(data[1].N_73) },
+	// 					{ label: d74.toLocaleDateString(), y: parseInt(data[1].N_74) },
+	// 					{ label: d75.toLocaleDateString(), y: parseInt(data[1].N_75) },
+	// 					{ label: d76.toLocaleDateString(), y: parseInt(data[1].N_76) },
+	// 					{ label: d77.toLocaleDateString(), y: parseInt(data[1].N_77) },
+	// 					{ label: d78.toLocaleDateString(), y: parseInt(data[1].N_78) },
+	// 					{ label: d79.toLocaleDateString(), y: parseInt(data[1].N_79) },
+	// 					{ label: d80.toLocaleDateString(), y: parseInt(data[1].N_80) },
+	// 					{ label: d81.toLocaleDateString(), y: parseInt(data[1].N_81) },
+	// 					{ label: d82.toLocaleDateString(), y: parseInt(data[1].N_82) },
+	// 					{ label: d83.toLocaleDateString(), y: parseInt(data[1].N_83) },
+	// 					{ label: d84.toLocaleDateString(), y: parseInt(data[1].N_84) },
+	// 					{ label: d85.toLocaleDateString(), y: parseInt(data[1].N_85) },
+	// 					{ label: d86.toLocaleDateString(), y: parseInt(data[1].N_86) },
+	// 					{ label: d87.toLocaleDateString(), y: parseInt(data[1].N_87) },
+	// 					{ label: d88.toLocaleDateString(), y: parseInt(data[1].N_88) },
+	// 					{ label: d89.toLocaleDateString(), y: parseInt(data[1].N_89) },
+	// 					{ label: d90.toLocaleDateString(), y: parseInt(data[1].N_90) }
+	// 				]
+	// 			},
+	// 			{        
+	// 				type: "line",  
+	// 				name: "MIN ITO Days",        
+	// 				showInLegend: true,
+	// 				dataPoints: [
+	// 					{ label: d1.toLocaleDateString(), y: parseInt(data[3].N_1) },     
+	// 					{ label: d2.toLocaleDateString(), y: parseInt(data[3].N_2) },     
+	// 					{ label: d3.toLocaleDateString(), y: parseInt(data[3].N_3) },     
+	// 					{ label: d4.toLocaleDateString(), y: parseInt(data[3].N_4) },     
+	// 					{ label: d5.toLocaleDateString(), y: parseInt(data[3].N_5) },
+	// 					{ label: d6.toLocaleDateString(), y: parseInt(data[3].N_6) },
+	// 					{ label: d7.toLocaleDateString(), y: parseInt(data[3].N_7) },     
+	// 					{ label: d8.toLocaleDateString(), y: parseInt(data[3].N_8) },     
+	// 					{ label: d9.toLocaleDateString(), y: parseInt(data[3].N_9) },     
+	// 					{ label: d10.toLocaleDateString(), y: parseInt(data[3].N_10) },
+	// 					{ label: d11.toLocaleDateString(), y: parseInt(data[3].N_11) },     
+	// 					{ label: d12.toLocaleDateString(), y: parseInt(data[3].N_12) },     
+	// 					{ label: d13.toLocaleDateString(), y: parseInt(data[3].N_13) },     
+	// 					{ label: d14.toLocaleDateString(), y: parseInt(data[3].N_14) },     
+	// 					{ label: d15.toLocaleDateString(), y: parseInt(data[3].N_15) },
+	// 					{ label: d16.toLocaleDateString(), y: parseInt(data[3].N_16) },
+	// 					{ label: d17.toLocaleDateString(), y: parseInt(data[3].N_17) },     
+	// 					{ label: d18.toLocaleDateString(), y: parseInt(data[3].N_18) },     
+	// 					{ label: d19.toLocaleDateString(), y: parseInt(data[3].N_19) }, 
+	// 					{ label: d20.toLocaleDateString(), y: parseInt(data[3].N_20) },
+	// 					{ label: d21.toLocaleDateString(), y: parseInt(data[3].N_21) },
+	// 					{ label: d22.toLocaleDateString(), y: parseInt(data[3].N_22) },
+	// 					{ label: d23.toLocaleDateString(), y: parseInt(data[3].N_23) },
+	// 					{ label: d24.toLocaleDateString(), y: parseInt(data[3].N_24) },
+	// 					{ label: d25.toLocaleDateString(), y: parseInt(data[3].N_25) },
+	// 					{ label: d26.toLocaleDateString(), y: parseInt(data[3].N_26) },
+	// 					{ label: d27.toLocaleDateString(), y: parseInt(data[3].N_27) },
+	// 					{ label: d28.toLocaleDateString(), y: parseInt(data[3].N_28) },
+	// 					{ label: d29.toLocaleDateString(), y: parseInt(data[3].N_29) },
+	// 					{ label: d30.toLocaleDateString(), y: parseInt(data[3].N_30) }, 
+	// 					{ label: d31.toLocaleDateString(), y: parseInt(data[3].N_31) }, 
+	// 					{ label: d32.toLocaleDateString(), y: parseInt(data[3].N_32) }, 
+	// 					{ label: d33.toLocaleDateString(), y: parseInt(data[3].N_33) }, 
+	// 					{ label: d34.toLocaleDateString(), y: parseInt(data[3].N_34) }, 
+	// 					{ label: d35.toLocaleDateString(), y: parseInt(data[3].N_35) }, 
+	// 					{ label: d36.toLocaleDateString(), y: parseInt(data[3].N_36) }, 
+	// 					{ label: d37.toLocaleDateString(), y: parseInt(data[3].N_37) }, 
+	// 					{ label: d38.toLocaleDateString(), y: parseInt(data[3].N_38) }, 
+	// 					{ label: d39.toLocaleDateString(), y: parseInt(data[3].N_39) }, 
+	// 					{ label: d40.toLocaleDateString(), y: parseInt(data[3].N_40) }, 
+	// 					{ label: d41.toLocaleDateString(), y: parseInt(data[3].N_41) }, 
+	// 					{ label: d42.toLocaleDateString(), y: parseInt(data[3].N_42) }, 
+	// 					{ label: d43.toLocaleDateString(), y: parseInt(data[3].N_43) }, 
+	// 					{ label: d44.toLocaleDateString(), y: parseInt(data[3].N_44) }, 
+	// 					{ label: d45.toLocaleDateString(), y: parseInt(data[3].N_45) }, 
+	// 					{ label: d46.toLocaleDateString(), y: parseInt(data[3].N_46) }, 
+	// 					{ label: d47.toLocaleDateString(), y: parseInt(data[3].N_47) }, 
+	// 					{ label: d48.toLocaleDateString(), y: parseInt(data[3].N_48) }, 
+	// 					{ label: d49.toLocaleDateString(), y: parseInt(data[3].N_49) }, 
+	// 					{ label: d50.toLocaleDateString(), y: parseInt(data[3].N_50) },
+	// 					{ label: d51.toLocaleDateString(), y: parseInt(data[3].N_51) },
+	// 					{ label: d52.toLocaleDateString(), y: parseInt(data[3].N_52) },
+	// 					{ label: d53.toLocaleDateString(), y: parseInt(data[3].N_53) },
+	// 					{ label: d54.toLocaleDateString(), y: parseInt(data[3].N_54) },
+	// 					{ label: d55.toLocaleDateString(), y: parseInt(data[3].N_55) },
+	// 					{ label: d56.toLocaleDateString(), y: parseInt(data[3].N_56) },
+	// 					{ label: d57.toLocaleDateString(), y: parseInt(data[3].N_57) },
+	// 					{ label: d58.toLocaleDateString(), y: parseInt(data[3].N_58) },
+	// 					{ label: d59.toLocaleDateString(), y: parseInt(data[3].N_59) },
+	// 					{ label: d60.toLocaleDateString(), y: parseInt(data[3].N_60) },
+	// 					{ label: d61.toLocaleDateString(), y: parseInt(data[3].N_61) },
+	// 					{ label: d62.toLocaleDateString(), y: parseInt(data[3].N_62) },
+	// 					{ label: d63.toLocaleDateString(), y: parseInt(data[3].N_63) },
+	// 					{ label: d64.toLocaleDateString(), y: parseInt(data[3].N_64) },
+	// 					{ label: d65.toLocaleDateString(), y: parseInt(data[3].N_65) },
+	// 					{ label: d66.toLocaleDateString(), y: parseInt(data[3].N_66) },
+	// 					{ label: d67.toLocaleDateString(), y: parseInt(data[3].N_67) },
+	// 					{ label: d68.toLocaleDateString(), y: parseInt(data[3].N_68) },
+	// 					{ label: d69.toLocaleDateString(), y: parseInt(data[3].N_69) },
+	// 					{ label: d70.toLocaleDateString(), y: parseInt(data[3].N_70) },
+	// 					{ label: d71.toLocaleDateString(), y: parseInt(data[3].N_71) },
+	// 					{ label: d72.toLocaleDateString(), y: parseInt(data[3].N_72) },
+	// 					{ label: d73.toLocaleDateString(), y: parseInt(data[3].N_73) },
+	// 					{ label: d74.toLocaleDateString(), y: parseInt(data[3].N_74) },
+	// 					{ label: d75.toLocaleDateString(), y: parseInt(data[3].N_75) },
+	// 					{ label: d76.toLocaleDateString(), y: parseInt(data[3].N_76) },
+	// 					{ label: d77.toLocaleDateString(), y: parseInt(data[3].N_77) },
+	// 					{ label: d78.toLocaleDateString(), y: parseInt(data[3].N_78) },
+	// 					{ label: d79.toLocaleDateString(), y: parseInt(data[3].N_79) },
+	// 					{ label: d80.toLocaleDateString(), y: parseInt(data[3].N_80) },
+	// 					{ label: d81.toLocaleDateString(), y: parseInt(data[3].N_81) },
+	// 					{ label: d82.toLocaleDateString(), y: parseInt(data[3].N_82) },
+	// 					{ label: d83.toLocaleDateString(), y: parseInt(data[3].N_83) },
+	// 					{ label: d84.toLocaleDateString(), y: parseInt(data[3].N_84) },
+	// 					{ label: d85.toLocaleDateString(), y: parseInt(data[3].N_85) },
+	// 					{ label: d86.toLocaleDateString(), y: parseInt(data[3].N_86) },
+	// 					{ label: d87.toLocaleDateString(), y: parseInt(data[3].N_87) },
+	// 					{ label: d88.toLocaleDateString(), y: parseInt(data[3].N_88) },
+	// 					{ label: d89.toLocaleDateString(), y: parseInt(data[3].N_89) },
+	// 					{ label: d90.toLocaleDateString(), y: parseInt(data[3].N_90) }
+	// 				]
 					
-				}, 
-				{        
-					type: "spline",
-					name: "ITO Days",        
-					showInLegend: true,
-					dataPoints: [
-						{ label: d1.toLocaleDateString(), y: parseInt(data[0].N_1 / data[4].N_1) },     
-						{ label: d2.toLocaleDateString(), y: parseInt(data[0].N_2/ data[4].N_2) },     
-						{ label: d3.toLocaleDateString(), y: parseInt(data[0].N_3/ data[4].N_3) },     
-						{ label: d4.toLocaleDateString(), y: parseInt(data[0].N_4/ data[4].N_4) },     
-						{ label: d5.toLocaleDateString(), y: parseInt(data[0].N_5 / data[4].N_5) },
-						{ label: d6.toLocaleDateString(), y: parseInt(data[0].N_6/ data[4].N_6) },
-						{ label: d7.toLocaleDateString(), y: parseInt(data[0].N_7/ data[4].N_7) },     
-						{ label: d8.toLocaleDateString(), y: parseInt(data[0].N_8/ data[4].N_8) },     
-						{ label: d9.toLocaleDateString(), y: parseInt(data[0].N_9/ data[4].N_9) },     
-						{ label: d10.toLocaleDateString(), y: parseInt(data[0].N_10/ data[4].N_10) },
-						{ label: d11.toLocaleDateString(), y: parseInt(data[0].N_11/ data[4].N_11) },     
-						{ label: d12.toLocaleDateString(), y: parseInt(data[0].N_12/ data[4].N_12) },     
-						{ label: d13.toLocaleDateString(), y: parseInt(data[0].N_13/ data[4].N_13) },     
-						{ label: d14.toLocaleDateString(), y: parseInt(data[0].N_14/ data[4].N_14) },     
-						{ label: d15.toLocaleDateString(), y: parseInt(data[0].N_15/ data[4].N_15) },
-						{ label: d16.toLocaleDateString(), y: parseInt(data[0].N_16/ data[4].N_16) },
-						{ label: d17.toLocaleDateString(), y: parseInt(data[0].N_17/ data[4].N_17) },     
-						{ label: d18.toLocaleDateString(), y: parseInt(data[0].N_18/ data[4].N_18) },     
-						{ label: d19.toLocaleDateString(), y: parseInt(data[0].N_19/ data[4].N_19) }, 
-						{ label: d20.toLocaleDateString(), y: parseInt(data[0].N_20/ data[4].N_20) },
-						{ label: d21.toLocaleDateString(), y: parseInt(data[0].N_21/ data[4].N_21) },
-						{ label: d22.toLocaleDateString(), y: parseInt(data[0].N_22/ data[4].N_22) },
-						{ label: d23.toLocaleDateString(), y: parseInt(data[0].N_23/ data[4].N_23) },
-						{ label: d24.toLocaleDateString(), y: parseInt(data[0].N_24/ data[4].N_24) },
-						{ label: d25.toLocaleDateString(), y: parseInt(data[0].N_25/ data[4].N_25) },
-						{ label: d26.toLocaleDateString(), y: parseInt(data[0].N_26/ data[4].N_26) },
-						{ label: d27.toLocaleDateString(), y: parseInt(data[0].N_27/ data[4].N_27) },
-						{ label: d28.toLocaleDateString(), y: parseInt(data[0].N_28/ data[4].N_28) },
-						{ label: d29.toLocaleDateString(), y: parseInt(data[0].N_29/ data[4].N_29) },
-						{ label: d30.toLocaleDateString(), y: parseInt(data[0].N_30/ data[4].N_30) }, 
-						{ label: d31.toLocaleDateString(), y: parseInt(data[0].N_31/ data[4].N_31) }, 
-						{ label: d32.toLocaleDateString(), y: parseInt(data[0].N_32/ data[4].N_32) }, 
-						{ label: d33.toLocaleDateString(), y: parseInt(data[0].N_33/ data[4].N_33) }, 
-						{ label: d34.toLocaleDateString(), y: parseInt(data[0].N_34/ data[4].N_34) }, 
-						{ label: d35.toLocaleDateString(), y: parseInt(data[0].N_35/ data[4].N_35) }, 
-						{ label: d36.toLocaleDateString(), y: parseInt(data[0].N_36/ data[4].N_36) }, 
-						{ label: d37.toLocaleDateString(), y: parseInt(data[0].N_37/ data[4].N_37) }, 
-						{ label: d38.toLocaleDateString(), y: parseInt(data[0].N_38/ data[4].N_38) }, 
-						{ label: d39.toLocaleDateString(), y: parseInt(data[0].N_39/ data[4].N_39) }, 
-						{ label: d40.toLocaleDateString(), y: parseInt(data[0].N_40/ data[4].N_40) }, 
-						{ label: d41.toLocaleDateString(), y: parseInt(data[0].N_41/ data[4].N_41) }, 
-						{ label: d42.toLocaleDateString(), y: parseInt(data[0].N_42/ data[4].N_42) }, 
-						{ label: d43.toLocaleDateString(), y: parseInt(data[0].N_43/ data[4].N_43) }, 
-						{ label: d44.toLocaleDateString(), y: parseInt(data[0].N_44/ data[4].N_44) }, 
-						{ label: d45.toLocaleDateString(), y: parseInt(data[0].N_45/ data[4].N_45) }, 
-						{ label: d46.toLocaleDateString(), y: parseInt(data[0].N_46/ data[4].N_46) }, 
-						{ label: d47.toLocaleDateString(), y: parseInt(data[0].N_47/ data[4].N_47) }, 
-						{ label: d48.toLocaleDateString(), y: parseInt(data[0].N_48/ data[4].N_48) }, 
-						{ label: d49.toLocaleDateString(), y: parseInt(data[0].N_49/ data[4].N_49) }, 
-						{ label: d50.toLocaleDateString(), y: parseInt(data[0].N_50/ data[4].N_50) },
-						{ label: d51.toLocaleDateString(), y: parseInt(data[0].N_51/ data[4].N_51) },
-						{ label: d52.toLocaleDateString(), y: parseInt(data[0].N_52/ data[4].N_52) },
-						{ label: d53.toLocaleDateString(), y: parseInt(data[0].N_53/ data[4].N_53) },
-						{ label: d54.toLocaleDateString(), y: parseInt(data[0].N_54/ data[4].N_54) },
-						{ label: d55.toLocaleDateString(), y: parseInt(data[0].N_55/ data[4].N_55) },
-						{ label: d56.toLocaleDateString(), y: parseInt(data[0].N_56/ data[4].N_56) },
-						{ label: d57.toLocaleDateString(), y: parseInt(data[0].N_57/ data[4].N_57) },
-						{ label: d58.toLocaleDateString(), y: parseInt(data[0].N_58/ data[4].N_58) },
-						{ label: d59.toLocaleDateString(), y: parseInt(data[0].N_59/ data[4].N_59) },
-						{ label: d60.toLocaleDateString(), y: parseInt(data[0].N_60/ data[4].N_60) },
-						{ label: d61.toLocaleDateString(), y: parseInt(data[0].N_61/ data[4].N_61) },
-						{ label: d62.toLocaleDateString(), y: parseInt(data[0].N_62/ data[4].N_62) },
-						{ label: d63.toLocaleDateString(), y: parseInt(data[0].N_63/ data[4].N_63) },
-						{ label: d64.toLocaleDateString(), y: parseInt(data[0].N_64/ data[4].N_64) },
-						{ label: d65.toLocaleDateString(), y: parseInt(data[0].N_65/ data[4].N_65) },
-						{ label: d66.toLocaleDateString(), y: parseInt(data[0].N_66/ data[4].N_66) },
-						{ label: d67.toLocaleDateString(), y: parseInt(data[0].N_67/ data[4].N_67) },
-						{ label: d68.toLocaleDateString(), y: parseInt(data[0].N_68/ data[4].N_68) },
-						{ label: d69.toLocaleDateString(), y: parseInt(data[0].N_69/ data[4].N_69) },
-						{ label: d70.toLocaleDateString(), y: parseInt(data[0].N_70/ data[4].N_70) },
-						{ label: d71.toLocaleDateString(), y: parseInt(data[0].N_71/ data[4].N_71) },
-						{ label: d72.toLocaleDateString(), y: parseInt(data[0].N_72/ data[4].N_72) },
-						{ label: d73.toLocaleDateString(), y: parseInt(data[0].N_73/ data[4].N_73) },
-						{ label: d74.toLocaleDateString(), y: parseInt(data[0].N_74/ data[4].N_74) },
-						{ label: d75.toLocaleDateString(), y: parseInt(data[0].N_75/ data[4].N_75) },
-						{ label: d76.toLocaleDateString(), y: parseInt(data[0].N_76/ data[4].N_76) },
-						{ label: d77.toLocaleDateString(), y: parseInt(data[0].N_77/ data[4].N_77) },
-						{ label: d78.toLocaleDateString(), y: parseInt(data[0].N_78/ data[4].N_78) },
-						{ label: d79.toLocaleDateString(), y: parseInt(data[0].N_79/ data[4].N_79) },
-						{ label: d80.toLocaleDateString(), y: parseInt(data[0].N_80/ data[4].N_80) },
-						{ label: d81.toLocaleDateString(), y: parseInt(data[0].N_81/ data[4].N_81) },
-						{ label: d82.toLocaleDateString(), y: parseInt(data[0].N_82/ data[4].N_82) },
-						{ label: d83.toLocaleDateString(), y: parseInt(data[0].N_83/ data[4].N_83) },
-						{ label: d84.toLocaleDateString(), y: parseInt(data[0].N_84/ data[4].N_84) },
-						{ label: d85.toLocaleDateString(), y: parseInt(data[0].N_85/ data[4].N_85) },
-						{ label: d86.toLocaleDateString(), y: parseInt(data[0].N_86/ data[4].N_86) },
-						{ label: d87.toLocaleDateString(), y: parseInt(data[0].N_87/ data[4].N_87) },
-						{ label: d88.toLocaleDateString(), y: parseInt(data[0].N_88/ data[4].N_88) },
-						{ label: d89.toLocaleDateString(), y: parseInt(data[0].N_89/ data[4].N_89) },
-						{ label: d90.toLocaleDateString(), y: parseInt(data[0].N_90/ data[4].N_90) }
-					]
+	// 			}, 
+	// 			{        
+	// 				type: "spline",
+	// 				name: "ITO Days",        
+	// 				showInLegend: true,
+	// 				dataPoints: [
+	// 					{ label: d1.toLocaleDateString(), y: parseInt(data[0].N_1 / data[4].N_1) },     
+	// 					{ label: d2.toLocaleDateString(), y: parseInt(data[0].N_2/ data[4].N_2) },     
+	// 					{ label: d3.toLocaleDateString(), y: parseInt(data[0].N_3/ data[4].N_3) },     
+	// 					{ label: d4.toLocaleDateString(), y: parseInt(data[0].N_4/ data[4].N_4) },     
+	// 					{ label: d5.toLocaleDateString(), y: parseInt(data[0].N_5 / data[4].N_5) },
+	// 					{ label: d6.toLocaleDateString(), y: parseInt(data[0].N_6/ data[4].N_6) },
+	// 					{ label: d7.toLocaleDateString(), y: parseInt(data[0].N_7/ data[4].N_7) },     
+	// 					{ label: d8.toLocaleDateString(), y: parseInt(data[0].N_8/ data[4].N_8) },     
+	// 					{ label: d9.toLocaleDateString(), y: parseInt(data[0].N_9/ data[4].N_9) },     
+	// 					{ label: d10.toLocaleDateString(), y: parseInt(data[0].N_10/ data[4].N_10) },
+	// 					{ label: d11.toLocaleDateString(), y: parseInt(data[0].N_11/ data[4].N_11) },     
+	// 					{ label: d12.toLocaleDateString(), y: parseInt(data[0].N_12/ data[4].N_12) },     
+	// 					{ label: d13.toLocaleDateString(), y: parseInt(data[0].N_13/ data[4].N_13) },     
+	// 					{ label: d14.toLocaleDateString(), y: parseInt(data[0].N_14/ data[4].N_14) },     
+	// 					{ label: d15.toLocaleDateString(), y: parseInt(data[0].N_15/ data[4].N_15) },
+	// 					{ label: d16.toLocaleDateString(), y: parseInt(data[0].N_16/ data[4].N_16) },
+	// 					{ label: d17.toLocaleDateString(), y: parseInt(data[0].N_17/ data[4].N_17) },     
+	// 					{ label: d18.toLocaleDateString(), y: parseInt(data[0].N_18/ data[4].N_18) },     
+	// 					{ label: d19.toLocaleDateString(), y: parseInt(data[0].N_19/ data[4].N_19) }, 
+	// 					{ label: d20.toLocaleDateString(), y: parseInt(data[0].N_20/ data[4].N_20) },
+	// 					{ label: d21.toLocaleDateString(), y: parseInt(data[0].N_21/ data[4].N_21) },
+	// 					{ label: d22.toLocaleDateString(), y: parseInt(data[0].N_22/ data[4].N_22) },
+	// 					{ label: d23.toLocaleDateString(), y: parseInt(data[0].N_23/ data[4].N_23) },
+	// 					{ label: d24.toLocaleDateString(), y: parseInt(data[0].N_24/ data[4].N_24) },
+	// 					{ label: d25.toLocaleDateString(), y: parseInt(data[0].N_25/ data[4].N_25) },
+	// 					{ label: d26.toLocaleDateString(), y: parseInt(data[0].N_26/ data[4].N_26) },
+	// 					{ label: d27.toLocaleDateString(), y: parseInt(data[0].N_27/ data[4].N_27) },
+	// 					{ label: d28.toLocaleDateString(), y: parseInt(data[0].N_28/ data[4].N_28) },
+	// 					{ label: d29.toLocaleDateString(), y: parseInt(data[0].N_29/ data[4].N_29) },
+	// 					{ label: d30.toLocaleDateString(), y: parseInt(data[0].N_30/ data[4].N_30) }, 
+	// 					{ label: d31.toLocaleDateString(), y: parseInt(data[0].N_31/ data[4].N_31) }, 
+	// 					{ label: d32.toLocaleDateString(), y: parseInt(data[0].N_32/ data[4].N_32) }, 
+	// 					{ label: d33.toLocaleDateString(), y: parseInt(data[0].N_33/ data[4].N_33) }, 
+	// 					{ label: d34.toLocaleDateString(), y: parseInt(data[0].N_34/ data[4].N_34) }, 
+	// 					{ label: d35.toLocaleDateString(), y: parseInt(data[0].N_35/ data[4].N_35) }, 
+	// 					{ label: d36.toLocaleDateString(), y: parseInt(data[0].N_36/ data[4].N_36) }, 
+	// 					{ label: d37.toLocaleDateString(), y: parseInt(data[0].N_37/ data[4].N_37) }, 
+	// 					{ label: d38.toLocaleDateString(), y: parseInt(data[0].N_38/ data[4].N_38) }, 
+	// 					{ label: d39.toLocaleDateString(), y: parseInt(data[0].N_39/ data[4].N_39) }, 
+	// 					{ label: d40.toLocaleDateString(), y: parseInt(data[0].N_40/ data[4].N_40) }, 
+	// 					{ label: d41.toLocaleDateString(), y: parseInt(data[0].N_41/ data[4].N_41) }, 
+	// 					{ label: d42.toLocaleDateString(), y: parseInt(data[0].N_42/ data[4].N_42) }, 
+	// 					{ label: d43.toLocaleDateString(), y: parseInt(data[0].N_43/ data[4].N_43) }, 
+	// 					{ label: d44.toLocaleDateString(), y: parseInt(data[0].N_44/ data[4].N_44) }, 
+	// 					{ label: d45.toLocaleDateString(), y: parseInt(data[0].N_45/ data[4].N_45) }, 
+	// 					{ label: d46.toLocaleDateString(), y: parseInt(data[0].N_46/ data[4].N_46) }, 
+	// 					{ label: d47.toLocaleDateString(), y: parseInt(data[0].N_47/ data[4].N_47) }, 
+	// 					{ label: d48.toLocaleDateString(), y: parseInt(data[0].N_48/ data[4].N_48) }, 
+	// 					{ label: d49.toLocaleDateString(), y: parseInt(data[0].N_49/ data[4].N_49) }, 
+	// 					{ label: d50.toLocaleDateString(), y: parseInt(data[0].N_50/ data[4].N_50) },
+	// 					{ label: d51.toLocaleDateString(), y: parseInt(data[0].N_51/ data[4].N_51) },
+	// 					{ label: d52.toLocaleDateString(), y: parseInt(data[0].N_52/ data[4].N_52) },
+	// 					{ label: d53.toLocaleDateString(), y: parseInt(data[0].N_53/ data[4].N_53) },
+	// 					{ label: d54.toLocaleDateString(), y: parseInt(data[0].N_54/ data[4].N_54) },
+	// 					{ label: d55.toLocaleDateString(), y: parseInt(data[0].N_55/ data[4].N_55) },
+	// 					{ label: d56.toLocaleDateString(), y: parseInt(data[0].N_56/ data[4].N_56) },
+	// 					{ label: d57.toLocaleDateString(), y: parseInt(data[0].N_57/ data[4].N_57) },
+	// 					{ label: d58.toLocaleDateString(), y: parseInt(data[0].N_58/ data[4].N_58) },
+	// 					{ label: d59.toLocaleDateString(), y: parseInt(data[0].N_59/ data[4].N_59) },
+	// 					{ label: d60.toLocaleDateString(), y: parseInt(data[0].N_60/ data[4].N_60) },
+	// 					{ label: d61.toLocaleDateString(), y: parseInt(data[0].N_61/ data[4].N_61) },
+	// 					{ label: d62.toLocaleDateString(), y: parseInt(data[0].N_62/ data[4].N_62) },
+	// 					{ label: d63.toLocaleDateString(), y: parseInt(data[0].N_63/ data[4].N_63) },
+	// 					{ label: d64.toLocaleDateString(), y: parseInt(data[0].N_64/ data[4].N_64) },
+	// 					{ label: d65.toLocaleDateString(), y: parseInt(data[0].N_65/ data[4].N_65) },
+	// 					{ label: d66.toLocaleDateString(), y: parseInt(data[0].N_66/ data[4].N_66) },
+	// 					{ label: d67.toLocaleDateString(), y: parseInt(data[0].N_67/ data[4].N_67) },
+	// 					{ label: d68.toLocaleDateString(), y: parseInt(data[0].N_68/ data[4].N_68) },
+	// 					{ label: d69.toLocaleDateString(), y: parseInt(data[0].N_69/ data[4].N_69) },
+	// 					{ label: d70.toLocaleDateString(), y: parseInt(data[0].N_70/ data[4].N_70) },
+	// 					{ label: d71.toLocaleDateString(), y: parseInt(data[0].N_71/ data[4].N_71) },
+	// 					{ label: d72.toLocaleDateString(), y: parseInt(data[0].N_72/ data[4].N_72) },
+	// 					{ label: d73.toLocaleDateString(), y: parseInt(data[0].N_73/ data[4].N_73) },
+	// 					{ label: d74.toLocaleDateString(), y: parseInt(data[0].N_74/ data[4].N_74) },
+	// 					{ label: d75.toLocaleDateString(), y: parseInt(data[0].N_75/ data[4].N_75) },
+	// 					{ label: d76.toLocaleDateString(), y: parseInt(data[0].N_76/ data[4].N_76) },
+	// 					{ label: d77.toLocaleDateString(), y: parseInt(data[0].N_77/ data[4].N_77) },
+	// 					{ label: d78.toLocaleDateString(), y: parseInt(data[0].N_78/ data[4].N_78) },
+	// 					{ label: d79.toLocaleDateString(), y: parseInt(data[0].N_79/ data[4].N_79) },
+	// 					{ label: d80.toLocaleDateString(), y: parseInt(data[0].N_80/ data[4].N_80) },
+	// 					{ label: d81.toLocaleDateString(), y: parseInt(data[0].N_81/ data[4].N_81) },
+	// 					{ label: d82.toLocaleDateString(), y: parseInt(data[0].N_82/ data[4].N_82) },
+	// 					{ label: d83.toLocaleDateString(), y: parseInt(data[0].N_83/ data[4].N_83) },
+	// 					{ label: d84.toLocaleDateString(), y: parseInt(data[0].N_84/ data[4].N_84) },
+	// 					{ label: d85.toLocaleDateString(), y: parseInt(data[0].N_85/ data[4].N_85) },
+	// 					{ label: d86.toLocaleDateString(), y: parseInt(data[0].N_86/ data[4].N_86) },
+	// 					{ label: d87.toLocaleDateString(), y: parseInt(data[0].N_87/ data[4].N_87) },
+	// 					{ label: d88.toLocaleDateString(), y: parseInt(data[0].N_88/ data[4].N_88) },
+	// 					{ label: d89.toLocaleDateString(), y: parseInt(data[0].N_89/ data[4].N_89) },
+	// 					{ label: d90.toLocaleDateString(), y: parseInt(data[0].N_90/ data[4].N_90) }
+	// 				]
 					
-				}]
-			});
+	// 			}]
+	// 		});
+	// 		chart.render();
+	// 		}
+	// 		});
+	// }
 
-			chart.render();
-			 					
-
-							
-			}
-			});
-
-
-
-	}
 	function info_assy (f,g,h){
 		var tgl_plan = AddDate(f);
 		if (h == 0 || h == null){
@@ -1048,6 +1040,7 @@ var d90 = new Date(y,m,d+90);
 		}
 	}
 
+	// console.log('mrp_rm_get_plan.php?cmb_type=<?php //echo $cmb_type;?>&cmb_item_no=<?php //echo $cmb_item_no;?>&from=<?php //echo $from;?>');
 	$('#dg_plan').datagrid({
 		url:'mrp_rm_get_plan.php?cmb_type=<?php echo $cmb_type;?>&cmb_item_no=<?php echo $cmb_item_no;?>&from=<?php echo $from;?>',
 		singleSelect: true,

@@ -13,15 +13,14 @@
 		 inner join prf_header b on a.prf_no=b.prf_no
 		 inner join item i on a.item_no=i.item_no
 		 inner join unit u on a.uom_q = u.unit_code
-		 where item_no = $item_no AND a.require_date = '$tgl_plan'
+		 where a.item_no = $item_no AND a.require_date = '$tgl_plan'
 		)aa
 		left outer join 
-		(select po_no, line_no as po_line, qty as qty_po, eta, prf_no as prf, prf_line_no as prf_line from po_details)bb on aa.prf_no = bb.prf AND aa.line_no = bb.prf_line" ;
+		(select po_no, line_no as po_line, qty as qty_po, cast(eta as varchar) as eta, prf_no as prf, prf_line_no as prf_line from po_details)bb on aa.prf_no = bb.prf AND aa.line_no = bb.prf_line" ;
 	$data_cek = sqlsrv_query($connect, strtoupper($cek));
-
-
 	$items = array();
 	$rowno=0;
+	// echo $cek;
 
 	while($row = sqlsrv_fetch_object($data_cek)){
 		array_push($items, $row);

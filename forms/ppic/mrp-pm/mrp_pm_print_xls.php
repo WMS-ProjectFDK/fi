@@ -41,27 +41,25 @@ $where = " where $fg $item $week i.description is not null
     and st.lower_item_no in (select distinct item_no from ztb_mrp_data_pck)";
 
 $sql = "
-
-
-select upper_item_no,item_name,this_inventory,level_no,lower_item_no,line_no,NO_ID,DESCRIPTION,N_1,N_2,N_3,N_4,N_5,N_6,N_7,N_8,N_9,N_10,N_11,N_12,N_13,N_14,N_15,N_16,N_17,N_18,N_19,N_20,N_21,N_22,N_23,N_24,N_25,N_26,N_27,N_28,N_29,N_30,N_31,N_32,N_33,N_34,N_35,N_36,N_37,N_38,N_39,N_40,N_41,N_42,N_43,N_44,N_45,N_46,N_47,N_48,N_49,N_50,N_51,N_52,N_53,N_54,N_55,N_56,N_57,N_58,N_59,N_60,N_61,N_62,N_63,N_64,N_65,N_66,N_67,N_68,N_69,N_70,N_71,N_72,N_73,N_74,N_75,N_76,N_77,N_78,N_79,N_80,N_81,N_82,N_83,N_84,N_85,N_86,N_87,N_88,N_89,N_90,z.ITEM_NO,ITEM_DESC,item_no_lower,description_lower_item,balance
-from (
-      select distinct a.item_no upper_item_no, i.description as item_name, isnull(wh.this_inventory,0) as this_inventory, st.level_no, st.lower_item_no, st.line_no
-      from mps_header a
-      inner join (select distinct po_no, po_line_no, isnull(sum(mps_qty),0) as qty 
-                  from ztb_mps_details 
-                  group by po_no, po_line_no) b on a.po_no=b.po_no and a.po_line_no = b.po_line_no
-      inner join (select st1.upper_item_no, st1.level_no, st2.lower_item_no, st2.line_no
-                  from (select upper_item_no, max(level_no) as level_no from structure group by upper_item_no) st1
-                  inner join structure st2 on st1.upper_item_no= st2.upper_item_no and st1.level_no= st2.level_no) st on a.item_no = st.upper_item_no
-      left outer join whinventory wh on a.item_no = wh.item_no
-      left join item i on a.item_no = i.item_no
-      $where
- 
-)aa
-inner join (select * from ztb_mrp_data_pck where no_id in(4,2)) z on aa.lower_item_no = z.item_no
-inner join (select item_no as item_no_lower, description as description_lower_item from item)it on aa.lower_item_no = it.item_no_lower 
-left outer join (select ITEM_NO, isnull(sum(bal_qty),0) as balance from po_details where eta <= cast(getdate() as date ) group by item_no) pod on aa.lower_item_no = pod.item_no
-order by aa.item_name asc, aa.upper_item_no asc, aa.line_no asc, z.no_id asc
+    select upper_item_no,item_name,this_inventory,level_no,lower_item_no,line_no,NO_ID,DESCRIPTION,N_1,N_2,N_3,N_4,N_5,N_6,N_7,N_8,N_9,N_10,N_11,N_12,N_13,N_14,N_15,N_16,N_17,N_18,N_19,N_20,N_21,N_22,N_23,N_24,N_25,N_26,N_27,N_28,N_29,N_30,N_31,N_32,N_33,N_34,N_35,N_36,N_37,N_38,N_39,N_40,N_41,N_42,N_43,N_44,N_45,N_46,N_47,N_48,N_49,N_50,N_51,N_52,N_53,N_54,N_55,N_56,N_57,N_58,N_59,N_60,N_61,N_62,N_63,N_64,N_65,N_66,N_67,N_68,N_69,N_70,N_71,N_72,N_73,N_74,N_75,N_76,N_77,N_78,N_79,N_80,N_81,N_82,N_83,N_84,N_85,N_86,N_87,N_88,N_89,N_90,z.ITEM_NO,ITEM_DESC,item_no_lower,description_lower_item,balance
+    from (
+        select distinct a.item_no upper_item_no, i.description as item_name, isnull(wh.this_inventory,0) as this_inventory, st.level_no, st.lower_item_no, st.line_no
+        from mps_header a
+        inner join (select distinct po_no, po_line_no, isnull(sum(mps_qty),0) as qty 
+                    from ztb_mps_details 
+                    group by po_no, po_line_no) b on a.po_no=b.po_no and a.po_line_no = b.po_line_no
+        inner join (select st1.upper_item_no, st1.level_no, st2.lower_item_no, st2.line_no
+                    from (select upper_item_no, max(level_no) as level_no from structure group by upper_item_no) st1
+                    inner join structure st2 on st1.upper_item_no= st2.upper_item_no and st1.level_no= st2.level_no) st on a.item_no = st.upper_item_no
+        left outer join whinventory wh on a.item_no = wh.item_no
+        left join item i on a.item_no = i.item_no
+        $where
+    
+    )aa
+    inner join (select * from ztb_mrp_data_pck where no_id in(4,2)) z on aa.lower_item_no = z.item_no
+    inner join (select item_no as item_no_lower, description as description_lower_item from item)it on aa.lower_item_no = it.item_no_lower 
+    left outer join (select ITEM_NO, isnull(sum(bal_qty),0) as balance from po_details where eta <= cast(getdate() as date ) group by item_no) pod on aa.lower_item_no = pod.item_no
+    order by aa.item_name asc, aa.upper_item_no asc, aa.line_no asc, z.no_id asc
 ";
 
 // VERS LAMA
@@ -162,7 +160,7 @@ $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4)
 
 $item_up = '';      $noUrut_up=1;
 $noRow = 4;
-while ($dt=oci_fetch_object($data) ){
+while ($dt=sqlsrv_fetch_object($data) ){
     if ($noRow == 4){
         /*HEADER UPPER*/                                                                                                    
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1371,16 +1369,16 @@ $objPHPExcel->getDefaultStyle()
     ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
 $objPHPExcel->setActiveSheetIndex(0);
-$objDrawing = new PHPExcel_Worksheet_Drawing();
-$objDrawing->setName('WMS-FDKI');
-$objDrawing->setDescription('FDKI');
-$objDrawing->setPath('../images/logo-print4.png');
-$objDrawing->setWidth('400px');
-$objDrawing->setCoordinates('A1');
-$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+// $objDrawing = new PHPExcel_Worksheet_Drawing();
+// $objDrawing->setName('WMS-FDKI');
+// $objDrawing->setDescription('FDKI');
+// $objDrawing->setPath('../../../images/logo-print4.png');
+// $objDrawing->setWidth('400px');
+// $objDrawing->setCoordinates('A1');
+// $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+$objWriter->save(str_replace('.php', '.xls', __FILE__));
 header('Content-type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="MRP_Pack.xlsx"');
+header('Content-Disposition: attachment; filename="MRP_PACK.xls"');
 $objWriter->save('php://output');
 ?>

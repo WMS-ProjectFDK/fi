@@ -1,7 +1,7 @@
 <?php
-require("../connect/conn.php");
+require("../../../connect/conn.php");
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 ?>
 
@@ -18,16 +18,16 @@ $user_name = $_SESSION['id_wms'];
 		return is_confirmed;
 	}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.patch.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../../themes/color.css" />
+<script type="text/javascript" src="../../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../../js/jquery.easyui.patch.js"></script>
+<script type="text/javascript" src="../../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../../js/jquery.edatagrid.js"></script>
 <style>
 *{
 font-size:12px;
@@ -63,7 +63,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
 	<fieldset style="float:left;width:500px;border-radius:4px;height: 75px;">
@@ -78,14 +78,14 @@ h2 {
 		<div class="fitem">
 			<span style="width:110px;display:inline-block;">Item Finish Goods</span>
 			<select style="width:330px;" name="cmb_upper_item_no" id="cmb_upper_item_no" class="easyui-combobox" 
-				data-options=" url:'json/json_upper_item.php', method:'get', valueField:'item_no', textField:'id_name_item', panelHeight:'100px'" ></select>
+				data-options=" url:'../../json/json_upper_item.php', method:'get', valueField:'item_no', textField:'id_name_item', panelHeight:'100px'" ></select>
 			<label><input type="checkbox" name="ck_fg" id="ck_fg" checked="true">All</input></label>
 		</div>
 	</fieldset>
 	<fieldset style="position:absolute;margin-left:525px;border-radius:4px;width: 470px;height: 75px;">
 		<div class="fitem">
 			<span style="width:85px;display:inline-block;">Item No.</span>
-			<select style="width:330px;" name="cmb_item" id="cmb_item" class="easyui-combobox" data-options=" url:'json/json_item_pm.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'150px',
+			<select style="width:330px;" name="cmb_item" id="cmb_item" class="easyui-combobox" data-options=" url:'../../json/json_item_pm.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'150px',
 			onSelect:function(rec){
 				//alert(rec.id_name_item);
 				var spl = rec.id_name_item;
@@ -167,7 +167,7 @@ h2 {
 			$.ajax({
 			type: 'GET',
 			dataType: "json",
-			url: 'json/json_last_mrp_pck_upload.php',
+			url: '../../json/json_last_mrp_pck_upload.php',
 			data: data,
 			success: function (data) {
 				
@@ -179,7 +179,23 @@ h2 {
 	function RunMRP(){
 		if (confirm("This process will takes time around 20-25 minutes, also MRP data now will be erased. if you agree please confirm ?")) {
 			alert("Please do not close browser while MRP running.");
-		    window.open('http://172.23.225.85/wms/schedule/execute_sp.php');
+		    // window.open('http://172.23.225.85/wms/schedule/execute_sp.php');
+			$.messager.progress({
+				title:'Please waiting',
+				msg:'Save data...'
+			});
+
+			$.post('mrp_pm_run.php',{}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Running MRP Success..!!','info');
+					$.messager.progress('close');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
+			});
 		} else {
 		    alert("Process cancelled");
 		}
@@ -243,6 +259,8 @@ h2 {
 				'&ck_fg='+ck_fg+
 				'&cmb_item='+$('#cmb_item').combobox('getValue')+
 				'&ck_item='+ck_item
+
+		// console.log(pdf_url);
 		
 		$('#dg').datagrid({
 	    	url:'mrp_pm_get.php',
@@ -260,7 +278,7 @@ h2 {
 				return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
 			},
 			onExpandRow: function(index,row){
-				console.log('mrp_pm_get_detail.php'+pdf_url+'&item='+row.ITEM_NO+'&level='+row.LEVEL_NO);
+				// console.log('mrp_pm_get_detail.php'+pdf_url+'&item='+row.ITEM_NO+'&level='+row.LEVEL_NO);
 				listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
 				listbrg.datagrid({
                 	title: 'Finish Goods Detail ('+row.ITEM_NAME+')',

@@ -45,7 +45,7 @@ $cek = "
 	)aa
 	$where
 	order by item_name asc" ;
-
+	
 $data_cek = sqlsrv_query($connect, strtoupper($cek));
 
 $items = array();
