@@ -204,59 +204,10 @@ $menu_id = $_GET['id'];
 					}
 				});
 
-				$('#dg').datagrid( {
-					// url: 'so_get.php',
-					view: detailview,
-				    columns:[[
-					    {field:'SO_NO',title:'GOODS RECEIVE<br>NO.', width:80, halign:'center'},
-		                {field:'SO_DATE',title:'GOODS RECEIVE<br>DATE',width:80,halign:'center', align:'center'},
-		                {field:'CUSTOMER_CODE',title:'SUPLIER<br>CODE',width:60,halign:'center', hidden: true},
-		                {field:'COMPANY',title:'SUPLIER',width:130,halign:'center'},
-		                {field:'CURR_SHORT',title:'CURR',width:35,halign:'center', align:'center'},
-		                {field:'EX_RATE',title:'RATE',width:50,halign:'center', align:'center'},
-		                {field:'AMT_L',title:'AMOUNT',width:80,halign:'center', align:'right'},
-		                {field:'REMARK',title:'REMARK',width:180,halign:'center'},
-		                {field:'PERSON',title:'PERSON',width:80,halign:'center'}
-					]],
-					detailFormatter: function(rowIndex, rowData){
-						return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
-					},
-					onExpandRow: function(index,row){
-						var listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
-						listbrg.datagrid({
-		                	title: 'Goods Receive Detail (No: '+row.GR_NO+')',
-							url:'gr_get_detail.php?gr_no='+row.GR_NO,
-							toolbar: '#ddv'+index,
-							singleSelect:true,
-							loadMsg:'load data ...',
-							height:'auto',
-							fitColumns: true,
-							columns:[[
-								{field:'LINE_NO', title:'LINE NO.', halign:'center', align:'center', width:50},
-								{field:'PO_NO',title:'PO NO.', halign:'center', width:150, sortable: true},
-								{field:'PO_LINE_NO', title:'PO<br/>LINE NO.', halign:'center', align:'center', width:50},
-				                {field:'ITEM_NO',title:'ITEM NO.', halign:'center', align:'center', width:80, sortable: true},
-				                {field:'DESCRIPTION', title:'ITEM<br>DESCRIPTION', halign:'center', width:240},
-				                {field:'UNIT', title:'UNIT', halign:'center', align:'center', width:50},
-				                {field:'UOM_Q', title:'UoM', halign:'center', align:'center', width:50, hidden: true},
-				                {field:'QTY', title:'QTY', halign:'center', align:'right', width:70},
-				                {field:'U_PRICE', title:'PRICE ('+row.CURR_SHORT+')', halign:'center', align:'center', width:70},
-				                {field:'AMT_L', title:'AMOUNT', halign:'center', align:'right', width:70},
-							]],
-							onResize:function(){
-								//alert(index);
-								$('#dg').datagrid('fixDetailRowHeight',index);
-							},
-							onLoadSuccess:function(){
-								setTimeout(function(){
-									$('#dg').datagrid('fixDetailRowHeight',index);
-								},0);
-							}
-		                });
-					}
-				});
 				document.getElementById('src').focus();
 			});
+
+			var src ='';
 
 			function filter(event){
 				var src = document.getElementById('src').value;
@@ -265,7 +216,7 @@ $menu_id = $_GET['id'];
 				
 			    if(event.keyCode == 13 || event.which == 13){
 					var src = document.getElementById('src').value;
-					alert(src);
+					// alert(src);
 					$('#dg').datagrid('load', {
 						src: search
 					});
@@ -274,7 +225,11 @@ $menu_id = $_GET['id'];
 
 					if (src=='') {
 						filterData();
-					};
+					}else{
+						$('#dg').datagrid({
+							url: 'so_get.php'
+						});
+					}
 					document.getElementById('src').value = '';
 			    }
 			}
@@ -331,23 +286,72 @@ $menu_id = $_GET['id'];
 					src: ''
 				});
 
-				$('#dg').datagrid({
-					url: 'so_get.php'
+				$('#dg').datagrid( {
+					url: 'so_get.php',
+					view: detailview,
+				    columns:[[
+					    {field:'SO_NO',title:'SALES ORDER<br>NO.', width:80, halign:'center'},
+		                {field:'SO_DATE',title:'SALES ORDER<br>DATE',width:80,halign:'center', align:'center'},
+		                {field:'CUSTOMER_CODE',title:'CUSTOMER<br>CODE',width:60,halign:'center', hidden: true},
+		                {field:'COMPANY',title:'SUPLIER',width:130,halign:'center'},
+						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br>PO NO.',width:80,halign:'center'},
+		                {field:'CURR_SHORT',title:'CURR',width:35,halign:'center', align:'center'},
+		                {field:'EX_RATE',title:'RATE',width:50,halign:'center', align:'center'},
+		                {field:'AMT_L',title:'AMOUNT',width:80,halign:'center', align:'right'},
+		                {field:'REMARK',title:'REMARK',width:180,halign:'center'},
+		                {field:'PERSON',title:'PERSON',width:80,halign:'center'}
+					]],
+					detailFormatter: function(rowIndex, rowData){
+						return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
+					},
+					onExpandRow: function(index,row){
+						var listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
+						listbrg.datagrid({
+		                	title: 'SALES ORDER DETAIL (NO: '+row.SO_NO+')',
+							url:'so_get_detail.php?so_no='+row.SO_NO,
+							toolbar: '#ddv'+index,
+							singleSelect:true,
+							loadMsg:'load data ...',
+							height:'auto',
+							fitColumns: true,
+							columns:[[
+								{field:'LINE_NO', title:'LINE NO.', halign:'center', align:'center', width:50},
+				                {field:'ITEM_NO',title:'ITEM NO.', halign:'center', align:'center', width:65, sortable: true},
+				                {field:'DESCRIPTION', title:'ITEM<br>DESCRIPTION', halign:'center', width:150},
+				                {field:'UNIT', title:'UNIT', halign:'center', align:'center', width:35},
+				                {field:'UOM_Q', title:'UoM', halign:'center', align:'center', width:50, hidden: true},
+				                {field:'QTY', title:'QTY', halign:'center', align:'right', width:70},
+				                {field:'U_PRICE', title:'PRICE ('+row.CURR_SHORT+')', halign:'center', align:'right', width:50},
+				                {field:'AMT_L', title:'AMOUNT', halign:'center', align:'right', width:70},
+								{field:'CASE_MARK', title:'CASE MARK', halign:'center', align:'right', width:120},
+								{field:'PALLET_MARK', title:'PALLET MARK', halign:'center', align:'right', width:120},
+							]],
+							onResize:function(){
+								$('#dg').datagrid('fixDetailRowHeight',index);
+							},
+							onLoadSuccess:function(){
+								setTimeout(function(){
+									$('#dg').datagrid('fixDetailRowHeight',index);
+								},0);
+							}
+		                });
+					}
 				});
 
 				pdf_url = "?date_awal="+$('#date_awal').datebox('getValue')+
-					"date_akhir="+$('#date_akhir').datebox('getValue')+
-					"ck_date="+ck_date+
-					"cmb_so_no="+$('#cmb_so_no').combobox('getValue')+
-					"ck_so_no="+ck_so_no+
-					"cmb_cust="+$('#cmb_cust').combobox('getValue')+
-					"ck_cust="+ck_cust+
-					"cmb_cust_po="+$('#cmb_cust_po').combobox('getValue')+
-					"ck_cust_po="+ck_cust_po+
-					"cmb_item="+$('#cmb_item').combobox('getValue')+
-					"ck_item="+ck_item;
+					"&date_akhir="+$('#date_akhir').datebox('getValue')+
+					"&ck_date="+ck_date+
+					"&cmb_so_no="+$('#cmb_so_no').combobox('getValue')+
+					"&ck_so_no="+ck_so_no+
+					"&cmb_cust="+$('#cmb_cust').combobox('getValue')+
+					"&ck_cust="+ck_cust+
+					"&cmb_cust_po="+$('#cmb_cust_po').combobox('getValue')+
+					"&ck_cust_po="+ck_cust_po+
+					"&cmb_item="+$('#cmb_item').combobox('getValue')+
+					"&ck_item="+ck_item+
+					"&src="+src;
 
-				console.log(pdf_url);
+				// console.log(pdf_url);
 				
 				$('#dg').datagrid('enableFilter');
 			}

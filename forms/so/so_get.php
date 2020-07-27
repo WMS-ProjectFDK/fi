@@ -17,53 +17,53 @@
 	$date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
 	$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';
 	$ck_date = isset($_REQUEST['ck_date']) ? strval($_REQUEST['ck_date']) : '';
-	$cmb_gr_no = isset($_REQUEST['cmb_gr_no']) ? strval($_REQUEST['cmb_gr_no']) : '';
-	$ck_gr_no = isset($_REQUEST['ck_gr_no']) ? strval($_REQUEST['ck_gr_no']) : '';
-	$cmb_supp = isset($_REQUEST['cmb_supp']) ? strval($_REQUEST['cmb_supp']) : '';
-	$ck_supp = isset($_REQUEST['ck_supp']) ? strval($_REQUEST['ck_supp']) : '';
-	$cmb_po = isset($_REQUEST['cmb_po']) ? strval($_REQUEST['cmb_po']) : '';
-	$ck_po = isset($_REQUEST['ck_po']) ? strval($_REQUEST['ck_po']) : '';
+	$cmb_so_no = isset($_REQUEST['cmb_so_no']) ? strval($_REQUEST['cmb_so_no']) : '';
+	$ck_so_no = isset($_REQUEST['ck_so_no']) ? strval($_REQUEST['ck_so_no']) : '';
+	$cmb_cust = isset($_REQUEST['cmb_cust']) ? strval($_REQUEST['cmb_cust']) : '';
+	$ck_cust = isset($_REQUEST['ck_cust']) ? strval($_REQUEST['ck_cust']) : '';
+	$cmb_cust_po = isset($_REQUEST['cmb_cust_po']) ? strval($_REQUEST['cmb_cust_po']) : '';
+	$ck_cust_po = isset($_REQUEST['ck_cust_po']) ? strval($_REQUEST['ck_cust_po']) : '';
 	$cmb_item = isset($_REQUEST['cmb_item']) ? strval($_REQUEST['cmb_item']) : '';
 	$ck_item = isset($_REQUEST['ck_item']) ? strval($_REQUEST['ck_item']) : '';
 	$src = isset($_REQUEST['src']) ? strval($_REQUEST['src']) : '';
 
 	if ($ck_date != "true"){
-		$gr_date = "a.gr_date BETWEEN CAST('$date_awal' as date) and CAST('$date_akhir' as date) and ";
+		$so_date = "a.so_date BETWEEN CAST('$date_awal' as date) and CAST('$date_akhir' as date) and ";
 	}else{
-		$gr_date = "";
+		$so_date = "";
 	}
 
-	if ($ck_gr_no != "true"){
-		$gr = "a.gr_no = '$cmb_gr_no' and ";
+	if ($ck_so_no != "true"){
+		$so = "a.so_no = '$cmb_so_no' and ";
 	}else{
-		$gr = "";
+		$so = "";
 	}
 
-	if ($ck_supp != "true"){
-		$supp = "a.supplier_code = '$cmb_supp' and ";
+	if ($ck_cust != "true"){
+		$cust = "a.customer_code = '$cmb_cust' and ";
 	}else{
-		$supp = "";
+		$cust = "";
 	}
 
-	if ($ck_po != "true"){
-		$po = "gd.po_no='$cmb_po' and ";
+	if ($ck_cust_po != "true"){
+		$po = "a.customer_po_no='$cmb_cust_po' and ";
 	}else{
 		$po = "";
 	}
 
 	if ($ck_item != "true"){
-		$item = "gd.item_no='$cmb_item' and ";
+		$item = "a.so_no in (select so_no from SO_DETAILS where item_no=$cmb_item)";// gd.item_no='$cmb_item' and ";
 	}else{
 		$item = "";
 	}
 
 	if ($src !='') {
-		$where="where a.gr_no like '%$src%' ";
+		$where="where a.so_no like '%$src%' ";
 	}else{
-		$where ="where $gr_date $gr $supp $po $item a.gr_no is not null";
+		$where ="where $so_date $so $cust $po $item a.so_no is not null";
 	}
 
-    $sql = "select distinct top 150 a.so_no, cast(a.so_date as varchar(10)) as so_date, 
+    $sql = "select distinct top 150 a.so_no, cast(a.so_date as varchar(10)) as so_date, a.CUSTOMER_PO_NO,
         a.customer_code, c.COMPANY, a.CURR_CODE, cast(a.ex_rate as decimal(18,5)) as ex_rate,
         d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON
         from SO_HEADER a
@@ -71,9 +71,10 @@
         left join COMPANY c on a.CUSTOMER_CODE = c.COMPANY_CODE
         left join currency d on a.CURR_CODE = d.CURR_CODE 
         left join person e on a.PERSON_CODE = e.PERSON_CODE
+        $where
         order by cast(a.so_date as varchar(10)) desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
-
+    // echo $sql;
 	$items = array();
 	$rowno=0;
 	while($row = sqlsrv_fetch_object($data)) {
