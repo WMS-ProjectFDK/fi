@@ -63,7 +63,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
 	<fieldset style="float:left;width:500px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong> PERIOD & ITEM FILTER </strong></span></legend>
@@ -161,6 +161,7 @@ h2 {
 		    ]],
 		    onDblClickRow:function(id,row){
 				$('#dlg_detail').dialog('open').dialog('setTitle','Inventory Detail ('+row.ITEM_NO+' - '+row.DESCRIPTION+')');
+				console.log('inventory_get_detail.php?id='+row.ITEM_NO+'&month='+$('#cmb_bln').combobox('getValue')+'&l_inv='+row.L_INVENTORY);
 				$('#dg_detail').datagrid({
 					url:'inventory_get_detail.php?id='+row.ITEM_NO+'&month='+$('#cmb_bln').combobox('getValue')+'&l_inv='+row.L_INVENTORY,
 					singleSelect:true,

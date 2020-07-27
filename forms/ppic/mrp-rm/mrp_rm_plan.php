@@ -438,7 +438,7 @@ var d90 = new Date(y,m,d+90);
 								//$('#prf_date_add').datebox('setValue',date_plan);
 								
 								$('#dg_add').datagrid({
-									url: 'mrp_rm_plan_getItem.php?item_no='+i+'&date='+date_plan+'&no=4',
+									url: 'mrp_rm_plan_getItem.php?item_no='+i+'&date='+date_plan+'&no=4&sts=ztb_mrp_data',
 								    singleSelect: true,
 								    fitColumns: true,
 									rownumbers: true,
