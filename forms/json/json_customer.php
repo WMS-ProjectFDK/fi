@@ -6,11 +6,10 @@
 	$sql = "select c.company_code, c.company from company c 
 		where c.country_code != 926168 and c.delete_type is null 
 		order by c.company";
-	$result = oci_parse($connect, $sql);
-	oci_execute($result);
+	$result = sqlsrv_query($connect, strtoupper($sql));
 	$arrData = array();
 	$arrNo = 0;
-	while ($row=oci_fetch_array($result)){
+	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
 			"company_code"=>rtrim($row[0]), 
 			"company"=>strtoupper(rtrim($row[1])).' ['.rtrim($row[0]).']'

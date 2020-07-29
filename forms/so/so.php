@@ -124,13 +124,118 @@ $menu_id = $_GET['id'];
 		    	<span style="width:50px;display:inline-block;">search</span>
 				<input style="width:150px; height: 18px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src"type="text" placeholder="Sales Order No."/>
 	    		<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2"  onclick="filterData();"><i class="fa fa-filter" aria-hidden="true"></i> FILTER DATA</a>
-	    		<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_gr()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
-	    		<a href="javascript:void(0)" style="width: 120px;" id="edit" class="easyui-linkbutton c2" onclick="edit_gr()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SO</a>
-	    		<a href="javascript:void(0)" style="width: 120px;" id="delete" class="easyui-linkbutton c2" onclick="delete_gr()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE SO</a>
+	    		<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
+	    		<a href="javascript:void(0)" style="width: 120px;" id="edit" class="easyui-linkbutton c2" onclick="edit_so()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SO</a>
+	    		<a href="javascript:void(0)" style="width: 120px;" id="delete" class="easyui-linkbutton c2" onclick="delete_so()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE SO</a>
 	    	</div></div>
         </div>
 
-		<table id="dg" title="SALES ORDER" class="easyui-datagrid" toolbar="#toolbar	" style="width:auto;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
+		<table id="dg" title="SALES ORDER" class="easyui-datagrid" toolbar="#toolbar	" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
+
+		<!-- ADD START -->
+		<div id="dlg_add" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-add" data-options="modal:true, position: 'center'">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CUSTOMER</span>
+					<input required="true" style="width:100px;" name="cust_no_add" id="cust_no_add" class="easyui-textbox" disabled="disabled" data-options="" />
+					<select style="width:300px;" name="cmb_cust_add" id="cmb_cust_add" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
+					onSelect:function(rec){
+						$('#cust_no_add').textbox('setValue', rec.company_code);
+					}
+					" required="">
+					</select>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SALES DATE</span>
+					<input style="width:100px;" name="so_date_add" id="so_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+					<span style="width:80px;display:inline-block;">SALES NO.</span>
+					<input required="true" style="width:215px;" name="so_no_add" id="so_no_add" class="easyui-textbox"/>
+				</div>
+			</fieldset>
+			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
+				<div class="fitem">
+					<span style="width:100px;display:inline-block;">CUST PO NO.</span>
+					<input style="width:250px;" name="so_cust_po_no_add" id="so_cust_po_no_add" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:100px;display:inline-block;">REMARKS</span>
+					<input style="width:400px;" name="so_remark_add" id="so_remark_add" class="easyui-textbox"/>
+				</div>
+			</fieldset>
+			<div style="clear:both;margin-bottom:10px;"></div>
+			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:250px;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
+			<div id="toolbar_add" style="padding: 5px 5px;">
+				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item_add()">ADD ITEM</a>
+	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_add()">REMOVE ITEM</a>
+			</div>
+		</div>
+		<div id="dlg-buttons-add">
+			<a href="javascript:void(0)" id="save_add" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveAdd()" style="width:90px">Save</a>
+			<a href="javascript:void(0)" id="cancel_add" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
+		</div>
+		<!-- ADD END -->
+
+		<!-- EDIT START -->
+		<div id="dlg_edit" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true, position: 'center'">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CUSTOMER</span>
+					<input required="true" style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" disabled="disabled" data-options="" />
+					<select style="width:300px;" name="cmb_cust_edit" id="cmb_cust_edit" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
+					onSelect:function(rec){
+						$('#cust_no_edit').textbox('setValue', rec.company_code);	
+					}
+					" required="" disabled="">
+					</select>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SALES DATE</span>
+					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
+					<span style="width:80px;display:inline-block;">RECEIVE NO.</span>
+					<input required="true" style="width:215px;" name="so_no_edit" id="so_no_edit" class="easyui-textbox" disabled=""/>
+				</div>
+			</fieldset>
+			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
+				<div class="fitem">
+					<span style="width:100px;display:inline-block;">CUST PO NO.</span>
+					<input style="width:250px;" name="so_cust_po_no_edit" id="so_cust_po_no_edit" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:100px;display:inline-block;">REMARKS</span>
+					<input style="width:400px;" name="so_remark_edit" id="so_remark_edit" class="easyui-textbox"/>
+				</div>
+			</fieldset>
+			<div style="clear:both;margin-bottom:10px;"></div>
+		</div>
+		<div id="dlg-buttons-edit">
+			<a href="javascript:void(0)" id="save_edit" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveEdit()" style="width:90px">Save</a>
+			<a href="javascript:void(0)" id="cancel_edit" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
+		</div>
+		<!-- EDIT END -->
+
+		<!-- ADD ITEM START -->
+		<div id="dlg_item" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addPO" data-options="modal:true">
+			<table id="dg_item" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		</div>
+		<!-- ADD ITEM END -->
+
+		<!-- ADD PALLET & CASE START -->
+		<div id="dlg_mark" class="easyui-dialog" style="width: 950px;height: 360px;" closed="true" buttons="#dlg-buttons-mark" data-options="modal:true">
+			<table id="dg_mark" class="easyui-datagrid" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		</div>
+		<div id="dlg-buttons-mark">
+			<div>
+				<input style="width: 200px;" name="jns_mark" id="jns_mark" class="easyui-textbox"/>
+				<input style="width: 200px;" name="sts_mark" id="sts_mark" class="easyui-textbox"/>
+				<input style="width: 200px;" name="row_mark" id="row_mark" class="easyui-textbox"/>
+				<input style="width: 200px;" name="result_mark" id="result_mark" class="easyui-textbox"/>
+
+			</div>
+			<div style="clear:both;padding:10px 0 0;"></div>
+			<a href="javascript:void(0)" id="save_mark" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveMark()" style="width:90px">SAVE</a>
+			<a href="javascript:void(0)" id="cancel_mark" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_mark').dialog('close')" style="width:90px">CANCEL</a>
+		</div>
+		<!-- ADD PALLET & CASE END -->
 
 		<script type="text/javascript">
 			function myformatter(date){
@@ -354,6 +459,201 @@ $menu_id = $_GET['id'];
 				// console.log(pdf_url);
 				
 				$('#dg').datagrid('enableFilter');
+			}
+
+			function add_so(){
+				$('#dlg_add').dialog('open').dialog('setTitle','ADD SALES ORDER');
+				$('#save_add').linkbutton('enable');
+				$('#cancel_add').linkbutton('enable');
+				$('#cust_no_add').textbox('setValue','');
+				$('#cmb_supp_add').combobox('setValue','');
+				$('#gr_no_add').textbox('setValue','');
+				$('#gr_remark_add').textbox('setValue','');
+				$('#dg_add').datagrid('loadData',[]);
+
+				$('#dg_add').datagrid({
+				    singleSelect: true,
+					rownumbers: true,
+				    columns:[[
+					    {field:'ITEM_NO', title:'ITEM NO.', width:50, halign: 'center'},
+					    {field:'ITEM', title:'ITEM NAME', width:80, halign: 'center'},
+					    {field:'DESCRIPTION', title:'DESCRIPTION', halign: 'center', width:250},
+					    {field:'U_PRICE', title:'PRICE', width:80, halign: 'center'},
+					    {field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
+					    {field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
+						{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
+						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:80, align:'center'},
+						{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:80, align:'center'},
+					    {field:'ACT_QTY', title:'ACTUAL<br>QTY', align:'right', halign: 'center', width:100, editor:{
+					    																						type:'numberbox',
+					    																						options:{precision:2,groupSeparator:','}
+																											}
+						},
+						{field: 'P_MARK_RESULT'},
+						{field: 'C_MARK_RESULT'}
+				    ]],
+				    onClickRow:function(rowIndex){
+				    	$(this).datagrid('beginEdit', rowIndex);
+					}
+					// ,
+				    // onBeginEdit:function(rowIndex){
+				    //     var editors = $('#dg_add').datagrid('getEditors', rowIndex);
+				    //     var n1 = $(editors[0].target);
+				    //     var n2 = $(editors[1].target);
+				    //     var n3 = $(editors[2].target);
+				    //     n1.add(n3).numberbox({
+				    //         onChange:function(){
+				    //             var amt = n1.numberbox('getValue') - n2.numberbox('getValue');
+				    //             if(n3.numberbox('getValue') > amt){
+					// 				$.messager.confirm('Confirm','actual value over',function(r){
+					// 					if(r){
+					// 						n3.numberbox('setValue',0);
+					// 					}else{
+					// 						n3.numberbox('setValue',$(editors[2].target));
+					// 					}		
+					// 				});
+				    //             }
+				    //         }
+				    //     })
+				    // }
+				});
+			}
+
+			function add_item_add(){
+				var cust_id = $('#cust_no_add').textbox('getValue');
+				var cust_name = $('#cmb_cust_add').textbox('getText');
+				var sts = "'ADD'";
+
+				if (cust_name == ''){
+					$.messager.alert('Warning','Please select customer','warning');
+				}else{
+					$('#dlg_item').dialog('open').dialog('setTitle','SEARCH ITEM');
+					$('#dg_item').datagrid({
+						url: 'so_getItem.php?cust='+cust_id,
+						columns:[[
+			                {field:'ITEM_NO',title:'ITEM',width:60,halign:'center', align:'center'},
+							{field:'ITEM',title:'ITEM',width:80,halign:'center'},
+							{field:'DESCRIPTION',title:'DESCRIPTION',width:200,halign:'center'},
+							{field:'CUSTOMER_PART_NO',title:'CUSTOMER<br/>PART NO.',width:60,halign:'center', align:'center'},
+							{field:'CURR_MARK',title:'CURR',width:50,halign:'center'},
+							{field:'U_PRICE',title:'UNIT PRICE',width:50,halign:'center', align:'right'},
+							{field:'STK_QTY',title:'BALANCE<br/>QTY',width:50,halign:'center', align:'right'},
+							{field:'ORIGIN_CODE',hidden: true},
+							{field:'UOM_Q',hidden: true},
+							{field:'ORIGIN',hidden: true},
+							{field:'CLASS_CODE',hidden: true},
+							{field:'SUPPLIER_CODE',hidden: true}
+			            ]],
+			            onDblClickRow:function(id,row){
+							var t = $('#dg_add').datagrid('getRows');
+							var total = t.length;
+						   	var idxfield=0;
+						   	var i = 0;
+						   	var count = 0;
+							if (parseInt(total) == 0) {
+								idxfield=total;
+							}else{
+								idxfield=total+1;
+								for (i=0; i < total; i++) {
+									var item = $('#dg_add').datagrid('getData').rows[i].ITEM_NO;
+									if (item == row.ITEM_NO) {
+										count++;
+									};
+								};
+							}
+
+							if (count > 0) {
+								$.messager.alert('Warning','Item present','warning');
+							}else{
+								$('#dg_add').datagrid('insertRow',{
+									index: idxfield,	// index start with 0
+									row: {
+										ITEM_NO: row.ITEM_NO,
+										ITEM: row.ITEM,
+										DESCRIPTION: row.DESCRIPTION,
+										U_PRICE: row.U_PRICE,
+										UNIT: row.UNIT,
+										CURR_MARK: row.CURR_MARK,
+										UOM_Q: row.UOM_Q,
+										STK_QTY: row.STK_QTY,
+										ORIGIN_CODE: row.ORIGIN_CODE,
+										CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
+										ORIGIN: row.ORIGIN,
+										CLASS_CODE: row.CLASS_CODE,
+										SUPPLIER_CODE: row.SUPPLIER_CODE,
+										TBL: row.TBL,
+										P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										P_MARK_RESULT: row.P_MARK_RESULT,
+										C_MARK_RESULT: row.C_MARK_RESULT
+									}
+								});
+							}
+						}
+					});
+
+					$('#dg_item').datagrid('enableFilter');
+				}
+			}
+			
+			function input_pallet(a,b,c){
+				// console.log(a,b);
+				$('#dlg_mark').dialog('open').dialog('setTitle','ADD PALLET MARK');
+				
+				$('#jns_mark').textbox('setValue', 'PALLET_MARK')
+				$('#sts_mark').textbox('setValue', a);
+				c = '' ?  $('#row_mark').textbox('setValue', 1) : $	('#row_mark').textbox('setValue', c);
+
+				$('#dg_mark').datagrid({
+					url: 'so_pallet_mark.json',
+					columns:[[
+						{field:'pmark',title:'PALLET MARK',width:40,halign:'center'},
+						{field:'vmark',title:'COMMAND',width:150,halign:'center', editor:{type:'textbox'}}
+					]],
+					onClickRow:function(rowIndex){
+						$(this).datagrid('beginEdit', rowIndex);
+					}
+				});
+			}
+
+			function input_case(a,b,c){
+				// console.log(a,b);
+				$('#dlg_mark').dialog('open').dialog('setTitle','ADD CASE MARK');
+				
+				$('#jns_mark').textbox('setValue', 'PALLET_MARK')
+				$('#sts_mark').textbox('setValue', a);
+				c = '' ? $('#row_mark').textbox('setValue', 1) : $('#row_mark').textbox('setValue', c);
+
+				$('#dg_mark').datagrid({
+					url: 'so_pallet_mark.json',
+					columns:[[
+						{field:'cmark',title:'CASE MARK',width:40,halign:'center'},
+						{field:'vmark',title:'COMMAND',width:150,halign:'center', editor:{type:'textbox'}}
+					]],
+					onClickRow:function(rowIndex){
+						$(this).datagrid('beginEdit', rowIndex);
+					}
+				});
+			}
+
+			function saveMark(){
+				var arrS = [];	var arrH = [];
+				var rows = $('#dg_mark').datagrid('getRows');
+				for(var j=0; j<rows.length; j++){
+					arrS.push(rows[j].vmark+"\n");
+				}
+				$('#result_mark').textbox('setValue',arrS.join(""));
+			}
+
+			
+
+
+
+
+
+			// --------------------------------------------------- EDIT SO ---------------------------------------------------//
+			function edit_so(){
+				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT SALES ORDER');
 			}
 		</script>
 	</body>
