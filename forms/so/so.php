@@ -124,7 +124,8 @@ $menu_id = $_GET['id'];
 		    	<span style="width:50px;display:inline-block;">search</span>
 				<input style="width:150px; height: 18px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src"type="text" placeholder="Sales Order No."/>
 	    		<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2"  onclick="filterData();"><i class="fa fa-filter" aria-hidden="true"></i> FILTER DATA</a>
-	    		<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
+				<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
+				<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO FROM FDK</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="edit" class="easyui-linkbutton c2" onclick="edit_so()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SO</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="delete" class="easyui-linkbutton c2" onclick="delete_so()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE SO</a>
 	    	</div></div>
@@ -133,7 +134,8 @@ $menu_id = $_GET['id'];
 		<table id="dg" title="SALES ORDER" class="easyui-datagrid" toolbar="#toolbar	" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
 
 		<!-- ADD START -->
-		<div id="dlg_add" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-add" data-options="modal:true, position: 'center'">
+		<div id='win_add' class="easyui-window" style="width:auto;height:565px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+		  <form id="f_add" method="post" novalidate>
 			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CUSTOMER</span>
@@ -141,37 +143,81 @@ $menu_id = $_GET['id'];
 					<select style="width:300px;" name="cmb_cust_add" id="cmb_cust_add" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
 					onSelect:function(rec){
 						$('#cust_no_add').textbox('setValue', rec.company_code);
+						$.ajax({
+		        			type: 'GET',
+							url: '../json/json_info_cust.php?id='+rec.company_code,
+							data: { kode:'kode' },
+							success: function(data){
+								$('#country_add').textbox('setValue',data[0].COUNTRY_CODE+'-'+data[0].COUNTRY);
+								$('#curr_add').combobox('setValue',data[0].CURR_CODE);
+								$('#rate_add').textbox('setValue',1);
+							}
+		        		});
 					}
 					" required="">
 					</select>
 				</div>
 				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SALES DATE</span>
+					<span style="width:80px;display:inline-block;">SO DATE</span>
 					<input style="width:100px;" name="so_date_add" id="so_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-					<span style="width:80px;display:inline-block;">SALES NO.</span>
-					<input required="true" style="width:215px;" name="so_no_add" id="so_no_add" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO NO.</span>
+					<input required="true" style="width:100px;" name="so_no_add" id="so_no_add" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">CUST P/O</span>
+					<input required="true" style="width:211px;" name="so_cust_po_no_add" id="so_cust_po_no_add" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
+					<input style="width:100px;" name="consignee_code_add" id="consignee_code_add" class="easyui-textbox" disabled=true/>
+					<input style="width:275px;" name="consignee_name_add" id="consignee_name_add" class="easyui-textbox" disabled=true/>
+					<span><a href="javascript:void(0)" onclick="consignee_data('add')">SET</a></span>
 				</div>
 			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:750px;margin-left: 510px;">
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">CUST PO NO.</span>
-					<input style="width:250px;" name="so_cust_po_no_add" id="so_cust_po_no_add" class="easyui-textbox"/>
+					<span style="width:80px;display:inline-block;">CURR</span>
+					<!-- <input required="true" style="width:100px;" name="curr_add" id="curr_add" class="easyui-textbox" disabled=true/>	 -->
+					<input style="width:100px;" id="curr_add" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
+		        	onSelect: function(rec){
+		        		$.ajax({
+		        			type: 'GET',
+							url: '../json/json_exrate.php?curr='+rec.idcrc,
+							data: { kode:'kode' },
+							success: function(data){
+								$('#rate_add').textbox('setValue',data[0].RATE);	
+							}
+		        		});
+		        	}" required="" disabled="" />
+					<span style="display:inline-block;">EX RATE</span>
+					<input required="true" style="width:100px;" name="rate_add" id="rate_add" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">COUNTRY</span>
+					<input required="true" style="width:325px;" name="country_add" id="country_add" class="easyui-textbox" disabled=true/>
 				</div>
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">REMARKS</span>
-					<input style="width:400px;" name="so_remark_add" id="so_remark_add" class="easyui-textbox"/>
+					<span style="width:80px;display:inline-block;">REMARKS</span>
+					<input style="width:650px;" name="so_remark_add" id="so_remark_add" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CASE MARK</span>
+					<input style="width:650px;" name="so_casemark_add" id="so_casemark_add" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CATEGORY</span>
+					<input style="width:650px;" name="so_category_add" id="so_category_add" class="easyui-textbox"/>
 				</div>
 			</fieldset>
 			<div style="clear:both;margin-bottom:10px;"></div>
-			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:250px;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
+			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_add" style="padding: 5px 5px;">
 				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item_add()">ADD ITEM</a>
 	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_add()">REMOVE ITEM</a>
 			</div>
-		</div>
-		<div id="dlg-buttons-add">
-			<a href="javascript:void(0)" id="save_add" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveAdd()" style="width:90px">Save</a>
-			<a href="javascript:void(0)" id="cancel_add" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
+			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+				<a class="easyui-linkbutton c2" id="save_add" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveAdd('add')" style="width:140px" disabled="true"> SAVE </a>
+				<a class="easyui-linkbutton c2" id="cancel_add" href="javascript:void(0)" onclick="javascript:$('#win_add').window('close')" style="width:140px"><i class="fa fa-ban" aria-hidden="true"></i> CANCEL </a>
+			</div>
+		  </form>
 		</div>
 		<!-- ADD END -->
 
@@ -224,18 +270,38 @@ $menu_id = $_GET['id'];
 			<table id="dg_mark" class="easyui-datagrid" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
 		</div>
 		<div id="dlg-buttons-mark">
-			<div>
+			<div class="fitem" align="center" hidden="true">
 				<input style="width: 200px;" name="jns_mark" id="jns_mark" class="easyui-textbox"/>
 				<input style="width: 200px;" name="sts_mark" id="sts_mark" class="easyui-textbox"/>
 				<input style="width: 200px;" name="row_mark" id="row_mark" class="easyui-textbox"/>
 				<input style="width: 200px;" name="result_mark" id="result_mark" class="easyui-textbox"/>
-
 			</div>
 			<div style="clear:both;padding:10px 0 0;"></div>
 			<a href="javascript:void(0)" id="save_mark" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveMark()" style="width:90px">SAVE</a>
 			<a href="javascript:void(0)" id="cancel_mark" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_mark').dialog('close')" style="width:90px">CANCEL</a>
 		</div>
 		<!-- ADD PALLET & CASE END -->
+
+		<!-- ADD QTY -->
+		<div id="dlg_input_qty" class="easyui-dialog" style="width: 350px;height: 105px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true">
+			<div class="fitem" align="center">
+				<input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/>
+			</div>
+			<div class="fitem" align="center" hidden="true">
+				<input type="hidden" style="width: 200px;" name="row_qty" id="row_qty" class="easyui-textbox"/>
+				<input type="hidden" style="width: 200px;" name="price_qty" id="price_qty" class="easyui-textbox"/>
+			</div>
+		</div>
+		<div id="dlg-buttons-qty" align="center">
+			<a href="javascript:void(0)" id="save_qty" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveQTY()" style="width:90px">SAVE</a>
+		</div>
+		<!-- END QTY -->
+
+		<!-- CONSIGNEE SETT -->
+		<div id="dlg_Notify" class="easyui-dialog" style="width: 880px;height: 270px;" closed="true" data-options="modal:true">
+			<table id="dg_Notify" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
+		</div>
+		<!-- END -->
 
 		<script type="text/javascript">
 			function myformatter(date){
@@ -461,14 +527,53 @@ $menu_id = $_GET['id'];
 				$('#dg').datagrid('enableFilter');
 			}
 
+			function validate(value){
+				var hasil=0;
+				var msg='';
+				
+				if(value == 'add'){
+					var t = $('#dg_add').datagrid('getRows');
+					var total = t.length;
+
+					if($('#cust_no_add').textbox('getValue')==''){
+						msg = $.messager.alert('Warning','Please select customer','warning');
+						hasil=1;
+					}else if($('#so_date_add').datebox('getValue')==''){
+						msg = $.messager.alert('INFORMATION','SO DATE Not Found','info');
+						hasil=1;
+					}else if($('#so_no_add').textbox('getValue')==''){
+						msg = $.messager.alert('INFORMATION','SO NO. Not Found','info');
+						hasil=1;
+					}else if($('#so_cust_po_no_add').textbox('getValue') == ''){
+						msg = $.messager.alert('INFORMATION','Cust PO NO. Not Found','info');
+						hasil=1;
+					}
+
+					// for(i2=0;i2<total;i2++){
+					// 	$('#dg_add').datagrid('endEdit',i2);
+					// 	if ($('#dg_add').datagrid('getData').rows[i2].ACT_QTY == '' || $('#dg_add').datagrid('getData').rows[i2].ACT_QTY == 0){
+					// 		msg = $.messager.alert('INFORMATION','QTY not Found','info');
+					// 		hasil=1;
+					// 	}
+					// }
+				}
+			}
+
 			function add_so(){
-				$('#dlg_add').dialog('open').dialog('setTitle','ADD SALES ORDER');
+				$('#win_add').window('open').window('setTitle','ADD SALES ORDER');
+				$('#win_add').window('center');
 				$('#save_add').linkbutton('enable');
 				$('#cancel_add').linkbutton('enable');
 				$('#cust_no_add').textbox('setValue','');
-				$('#cmb_supp_add').combobox('setValue','');
-				$('#gr_no_add').textbox('setValue','');
-				$('#gr_remark_add').textbox('setValue','');
+				$('#cmb_cust_add').combobox('setValue','');
+				$('#so_no_add').textbox('setValue','');
+				$('#so_cust_po_no_add').textbox('setValue','');
+				$('#consignee_code_add').textbox('setValue','');
+				$('#consignee_name_add').textbox('setValue','');
+				$('#curr_add').combobox('setValue','');
+				$('#rate_add').textbox('setValue','');
+				$('#country_add').textbox('setValue','');
+
 				$('#dg_add').datagrid('loadData',[]);
 
 				$('#dg_add').datagrid({
@@ -482,40 +587,20 @@ $menu_id = $_GET['id'];
 					    {field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
 					    {field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
 						{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
-						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:80, align:'center'},
-						{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:80, align:'center'},
-					    {field:'ACT_QTY', title:'ACTUAL<br>QTY', align:'right', halign: 'center', width:100, editor:{
-					    																						type:'numberbox',
-					    																						options:{precision:2,groupSeparator:','}
-																											}
-						},
-						{field: 'P_MARK_RESULT'},
-						{field: 'C_MARK_RESULT'}
+						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
+						{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:50, align:'center'},
+					    {field:'ACT_QTY', title:'ORDER<br>QTY', halign: 'center', width:50, align:'center'},
+						{field: 'P_MARK_RESULT', title:'PALLET MARK<br/>RESULT', halign: 'center', width:150},
+						{field: 'C_MARK_RESULT', title:'CASE MARK<br/>RESULT', halign: 'center', width:150},//, hidden: true}
+						{field:'ACT_QTY_RESULT', title:'ACT QTY<br/>RESULT', halign: 'center', width:100, align:'right'},
+						{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right'}
 				    ]],
 				    onClickRow:function(rowIndex){
 				    	$(this).datagrid('beginEdit', rowIndex);
+					},
+					onAfterEdit:function(index,row){
+						$(this).datagrid('beginEdit', index);
 					}
-					// ,
-				    // onBeginEdit:function(rowIndex){
-				    //     var editors = $('#dg_add').datagrid('getEditors', rowIndex);
-				    //     var n1 = $(editors[0].target);
-				    //     var n2 = $(editors[1].target);
-				    //     var n3 = $(editors[2].target);
-				    //     n1.add(n3).numberbox({
-				    //         onChange:function(){
-				    //             var amt = n1.numberbox('getValue') - n2.numberbox('getValue');
-				    //             if(n3.numberbox('getValue') > amt){
-					// 				$.messager.confirm('Confirm','actual value over',function(r){
-					// 					if(r){
-					// 						n3.numberbox('setValue',0);
-					// 					}else{
-					// 						n3.numberbox('setValue',$(editors[2].target));
-					// 					}		
-					// 				});
-				    //             }
-				    //         }
-				    //     })
-				    // }
 				});
 			}
 
@@ -582,6 +667,7 @@ $menu_id = $_GET['id'];
 										CLASS_CODE: row.CLASS_CODE,
 										SUPPLIER_CODE: row.SUPPLIER_CODE,
 										TBL: row.TBL,
+										ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+')">SET</a>', 
 										P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
 										C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
 										P_MARK_RESULT: row.P_MARK_RESULT,
@@ -595,14 +681,29 @@ $menu_id = $_GET['id'];
 					$('#dg_item').datagrid('enableFilter');
 				}
 			}
+
+			function remove_item_add(){
+				var row = $('#dg_add').datagrid('getSelected');	
+				if (row){
+					var idx = $("#dg_add").datagrid("getRowIndex", row);
+					$('#dg_add').datagrid('deleteRow', idx);
+				}
+			}
+
+			function input_qty(a,b,c){
+				$('#dlg_input_qty').dialog('open').dialog('setTitle','ADD QTY ORDER');
+				$('#qty_order').textbox('setValue','');
+				b == '' ?  $('#row_qty').textbox('setValue', 1) : $	('#row_qty').textbox('setValue', b);
+				$('#price_qty').textbox('setValue', c);
+			}
 			
 			function input_pallet(a,b,c){
 				// console.log(a,b);
 				$('#dlg_mark').dialog('open').dialog('setTitle','ADD PALLET MARK');
 				
-				$('#jns_mark').textbox('setValue', 'PALLET_MARK')
+				$('#jns_mark').textbox('setValue', 'P_MARK_RESULT')
 				$('#sts_mark').textbox('setValue', a);
-				c = '' ?  $('#row_mark').textbox('setValue', 1) : $	('#row_mark').textbox('setValue', c);
+				c == '' ?  $('#row_mark').textbox('setValue', 1) : $	('#row_mark').textbox('setValue', c);
 
 				$('#dg_mark').datagrid({
 					url: 'so_pallet_mark.json',
@@ -620,9 +721,9 @@ $menu_id = $_GET['id'];
 				// console.log(a,b);
 				$('#dlg_mark').dialog('open').dialog('setTitle','ADD CASE MARK');
 				
-				$('#jns_mark').textbox('setValue', 'PALLET_MARK')
+				$('#jns_mark').textbox('setValue', 'C_MARK_RESULT')
 				$('#sts_mark').textbox('setValue', a);
-				c = '' ? $('#row_mark').textbox('setValue', 1) : $('#row_mark').textbox('setValue', c);
+				c == '' ? $('#row_mark').textbox('setValue', 1) : $('#row_mark').textbox('setValue', c);
 
 				$('#dg_mark').datagrid({
 					url: 'so_pallet_mark.json',
@@ -636,21 +737,200 @@ $menu_id = $_GET['id'];
 				});
 			}
 
-			function saveMark(){
-				var arrS = [];	var arrH = [];
-				var rows = $('#dg_mark').datagrid('getRows');
-				for(var j=0; j<rows.length; j++){
-					arrS.push(rows[j].vmark+"\n");
-				}
-				$('#result_mark').textbox('setValue',arrS.join(""));
+			function consignee_data(value){
+				$('#dlg_Notify').dialog('open').dialog('setTitle','SEARCH CONSIGNEE');
+				$('#dg_Notify').datagrid('load',{sch: ''});
+				$('#dg_Notify').datagrid({
+					url: '../json/json_consignee.php',
+					fitColumns: true,
+					columns:[[
+						{field:'CONSIGNEE_CODE',title:'CODE',width:65,halign:'center', align:'center'},
+						{field:'CONSIGNEE_NAME',title:'NAME',width:150,halign:'center'}
+					]],
+					onClickRow:function(id,row){
+						var rows = $('#dg_Notify').datagrid('getSelected');
+						if(value=='add'){
+							$('#consignee_code_add').textbox('setValue', rows.CONSIGNEE_CODE);
+							$('#consignee_name_add').textbox('setValue', rows.CONSIGNEE_NAME);
+						}//else if(value == 'edit'){
+						// 	$('#notify_edit').textbox('setValue', rows.NOTIFY);
+						// }
+						$('#dlg_Notify').dialog('close');
+					}
+				});
+
+				$('#dg_Notify').datagrid('enableFilter');
 			}
 
+			function saveQTY(){
+				var indexo = $('#row_qty').textbox('getValue') - 1;
+				var amt = parseFloat(
+							$('#qty_order').textbox('getValue') * parseFloat($('#price_qty').textbox('getValue')).toFixed(6)
+						).toFixed(2);
+				// console.log(parseFloat($('#price_qty').textbox('getValue')).toFixed(6));
+				// console.log(amt);
+				$('#dg_add').datagrid('updateRow',{
+					index:  indexo,
+					row: {
+						ACT_QTY_RESULT : $('#qty_order').textbox('getValue'),
+						AMOUNT_RESULT : amt
+					}
+				});
+				$('#dlg_input_qty').dialog('close');
+			}
+
+			function saveMark(){
+				$('#dg_mark').datagrid('beginEdit');
+				var ids = [];
+				var arr1 = [];
+				var h;
+				var t = $('#dg_mark').datagrid('getRows');
+				var total = t.length;
+				var jmrow=0;
+
+				for(i=0;i<total;i++){
+					jmrow = i+1;
+					$('#dg_mark').datagrid('endEdit',i);
+					if ($('#dg_mark').datagrid('getData').rows[i].vmark != ''){
+						ids.push(
+							$('#dg_mark').datagrid('getData').rows[i].vmark
+						);
+					}
+				}
+
+				$('#result_mark').textbox('setValue',ids.join("\n"));
+				// console.log(ids.join("\n"));
+				// console.log($('#row_mark').textbox('getValue'));
+				// console.log($('#jns_mark').textbox('getValue'));
+				var indexo = $('#row_mark').textbox('getValue') - 1;
+				var nameField = $('#jns_mark').textbox('getValue');
+
+				if (nameField == 'P_MARK_RESULT'){
+					$('#dg_add').datagrid('updateRow',{
+						index:  indexo,
+						row: {
+							P_MARK_RESULT : ids.join("<br/>")
+						}
+					});
+				}else{
+					$('#dg_add').datagrid('updateRow',{
+						index:  indexo,
+						row: {
+							C_MARK_RESULT : ids.join("<br/>")
+						}
+					});
+				}
+				
+				
+
+				$('#dg_add').datagrid({
+					// onClickRow:function(rowIndex){
+					// 	$(this).datagrid('beginEdit', rowIndex);
+					// }
+					onAfterEdit:function(index,row){
+						$(this).datagrid('beginEdit', index);
+					}
+				});
+
+				$('#dg_add').datagrid('reload');
+				// $('#dg_add').datagrid('beginEdit');
+				$('#dlg_mark').dialog('close');
+			}
+
+			function saveAdd(value){
+				if(value == 'add'){
+					$.ajax({
+						type: 'GET',
+						url: '../json/json_kode_so.php',
+						data: { kode:'kode' },
+						success: function(data){
+							if(data[0].kode == 'UNDEFINIED'){
+								$.messager.alert('INFORMATION','SO NO. Error..!!','info');
+								$.messager.progress('close');
+							}else{
+								$('#so_no_add').textbox('setValue', data[0].kode);
+								if (validate('add') != 1){
+									simpan();
+								}
+							}
+						}
+					});
+				}
+			}
+
+			function simpan(){
+				var rows = [];
+				var tot_amt = 0;
+				var t = $('#dg_add').datagrid('getRows');
+				var total = t.length;
+
+				for(i=0;i<total;i++){
+					jmrow = i+1;
+					$('#dg_add').datagrid('endEdit',i);
+					rows.push({
+						so_sts : 'DETAILS',
+						so_cust: $('#cust_no_add').textbox('getValue'),
+						so_date: $('#so_date_add').datebox('getValue'),
+						so_so_no: $('#so_no_add').textbox('getValue'),
+						so_cust_po_no: $('#so_cust_po_no_add').textbox('getValue'),
+						so_consignee_code: $('#consignee_code_add').textbox('getValue'),
+						so_consignee_name: $('#consignee_name_add').textbox('getValue'),
+						so_curr: $('#curr_add').combobox('getValue'),
+						so_rate: $('#rate_add').textbox('getValue'),
+						so_country: $('#country_add').textbox('getValue'),
+						so_item: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,
+						so_price: $('#dg_add').datagrid('getData').rows[i].U_PRICE,
+						so_uom: $('#dg_add').datagrid('getData').rows[i].UOM_Q,
+						so_p_mark: $('#dg_add').datagrid('getData').rows[i].P_MARK_RESULT,
+						so_c_mark: $('#dg_add').datagrid('getData').rows[i].C_MARK_RESULT,
+						so_amount: $('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT.replace(/,/g,'')
+					});
+
+					tot_amt += parseFloat($('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT.replace(/,/g,'')).toFixed(2);
+
+					if(i==total-1){
+						rows.push({
+						so_sts : 'HEADER',
+						so_cust: $('#cust_no_add').textbox('getValue'),
+						so_date: $('#so_date_add').datebox('getValue'),
+						so_so_no: $('#so_no_add').textbox('getValue'),
+						so_cust_po_no: $('#so_cust_po_no_add').textbox('getValue'),
+						so_consignee_code: $('#consignee_code_add').textbox('getValue'),
+						so_consignee_name: $('#consignee_name_add').textbox('getValue'),
+						so_curr: $('#curr_add').combobox('getValue'),
+						so_rate: $('#rate_add').textbox('getValue'),
+						so_country: $('#country_add').textbox('getValue'),
+						so_item: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,
+						so_price: $('#dg_add').datagrid('getData').rows[i].U_PRICE,
+						so_uom: $('#dg_add').datagrid('getData').rows[i].UOM_Q,
+						so_p_mark: $('#so_remark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].P_MARK_RESULT,
+						so_c_mark: $('#so_casemark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].C_MARK_RESULT,
+						so_amount: tot_amt
+					});
+					}
+				}
+
+				var myJSON = JSON.stringify(rows);
+				var str_unescape = unescape(myJSON);
+
+				console.log('so_save.php?data='+str_unescape);
+
+				// $.post('so_save.php',{
+				// 	data: unescape(str_unescape)
+				// }).done(function(res){
+				// 	if(res == '"success"'){
+				// 		$('#dlg_add').dialog('close');
+				// 		$('#dg').datagrid('reload');
+				// 		$.messager.alert('INFORMATION','Insert Data Success..!!<br/>SO No. : '+$('#so_no_add').textbox('getValue'),'info');
+				// 		$.messager.progress('close');
+				// 	}else{
+				// 		$.post('so_destroy.php',{prf_no: $('#so_no_add').textbox('getValue')},'json');
+				// 		$.messager.alert('ERROR',res,'warning');
+				// 		$.messager.progress('close');
+				// 	}
+				// });
+			}
 			
-
-
-
-
-
 			// --------------------------------------------------- EDIT SO ---------------------------------------------------//
 			function edit_so(){
 				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT SALES ORDER');
