@@ -1006,8 +1006,8 @@ $user_name = $_SESSION['id_wms'];
 						$('#sscc_item_no').textbox('setValue',data[0].ITEM);
 						
 						sscc_item = data[0].ITEM;
-						sscc_qtyTotal = data[0].QUANTITY.replace(/,/g,'');
-						sscc_start_carton = data[0].START_CARTON.replace(/,/g,'');
+						sscc_qtyTotal = data[0].QUANTITY;
+						sscc_start_carton = data[0].START_CARTON;
 						$('#dg_sscc').datagrid({
 							url: 'kanban_print_sscc_info.php?wo_no='+row.WORK_ORDER+'&jumPlt='+row.TOTALPALLET,
 							rownumbers: true,

@@ -49,19 +49,26 @@ if (isset($_SESSION['id_wms'])){
 			$sscc_pcs_percarton = $query->sscc_pcs_percarton;
 			$sscc_qty_carton = $query->sscc_qty_carton;
 			$sscc_country_code = $query->sscc_country_code;
-			$sscc_start_carton = $query->sscc_start_carton;
+			$sscc_start_carton = intval($query->sscc_start_carton);
+
+			$sscc_qtyTotal = str_replace(',', '', $sscc_qtyTotal);
 
 			$START = intval($sscc_start_carton);
 			$tot_carton = intval($sscc_qtyTotal/$sscc_pcs_percarton);
-			$finish = ($START+1)+$tot_carton;
+			$finish = intval(($START+1)+$tot_carton);
 			$start_per_carton = $sscc_start_carton+(($sscc_plt-1)*$sscc_qty_carton)+1;
 			$no_carton_to = $sscc_qty_carton+(($sscc_plt-1)*$sscc_qty_carton);
 			$no_carton_from = ($no_carton_to-$sscc_qty_carton)+1;
 			$FromCarton = intval($start_per_carton);
 			$toCarton = $FromCarton	+ intval($sscc_qty_carton);
 
+			
+			
+
+			
+
 			// echo $sscc_wo.' - '.$sscc_plt.' - '.substr($sscc_item,-3,3).' - '.$sscc_qtyTotal.' - '.$sscc_pcs_percarton.' - '.$sscc_qty_carton.' - '.$sscc_country_code.' - '.$sscc_start_carton.'<br>';
-			// echo 'START:'.$START.'<br/>TOTAL CARTON:'.$tot_carton.'<br/>FINISH:'.$finish.'<br/>START PER PALLET :'.$start_per_carton.'<br/>';
+			//echo 'START:'.$START.'<br/>TOTAL CARTON:'.$tot_carton.'<br/>FINISH:'.$finish.'<br/>START PER PALLET :'.$start_per_carton.'<br/>';
 			// echo 'NO SSCC: FROM '.$FromCarton.' TO '.$toCarton.'<br/>';
 			// echo 'NO CARTON: FROM '.$no_carton_from.' TO '.$no_carton_to.'<br/>';
 			// echo '<hr>';
@@ -79,7 +86,7 @@ if (isset($_SESSION['id_wms'])){
 					}
 				}
 			}
-
+			
 			for ($i=$FromCarton; $i<$toCarton ; $i++) {
 				if($i<10){
 					$n_urut = "00000".$i;
@@ -97,7 +104,7 @@ if (isset($_SESSION['id_wms'])){
 
 				$n = '04976680'.substr($sscc_item,-3,3).$n_urut;
 				$sscc = sscc_kode_print($n);
-
+				
 				if($i<$finish){
 					if ($sscc_country_code == '304' OR $sscc_country_code == '205' OR $sscc_country_code == '208' OR $sscc_country_code == '237' OR $sscc_country_code == '215' OR $sscc_country_code == '218' OR $sscc_country_code == '223' OR $sscc_country_code == '207' OR $sscc_country_code == '210' OR $sscc_country_code == '213' OR $sscc_country_code == '217'){
 						$n = '04976680'.substr($sscc_item,-3,3).$n_urut;
@@ -106,7 +113,7 @@ if (isset($_SESSION['id_wms'])){
 						$n = '04976680'.substr($sscc_item,-3,3).$n_urut;
 						$sscc = sscc_kode_print($n);
 					}
-
+					
 					$response[] = array('PO' => trim($row->AMAZON_PO_NO),
 										'ASIN' => trim($row->ASIN),
 										'TOTAL_CARTON' => $tot_carton,
@@ -134,7 +141,7 @@ if (isset($_SESSION['id_wms'])){
 							'".str_replace("'", "''", $row->ADDRESS4)."', 
 							getdate(), '$user', $sscc_plt ";
 					//echo $n;
-					// echo $INS2;
+					//echo $INS2;
 					$data_INS2 = sqlsrv_query($connect, $INS2);
 					if( $data_INS2 === false ) {
 						if( ($errors = sqlsrv_errors() ) != null) {
@@ -153,7 +160,6 @@ if (isset($_SESSION['id_wms'])){
 			}
 	 	}
 	}
-	// echo json_encode($response);
 }else{
 	$msg .= 'Session Expired';
 }
