@@ -283,11 +283,42 @@ $menu_id = $_GET['id'];
 		<!-- ADD PALLET & CASE END -->
 
 		<!-- ADD QTY -->
-		<div id="dlg_input_qty" class="easyui-dialog" style="width: 350px;height: 105px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true">
-			<div class="fitem" align="center">
-				<input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/>
+		<div id="dlg_input_qty" class="easyui-dialog" style="width: 250px;height: 30`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+			<div class="fitem">
+				<span style="width:100px;display:inline-block;">QTY ORDER</span>
+				<input style="width: 100px;" name="qty_order" id="qty_order" class="easyui-numberbox"/>
 			</div>
-			<div class="fitem" align="center" hidden="true">
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">REQUEST DATE</span>
+				<input style="width:100px;" name="req_date_add" id="req_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">EX FACT DATE</span>
+				<input style="width:100px;" name="exfact_date_add" id="exfact_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">AGING DAY</span>
+				<input style="width:100px;" name="aging_day_add" id="aging_day_add" class="easyui-numberbox"/>
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">DATE-CODE</span>
+				<input style="width:100px;" name="date_code_add" id="date_code_add" class="easyui-textbox"/>
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">ASIN</span>
+				<input style="width:100px;" name="asin_add" id="asin_add" class="easyui-textbox" />
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">AMZ PO NO.</span>
+				<input style="width:100px;" name="amz_po_no_add" id="amz_po_no_add" class="easyui-textbox"/>
+				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
+			</div>
+			<div class="fitem" hidden="true">
 				<input type="hidden" style="width: 200px;" name="row_qty" id="row_qty" class="easyui-textbox"/>
 				<input type="hidden" style="width: 200px;" name="price_qty" id="price_qty" class="easyui-textbox"/>
 			</div>
@@ -581,19 +612,25 @@ $menu_id = $_GET['id'];
 					rownumbers: true,
 				    columns:[[
 					    {field:'ITEM_NO', title:'ITEM NO.', width:50, halign: 'center'},
-					    {field:'ITEM', title:'ITEM NAME', width:80, halign: 'center'},
+					    {field:'ITEM', title:'ITEM NAME', width:80, halign: 'center', hidden: true},
 					    {field:'DESCRIPTION', title:'DESCRIPTION', halign: 'center', width:250},
 					    {field:'U_PRICE', title:'PRICE', width:80, halign: 'center'},
 					    {field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
 					    {field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
 						{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
-						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
-						{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:50, align:'center'},
-					    {field:'ACT_QTY', title:'ORDER<br>QTY', halign: 'center', width:50, align:'center'},
-						{field: 'P_MARK_RESULT', title:'PALLET MARK<br/>RESULT', halign: 'center', width:150},
-						{field: 'C_MARK_RESULT', title:'CASE MARK<br/>RESULT', halign: 'center', width:150},//, hidden: true}
+					    {field:'ACT_QTY', title:'ORDER<br>SET', halign: 'center', width:50, align:'center'},
 						{field:'ACT_QTY_RESULT', title:'ACT QTY<br/>RESULT', halign: 'center', width:100, align:'right'},
-						{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right'}
+						{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right', hidden: true},
+						{field:'REQ_DATE', title:'REQUEST<br/>DATE', halign: 'center', width:100, align:'center'},
+						{field:'EXFACT_DATE', title:'EX FACT<br/>DATE', halign: 'center', width:100, align:'center'},
+						{field:'AGING_DAY', title:'AGING<br/>DAY', halign: 'center', width:100, align:'center'},
+						{field:'DATE_CODE', title:'DATE<br/>CODE', halign: 'center', width:100, align:'center'},
+						{field:'ASIN', title:'ASIN', halign: 'center', width:100, align:'center'},
+						{field:'AMZ_PO', title:'AMZ PO', halign: 'center', width:100, align:'center'},
+						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
+						{field: 'P_MARK_RESULT', title:'PALLET MARK<br/>RESULT', halign: 'center', width:150},
+						{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:50, align:'center'},
+						{field: 'C_MARK_RESULT', title:'CASE MARK<br/>RESULT', halign: 'center', width:150} //, hidden: true}
 				    ]],
 				    onClickRow:function(rowIndex){
 				    	$(this).datagrid('beginEdit', rowIndex);
@@ -773,7 +810,14 @@ $menu_id = $_GET['id'];
 					index:  indexo,
 					row: {
 						ACT_QTY_RESULT : $('#qty_order').textbox('getValue'),
-						AMOUNT_RESULT : amt
+						AMOUNT_RESULT : amt,
+						REQ_DATE : $('#req_date_add').datebox('getValue'),
+						EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
+						AGING_DAY: $('#aging_day_add').numberbox('getValue'),
+						DATE_CODE: $('#date_code_add').textbox('getValue'),
+						ASIN: $('#asin_add').textbox('getValue'),
+						AMZ_PO: $('#amz_po_no_add').textbox('getValue')
+
 					}
 				});
 				$('#dlg_input_qty').dialog('close');
@@ -838,6 +882,11 @@ $menu_id = $_GET['id'];
 			}
 
 			function saveAdd(value){
+				$.messager.progress({
+					title:'Please waiting',
+					msg:'Saving data...'
+				});
+
 				if(value == 'add'){
 					$.ajax({
 						type: 'GET',
@@ -860,6 +909,7 @@ $menu_id = $_GET['id'];
 
 			function simpan(){
 				var rows = [];
+				var amt = 0;
 				var tot_amt = 0;
 				var t = $('#dg_add').datagrid('getRows');
 				var total = t.length;
@@ -872,6 +922,7 @@ $menu_id = $_GET['id'];
 						so_cust: $('#cust_no_add').textbox('getValue'),
 						so_date: $('#so_date_add').datebox('getValue'),
 						so_so_no: $('#so_no_add').textbox('getValue'),
+						so_line_no: jmrow,
 						so_cust_po_no: $('#so_cust_po_no_add').textbox('getValue'),
 						so_consignee_code: $('#consignee_code_add').textbox('getValue'),
 						so_consignee_name: $('#consignee_name_add').textbox('getValue'),
@@ -881,12 +932,20 @@ $menu_id = $_GET['id'];
 						so_item: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,
 						so_price: $('#dg_add').datagrid('getData').rows[i].U_PRICE,
 						so_uom: $('#dg_add').datagrid('getData').rows[i].UOM_Q,
+						so_qty: $('#dg_add').datagrid('getData').rows[i].ACT_QTY_RESULT,
 						so_p_mark: $('#dg_add').datagrid('getData').rows[i].P_MARK_RESULT,
 						so_c_mark: $('#dg_add').datagrid('getData').rows[i].C_MARK_RESULT,
-						so_amount: $('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT.replace(/,/g,'')
+						so_amount: $('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT,
+						so_req_date: $('#dg_add').datagrid('getData').rows[i].REQ_DATE,
+						so_ex_fact_date: $('#dg_add').datagrid('getData').rows[i].EXFACT_DATE,
+						so_aging_day: $('#dg_add').datagrid('getData').rows[i].AGING_DAY,
+						so_date_code: $('#dg_add').datagrid('getData').rows[i].DATE_CODE,
+						so_asin: $('#dg_add').datagrid('getData').rows[i].ASIN,
+						so_amz_po_no: $('#dg_add').datagrid('getData').rows[i].AMZ_PO,
 					});
 
-					tot_amt += parseFloat($('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT.replace(/,/g,'')).toFixed(2);
+					amt = parseFloat($('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT).toFixed(2);
+					tot_amt += parseFloat(amt);
 
 					if(i==total-1){
 						rows.push({
@@ -915,25 +974,53 @@ $menu_id = $_GET['id'];
 
 				console.log('so_save.php?data='+str_unescape);
 
-				// $.post('so_save.php',{
-				// 	data: unescape(str_unescape)
-				// }).done(function(res){
-				// 	if(res == '"success"'){
-				// 		$('#dlg_add').dialog('close');
-				// 		$('#dg').datagrid('reload');
-				// 		$.messager.alert('INFORMATION','Insert Data Success..!!<br/>SO No. : '+$('#so_no_add').textbox('getValue'),'info');
-				// 		$.messager.progress('close');
-				// 	}else{
-				// 		$.post('so_destroy.php',{prf_no: $('#so_no_add').textbox('getValue')},'json');
-				// 		$.messager.alert('ERROR',res,'warning');
-				// 		$.messager.progress('close');
-				// 	}
-				// });
+				$.post('so_save.php',{
+					data: unescape(str_unescape)
+				}).done(function(res){
+					if(res == '"success"'){
+						// $('#dlg_add').dialog('close');
+						$('#win_add').window('close');
+						$('#dg').datagrid('reload');
+						$.messager.alert('INFORMATION','Insert Data Success..!!<br/>SO No. : '+$('#so_no_add').textbox('getValue'),'info');
+						$.messager.progress('close');
+					}else{
+						$.post('so_destroy.php',{prf_no: $('#so_no_add').textbox('getValue')},'json');
+						$.messager.alert('ERROR',res,'warning');
+						$.messager.progress('close');
+					}
+				});
 			}
 			
 			// --------------------------------------------------- EDIT SO ---------------------------------------------------//
 			function edit_so(){
 				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT SALES ORDER');
+			}
+
+			function delete_so(){
+				var row = $('#dg').datagrid('getSelected');	
+				if (row){
+					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+						if(r){
+							$.messager.progress({
+								title:'Please waiting',
+								msg:'removing data...'
+							});
+							// console.log('so_destroy.php?so_no='+row.SO_NO);
+							$.post('so_destroy.php',{so_no: row.SO_NO},function(result){
+								if (result.success){
+									$('#dg').datagrid('reload');
+									$.messager.progress('close');
+								}else{
+									$.messager.show({
+										title: 'Error',
+										msg: result.errorMsg
+									});
+									$.messager.progress('close');
+								}
+							},'json');
+						}
+					});
+				}
 			}
 		</script>
 	</body>
