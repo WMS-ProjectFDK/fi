@@ -171,7 +171,7 @@ $user_name = $_SESSION['id_wms'];
 					sync_id: $('#dg').datagrid('getData').rows[i].ID,
 					sync_type: $('#dg').datagrid('getData').rows[i].NAME_TYPE,
 					sync_rack: $('#dg').datagrid('getData').rows[i].RACK,
-					sync_qty: $('#dg').datagrid('getData').rows[i].QTY.replace(/,/g,''),
+					sync_qty: $('#dg').datagrid('getData').rows[i].QTY,
 					sync_doc: $('#dg').datagrid('getData').rows[i].DOC,
 					sync_item: $('#dg').datagrid('getData').rows[i].ITEM,
 					sync_line: $('#dg').datagrid('getData').rows[i].LINE,

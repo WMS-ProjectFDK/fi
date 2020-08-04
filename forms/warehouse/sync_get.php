@@ -6,7 +6,7 @@
 	$items = array();
 	$rowno=0;
 
-	$rs = "select aa.id_no,aa.tanggal,aa.type,aa.name_type,aa.id,aa.flag,aa.rack,aa.doc,aa.line,aa.item,aa.pallet,aa.qty, it.description from (
+	$rs = "select aa.id_no,cast(aa.tanggal as varchar,aa.type,aa.name_type,aa.id,aa.flag,aa.rack,aa.doc,aa.line,aa.item,aa.pallet,aa.qty, it.description from (
 		select a.id_no,a.tanggal, a.type,
 		case when a.type = '1' then 'INCOMING' when a.type = '2' THEN 'OUTGOING' else 'CHANGE RACK' end as name_type,
 		a.id, a.flag, a.rack,

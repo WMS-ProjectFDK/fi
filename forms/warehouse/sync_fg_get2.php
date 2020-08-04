@@ -4,7 +4,7 @@ date_default_timezone_set("Asia/Bangkok");
 session_start();
 $user = $_SESSION['id_wms'];
 
-include("../connect/conn.php");
+include("../../connect/conn.php");
 
 $device = isset($_REQUEST['device']) ? strval($_REQUEST['device']) : '';
 
@@ -47,16 +47,16 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	for($i=1;$i<=$arrayCount;$i++){
 		$id = trim($allDataInSheet[$i]["A"]);
 		
-		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) select $id,to_date('$hr','yyyy-mm-dd'),0 from dual
+		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) select $id,'$hr',0 from dual
 			where not exists (select * from ztb_wh_kanban_trans_fg where slip_no = '$id')";
-		$sqlNya = oci_parse($connect, $sql);
-		oci_execute($sqlNya);
+		$sqlNya = sqlsrv_query($connect, $sql);
+		
 	}
 
 	/*INSERT LOG*/
-	$qry = "insert into ztb_wh_sync_log VALUES ('KANBAN-FG',TO_DATE('".date('Y-m-d H:i:s')."','yyyy/mm/dd hh24:mi:ss'),'syncronize barcode ip: ".$device."')";
-	$sql_ins = oci_parse($connect, $qry);
-	oci_execute($sql_ins);
+	$qry = "insert into ztb_wh_sync_log VALUES ('KANBAN-FG','".date('Y-m-d H:i:s')."','syncronize barcode ip: ".$device."')";
+	$sql_ins = sqlsrv_query($connect, $qry);
+
 	
 	if(file_exists($inputFileName)) {
 		$file_baru = '../../../../Users/Public/Documents/kanban_wh_fg'.date("YmdHis").'.csv';
