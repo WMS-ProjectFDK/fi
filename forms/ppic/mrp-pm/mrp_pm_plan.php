@@ -374,8 +374,10 @@ if ($sts == 'lower'){
 								$('#dg_add').datagrid('loadData',[]);
 								//$('#prf_date_add').datebox('setValue',date_plan);
 								
+								// console.log('mrp-rm/mrp_rm_plan_getItem.php?item_no='+i+'&date='+date_plan+'&no=4&sts=ztb_mrp_data_pck');
+
 								$('#dg_add').datagrid({
-									url: 'mrp_rm_plan_getItem.php?item_no='+i+'&date='+date_plan+'&no=4',
+									url: '../mrp-rm/mrp_rm_plan_getItem.php?item_no='+i+'&date='+date_plan+'&no=4',
 								    singleSelect: true,
 								    fitColumns: true,
 									rownumbers: true,
@@ -473,7 +475,7 @@ if ($sts == 'lower'){
 			var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
 			
-			$.post('purchase_req_save.php',{
+			$.post('../../prf/purchase_req_save.php',{
 				data: unescape(str_unescape)
 			}).done(function(res){
 				if(res == '"success"'){
@@ -483,7 +485,7 @@ if ($sts == 'lower'){
 					$.messager.progress('close');
 					$.messager.confirm('Confirm','Are you sure you want to print PRF?',function(r){
 					if(r){
-						window.open('purchase_req_print.php?prf='+$('#prf_no_add').textbox('getValue'));
+						window.open('../../prf/purchase_req_print.php?prf='+$('#prf_no_add').textbox('getValue'));
 					}
 				});
 				}else{
@@ -516,9 +518,9 @@ if ($sts == 'lower'){
 	function infoPRF(a,b){
 		var tgl_plan = AddDate(a);
 		$('#dlg_viewPRF').dialog('open').dialog('setTitle','VIEW INFO PURCHASE REQUESTION ('+AddDateII(a)+')');
-		//alert('mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan);
+		console.log('mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan);
 		$('#dg_viewPRF').datagrid({
-			url: 'mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan,
+			url: '../mrp-rm/mrp_rm_plan_info_PRF.php?item_no='+b+'&tgl_plan='+tgl_plan,
 			singleSelect: true,
 			rownumbers: true,
 			fitColumns: true,
@@ -1299,11 +1301,9 @@ if ($sts == 'lower'){
 			    columns:[[
 				    {field:'BRAND', title:'BRAND', width: 280, halign: 'center'},
 				    {field:'WORK_ORDER', title:'WORK ORDER', width: 150, halign: 'center'},
-
 				    {field:'CR_DATE', title:'CR DATE', width: 80, halign: 'center'},
-				    {field:'STATUS', title:'STATUS', width: 60, halign: 'center', align: 'center'},
-				    {field:'DATE_CODE', title:'DATE CODE', width: 60, halign: 'center', align: 'center'},
-
+				    // {field:'STATUS', title:'STATUS', width: 60, halign: 'center', align: 'center'},
+				    // {field:'DATE_CODE', title:'DATE CODE', width: 60, halign: 'center', align: 'center'},
 				    {field:'QTY', title:'QTY ORDER', width: 80, halign: 'center', align: 'right'},
 				    {field:'MPS_QTY', title:'QTY PROD', width: 80, halign: 'center', align: 'right'},
 				    {field:'LOWER_ITEM_NO', title:'ITEM NO.', width: 80, halign: 'center', align: 'center'},
@@ -1315,15 +1315,33 @@ if ($sts == 'lower'){
 	}
 
 	function run_mrp_item(a){
-		/*if (confirm("This process will takes time around 3-5 minutes, also MRP data now will be erased. if you agree please confirm ?")) {
-			alert("Please do not close browser while MRP Item running.");*/
-		    window.open('http://172.23.225.85/wms/schedule/execute_sp_item.php?item='+a);
-		/*} else {
-		    alert("Process cancelled");
-		}*/
+		if (confirm("This process will takes time around 3-5 minutes, also MRP data now will be erased. if you agree please confirm ?")) {
+			alert("Please do not close browser while MRP Item running.");
+		    // window.open('http://172.23.225.85/wms/schedule/execute_sp_item.php?item='+a);
+			$.messager.progress({
+				title:'Please waiting',
+				msg:'Save data...'
+			});
+
+			$.post('mrp_pm_run_item.php?item=',{
+				item_no: a
+			}).done(function(res){
+				if(res == '"success"'){
+					// console.log('mrp_pm_run_item.php?item='+a);
+					// console.log(res);
+					$.messager.alert('INFORMATION','Running MRP Success..!!','info');
+					$('#dg').datagrid('reload');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+				}
+				$.messager.progress('close');
+			});
+		}else{
+			alert("Process cancelled");
+		}
 	}
 
-	console.log('mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>');
+	// console.log('mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>');
 	$('#dg_plan').datagrid({
 		url:'mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>',
 		singleSelect: true,

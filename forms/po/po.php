@@ -1224,7 +1224,7 @@ if ($varConn=='Y'){
 				tot_amt_l += parseFloat(amt_l);
 
 				if(i==total-1){
-					//$.post('po_save.php',{
+					//$.post('po_savepo_save.php',{
 					dataRows.push({
 						po_sts: 'HEADER',
 						po_supp: $('#supplier_add').combobox('getValue'),
@@ -1260,7 +1260,9 @@ if ($varConn=='Y'){
 
 			var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
-			//$.messager.alert('Info',str_unescape);
+			
+			console.log(unescape(str_unescape));
+
 			$.post('po_save.php',{
 				data: unescape(str_unescape)
 			}).done(function(res){

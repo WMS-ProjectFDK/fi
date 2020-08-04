@@ -1,4 +1,5 @@
 <?php
+	error_reporting(0);
 	session_start();
 	$result = array();
 	$id = isset($_REQUEST['id']) ? strval($_REQUEST['id']) : '';
@@ -31,7 +32,7 @@
 	$foot = array();
 	$tot_rec = 0;	$tot_o_rec = 0;	
 	$tot_iss = 0;	$tot_o_iss = 0;	
-	$tot_inv=0;
+	$tot_inv=0;		$total = 0;
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
 

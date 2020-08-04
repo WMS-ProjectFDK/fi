@@ -1,0 +1,12 @@
+[
+    {"cmark": "CASE_MARK_1", "pmark": "PALLET_MARK_1", "vmark": ""},
+    {"cmark": "CASE_MARK_2", "pmark": "PALLET_MARK_2", "vmark": ""},
+    {"cmark": "CASE_MARK_3", "pmark": "PALLET_MARK_3", "vmark": ""},
+    {"cmark": "CASE_MARK_4", "pmark": "PALLET_MARK_4", "vmark": ""},
+    {"cmark": "CASE_MARK_5", "pmark": "PALLET_MARK_5", "vmark": ""},
+    {"cmark": "CASE_MARK_6", "pmark": "PALLET_MARK_6", "vmark": ""},
+    {"cmark": "CASE_MARK_7", "pmark": "PALLET_MARK_7", "vmark": ""},
+    {"cmark": "CASE_MARK_8", "pmark": "PALLET_MARK_8", "vmark": ""},
+    {"cmark": "CASE_MARK_9", "pmark": "PALLET_MARK_9", "vmark": ""},
+    {"cmark": "CASE_MARK_10", "pmark": "PALLET_MARK_10", "vmark": ""}
+]

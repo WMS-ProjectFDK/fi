@@ -5,6 +5,7 @@
 	$s_item = isset($_REQUEST['item_no']) ? strval($_REQUEST['item_no']) : '';
 	$date = isset($_REQUEST['date']) ? strval($_REQUEST['date']) : '';
 	$n = isset($_REQUEST['no']) ? strval($_REQUEST['no']) : '';
+	$sts = isset($_REQUEST['sts']) ? strval($_REQUEST['sts']) : '';
 
 	$nilai = 'N_'.$n;
 
@@ -32,7 +33,7 @@
 		)
 		group by item_no
 		)bb on aa.item_no=bb.item_no";
-	//echo $rs;
+	// echo $rs;
 	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_array($data)) {
