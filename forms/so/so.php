@@ -125,7 +125,7 @@ $menu_id = $_GET['id'];
 				<input style="width:150px; height: 18px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src"type="text" placeholder="Sales Order No."/>
 	    		<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2"  onclick="filterData();"><i class="fa fa-filter" aria-hidden="true"></i> FILTER DATA</a>
 				<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
-				<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO FROM FDK</a>
+				<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2" onclick="add_group_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO FROM FDK</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="edit" class="easyui-linkbutton c2" onclick="edit_so()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SO</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="delete" class="easyui-linkbutton c2" onclick="delete_so()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE SO</a>
 	    	</div></div>
@@ -210,7 +210,7 @@ $menu_id = $_GET['id'];
 			<div style="clear:both;margin-bottom:10px;"></div>
 			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_add" style="padding: 5px 5px;">
-				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item_add()">ADD ITEM</a>
+				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item(add)">ADD ITEM</a>
 	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_add()">REMOVE ITEM</a>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
@@ -222,40 +222,90 @@ $menu_id = $_GET['id'];
 		<!-- ADD END -->
 
 		<!-- EDIT START -->
-		<div id="dlg_edit" class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true, position: 'center'">
+		<div id='win_edit' class="easyui-window" style="width:auto;height:565px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+		  <form id="f_edit" method="post" novalidate>
 			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CUSTOMER</span>
 					<input required="true" style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" disabled="disabled" data-options="" />
 					<select style="width:300px;" name="cmb_cust_edit" id="cmb_cust_edit" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
 					onSelect:function(rec){
-						$('#cust_no_edit').textbox('setValue', rec.company_code);	
+						$('#cust_no_edit').textbox('setValue', rec.company_code);
+						$.ajax({
+		        			type: 'GET',
+							url: '../json/json_info_cust.php?id='+rec.company_code,
+							data: { kode:'kode' },
+							success: function(data){
+								$('#country_edit').textbox('setValue',data[0].COUNTRY_CODE+'-'+data[0].COUNTRY);
+								$('#curr_edit').combobox('setValue',data[0].CURR_CODE);
+								$('#rate_edit').textbox('setValue',1);
+							}
+		        		});
 					}
-					" required="" disabled="">
+					" required="">
 					</select>
 				</div>
 				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SALES DATE</span>
-					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
-					<span style="width:80px;display:inline-block;">RECEIVE NO.</span>
-					<input required="true" style="width:215px;" name="so_no_edit" id="so_no_edit" class="easyui-textbox" disabled=""/>
+					<span style="width:80px;display:inline-block;">SO DATE</span>
+					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO NO.</span>
+					<input required="true" style="width:100px;" name="so_no_edit" id="so_no_edit" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">CUST P/O</span>
+					<input required="true" style="width:211px;" name="so_cust_po_no_edit" id="so_cust_po_no_edit" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
+					<input style="width:100px;" name="consignee_code_edit" id="consignee_code_edit" class="easyui-textbox" disabled=true/>
+					<input style="width:275px;" name="consignee_name_edit" id="consignee_name_edit" class="easyui-textbox" disabled=true/>
+					<span><a href="javascript:void(0)" onclick="consignee_data('edit')">SET</a></span>
 				</div>
 			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:530px;margin-left: 510px;">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:750px;margin-left: 510px;">
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">CUST PO NO.</span>
-					<input style="width:250px;" name="so_cust_po_no_edit" id="so_cust_po_no_edit" class="easyui-textbox"/>
+					<span style="width:80px;display:inline-block;">CURR</span>
+					<!-- <input required="true" style="width:100px;" name="curr_edit" id="curr_edit" class="easyui-textbox" disabled=true/>	 -->
+					<input style="width:100px;" id="curr_edit" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
+		        	onSelect: function(rec){
+		        		$.ajax({
+		        			type: 'GET',
+							url: '../json/json_exrate.php?curr='+rec.idcrc,
+							data: { kode:'kode' },
+							success: function(data){
+								$('#rate_edit').textbox('setValue',data[0].RATE);	
+							}
+		        		});
+		        	}" required="" disabled="" />
+					<span style="display:inline-block;">EX RATE</span>
+					<input required="true" style="width:100px;" name="rate_edit" id="rate_edit" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">COUNTRY</span>
+					<input required="true" style="width:325px;" name="country_edit" id="country_edit" class="easyui-textbox" disabled=true/>
 				</div>
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">REMARKS</span>
-					<input style="width:400px;" name="so_remark_edit" id="so_remark_edit" class="easyui-textbox"/>
+					<span style="width:80px;display:inline-block;">REMARKS</span>
+					<input style="width:650px;" name="so_remark_edit" id="so_remark_edit" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CASE MARK</span>
+					<input style="width:650px;" name="so_casemark_edit" id="so_casemark_edit" class="easyui-textbox"/>
+				</div>
+				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CATEGORY</span>
+					<input style="width:650px;" name="so_category_edit" id="so_category_edit" class="easyui-textbox"/>
 				</div>
 			</fieldset>
 			<div style="clear:both;margin-bottom:10px;"></div>
-		</div>
-		<div id="dlg-buttons-edit">
-			<a href="javascript:void(0)" id="save_edit" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveEdit()" style="width:90px">Save</a>
-			<a href="javascript:void(0)" id="cancel_edit" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
+			<table id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
+			<div id="toolbar_edit" style="padding: 5px 5px;">
+				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item(edit)">ADD ITEM</a>
+	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_edit()">REMOVE ITEM</a>
+			</div>
+			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+				<a class="easyui-linkbutton c2" id="save_edit" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveedit('edit')" style="width:140px" disabled="true"> SAVE </a>
+				<a class="easyui-linkbutton c2" id="cancel_edit" href="javascript:void(0)" onclick="javascript:$('#win_edit').window('close')" style="width:140px"><i class="fa fa-ban" aria-hidden="true"></i> CANCEL </a>
+			</div>
+		  </form>
 		</div>
 		<!-- EDIT END -->
 
@@ -284,6 +334,9 @@ $menu_id = $_GET['id'];
 
 		<!-- ADD QTY -->
 		<div id="dlg_input_qty" class="easyui-dialog" style="width: 250px;height: 30`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+			<div class="fitem" hidden="true">
+				<input style="width: 100px;" name="sts_order" id="sts_order" class="easyui-textbox"/>
+			</div>
 			<div class="fitem">
 				<span style="width:100px;display:inline-block;">QTY ORDER</span>
 				<input style="width: 100px;" name="qty_order" id="qty_order" class="easyui-numberbox"/>
@@ -296,27 +349,22 @@ $menu_id = $_GET['id'];
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">EX FACT DATE</span>
 				<input style="width:100px;" name="exfact_date_add" id="exfact_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
 			</div>
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">AGING DAY</span>
 				<input style="width:100px;" name="aging_day_add" id="aging_day_add" class="easyui-numberbox"/>
-				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
 			</div>
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">DATE-CODE</span>
 				<input style="width:100px;" name="date_code_add" id="date_code_add" class="easyui-textbox"/>
-				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
 			</div>
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">ASIN</span>
 				<input style="width:100px;" name="asin_add" id="asin_add" class="easyui-textbox" />
-				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
 			</div>
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">AMZ PO NO.</span>
 				<input style="width:100px;" name="amz_po_no_add" id="amz_po_no_add" class="easyui-textbox"/>
-				<!-- <input style="width: 200px;" name="qty_order" id="qty_order" class="easyui-numberbox"/> -->
 			</div>
 			<div class="fitem" hidden="true">
 				<input type="hidden" style="width: 200px;" name="row_qty" id="row_qty" class="easyui-textbox"/>
@@ -333,6 +381,13 @@ $menu_id = $_GET['id'];
 			<table id="dg_Notify" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
 		</div>
 		<!-- END -->
+
+
+		<!-- ADD FDK GROUP ORDER -->
+		<div id="dlg_group" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addPO" data-options="modal:true">
+			<table id="dg_group" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		</div>
+		<!-- ADD FDK GROUP ORDER  -->
 
 		<script type="text/javascript">
 			function myformatter(date){
@@ -641,10 +696,34 @@ $menu_id = $_GET['id'];
 				});
 			}
 
-			function add_item_add(){
-				var cust_id = $('#cust_no_add').textbox('getValue');
-				var cust_name = $('#cmb_cust_add').textbox('getText');
-				var sts = "'ADD'";
+			function add_group_so(){
+				$('#dlg_group').dialog('open').dialog('setTitle','GROUP ORDER');
+				$('#dg_group').datagrid ({
+					url: 'so_getOrderGroup.php',
+					columns:[[
+						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br/>PO NO.',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PO_DATE',title:'CUSTOMER<br/>PO DATE',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PERSON',title:'PERSON',width:200,halign:'center'},
+						{field:'CUSTOMER_PERSON_CODE',title:'DESCRIPTION',width:80,halign:'center'}
+					]]
+				});
+				$('#dg_group').datagrid('enableFilter');
+			}
+
+			function add_item(val){
+				var cust_id = '';
+				var cust_name = '';
+				var sts = '';
+
+				if (val == 'add'){
+					cust_id = $('#cust_no_add').textbox('getValue');
+					cust_name = $('#cmb_cust_add').textbox('getText');
+					sts = "'ADD'";
+				}else{
+					cust_id = $('#cust_no_edit').textbox('getValue');
+					cust_name = $('#cmb_cust_edit').textbox('getText');
+					sts = "'EDIT'";
+				}
 
 				if (cust_name == ''){
 					$.messager.alert('Warning','Please select customer','warning');
@@ -667,17 +746,20 @@ $menu_id = $_GET['id'];
 							{field:'SUPPLIER_CODE',hidden: true}
 			            ]],
 			            onDblClickRow:function(id,row){
-							var t = $('#dg_add').datagrid('getRows');
+							var t = ''
+							val == 'add' ? t = $('#dg_add').datagrid('getRows') : t = $('#dg_edit').datagrid('getRows');
 							var total = t.length;
 						   	var idxfield=0;
 						   	var i = 0;
 						   	var count = 0;
+							
 							if (parseInt(total) == 0) {
 								idxfield=total;
 							}else{
 								idxfield=total+1;
 								for (i=0; i < total; i++) {
-									var item = $('#dg_add').datagrid('getData').rows[i].ITEM_NO;
+									var item = '';
+									val == 'add' ? item = $('#dg_add').datagrid('getData').rows[i].ITEM_NO : item = $('#dg_edit').datagrid('getData').rows[i].ITEM_NO;
 									if (item == row.ITEM_NO) {
 										count++;
 									};
@@ -687,30 +769,57 @@ $menu_id = $_GET['id'];
 							if (count > 0) {
 								$.messager.alert('Warning','Item present','warning');
 							}else{
-								$('#dg_add').datagrid('insertRow',{
-									index: idxfield,	// index start with 0
-									row: {
-										ITEM_NO: row.ITEM_NO,
-										ITEM: row.ITEM,
-										DESCRIPTION: row.DESCRIPTION,
-										U_PRICE: row.U_PRICE,
-										UNIT: row.UNIT,
-										CURR_MARK: row.CURR_MARK,
-										UOM_Q: row.UOM_Q,
-										STK_QTY: row.STK_QTY,
-										ORIGIN_CODE: row.ORIGIN_CODE,
-										CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
-										ORIGIN: row.ORIGIN,
-										CLASS_CODE: row.CLASS_CODE,
-										SUPPLIER_CODE: row.SUPPLIER_CODE,
-										TBL: row.TBL,
-										ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+')">SET</a>', 
-										P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-										C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-										P_MARK_RESULT: row.P_MARK_RESULT,
-										C_MARK_RESULT: row.C_MARK_RESULT
-									}
-								});
+								if (val == 'add'){
+									$('#dg_add').datagrid('insertRow',{
+										index: idxfield,	// index start with 0
+										row: {
+											ITEM_NO: row.ITEM_NO,
+											ITEM: row.ITEM,
+											DESCRIPTION: row.DESCRIPTION,
+											U_PRICE: row.U_PRICE,
+											UNIT: row.UNIT,
+											CURR_MARK: row.CURR_MARK,
+											UOM_Q: row.UOM_Q,
+											STK_QTY: row.STK_QTY,
+											ORIGIN_CODE: row.ORIGIN_CODE,
+											CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
+											ORIGIN: row.ORIGIN,
+											CLASS_CODE: row.CLASS_CODE,
+											SUPPLIER_CODE: row.SUPPLIER_CODE,
+											TBL: row.TBL,
+											ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
+											P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+											C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+											P_MARK_RESULT: row.P_MARK_RESULT,
+											C_MARK_RESULT: row.C_MARK_RESULT
+										}
+									});
+								}else{
+									$('#dg_edit').datagrid('insertRow',{
+										index: idxfield,	// index start with 0
+										row: {
+											ITEM_NO: row.ITEM_NO,
+											ITEM: row.ITEM,
+											DESCRIPTION: row.DESCRIPTION,
+											U_PRICE: row.U_PRICE,
+											UNIT: row.UNIT,
+											CURR_MARK: row.CURR_MARK,
+											UOM_Q: row.UOM_Q,
+											STK_QTY: row.STK_QTY,
+											ORIGIN_CODE: row.ORIGIN_CODE,
+											CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
+											ORIGIN: row.ORIGIN,
+											CLASS_CODE: row.CLASS_CODE,
+											SUPPLIER_CODE: row.SUPPLIER_CODE,
+											TBL: row.TBL,
+											ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
+											P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+											C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+											P_MARK_RESULT: row.P_MARK_RESULT,
+											C_MARK_RESULT: row.C_MARK_RESULT
+										}
+									});
+								}
 							}
 						}
 					});
@@ -727,11 +836,66 @@ $menu_id = $_GET['id'];
 				}
 			}
 
-			function input_qty(a,b,c){
-				$('#dlg_input_qty').dialog('open').dialog('setTitle','ADD QTY ORDER');
-				$('#qty_order').textbox('setValue','');
-				b == '' ?  $('#row_qty').textbox('setValue', 1) : $	('#row_qty').textbox('setValue', b);
-				$('#price_qty').textbox('setValue', c);
+			function input_qty(a,b,c,d){
+				// if (d == 'ADD') {
+					$('#dlg_input_qty').dialog('open').dialog('setTitle', d+' QTY ORDER');
+					$('#sts_order').textbox('setValue', d);
+					$('#qty_order').textbox('setValue','');
+					$('#aging_day_add').numberbox('setValue', '');
+					$('#date_code_add').textbox('setValue', '');
+					$('#asin_add').textbox('setValue', '');
+					$('#amz_po_no_add').textbox('setValue', '');
+					b == '' ?  $('#row_qty').textbox('setValue', 1) : $	('#row_qty').textbox('setValue', b);
+					$('#price_qty').textbox('setValue', c);
+				// }
+				//else if(d == 'EDIT'){
+				// 	$('#dlg_input_qty').dialog('open').dialog('setTitle','EDIT QTY ORDER');
+				// 	$('#qty_order').textbox('setValue','');
+				// 	b == '' ?  $('#row_qty').textbox('setValue', 1) : $	('#row_qty').textbox('setValue', b);
+				// 	$('#price_qty').textbox('setValue', c);
+				// }
+			}
+
+			function saveQTY(){
+				var indexo = $('#row_qty').textbox('getValue') - 1;
+				var amt = parseFloat(
+							$('#qty_order').textbox('getValue') * parseFloat($('#price_qty').textbox('getValue')).toFixed(6)
+						).toFixed(2);
+				// console.log(parseFloat($('#price_qty').textbox('getValue')).toFixed(6));
+				// console.log(amt);
+				var s_order = $('#sts_order').textbox('getValue'); 
+				if (s_order == 'ADD'){
+					$('#dg_add').datagrid('updateRow',{
+						index:  indexo,
+						row: {
+							ACT_QTY_RESULT : $('#qty_order').textbox('getValue'),
+							AMOUNT_RESULT : amt,
+							REQ_DATE : $('#req_date_add').datebox('getValue'),
+							EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
+							AGING_DAY: $('#aging_day_add').numberbox('getValue'),
+							DATE_CODE: $('#date_code_add').textbox('getValue'),
+							ASIN: $('#asin_add').textbox('getValue'),
+							AMZ_PO: $('#amz_po_no_add').textbox('getValue')
+
+						}
+					});
+				}else{
+					$('#dg_edit').datagrid('updateRow',{
+						index: indexo,
+						row: {
+							ACT_QTY_RESULT : $('#qty_order').textbox('getValue'),
+							AMOUNT_RESULT : amt,
+							REQ_DATE : $('#req_date_add').datebox('getValue'),
+							EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
+							AGING_DAY: $('#aging_day_add').numberbox('getValue'),
+							DATE_CODE: $('#date_code_add').textbox('getValue'),
+							ASIN: $('#asin_add').textbox('getValue'),
+							AMZ_PO: $('#amz_po_no_add').textbox('getValue')
+
+						}
+					});
+				}
+				$('#dlg_input_qty').dialog('close');
 			}
 			
 			function input_pallet(a,b,c){
@@ -774,55 +938,6 @@ $menu_id = $_GET['id'];
 				});
 			}
 
-			function consignee_data(value){
-				$('#dlg_Notify').dialog('open').dialog('setTitle','SEARCH CONSIGNEE');
-				$('#dg_Notify').datagrid('load',{sch: ''});
-				$('#dg_Notify').datagrid({
-					url: '../json/json_consignee.php',
-					fitColumns: true,
-					columns:[[
-						{field:'CONSIGNEE_CODE',title:'CODE',width:65,halign:'center', align:'center'},
-						{field:'CONSIGNEE_NAME',title:'NAME',width:150,halign:'center'}
-					]],
-					onClickRow:function(id,row){
-						var rows = $('#dg_Notify').datagrid('getSelected');
-						if(value=='add'){
-							$('#consignee_code_add').textbox('setValue', rows.CONSIGNEE_CODE);
-							$('#consignee_name_add').textbox('setValue', rows.CONSIGNEE_NAME);
-						}//else if(value == 'edit'){
-						// 	$('#notify_edit').textbox('setValue', rows.NOTIFY);
-						// }
-						$('#dlg_Notify').dialog('close');
-					}
-				});
-
-				$('#dg_Notify').datagrid('enableFilter');
-			}
-
-			function saveQTY(){
-				var indexo = $('#row_qty').textbox('getValue') - 1;
-				var amt = parseFloat(
-							$('#qty_order').textbox('getValue') * parseFloat($('#price_qty').textbox('getValue')).toFixed(6)
-						).toFixed(2);
-				// console.log(parseFloat($('#price_qty').textbox('getValue')).toFixed(6));
-				// console.log(amt);
-				$('#dg_add').datagrid('updateRow',{
-					index:  indexo,
-					row: {
-						ACT_QTY_RESULT : $('#qty_order').textbox('getValue'),
-						AMOUNT_RESULT : amt,
-						REQ_DATE : $('#req_date_add').datebox('getValue'),
-						EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
-						AGING_DAY: $('#aging_day_add').numberbox('getValue'),
-						DATE_CODE: $('#date_code_add').textbox('getValue'),
-						ASIN: $('#asin_add').textbox('getValue'),
-						AMZ_PO: $('#amz_po_no_add').textbox('getValue')
-
-					}
-				});
-				$('#dlg_input_qty').dialog('close');
-			}
-
 			function saveMark(){
 				$('#dg_mark').datagrid('beginEdit');
 				var ids = [];
@@ -848,21 +963,40 @@ $menu_id = $_GET['id'];
 				// console.log($('#jns_mark').textbox('getValue'));
 				var indexo = $('#row_mark').textbox('getValue') - 1;
 				var nameField = $('#jns_mark').textbox('getValue');
+				var sts_dg = $('#sts_mark').textbox('getValue');
 
-				if (nameField == 'P_MARK_RESULT'){
-					$('#dg_add').datagrid('updateRow',{
-						index:  indexo,
-						row: {
-							P_MARK_RESULT : ids.join("<br/>")
-						}
-					});
+				if (sts_dg == 'ADD'){
+					if (nameField == 'P_MARK_RESULT'){
+						$('#dg_add').datagrid('updateRow',{
+							index:  indexo,
+							row: {
+								P_MARK_RESULT : ids.join("<br/>")
+							}
+						});
+					}else{
+						$('#dg_add').datagrid('updateRow',{
+							index:  indexo,
+							row: {
+								C_MARK_RESULT : ids.join("<br/>")
+							}
+						});
+					}
 				}else{
-					$('#dg_add').datagrid('updateRow',{
-						index:  indexo,
-						row: {
-							C_MARK_RESULT : ids.join("<br/>")
-						}
-					});
+					if (nameField == 'P_MARK_RESULT'){
+						$('#dg_edit').datagrid('updateRow',{
+							index:  indexo,
+							row: {
+								P_MARK_RESULT : ids.join("<br/>")
+							}
+						});
+					}else{
+						$('#dg_edit').datagrid('updateRow',{
+							index:  indexo,
+							row: {
+								C_MARK_RESULT : ids.join("<br/>")
+							}
+						});
+					}
 				}
 				
 				
@@ -879,6 +1013,31 @@ $menu_id = $_GET['id'];
 				$('#dg_add').datagrid('reload');
 				// $('#dg_add').datagrid('beginEdit');
 				$('#dlg_mark').dialog('close');
+			}
+
+			function consignee_data(value){
+				$('#dlg_Notify').dialog('open').dialog('setTitle','SEARCH CONSIGNEE');
+				$('#dg_Notify').datagrid('load',{sch: ''});
+				$('#dg_Notify').datagrid({
+					url: '../json/json_consignee.php',
+					fitColumns: true,
+					columns:[[
+						{field:'CONSIGNEE_CODE',title:'CODE',width:65,halign:'center', align:'center'},
+						{field:'CONSIGNEE_NAME',title:'NAME',width:150,halign:'center'}
+					]],
+					onClickRow:function(id,row){
+						var rows = $('#dg_Notify').datagrid('getSelected');
+						if(value=='add'){
+							$('#consignee_code_add').textbox('setValue', rows.CONSIGNEE_CODE);
+							$('#consignee_name_add').textbox('setValue', rows.CONSIGNEE_NAME);
+						}//else if(value == 'edit'){
+						// 	$('#notify_edit').textbox('setValue', rows.NOTIFY);
+						// }
+						$('#dlg_Notify').dialog('close');
+					}
+				});
+
+				$('#dg_Notify').datagrid('enableFilter');
 			}
 
 			function saveAdd(value){
@@ -993,8 +1152,66 @@ $menu_id = $_GET['id'];
 			
 			// --------------------------------------------------- EDIT SO ---------------------------------------------------//
 			function edit_so(){
-				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT SALES ORDER');
+				var row = $('#dg').datagrid('getSelected');
+				if (row){
+					$('#win_edit').window('open').dialog('setTitle','EDIT SALES ORDER ('+row.SO_NO+')');
+					$('#cust_no_edit').textbox('setValue', row.CUSTOMER_CODE);
+					$('#cmb_cust_edit').combobox('setValue', row.CUSTOMER_CODE);
+					$('#so_no_edit').textbox('setValue', row.SO_NO);
+					$('#so_cust_po_no_edit').textbox('setValue', row.CUSTOMER_PO_NO);
+					$('#consignee_code_edit').textbox('setValue', row.CONSIGNEE_CODE); 
+					// $('#consignee_name_edit').textbox('setValue',
+					// $('#curr_edit').combobox('setValue', row.CURR_CODE);
+					// $('#rate_edit').textbox('setValue', row.EX_RATE);
+					$('#so_remark_edit').textbox('setValue', row.REMARK);
+					// $('#so_casemark_edit').textbox('setValue',
+					// $('#so_category_edit').textbox('setValue',
+
+					$('#dg_edit').datagrid({
+						url:'so_get_detail_edit.php?so_no='+row.SO_NO,
+						singleSelect: true,
+						rownumbers: true,
+						columns:[[
+							{field:'ITEM_NO', title:'ITEM NO.', width:50, halign: 'center'},
+							{field:'ITEM', title:'ITEM NAME', width:80, halign: 'center', hidden: true},
+							{field:'DESCRIPTION', title:'DESCRIPTION', halign: 'center', width:250},
+							{field:'U_PRICE', title:'PRICE', width:80, halign: 'center'},
+							{field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
+							{field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
+							{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
+							{field:'ACT_QTY', title:'ORDER<br>SET', halign: 'center', width:50, align:'center'},
+							{field:'ACT_QTY_RESULT', title:'ACT QTY<br/>RESULT', halign: 'center', width:100, align:'right'},
+							{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right', hidden: true},
+							{field:'REQ_DATE', title:'REQUEST<br/>DATE', halign: 'center', width:100, align:'center'},
+							{field:'EXFACT_DATE', title:'EX FACT<br/>DATE', halign: 'center', width:100, align:'center'},
+							{field:'AGING_DAY', title:'AGING<br/>DAY', halign: 'center', width:100, align:'center'},
+							{field:'DATE_CODE', title:'DATE<br/>CODE', halign: 'center', width:100, align:'center'},
+							{field:'ASIN', title:'ASIN', halign: 'center', width:100, align:'center'},
+							{field:'AMZ_PO', title:'AMZ PO', halign: 'center', width:100, align:'center'},
+							{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
+							{field:'P_MARK_RESULT', title:'PALLET MARK<br/>RESULT', halign: 'center', width:150},
+							{field:'C_MARK', title:'CASE<br/>MARK', halign: 'center',width:50, align:'center'},
+							{field:'C_MARK_RESULT', title:'CASE MARK<br/>RESULT', halign: 'center', width:150} //, hidden: true}
+						]],
+						onClickRow:function(rowIndex){
+							$(this).datagrid('beginEdit', rowIndex);
+						},
+						onAfterEdit:function(index,row){
+							$(this).datagrid('beginEdit', index);
+						}
+					});
+				}
 			}
+
+			function remove_item_edit(){
+				var row = $('#dg_edit').datagrid('getSelected');	
+				if (row){
+					var idx = $("#dg_edit").datagrid("getRowIndex", row);
+					$('#dg_edit').datagrid('deleteRow', idx);
+				}
+			}
+
+
 
 			function delete_so(){
 				var row = $('#dg').datagrid('getSelected');	

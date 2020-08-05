@@ -3,51 +3,55 @@
 	session_start();
 	$result = array();
 	
-	$gr_no = isset($_REQUEST['gr_no']) ? strval($_REQUEST['gr_no']) : '';
+	$so_no = isset($_REQUEST['so_no']) ? strval($_REQUEST['so_no']) : '';
+	$sts = "'EDIT'";
+	$items = array();
+	$rowno = 0;
 
 	include("../../connect/conn.php");
-	$rowno=0;
 
-	$rs = "select distinct b.line_no as line_no_gr, a.gr_no, b.po_line_no as line_no_po, b.po_no, cast(g.po_date as varchar(10)) as po_date, b.item_no, c.item, c.description, c.STOCK_SUBJECT_CODE, c.COST_PROCESS_CODE, c.COST_SUBJECT_CODE, c.STANDARD_PRICE, coalesce(c.SUPPLIERS_PRICE,0) as SUPPLIERS_PRICE,
-		b.uom_q, d.unit, a.curr_code, e.curr_mark, e.curr_short, f.qty, f.gr_qty - b.qty as gr_qty, b.qty as act_qty, f.origin_code, b.u_price, a.ex_rate, cast(f.eta as varchar(10)) eta,
-		a.pdays, a.pdesc, b.amt_o, b.amt_l, a.slip_type, (CASE WHEN b.item_no=whi.item_no THEN '1' ELSE '0' END) as sts_wh, f.qty - (f.gr_qty - b.qty) as blnc
-		from gr_header a
-		inner join gr_details b on a.gr_no=b.gr_no
-		left join item c on b.item_no=c.item_no
-		left join unit d on b.uom_q=d.unit_code
-		left join currency e on a.curr_code = e.curr_code
-		left join po_details f on b.po_no= f.po_no and b.item_no=f.item_no and b.po_line_no= f.line_no
-		left join po_header g on f.po_no=g.po_no
-		left join whinventory whi on b.item_no= whi.item_no
-		where a.gr_no='$gr_no' order by b.line_no asc";
+	$rs = "select a.so_no, a.line_no, a.customer_part_no, a.ITEM_NO, it.ITEM, it.DESCRIPTION, a.qty as ACT_QTY_RESULT, a.uom_q, un.UNIT,
+		a.U_PRICE, a.AMT_O, a.AMT_L, b.curr_code, curr.CURR_MARK, CAST(a.CUSTOMER_REQ_DATE as varchar(10)) as REQ_DATE,
+		CAST(a.ETD as varchar(10)) as EXFACT_DATE, a.DATE_CODE, a.BAL_QTY, a.AGING_DAY, a.ASIN, a.AMAZON_PO_NO as AMZ_PO,
+		case when a.PALLET_MARK_1 IS NOT NULL then a.PALLET_MARK_1+'<br/>' else '' end + 
+		case when a.PALLET_MARK_2 IS NOT NULL then a.PALLET_MARK_2+'<br/>' else '' end +
+		case when a.PALLET_MARK_3 IS NOT NULL then a.PALLET_MARK_3+'<br/>' else '' end +
+		case when a.PALLET_MARK_4 IS NOT NULL then a.PALLET_MARK_4+'<br/>' else '' end +
+		case when a.PALLET_MARK_5 IS NOT NULL then a.PALLET_MARK_5+'<br/>' else '' end +
+		case when a.PALLET_MARK_6 IS NOT NULL then a.PALLET_MARK_6+'<br/>' else '' end +
+		case when a.PALLET_MARK_7 IS NOT NULL then a.PALLET_MARK_7+'<br/>' else '' end +
+		case when a.PALLET_MARK_8 IS NOT NULL then a.PALLET_MARK_8+'<br/>' else '' end +
+		case when a.PALLET_MARK_9 IS NOT NULL then a.PALLET_MARK_9+'<br/>' else '' end +
+		case when a.PALLET_MARK_10 IS NOT NULL then a.PALLET_MARK_10 else '' end as P_MARK_RESULT,
+		case when a.CASE_MARK_1 is not null then a.CASE_MARK_1+'<br/>' else '' end +
+		case when a.CASE_MARK_2 is not null then a.CASE_MARK_2+'<br/>' else '' end +
+		case when a.CASE_MARK_3 is not null then a.CASE_MARK_3+'<br/>' else '' end +
+		case when a.CASE_MARK_4 is not null then a.CASE_MARK_4+'<br/>' else '' end +
+		case when a.CASE_MARK_5 is not null then a.CASE_MARK_5+'<br/>' else '' end +
+		case when a.CASE_MARK_6 is not null then a.CASE_MARK_6+'<br/>' else '' end +
+		case when a.CASE_MARK_7 is not null then a.CASE_MARK_7+'<br/>' else '' end +
+		case when a.CASE_MARK_8 is not null then a.CASE_MARK_8+'<br/>' else '' end +
+		case when a.CASE_MARK_9 is not null then a.CASE_MARK_9+'<br/>' else '' end +
+		case when a.CASE_MARK_10 is not null then a.CASE_MARK_10 else '' end as C_MARK_RESULT
+		from SO_DETAILS a
+		inner join so_header b on a.so_no = b.SO_NO
+		inner join item it on a.ITEM_NO=it.ITEM_NO
+		inner join unit un on a.UOM_Q = un.UNIT_CODE
+		inner join CURRENCY curr on b.CURR_CODE = curr.CURR_CODE 
+		where a.so_no='$so_no'
+		order by line_no asc";
 	$data = sqlsrv_query($connect, strtoupper($rs));
-	$items = array();
+	
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
-		$qty = $items[$rowno]->QTY;
-		$items[$rowno]->QTY = number_format($qty);
-		$items[$rowno]->QTY_2 = number_format($qty);
 
-		$gr_qty = $items[$rowno]->GR_QTY;
-		$items[$rowno]->GR_QTY = number_format($gr_qty);
-		$items[$rowno]->GR_QTY_2 = number_format($gr_qty);
+		$it = "'".$items[$rowno]->ITEM_NO."'";
+		$ln = "'".$items[$rowno]->LINE_NO."'";
+		$pr = "'".$items[$rowno]->U_PRICE."'";
 
-		$act = $items[$rowno]->ACT_QTY;
-
-		$bal_qty = $items[$rowno]->BAL_QTY;
-		$items[$rowno]->BAL_QTY = number_format($bal_qty);
-		$items[$rowno]->BAL_QTY_2 = number_format($bal_qty);
-
-		$blnc = $items[$rowno]->BLNC;
-		$items[$rowno]->BLNC = number_format($blnc);
-
-		if($qty==$gr_qty){
-			$items[$rowno]->GR_QTY = number_format($qty-$act);
-			$items[$rowno]->GR_QTY_2 = number_format($qty-$act);
-		}else{
-			$items[$rowno]->GR_QTY = number_format($gr_qty);
-			$items[$rowno]->GR_QTY_2 = number_format($gr_qty);
-		}
+		$items[$rowno]->P_MARK = '<a href="javascript:void(0)" onclick="input_pallet('.$sts.','.$it.','.$ln.')">SET</a>';
+		$items[$rowno]->C_MARK = '<a href="javascript:void(0)" onclick="input_case('.$sts.','.$it.','.$ln.')">SET</a>';
+		$items[$rowno]->ACT_QTY = '<a href="javascript:void(0)" onclick="input_qty('.$it.','.$ln.','.$pr.','.$sts.')">SET</a>';
 
 		$rowno++;
 	}
