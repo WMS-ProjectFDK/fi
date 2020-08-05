@@ -1,7 +1,7 @@
 <?php
 // error_reporting(0);
 ini_set('memory_limit','-1');
-include("../connect/conn.php");
+include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
 
@@ -108,7 +108,7 @@ $content.="
 
 // echo $content;
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('kanban_print_ulang.pdf');
