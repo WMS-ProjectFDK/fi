@@ -65,7 +65,7 @@
 
     $sql = "select distinct top 150 a.so_no, cast(a.so_date as varchar(10)) as so_date, a.CUSTOMER_PO_NO,
         a.customer_code, c.COMPANY, a.CURR_CODE, cast(a.ex_rate as decimal(18,5)) as ex_rate,
-        d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON, a.CONSIGNEE_CODE
+        d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON, a.CONSIGNEE_CODE, a.CONSIGNEE_NAME, a.case_mark, a.consignee_from_jp
         from SO_HEADER a
         inner join so_details b on a.so_no=b.so_no
         left join COMPANY c on a.CUSTOMER_CODE = c.COMPANY_CODE
