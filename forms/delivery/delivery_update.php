@@ -73,7 +73,7 @@ h2 {
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Delivery Type.</span>
-					<select style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true"  >
+					<select  style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true" " >
                         <option value="None" selected>-- Select --</option>
                         <option value="UPDATE">Delivery Update</option>
                         <option value="RESTORE" >Delivery Restore</option>
@@ -88,14 +88,34 @@ h2 {
 			<div class="fitem" align="center">
 				<a href="javascript:void(0)" style="width: 150px;height: 35px;" id="save_approve" class="easyui-linkbutton c2" onClick="save_approve()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Update / Restore</a>
 			</div>
+            <div id="dlg-buttons-qty" align="center">
+			    <a href="javascript:void(0)" id="save_con" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveCon()" style="width:90px">SET</a>
+		    </div>
 		</fieldset>
 		<div style="clear:both;"></div>
 	</div>
 
+    <div id="dlg_input" class="easyui-dialog" style="width: 550px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+			
+			<div class="fitem">
+				<span style="width:100px;display:inline-block;">CONTAINER NO</span>
+				<input style="width: 400px;" name="con_no" id="con_no" class="easyui-textbox"/>
+			</div>
+			
+			<div class="fitem" align="center">
+				<span style="width:100px;display:inline-block;">SEAL NO</span>
+				<input style="width:400px;" name="seal_no" id="seal_no" class="easyui-textbox"/>
+			</div>
+
+          
+			
+		</div>
+
 	<table id="dg" title="DELIVERY UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
-		function myformatter(date){
+		var flagTipe = "";
+        function myformatter(date){
 			var y = date.getFullYear();
 			var m = date.getMonth()+1;
 			var d = date.getDate();
@@ -129,9 +149,6 @@ h2 {
 
 		$(function(){
 			$('#dg').datagrid({
-				singleSelect: false,
-				checkOnSelect: true,
-	    		selectOnCheck: true,
 			    columns:[[
 				    {field:'CK', checkbox:true, width:30, halign: 'center'},
                     {field:'DO_NO',title:'INV NO.',width:75, halign: 'center', align: 'center'},
@@ -144,16 +161,17 @@ h2 {
                     {field:'DESCRIPTION',title:'DESCRIPTION', width:100, halign: 'center'},
                     {field:'QTY',title:'QUANTITY', width:70, halign: 'center',align: 'right'},
                     {field:'CUSTOMER',title:'CUSTOMER', width:100, halign: 'center'},
+                    {field:'INPUT',title:'INPUT', width:40, halign: 'center'},
                     {field:'CONTAINER_NO',title:'CONTAINER', width:80, halign: 'center'},
                     {field:'SEAL_NO',title:'SEAL', width:80, halign: 'center'}
 			    ]]
 				
 			})
 		})
-
+        
 		function filterData(){
             var tipe = $('#cmb_delivery_type').combobox('getValue');
-
+            flagTipe = tipe;
             if(tipe=='UPDATE'){
                 filterDataUpdate()
             }else if(tipe=='RESTORE'){
@@ -247,14 +265,58 @@ h2 {
 		function save_approve(){
             var tipe = $('#cmb_delivery_type').combobox('getValue');
 
-            if(tipe=='UPDATE'){
+            if(tipe=='UPDATE' && flagTipe == 'UPDATE'){
                 deliveryUpdate()
-            }else if(tipe=='RESTORE'){
+            }else if(tipe=='RESTORE'&& flagTipe == 'RESTORE'){
                 deliveryRestore()
+            }else{
+                $.messager.alert('INFORMATION','Please Choose Type and Retry Filter','info');
+            }
+		}
+        var ans = ''
+        function input_container(a){
+            var tipe = $('#cmb_delivery_type').combobox('getValue');
+            if(tipe=='UPDATE'){
+                $('#dlg_input').dialog('open').dialog('setTitle', 'INPUT CONTAINER');	
+                var rows = $('#dg').datagrid('getRows');
+                var sealNo = '';
+                var conNo = '';
+
+                for(i=0;i<rows.length;i++){
+                    if(a == rows[i].ANSWER_NO){
+                        sealNo = rows[i].SEAL_NO;
+                        conNo = rows[i].CONTAINER_NO;
+                    }
+                }
+                $('#con_no').textbox('setValue',conNo);
+                $('#seal_no').textbox('setValue',sealNo);
+                ans = a;
+            }else if(tipe=='RESTORE'){
+                $.messager.alert('INFORMATION','Cannot Change Data','info');
             }else{
                 $.messager.alert('INFORMATION','Please Choose Type','info');
             }
+			
 		}
+        
+        function saveCon(){
+            
+            var sealNo = $('#seal_no').textbox('getValue');
+            var conNo = $('#con_no').textbox('getValue');
+            var rows = $('#dg').datagrid('getRows');
+            for(i=0;i<rows.length;i++){
+                if(ans == rows[i].ANSWER_NO){
+                    $('#dg').datagrid('updateRow', {
+                        index: i,
+                        row: {CONTAINER_NO: conNo,SEAL_NO:sealNo}
+                    });
+                }
+			}
+            $('#dlg_input').dialog('close');
+           
+        }
+
+       
 	</script>
 </body>
 </html>

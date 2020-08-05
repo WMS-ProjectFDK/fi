@@ -128,7 +128,7 @@ UPDATE INDICATION SET
     SLIP_DATE  = @ex_factory,
     COMMIT_DATE= getdate(),
     SEAL_NO = @seal_no,
-    @container_no = @container_no
+    CONTAINER_NO = @container_no
 WHERE ANSWER_NO = @ans_no ;
        
 commit TRAN tt

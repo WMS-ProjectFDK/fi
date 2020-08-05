@@ -52,7 +52,9 @@ $rowno=0;
 
 while($row = sqlsrv_fetch_object($data_cek)){
 	array_push($items, $row);
-
+	$it = "'".$items[$rowno]->ANSWER_NO."'";
+	$items[$rowno]->INPUT = '<a href="javascript:void(0)" onclick="input_container('.$it.')">SET</a>';
+	
 	$rowno++;
 }
 
