@@ -1,11 +1,4 @@
 <?php
-// ADD ===============
-// so_save.php?data=[{"so_sts":"DETAILS","so_cust":"996130","so_date":"2020-08-05","so_so_no":"FI-20-0576","so_line_no":1,"so_cust_po_no":"COBA-UENG","so_consignee_code":"212361","so_consignee_name":"DTM2 - Dortmund, North Rhine -Westphalia","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88845","so_price":".093000","so_uom":"PC","so_qty":"211","so_p_mark":"QQQ<br/>WWW<br/>EEE<br/>SSS","so_c_mark":"ASDW<br/>WDSA<br/>ERDS<br/>SADA","so_amount":"19.62","so_req_date":"2020-08-05","so_ex_fact_date":"2020-08-05","so_aging_day":"7","so_date_code":"2025-09","so_asin":"ASN#4","so_amz_po_no":"AMZPO#3"},{"so_sts":"HEADER","so_cust":"996130","so_date":"2020-08-05","so_so_no":"FI-20-0576","so_cust_po_no":"COBA-UENG","so_consignee_code":"212361","so_consignee_name":"DTM2 - Dortmund, North Rhine -Westphalia","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88845","so_price":".093000","so_uom":"PC","so_p_mark":"X","so_c_mark":"Y","so_category_mark":"Z","so_amount":19.62}]
-
-
-// EDIT===============
-// so_save.php?data=[{"so_sts":"DETAILS","so_cust":"996130","so_date":"2020-08-05","so_so_no":"FI-20-0576","so_line_no":1,"so_cust_po_no":"COBA-UENG","so_consignee_code":"212361","so_consignee_name":"DTM2 - Dortmund, North Rhine -Westphalia","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88845","so_price":".093000","so_uom":"PC","so_qty":"211","so_p_mark":"QQQ<BR/>WWW<BR/>EEE<BR/>SSS<BR/>","so_c_mark":"ASDW<BR/>WDSA<BR/>ERDS<BR/>SADA<BR/>","so_amount":"19.62","so_req_date":"2020-08-05","so_ex_fact_date":"2020-08-05","so_aging_day":7,"so_date_code":"2025-09","so_asin":"ASN#4","so_amz_po_no":"AMZPO#3"},{"so_sts":"HEADER","so_cust":"996130","so_date":"2020-08-05","so_so_no":"FI-20-0576","so_cust_po_no":"COBA-UENG","so_consignee_code":"212361","so_consignee_name":"DTM2 - Dortmund, North Rhine -Westphalia","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88845","so_price":".093000","so_uom":"PC","so_p_mark":"X1","so_c_mark":"Y1","so_category_mark":"Z1","so_amount":19.62}]
-
 session_start();
 error_reporting(0);
 include("../../connect/conn.php");

@@ -558,7 +558,8 @@ $menu_id = $_GET['id'];
 		                {field:'REMARK',title:'REMARK',width:180,halign:'center'},
 		                {field:'PERSON',title:'PERSON',width:80,halign:'center'},
 						{field:'CASE_MARK', hidden: true},
-						{field:'CONSIGNEE_FROM_JP', hidden: true}//,consignee_from_jp
+						{field:'CONSIGNEE_FROM_JP', hidden: true},//consignee_from_jp
+						{field:'ANSWER_QTY',title:'SHIPPING PLAN<br/>QTY',width:80,halign:'center', align:'right'}//answer_qty
 					]],
 					detailFormatter: function(rowIndex, rowData){
 						return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
@@ -696,20 +697,6 @@ $menu_id = $_GET['id'];
 						$(this).datagrid('beginEdit', index);
 					}
 				});
-			}
-
-			function add_group_so(){
-				$('#dlg_group').dialog('open').dialog('setTitle','GROUP ORDER');
-				$('#dg_group').datagrid ({
-					url: 'so_getOrderGroup.php',
-					columns:[[
-						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br/>PO NO.',width:60,halign:'center', align:'center'},
-						{field:'CUSTOMER_PO_DATE',title:'CUSTOMER<br/>PO DATE',width:60,halign:'center', align:'center'},
-						{field:'CUSTOMER_PERSON',title:'PERSON',width:200,halign:'center'},
-						{field:'CUSTOMER_PERSON_CODE',title:'DESCRIPTION',width:80,halign:'center'}
-					]]
-				});
-				$('#dg_group').datagrid('enableFilter');
 			}
 
 			function add_item(val){
@@ -1329,30 +1316,49 @@ $menu_id = $_GET['id'];
 				});
 			}
 
+			function add_group_so(){
+				$('#dlg_group').dialog('open').dialog('setTitle','GROUP ORDER');
+				$('#dg_group').datagrid ({
+					url: 'so_getOrderGroup.php',
+					columns:[[
+						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br/>PO NO.',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PO_DATE',title:'CUSTOMER<br/>PO DATE',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PERSON',title:'PERSON',width:200,halign:'center'},
+						{field:'CUSTOMER_PERSON_CODE',title:'DESCRIPTION',width:80,halign:'center'},
+						{field:'CREATE',title:'ADD TO SO', width:80, halign:'center', align:'center'}
+					]]
+				});
+				$('#dg_group').datagrid('enableFilter');
+			}
+
 			function delete_so(){
 				var row = $('#dg').datagrid('getSelected');	
 				if (row){
-					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-						if(r){
-							$.messager.progress({
-								title:'Please waiting',
-								msg:'removing data...'
-							});
-							// console.log('so_destroy.php?so_no='+row.SO_NO);
-							$.post('so_destroy.php',{so_no: row.SO_NO},function(result){
-								if (result.success){
-									$('#dg').datagrid('reload');
-									$.messager.progress('close');
-								}else{
-									$.messager.show({
-										title: 'Error',
-										msg: result.errorMsg
-									});
-									$.messager.progress('close');
-								}
-							},'json');
-						}
-					});
+					if (row.ANSWER_QTY != 0) {
+						$.messager.alert('INFORMATION',"Data can't to remove, because it has Shipping plan",'info');
+					}else{
+						$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+							if(r){
+								$.messager.progress({
+									title:'Please waiting',
+									msg:'removing data...'
+								});
+								// console.log('so_destroy.php?so_no='+row.SO_NO);
+								$.post('so_destroy.php',{so_no: row.SO_NO},function(result){
+									if (result.success){
+										$('#dg').datagrid('reload');
+										$.messager.progress('close');
+									}else{
+										$.messager.show({
+											title: 'Error',
+											msg: result.errorMsg
+										});
+										$.messager.progress('close');
+									}
+								},'json');
+							}
+						});
+					}
 				}
 			}
 		</script>

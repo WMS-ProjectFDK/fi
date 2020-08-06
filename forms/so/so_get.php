@@ -65,12 +65,15 @@
 
     $sql = "select distinct top 150 a.so_no, cast(a.so_date as varchar(10)) as so_date, a.CUSTOMER_PO_NO,
         a.customer_code, c.COMPANY, a.CURR_CODE, cast(a.ex_rate as decimal(18,5)) as ex_rate,
-        d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON, a.CONSIGNEE_CODE, a.CONSIGNEE_NAME, a.case_mark, a.consignee_from_jp
+		d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON, cast(coalesce(ans.ans_qty,0) as int) as answer_qty,
+		a.CONSIGNEE_CODE, a.CONSIGNEE_NAME, a.case_mark, a.consignee_from_jp
         from SO_HEADER a
         inner join so_details b on a.so_no=b.so_no
         left join COMPANY c on a.CUSTOMER_CODE = c.COMPANY_CODE
         left join currency d on a.CURR_CODE = d.CURR_CODE 
-        left join person e on a.PERSON_CODE = e.PERSON_CODE
+		left join person e on a.PERSON_CODE = e.PERSON_CODE
+		LEFT JOIN (select so_no,so_line_no,sum(qty) ans_qty from answer group by so_no,so_line_no) ans
+		on b.SO_NO = ans.SO_NO and b.LINE_NO = ans.SO_LINE_NO
         $where
         order by cast(a.so_date as varchar(10)) desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
