@@ -6,11 +6,10 @@
 	$yearplus = intval(date('Y')+1);
 	//echo $yearmin.$year.$yaerplus;
 	$sql = " select distinct work_order ,'' as po_no ,'' as Item_no  from mps_header 
-	union all
-	select distinct '' ,po_no,''  from mps_header
-	union all
-	select distinct '' ,'',cast(item_no as varchar(10)) + ' - ' + item_name Item_no  from mps_header
-	   ";
+		union all
+		select distinct '' ,po_no,''  from mps_header
+		union all
+		select distinct '' ,'',cast(item_no as varchar(10)) + ' - ' + item_name Item_no  from mps_header";
 	$result = sqlsrv_query($connect, $sql);
 	
 	$arrNo = 0;

@@ -20,16 +20,16 @@ if ($varConn=='Y'){
 		return is_confirmed;
 	}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.patch.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.patch.js"></script>
+<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
 
 <style>
 *{

@@ -6,7 +6,9 @@
 
     include("../../connect/conn.php");
     
-    $sql = "select PPBE_NO,'$WO' WO_NO,ITEM_NO, QTY,PALLET,CARTON_NOT_FULL,CONTAINERS,NET,GROSS,MSM,cast(ROWID as varchar(50)) RD,     CONTAINER_VALUE  from ztb_shipping_detail where ppbe_no = '$PPBE' and wo_no = '$WO'";
+	$sql = "select PPBE_NO,'$WO' WO_NO,ITEM_NO, QTY,PALLET,CARTON_NOT_FULL,CONTAINERS,NET,GROSS,MSM,
+		ROW_NUMBER() over (order by answer_no asc) RD,
+		CONTAINER_VALUE  from ztb_shipping_detail where ppbe_no = '$PPBE' and wo_no = '$WO' ";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

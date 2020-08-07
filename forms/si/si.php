@@ -70,7 +70,7 @@ $menu_id = $_GET['id'];
 	
 	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
 	<div id="toolbar">
-		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:95%; height:100px; float:left;"><legend>SHIPPING INSTRUCTION FILTER</legend>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:70px; float:left;"><legend>SHIPPING INSTRUCTION FILTER</legend>
 			<div style="width:470px; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CR Date</span>
@@ -87,15 +87,17 @@ $menu_id = $_GET['id'];
             </div>
 			<div>
                 <div class="fitem">
+                    <span style="width:100px;display:inline-block;"></span>
                     <span style="width:100px;display:inline-block;">CONSIGNEE</span>
                     <input style="width:85px;" name="consignee_code" id="consignee_code" class="easyui-textbox" disabled=""/>
                     <select style="width:240px;" name="consignee_name" id="consignee_name" class="easyui-combobox"/></select>
-                    <label><input type="checkbox" name="ck_si_no" id="ck_si_no" checked="true">All</input></label>
+                    <label><input type="checkbox" name="ck_consignee" id="ck_consignee" checked="true">All</input></label>
 				</div>
                 <div class="fitem">
-					<span style="width:100px;display:inline-block;">CUST PO/NO.</span>
-					<select style="width:300px;" name="cmb_prf_no" id="cmb_prf_no" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
-					<label><input type="checkbox" name="ck_prf" id="ck_prf" checked="true">All</input></label>
+                    <span style="width:100px;display:inline-block;"></span>
+                    <span style="width:100px;display:inline-block;">CUST PO/NO.</span>
+					<select style="width:330px;" name="cmb_cust_po" id="cmb_cust_po" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
+					<label><input type="checkbox" name="ck_cust_po" id="ck_cust_po" checked="true">All</input></label>
 				</div>
 			</div>
 		</fieldset>
@@ -128,6 +130,177 @@ $menu_id = $_GET['id'];
 				return new Date();
 			}
 		}
+
+        function filter(event){
+			var src = document.getElementById('src').value;
+			var search = src.toUpperCase();
+			document.getElementById('src').value = search;
+			
+		    if(event.keyCode == 13 || event.which == 13){
+				var src = document.getElementById('src').value;
+				//alert(src);
+				$('#dg').datagrid('load', {
+					src: search
+				});
+
+				if (src=='') {
+					filterData();
+				};
+		    }
+		}
+
+        function access_log(){
+			//ADD//UPDATE/T
+			//DELETE/T
+			//PRINT/T
+
+			var add = "<?=$exp[0]?>";
+			var upd = "<?=$exp[1]?>";
+			var del = "<?=$exp[2]?>";
+			var prn = "<?=$exp[4]?>";
+
+			if (add == 'ADD/T'){
+				$('#add').linkbutton('enable');
+			}else{
+				$('#add').linkbutton('disable');
+			}
+
+			if (upd == 'UPDATE/T'){
+				$('#edit').linkbutton('enable');
+			}else{
+				$('#edit').linkbutton('disable');
+			}
+
+			if (del == 'DELETE/T'){
+				$('#delete').linkbutton('enable');
+			}else{
+				$('#delete').linkbutton('disable');
+			}
+
+			if (prn == 'PRINT/T'){
+				$('#print').linkbutton('enable');
+			}else{
+				$('#print').linkbutton('disable');
+			}			
+		}
+
+        $(function(){
+            access_log();
+
+            $('#date_awal').datebox('disable');
+			$('#date_akhir').datebox('disable');
+			$('#ck_date').change(function(){
+				if ($(this).is(':checked')) {
+					$('#date_awal').datebox('disable');
+					$('#date_akhir').datebox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#date_awal').datebox('enable');
+					$('#date_akhir').datebox('enable');
+				};
+			})
+
+			$('#cmb_si_no').combobox('disable');
+			$('#ck_si_no').change(function(){
+				if ($(this).is(':checked')) {
+					$('#cmb_si_no').combobox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#cmb_si_no').combobox('enable');
+				};
+			})
+
+			$('#consignee_name').combobox('disable');
+			$('#ck_consignee').change(function(){
+				if ($(this).is(':checked')) {
+					$('#consignee_name').combobox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#consignee_name').combobox('enable');
+				};
+			})
+
+            $('#cmb_cust_po').combobox('disable');
+			$('#ck_cust_po').change(function(){
+				if ($(this).is(':checked')) {
+					$('#cmb_cust_po').combobox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#cmb_cust_po').combobox('enable');
+				};
+			})
+
+            $('#dg').datagrid({
+				url:'si_get.php',
+		    	singleSelect: true,
+			    fitColumns: true,
+				rownumbers: true,
+				sortName: 'prf_date',
+				sortOrder: 'asc',
+			    columns:[[
+				    {field:'SI_NO',title:'PRF NO.',width:75, halign: 'center', align: 'center'},
+				    {field:'CUST_SI_NO',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true},
+				    {field:'PRF_DATE_1',title:'PRF DATE',width:60, halign: 'center', align: 'center', sortable:true, hidden: true},
+				    {field:'REQUIRE_PERSON_CODE',title:'Require<br/>Person',width:60, halign: 'center', align: 'center'},
+				    {field:'APPROVAL_DATE',title:'Approval<br/>Date',width:60, halign: 'center', align: 'center'},
+				    {field:'REMARK',title:'REMARK', width:200, halign: 'center'},
+				    {field:'STATUS',title:'STATUS', width:70, halign: 'center', align: 'center'},
+				    {field:'STS_DSIGN',title:'STATUS<br/>DESIGN', width:70, halign: 'center', align: 'center'},
+				    {field:'JUMLAH_PO',title:'STATUS PO', width:100, halign: 'center', align: 'center'},
+				    {field:'STS', hidden: true},
+				    {field:'JUM_PO', hidden: true},
+				    {field:'CUSTOMER_PO_NO', hidden: true},
+				    {field:'STS_DSIGN', hidden: true}
+			    ]]
+            });
+        });
+
+        function filterData(){
+            var ck_date = 'false';
+			var ck_si_no = 'false';
+			var ck_consignee = 'false';
+            var ck_cust_po = 'false';
+			var flag = 0;
+
+            if($('#ck_date').attr("checked")){
+				ck_date='true';
+				flag += 1;
+			}
+
+			if($('#ck_si_no').attr("checked")){
+				ck_si_no='true';
+				flag += 1;
+			}
+			
+            if($('#ck_consignee').attr("checked")){
+				ck_consignee='true';
+				flag += 1;
+			}
+
+            if($('#ck_cust_po').attr("checked")){
+				ck_cust_po='true';
+				flag += 1;
+			}
+			
+			if(flag == 4) {
+				$.messager.alert('INFORMATION','No filter data, system only show 150 records','info');
+			}
+
+			$('#dg').datagrid('load', {
+				date_awal: $('#date_awal').datebox('getValue'),
+				date_akhir: $('#date_akhir').datebox('getValue'),
+				ck_date: ck_date,
+				cmb_item_no: $('#cmb_si_no').combobox('getValue'),
+				ck_si_no: ck_si_no,
+                cmb_consignee: $('#consignee_name').combobox('getValue'),
+				ck_consignee: ck_consignee,
+                cmb_cust_po: $('#cmb_cust_po').combobox('getValue'),
+				ck_cust_po: ck_cust_po,
+                src: ''
+			});
+
+		   	$('#dg').datagrid('enableFilter');
+        }
     </Script>
 	</body>
     </html>

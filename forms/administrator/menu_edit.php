@@ -12,8 +12,10 @@ if (isset($_SESSION['id_wms'])){
 	$parent = htmlspecialchars($_REQUEST['menu_parent']);
 	$kode_menu = htmlspecialchars($_REQUEST['kode_menu']);
 	$nama_menu  = htmlspecialchars($_REQUEST['nama_menu']);
-	$kode_submenu = $_REQUEST['kode_submenu'] != '' ? $_REQUEST['kode_submenu'] : NULL;
-	$nama_submenu = $_REQUEST['nama_submenu'] != '' ? $_REQUEST['nama_submenu'] : NULL;
+
+	$kode_submenu = htmlspecialchars($_REQUEST['kode_submenu']) != '' ? htmlspecialchars($_REQUEST['kode_submenu']) : NULL ;
+	$nama_submenu = htmlspecialchars($_REQUEST['nama_submenu']) != '' ? htmlspecialchars($_REQUEST['nama_submenu']) : NULL ;
+
 	$link  = htmlspecialchars($_REQUEST['link']);
 
 	$split_parent = explode('-', $parent);
@@ -36,6 +38,12 @@ if (isset($_SESSION['id_wms'])){
 				where id=$menu_id";
 	// echo $sql_equ;
 	$result = sqlsrv_query($connect, $sql_equ);
+
+	// if (($kode_menu == '' OR is_null($kode_menu)) AND ($nama_submenu == '' OR is_null($nama_submenu))) {
+		$upd = "update ZTB_MENU set MENU_SUB_PARENT=NULL, ID_SUB_PARENT=NULL 
+			where ID_SUB_PARENT is null OR ID_SUB_PARENT = '' ";
+		$rs = sqlsrv_query($connect, $upd);
+	// }
 	
 	if ($result){
 		echo json_encode("Success");
