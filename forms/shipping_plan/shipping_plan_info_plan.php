@@ -8,8 +8,8 @@
 	$work_order = isset($_REQUEST['work_order']) ? strval($_REQUEST['work_order']) : '';
 	$ppbe = isset($_REQUEST['ppbe']) ? strval($_REQUEST['ppbe']) : '';
 	
-	$cek = "select '1' AM ,a.* ,'1' DEL,cast(a.ROWID as varchar(50)) RD, b.answer_no, b.crs_remark,
-		to_char(a.eta,'YYYY-MM-DD') as eta_format, to_char(a.etd,'YYYY-MM-DD') as etd_format, to_char(to_date(a.ex_fact,'DD-MM-YY'),'YYYY-MM-DD') as ex_fact_format
+	$cek = "select '1' AM ,a.* ,'1' DEL, ROW_NUMBER() over (order by answer_no asc) RD, b.answer_no, b.crs_remark,
+		cast(a.eta as varchar) as eta_format, cast(a.etd as varchar) as etd_format, cast(a.ex_fact as varchar) as ex_fact_format
 		from ztb_shipping_plan a
 		inner join answer b on a.wo_no = b.work_no and a.si_no = b.si_no and b.crs_remark=a.inv_no
 		where wo_no = '$work_order' and b.crs_remark = '$ppbe'" ;

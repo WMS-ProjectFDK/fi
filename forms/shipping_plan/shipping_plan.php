@@ -133,7 +133,7 @@ h2 {
 <div id='dlg_viewPln' class="easyui-dialog" style="width:1300px;height:300px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true"
 	title="<span style='margin-right:1060px;'>VIEW & EDIT INFO SHIPPING</span>
 		   <span><a href='javascript:void(0)' style='color:white' onclick='closeDialog()'>
-		   			<img src='../images/cancel.png' alt='Close' title='close'></img>
+		   			<!-- <img src='../images/cancel.png' alt='Close' title='close'></img> -->
 		   		 </a>
 		   	</span>">
 	<table id="dg_viewPln" class="easyui-datagrid" style="width:100%;height:100%;"></table>
