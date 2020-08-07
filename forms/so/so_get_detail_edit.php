@@ -10,8 +10,8 @@
 
 	include("../../connect/conn.php");
 
-	$rs = "select a.so_no, a.line_no, a.customer_part_no, a.ITEM_NO, it.ITEM, it.DESCRIPTION, a.qty as ACT_QTY_RESULT, a.uom_q, un.UNIT,
-		a.U_PRICE, a.AMT_O, a.AMT_L, b.curr_code, curr.CURR_MARK, CAST(a.CUSTOMER_REQ_DATE as varchar(10)) as REQ_DATE,
+	$rs = "select a.so_no, a.line_no, a.customer_part_no, a.ITEM_NO, it.ITEM, it.DESCRIPTION, a.qty as ACT_QTY_RESULT, un.UNIT AS uom_q, un.UNIT,
+		a.U_PRICE, a.AMT_O as AMOUNT_RESULT, a.AMT_L, b.curr_code, curr.CURR_MARK, CAST(a.CUSTOMER_REQ_DATE as varchar(10)) as REQ_DATE,
 		CAST(a.ETD as varchar(10)) as EXFACT_DATE, a.DATE_CODE, a.BAL_QTY, a.AGING_DAY, a.ASIN, a.AMAZON_PO_NO as AMZ_PO,
 		case when a.PALLET_MARK_1 IS NOT NULL then a.PALLET_MARK_1+'<br/>' else '' end + 
 		case when a.PALLET_MARK_2 IS NOT NULL then a.PALLET_MARK_2+'<br/>' else '' end +

@@ -1,16 +1,4 @@
 <?php
-
-// so_save.php?data=
-// [
-//     {"so_sts":"DETAILS","so_cust":"996130","so_date":"2020-08-04","so_so_no":"FI-20-0577","so_line_no":1,"so_cust_po_no":"COBA-UENG","so_consignee_code":"","so_consignee_name":"","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88845","so_price":".093000","so_uom":"PC","so_qty":"231","so_p_mark":"aaa<br/>sss<br/>ddd","so_c_mark":"sss<br/>ddd<br/>aaa","so_amount":"21.48"},
-    
-//     {"so_sts":"DETAILS","so_cust":"996130","so_date":"2020-08-04","so_so_no":"FI-20-0577","so_line_no":2,"so_cust_po_no":"COBA-UENG","so_consignee_code":"","so_consignee_name":"","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88864","so_price":".110100","so_uom":"PC","so_qty":"221","so_amount":"24.33"},
-    
-//     {"so_sts":"DETAILS","so_cust":"996130","so_date":"2020-08-04","so_so_no":"FI-20-0577","so_line_no":3,"so_cust_po_no":"COBA-UENG","so_consignee_code":"","so_consignee_name":"","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88914","so_price":".111300","so_uom":"PC","so_qty":"211","so_amount":"23.48"},
-    
-//     {"so_sts":"HEADER","so_cust":"996130","so_date":"2020-08-04","so_so_no":"FI-20-0577","so_cust_po_no":"COBA-UENG","so_consignee_code":"","so_consignee_name":"","so_curr":"1","so_rate":"1","so_country":"192-JAPAN","so_item":"88914","so_price":".111300","so_uom":"PC","so_p_mark":"","so_c_mark":"","so_amount":69.29}
-// ]
-
 session_start();
 error_reporting(0);
 include("../../connect/conn.php");
@@ -56,6 +44,7 @@ if (isset($_SESSION['id_wms'])){
         $so_date_code = $query->so_date_code;
         $so_asin = $query->so_asin;
         $so_amz_po_no = $query->so_amz_po_no;
+        $so_category_mark = $query->so_category_mark;
 
         $amt_l = $so_amount * $so_rate;
         
@@ -76,7 +65,8 @@ if (isset($_SESSION['id_wms'])){
             $field_so .= "amt_l,"           ; $value_so .= "$amt_l,"                    ;
             $field_so .= "person_code,"     ; $value_so .= "'$user',"                   ;
             $field_so .= "consignee_code,"  ; $value_so .= "'$so_consignee_code',"      ;
-            $field_so .= "consignee_from_jp"; $value_so .= "'-'"                        ;
+            $field_so .= "consignee_name,"  ; $value_so .= "'$so_consignee_name',"      ;
+            $field_so .= "consignee_from_jp"; $value_so .= "'$so_category_mark'"        ;
             chop($field_so) ;              	  chop($value_so) ;
 
             $ins1  = "insert into so_header ($field_so) select $value_so

@@ -210,7 +210,7 @@ $menu_id = $_GET['id'];
 			<div style="clear:both;margin-bottom:10px;"></div>
 			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_add" style="padding: 5px 5px;">
-				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item(add)">ADD ITEM</a>
+				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item('add')">ADD ITEM</a>
 	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_add()">REMOVE ITEM</a>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
@@ -242,7 +242,7 @@ $menu_id = $_GET['id'];
 							}
 		        		});
 					}
-					" required="">
+					" disabled="disabled">
 					</select>
 				</div>
 				<div class="fitem">
@@ -298,11 +298,11 @@ $menu_id = $_GET['id'];
 			<div style="clear:both;margin-bottom:10px;"></div>
 			<table id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_edit" style="padding: 5px 5px;">
-				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item(edit)">ADD ITEM</a>
+				<a href="#" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item('edit')">ADD ITEM</a>
 	    		<a href="#" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_edit()">REMOVE ITEM</a>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
-				<a class="easyui-linkbutton c2" id="save_edit" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveedit('edit')" style="width:140px" disabled="true"> SAVE </a>
+				<a class="easyui-linkbutton c2" id="save_edit" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveedit('edit')" style="width:140px"> SAVE </a>
 				<a class="easyui-linkbutton c2" id="cancel_edit" href="javascript:void(0)" onclick="javascript:$('#win_edit').window('close')" style="width:140px"><i class="fa fa-ban" aria-hidden="true"></i> CANCEL </a>
 			</div>
 		  </form>
@@ -556,7 +556,10 @@ $menu_id = $_GET['id'];
 		                {field:'EX_RATE',title:'RATE',width:50,halign:'center', align:'center'},
 		                {field:'AMT_L',title:'AMOUNT',width:80,halign:'center', align:'right'},
 		                {field:'REMARK',title:'REMARK',width:180,halign:'center'},
-		                {field:'PERSON',title:'PERSON',width:80,halign:'center'}
+		                {field:'PERSON',title:'PERSON',width:80,halign:'center'},
+						{field:'CASE_MARK', hidden: true},
+						{field:'CONSIGNEE_FROM_JP', hidden: true},//consignee_from_jp
+						{field:'ANSWER_QTY',title:'SHIPPING PLAN<br/>QTY',width:80,halign:'center', align:'right'}//answer_qty
 					]],
 					detailFormatter: function(rowIndex, rowData){
 						return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
@@ -672,7 +675,7 @@ $menu_id = $_GET['id'];
 					    {field:'U_PRICE', title:'PRICE', width:80, halign: 'center'},
 					    {field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
 					    {field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
-						{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
+						{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right', hidden: true},
 					    {field:'ACT_QTY', title:'ORDER<br>SET', halign: 'center', width:50, align:'center'},
 						{field:'ACT_QTY_RESULT', title:'ACT QTY<br/>RESULT', halign: 'center', width:100, align:'right'},
 						{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right', hidden: true},
@@ -694,20 +697,6 @@ $menu_id = $_GET['id'];
 						$(this).datagrid('beginEdit', index);
 					}
 				});
-			}
-
-			function add_group_so(){
-				$('#dlg_group').dialog('open').dialog('setTitle','GROUP ORDER');
-				$('#dg_group').datagrid ({
-					url: 'so_getOrderGroup.php',
-					columns:[[
-						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br/>PO NO.',width:60,halign:'center', align:'center'},
-						{field:'CUSTOMER_PO_DATE',title:'CUSTOMER<br/>PO DATE',width:60,halign:'center', align:'center'},
-						{field:'CUSTOMER_PERSON',title:'PERSON',width:200,halign:'center'},
-						{field:'CUSTOMER_PERSON_CODE',title:'DESCRIPTION',width:80,halign:'center'}
-					]]
-				});
-				$('#dg_group').datagrid('enableFilter');
 			}
 
 			function add_item(val){
@@ -1123,6 +1112,7 @@ $menu_id = $_GET['id'];
 						so_uom: $('#dg_add').datagrid('getData').rows[i].UOM_Q,
 						so_p_mark: $('#so_remark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].P_MARK_RESULT,
 						so_c_mark: $('#so_casemark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].C_MARK_RESULT,
+						so_category_mark: $('#so_category_add').textbox('getValue'),
 						so_amount: tot_amt
 					});
 					}
@@ -1157,15 +1147,23 @@ $menu_id = $_GET['id'];
 					$('#win_edit').window('open').dialog('setTitle','EDIT SALES ORDER ('+row.SO_NO+')');
 					$('#cust_no_edit').textbox('setValue', row.CUSTOMER_CODE);
 					$('#cmb_cust_edit').combobox('setValue', row.CUSTOMER_CODE);
+					$.ajax({
+						type: 'GET',
+						url: '../json/json_info_cust.php?id='+row.CUSTOMER_CODE,
+						data: { kode:'kode' },
+						success: function(data){
+							$('#country_edit').textbox('setValue',data[0].COUNTRY_CODE+'-'+data[0].COUNTRY);
+							$('#curr_edit').combobox('setValue',data[0].CURR_CODE);
+							$('#rate_edit').textbox('setValue',1);
+						}
+					});
 					$('#so_no_edit').textbox('setValue', row.SO_NO);
 					$('#so_cust_po_no_edit').textbox('setValue', row.CUSTOMER_PO_NO);
 					$('#consignee_code_edit').textbox('setValue', row.CONSIGNEE_CODE); 
-					// $('#consignee_name_edit').textbox('setValue',
-					// $('#curr_edit').combobox('setValue', row.CURR_CODE);
-					// $('#rate_edit').textbox('setValue', row.EX_RATE);
+					$('#consignee_name_edit').textbox('setValue', row.CONSIGNEE_NAME); 
 					$('#so_remark_edit').textbox('setValue', row.REMARK);
-					// $('#so_casemark_edit').textbox('setValue',
-					// $('#so_category_edit').textbox('setValue',
+					$('#so_category_edit').textbox('setValue', row. CONSIGNEE_FROM_JP);
+					$('#so_casemark_edit').textbox('setValue', row.CASE_MARK);
 
 					$('#dg_edit').datagrid({
 						url:'so_get_detail_edit.php?so_no='+row.SO_NO,
@@ -1178,7 +1176,7 @@ $menu_id = $_GET['id'];
 							{field:'U_PRICE', title:'PRICE', width:80, halign: 'center'},
 							{field:'UOM_Q', title:'UoM', halign: 'center', width:50, align:'center'},
 							{field:'CURR_MARK', title:'CURR', halign: 'center', width:50, align:'center'},
-							{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right'},
+							{field:'STK_QTY', title:'STOCK<br/>QTY', halign: 'center',width:80, align:'right', hidden: true},
 							{field:'ACT_QTY', title:'ORDER<br>SET', halign: 'center', width:50, align:'center'},
 							{field:'ACT_QTY_RESULT', title:'ACT QTY<br/>RESULT', halign: 'center', width:100, align:'right'},
 							{field:'AMOUNT_RESULT', title:'AMOUNT<br/>RESULT', halign: 'center', width:100, align:'right', hidden: true},
@@ -1211,32 +1209,156 @@ $menu_id = $_GET['id'];
 				}
 			}
 
+			function saveedit(value){
+				// $.messager.progress({
+				// 	title:'Please waiting',
+				// 	msg:'Saving data...'
+				// });
 
+				if(value == 'edit'){
+					var so = $('#so_no_edit').textbox('getValue');
+					$.post('so_destroy.php',{so_no: so},function(result){
+						if (result.success){
+							simpanEdit();
+						}else{
+							$.messager.show({
+								title: 'Error',
+								msg: result.errorMsg
+							});
+							$.messager.progress('close');
+						}
+					},'json');
+				}
+			}
+
+			function simpanEdit(){
+				var rows = [];
+				var amt = 0;
+				var tot_amt = 0;
+				var t = $('#dg_edit').datagrid('getRows');
+				var total = t.length;
+
+				for(i=0;i<total;i++){
+					jmrow = i+1;
+					$('#dg_edit').datagrid('endEdit',i);
+					rows.push({
+						so_sts : 'DETAILS',
+						so_cust: $('#cust_no_edit').textbox('getValue'),
+						so_date: $('#so_date_edit').datebox('getValue'),
+						so_so_no: $('#so_no_edit').textbox('getValue'),
+						so_line_no: jmrow,
+						so_cust_po_no: $('#so_cust_po_no_edit').textbox('getValue'),
+						so_consignee_code: $('#consignee_code_edit').textbox('getValue'),
+						so_consignee_name: $('#consignee_name_edit').textbox('getValue'),
+						so_curr: $('#curr_edit').combobox('getValue'),
+						so_rate: $('#rate_edit').textbox('getValue'),
+						so_country: $('#country_edit').textbox('getValue'),
+						so_item: $('#dg_edit').datagrid('getData').rows[i].ITEM_NO,
+						so_price: $('#dg_edit').datagrid('getData').rows[i].U_PRICE,
+						so_uom: $('#dg_edit').datagrid('getData').rows[i].UOM_Q,
+						so_qty: $('#dg_edit').datagrid('getData').rows[i].ACT_QTY_RESULT,
+						so_p_mark: $('#dg_edit').datagrid('getData').rows[i].P_MARK_RESULT,
+						so_c_mark: $('#dg_edit').datagrid('getData').rows[i].C_MARK_RESULT,
+						so_amount: $('#dg_edit').datagrid('getData').rows[i].AMOUNT_RESULT,
+						so_req_date: $('#dg_edit').datagrid('getData').rows[i].REQ_DATE,
+						so_ex_fact_date: $('#dg_edit').datagrid('getData').rows[i].EXFACT_DATE,
+						so_aging_day: $('#dg_edit').datagrid('getData').rows[i].AGING_DAY,
+						so_date_code: $('#dg_edit').datagrid('getData').rows[i].DATE_CODE,
+						so_asin: $('#dg_edit').datagrid('getData').rows[i].ASIN,
+						so_amz_po_no: $('#dg_edit').datagrid('getData').rows[i].AMZ_PO,
+					});
+
+					amt = parseFloat($('#dg_edit').datagrid('getData').rows[i].AMOUNT_RESULT).toFixed(2);
+					tot_amt += parseFloat(amt);
+
+					if(i==total-1){
+						rows.push({
+						so_sts : 'HEADER',
+						so_cust: $('#cust_no_edit').textbox('getValue'),
+						so_date: $('#so_date_edit').datebox('getValue'),
+						so_so_no: $('#so_no_edit').textbox('getValue'),
+						so_cust_po_no: $('#so_cust_po_no_edit').textbox('getValue'),
+						so_consignee_code: $('#consignee_code_edit').textbox('getValue'),
+						so_consignee_name: $('#consignee_name_edit').textbox('getValue'),
+						so_curr: $('#curr_edit').combobox('getValue'),
+						so_rate: $('#rate_edit').textbox('getValue'),
+						so_country: $('#country_edit').textbox('getValue'),
+						so_item: $('#dg_edit').datagrid('getData').rows[i].ITEM_NO,
+						so_price: $('#dg_edit').datagrid('getData').rows[i].U_PRICE,
+						so_uom: $('#dg_edit').datagrid('getData').rows[i].UOM_Q,
+						so_p_mark: $('#so_remark_edit').textbox('getValue'), //$('#dg_edit').datagrid('getData').rows[i].P_MARK_RESULT,
+						so_c_mark: $('#so_casemark_edit').textbox('getValue'), //$('#dg_edit').datagrid('getData').rows[i].C_MARK_RESULT,
+						so_category_mark: $('#so_category_edit').textbox('getValue'),
+						so_amount: tot_amt
+					});
+					}
+				}
+
+				var myJSON = JSON.stringify(rows);
+				var str_unescape = unescape(myJSON);
+
+				console.log('so_save.php?data='+str_unescape);
+
+				$.post('so_save.php',{
+					data: unescape(str_unescape)
+				}).done(function(res){
+					if(res == '"success"'){
+						// $('#dlg_edit').dialog('close');
+						$('#win_edit').window('close');
+						$('#dg').datagrid('reload');
+						$.messager.alert('INFORMATION','Update Data Success..!!<br/>SO No. : '+$('#so_no_edit').textbox('getValue'),'info');
+						$.messager.progress('close');
+					}else{
+						$.post('so_destroy.php',{prf_no: $('#so_no_edit').textbox('getValue')},'json');
+						$.messager.alert('ERROR',res,'warning');
+						$.messager.progress('close');
+					}
+				});
+			}
+
+			function add_group_so(){
+				$('#dlg_group').dialog('open').dialog('setTitle','GROUP ORDER');
+				$('#dg_group').datagrid ({
+					url: 'so_getOrderGroup.php',
+					columns:[[
+						{field:'CUSTOMER_PO_NO',title:'CUSTOMER<br/>PO NO.',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PO_DATE',title:'CUSTOMER<br/>PO DATE',width:60,halign:'center', align:'center'},
+						{field:'CUSTOMER_PERSON',title:'PERSON',width:200,halign:'center'},
+						{field:'CUSTOMER_PERSON_CODE',title:'DESCRIPTION',width:80,halign:'center'},
+						{field:'CREATE',title:'ADD TO SO', width:80, halign:'center', align:'center'}
+					]]
+				});
+				$('#dg_group').datagrid('enableFilter');
+			}
 
 			function delete_so(){
 				var row = $('#dg').datagrid('getSelected');	
 				if (row){
-					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-						if(r){
-							$.messager.progress({
-								title:'Please waiting',
-								msg:'removing data...'
-							});
-							// console.log('so_destroy.php?so_no='+row.SO_NO);
-							$.post('so_destroy.php',{so_no: row.SO_NO},function(result){
-								if (result.success){
-									$('#dg').datagrid('reload');
-									$.messager.progress('close');
-								}else{
-									$.messager.show({
-										title: 'Error',
-										msg: result.errorMsg
-									});
-									$.messager.progress('close');
-								}
-							},'json');
-						}
-					});
+					if (row.ANSWER_QTY != 0) {
+						$.messager.alert('INFORMATION',"Data can't to remove, because it has Shipping plan",'info');
+					}else{
+						$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+							if(r){
+								$.messager.progress({
+									title:'Please waiting',
+									msg:'removing data...'
+								});
+								// console.log('so_destroy.php?so_no='+row.SO_NO);
+								$.post('so_destroy.php',{so_no: row.SO_NO},function(result){
+									if (result.success){
+										$('#dg').datagrid('reload');
+										$.messager.progress('close');
+									}else{
+										$.messager.show({
+											title: 'Error',
+											msg: result.errorMsg
+										});
+										$.messager.progress('close');
+									}
+								},'json');
+							}
+						});
+					}
 				}
 			}
 		</script>
