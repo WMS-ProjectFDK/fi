@@ -1,4 +1,5 @@
 <?php
+// error_reporting(0);
 	include("../../connect/conn.php");
 	ini_set('max_execution_time', -1);
 	session_start();
@@ -6,7 +7,7 @@
 	$items = array();
 	$rowno=0;
 
-	$rs = "select aa.id_no,cast(aa.tanggal as varchar,aa.type,aa.name_type,aa.id,aa.flag,aa.rack,aa.doc,aa.line,aa.item,aa.pallet,aa.qty, it.description from (
+	$rs = "select aa.id_no,cast(aa.tanggal as varchar(10)) tanggal,aa.type,aa.name_type,aa.id,aa.flag,aa.rack,aa.doc,aa.line,aa.item,aa.pallet,aa.qty, it.description from (
 		select a.id_no,a.tanggal, a.type,
 		case when a.type = '1' then 'INCOMING' when a.type = '2' THEN 'OUTGOING' else 'CHANGE RACK' end as name_type,
 		a.id, a.flag, a.rack,
@@ -22,7 +23,16 @@
 		left join item it on aa.item = it.item_no
 		order by aa.type asc";
 	$data = sqlsrv_query($connect, strtoupper($rs));
-
+	if( $data === false ) {
+		if( ($errors = sqlsrv_errors() ) != null) {
+			foreach( $errors as $error ) {
+				echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+				echo "code: ".$error[ 'code']."<br />";
+				echo "message: ".$error[ 'message']."<br />";
+				echo $rs;
+			}
+		}
+	}
 	
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);

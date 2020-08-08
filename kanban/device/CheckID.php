@@ -1,7 +1,7 @@
 <?php
-include("../../../connect/conn.php");
+include("conn.php");
 date_default_timezone_set('Etc/UTC');
-require_once '../class/PHPMailer/PHPMailerAutoload.php';
+require_once '../../class/PHPMailer/PHPMailerAutoload.php';
 error_reporting(0);
 
 
@@ -54,7 +54,7 @@ $TOTAL=0;
 // 	echo  "SILAHKAN DI PROSES, PALLET " .  $var1 . " SUDAH DI SCAN."; //would output "some-string"
 // }
 
-IF ($TOTAL==0) {
+if($TOTAL==0) {
 	$qry = "select wo_no,plt_no,ID from ztb_p_plan where id = '$var1' ";
 	$data_qry = sqlsrv_query($connect, strtoupper($qry));
 	while ($dt_qry = sqlsrv_fetch_object($data_qry)) {
@@ -68,8 +68,9 @@ IF ($TOTAL==0) {
 			echo  "SILAHKAN DI PROSES, PALLET " .  $var1 . " SUDAH DI SCAN."; //would output "some-string"
 			$var2 = '';
 			exit();
-	}						
+	    }						
 	// echo  "SILAHKAN DI PROSES, PALLET " .  $var2 . " nomor pallet ". $var3 ." SUDAH DI SCAN."; //would output "some-string"
+    }
 }
 			
 	
@@ -119,7 +120,7 @@ if ($TOTAL==0 & $var2 != '') {
 				// 	    echo "Message sent!";
 				// 	    echo "<script>window.onload = self.close();</script>";
 				// 	}
-}ELSE{
+}else{
 	echo "PALLET TIDAK TERDAFTAR, MOHON DI SCAN SEKALI LAGI. ";
 } 
 ?>

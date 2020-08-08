@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 session_start();
 ini_set('max_execution_time', -1);
 include("../../connect/conn.php");
@@ -85,7 +86,7 @@ left outer join (select wo_no,
 left outer join (select distinct a.customer_po_no, b.country_code from so_header a 
                  inner join company b on a.consignee_code = b.company) com on r.po_no = com.customer_po_no
 left outer join (select wo, isnull(count(*),0) as jum_wo from ztb_amazon_wo group by wo) amz on r.work_order = amz.wo
-$where
+
 order by cr_date asc" ;
 
 $data_cek = sqlsrv_query($connect, strtoupper($cek));

@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 date_default_timezone_set("Asia/Bangkok");
 session_start();
 $user = $_SESSION['id_wms'];
@@ -8,8 +8,8 @@ include("../../connect/conn.php");
 
 $device = isset($_REQUEST['device']) ? strval($_REQUEST['device']) : '';
 
-set_include_path(get_include_path() . PATH_SEPARATOR . '../class/phpexcel/');
-include 'PHPExcel/IOFactory.php';
+set_include_path(get_include_path() . PATH_SEPARATOR . 'phpexcel/');
+include '../../class/PHPExcel/PHPExcel/IOFactory.php';
 
 /* COPY FILE DARI 172.23.206.90/Program/Transfer.csv KE WAREHOUSE/FORMS/Transfer.csv */
 /* DELETE FILE DI 172.23.206.90/Program/Transfer.csv*/
@@ -17,6 +17,7 @@ include 'PHPExcel/IOFactory.php';
 // define some variables
 $local_file = 'C:\Users\Public\Documents\kanban_fg.csv';
 $server_file = 'Program/kuraire.csv';
+
 
 // set up basic connection
 $conn_id = ftp_connect($device);
@@ -26,8 +27,7 @@ $login_result = ftp_login($conn_id , 'keyence', 'keyence');
 
 if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	$file = 'Program/kuraire.csv';
-	$inputFileName = "../../../../Users/Public/Documents/kanban_fg.csv";
-
+	$inputFileName = "C:\\Users\Public\Documents\kanban_fg.csv";
 	try {
 	    $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 	} catch(Exception $e) {
@@ -47,10 +47,18 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	for($i=1;$i<=$arrayCount;$i++){
 		$id = trim($allDataInSheet[$i]["A"]);
 		
-		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) select $id,'$hr',0 from dual
-			where not exists (select * from ztb_wh_kanban_trans_fg where slip_no = '$id')";
+		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) select $id,'$hr',0 ";
 		$sqlNya = sqlsrv_query($connect, $sql);
-		
+		if( $sqlNya === false ) {
+			if( ($errors = sqlsrv_errors() ) != null) {
+				foreach( $errors as $error ) {
+					echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+					echo "code: ".$error[ 'code']."<br />";
+					echo "message: ".$error[ 'message']."<br />";
+					echo $sql;
+				}
+			}
+		}
 	}
 
 	/*INSERT LOG*/
@@ -59,7 +67,8 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 
 	
 	if(file_exists($inputFileName)) {
-		$file_baru = '../../../../Users/Public/Documents/kanban_wh_fg'.date("YmdHis").'.csv';
+		// $file_baru = '../../../../Users/Public/Documents/kanban_wh_fg'.date("YmdHis").'.csv';
+		$file_baru = 'C:\\Users\Public\Documents\kanban_wh_fg'.date("Ymdhis").'.csv';
 		rename($inputFileName,$file_baru);
 
 		ftp_delete($conn_id, $file);	

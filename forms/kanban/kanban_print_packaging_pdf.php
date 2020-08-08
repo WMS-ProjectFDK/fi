@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 /*id =2
 NAme : ueng hernana
 tanggal : 18-JAN-19
@@ -123,9 +124,11 @@ while ($data=sqlsrv_fetch_object($result)){
 	if($plt_no_new != $plt_no_old){
 	 	$QR_CODE1 = str_replace(' ', '%20',$data->QR_CODE1);
 	 	$QR_CODE2 = str_replace(' ', '%20',$data->QR_CODE2);
-
-	 	$link1 = 'http://localhost:8888/fi/forms/qr_generate.php?string='.$QR_CODE1;
-	 	$link2 = 'http://localhost:8888/fi/forms/qr_generate_timbangan.php?string='.$QR_CODE2;
+		
+	 	$link1 = 'http://localhost:8088/fi/forms/qr_generate.php?string='.$QR_CODE1;
+		$link2 = 'http://localhost:8088/fi/forms/qr_generate_timbangan.php?string='.$QR_CODE2;
+		 
+		// echo $link1;
 
 		if ($row_a==0) {
 			if($col_a==0){

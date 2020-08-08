@@ -59,7 +59,7 @@ $user_name = $_SESSION['id_wms'];
     </head>
     <body>
 	<?php 
-	include ('../ico_logout.php'); 
+	include ('../../ico_logout.php'); 
 	//include ('sync_get2.php'); 
 	?>
 	

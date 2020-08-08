@@ -8,8 +8,10 @@ include("../../connect/conn.php");
 
 $device = isset($_REQUEST['device']) ? strval($_REQUEST['device']) : '';
 
-set_include_path(get_include_path() . PATH_SEPARATOR . '../class/phpexcel/');
-include 'PHPExcel/IOFactory.php';
+
+set_include_path(get_include_path() . PATH_SEPARATOR . 'phpexcel/');
+include '../../class/PHPExcel/PHPExcel/IOFactory.php';
+
 
 /* COPY FILE DARI 172.23.206.90/Program/Transfer.csv KE WAREHOUSE/FORMS/Transfer.csv */
 /* DELETE FILE DI 172.23.206.90/Program/Transfer.csv*/
@@ -27,8 +29,8 @@ $login_result = ftp_login($conn_id , 'keyence', 'keyence');
 if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	$file = 'Program/Transfer.csv';
 	// This is the file path to be uploaded.
-	$inputFileName = "../../../../Users/Public/Documents/Trans.csv";
 
+	$inputFileName = "C:\\Users\Public\Documents\Trans.csv";
 	try {
 	    $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 	} catch(Exception $e) {
@@ -56,16 +58,26 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 
 		$sql ="insert into ztb_wh_trans (tanggal,type,id_no,document,line,item,rack,pallet,qty,flag) VALUES ('$tanggal','$type','$id','$document','$line','$item','$rack','$pallet','$qty',0)";
 		$sqlNya = sqlsrv_query($connect, $sql);
+		if( $sqlNya === false ) {
+			if( ($errors = sqlsrv_errors() ) != null) {
+				foreach( $errors as $error ) {
+					echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+					echo "code: ".$error[ 'code']."<br />";
+					echo "message: ".$error[ 'message']."<br />";
+					echo $sql;
+				}
+			}
+		}
 		
 	}
 
 	/*INSERT LOG*/
-	$qry = "insert into ztb_wh_sync_log VALUES ('$user',TO_DATE('".date('Y-m-d H:i:s')."','yyyy/mm/dd hh24:mi:ss'),'syncronize barcode ip: ".$device."')";
+	$qry = "insert into ztb_wh_sync_log VALUES ('$user','".date('Y-m-d H:i:s')."','syncronize barcode ip: ".$device."')";
 	$sql_ins = sqlsrv_query($connect, $qry);
 	
 	
 	if(file_exists($inputFileName)) {
-		$file_baru = '../../../../Users/Public/Documents/Trans_'.date("Ymdhis").'.csv';
+		$file_baru = 'C:\\Users\Public\Documents\Trans_'.date("Ymdhis").'.csv';
 		rename($inputFileName,$file_baru);
 
 		ftp_delete($conn_id, $file);	
