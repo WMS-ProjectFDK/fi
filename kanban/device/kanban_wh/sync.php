@@ -73,15 +73,13 @@ if($login_result){
 			}
 			
 			$sql ="insert into ztb_wh_kanban_trans (id,item_no,qty,flag,wo_no,plt_no,line_no,date_in,slip_no)
-				select $id, $item, $qty, 0, '$wo', $plt, $line, TO_DATE('$hr','yyyy-mm-dd'),'$kode' from dual
+				select top 1  $id, $item, $qty, 0, '$wo', $plt, $line, '$hr','$kode' from ztb_wh_kanban_trans
 				where not exists (select * from ztb_wh_kanban_trans where id=$id and item_no='$item')";
-			$sqlNya = oci_parse($connect, $sql);
-			oci_execute($sqlNya);
+			$sqlNya = sqlsrv_query($connect, $sql);
 
 			// UPDATE UPLOAD ZTB_M_PLAN
 			$upd2 = "update ztb_m_plan set upload=1 where wo_no='".$wo."' and plt_no=".$plt."";
-			$data_upd2 = oci_parse($connect, $upd2);
-			oci_execute($data_upd2);
+			$data_upd2 = sqlsrv_query($connect, $upd2);
 
 			$response[] = array('id'=>$id,
 								'kode'=>$kode,
@@ -99,8 +97,7 @@ if($login_result){
 
 		/*INSERT LOG*/
 		$qry = "insert into ztb_wh_sync_log VALUES ('kanban_user',TO_DATE('".date('Y-m-d H:i:s')."','yyyy/mm/dd hh24:mi:ss'),'syncronize barcode ip: ".$device."')";
-		$sql_ins = oci_parse($connect, $qry);
-		oci_execute($sql_ins);
+		$sql_ins = sqlsrv_query($connect, $qry);
 
 		if(file_exists($inputFileName)) {
 			$file_baru = '../../../../Users/Public/Documents/kanban_wh_'.date("YmdHis").'.csv';
