@@ -10,11 +10,11 @@
 	include("../../connect/conn.php");
 
 	$ins_cc = "delete from ZTB_CONTAINER_TEMP ";
-	$data_cc = sqlsrv_query($connect, strtoupper($ins_cc));
+	$data_cc = sqlsrv_query($connect, $ins_cc);
 
 	IF($RD<>'xxx'){
 		$ins_cc = "delete from ztb_shipping_detail where rowid = '$RD' ";
-		$data_cc = sqlsrv_query($connect, strtoupper($ins_cc));
+		$data_cc = sqlsrv_query($connect, $ins_cc);
 	};
 	IF($QTY>0){
 		$field .= "PPBE,"				;	$value .= "'$PPBE',";
@@ -24,6 +24,6 @@
 		chop($field);              			chop($value);
 	    $ins_cc = "insert into ZTB_CONTAINER_TEMP ($field) select $value from dual";
 	    echo($ins_cc);
-		$data_cc = sqlsrv_query($connect, strtoupper($ins_cc));
+		$data_cc = sqlsrv_query($connect, $ins_cc);
 	}
 ?>

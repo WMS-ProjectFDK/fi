@@ -3,7 +3,7 @@
 	header("Content-type: application/json");
 
 	$user = isset($_REQUEST['user']) ? strval($_REQUEST['user']) : '';
-    $sql = "select si_no, cast(si_no as varchar(20))||'-'||cust_si_no cust from si_header 
+    $sql = "select si_no, cast(si_no as varchar(20))+'-'+cust_si_no cust from si_header 
         where cust_si_no is not null 
         order by si_no desc";
 	$result = sqlsrv_query($connect, strtoupper($sql));

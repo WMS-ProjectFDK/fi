@@ -51,11 +51,11 @@ if (isset($_SESSION['id_wms'])){
 
 		//ini untuk edit keselurahan si dan ppbe_no.
 		$sql2  = "update  answer set " ;
-	    $sql2 .= " data_date = to_date('$EX_FACT','YYYY-MM-DD'),";
-	    $sql2 .= " duein_date = to_date('$EX_FACT','YYYY-MM-DD'),";
-	    $sql2 .= " eta = to_date('$ETA','YYYY-MM-DD'),";
-	    $sql2 .= " etd = to_date('$ETD','YYYY-MM-DD'),";
-	    $sql2 .= " stuffy_date =  TO_DATE('$EX_FACT','yyyy-mm-dd')," ;
+	    $sql2 .= " data_date = '$EX_FACT',";
+	    $sql2 .= " duein_date = '$EX_FACT',";
+	    $sql2 .= " eta = '$ETA',";
+	    $sql2 .= " etd = '$ETD',";
+	    $sql2 .= " stuffy_date =  '$EX_FACT'," ;
 	    $sql2 .= " operation_date = sysdate,";
 	    $sql2 .= " vessel='$VESSEL'";
 	    $sql2 .= " where crs_remark = '$CRS_REMARK' AND si_no = '$SI_NO' " ;
@@ -70,9 +70,9 @@ if (isset($_SESSION['id_wms'])){
 		//ini untuk edit keselurahan si dan ppbe_no.
 		$sql0 .= "  update  ztb_shipping_plan set" ;
 	    $sql0 .= "  cr_Date =  '$CR_DATE'," ;
-	    $sql0 .= "  ETA =  TO_DATE('$ETA','yyyy-mm-dd')," ;
-	    $sql0 .= "  ETD =  TO_DATE('$ETD','yyyy-mm-dd')," ;
-	    $sql0 .= "  EX_FACT =  TO_DATE('$EX_FACT','yyyy-mm-dd')," ;
+	    $sql0 .= "  ETA =  '$ETA'," ;
+	    $sql0 .= "  ETD =  '$ETD'," ;
+	    $sql0 .= "  EX_FACT =  '$EX_FACT'," ;
 	    $sql0 .= "  inv_no =  '$CRS_REMARK'," ;
 	    $sql0 .= "  vessel =  '$VESSEL'" ;
 	    $sql0 .= "  where si_no = '$SI_NO' AND inv_no = '$CRS_REMARK'" ;

@@ -85,12 +85,12 @@ h2 {
 		<div style="width:450px;float:left">
 			<div class="fitem">
 				<span style="width:80px;display:inline-block;">PO No.</span>
-				<select style="width:300px;" name="cmb_po_no" id="cmb_po_no" class="easyui-combobox" data-options=" url:'json/json_mps.php',method:'get',valueField:'po_no',textField:'po_no', panelHeight:'150px'"></select>
+				<select style="width:300px;" name="cmb_po_no" id="cmb_po_no" class="easyui-combobox" data-options=" url:'../json/json_mps.php',method:'get',valueField:'po_no',textField:'po_no', panelHeight:'150px'"></select>
 				<label><input type="checkbox" name="ck_po_no" id="ck_po_no" checked="true">All</input></label>
 			</div>
 			<div class="fitem">
 				<span style="width:80px;display:inline-block;">Item No.</span>
-				<select style="width:300px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_mps.php',method:'get',valueField:'item_no',textField:'item_no', panelHeight:'150px'"></select>
+				<select style="width:300px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_mps.php',method:'get',valueField:'item_no',textField:'item_no', panelHeight:'150px'"></select>
 				<label><input type="checkbox" name="ck_item_no" id="ck_item_no" checked="true">All</input></label>
 			</div>
 		</div>
@@ -133,7 +133,7 @@ h2 {
 <div id='dlg_viewPln' class="easyui-dialog" style="width:1300px;height:300px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true"
 	title="<span style='margin-right:1060px;'>VIEW & EDIT INFO SHIPPING</span>
 		   <span><a href='javascript:void(0)' style='color:white' onclick='closeDialog()'>
-		   			<img src='../images/cancel.png' alt='Close' title='close'></img>
+		   			<!-- <img src='../images/cancel.png' alt='Close' title='close'></img> -->
 		   		 </a>
 		   	</span>">
 	<table id="dg_viewPln" class="easyui-datagrid" style="width:100%;height:100%;"></table>
