@@ -1,5 +1,9 @@
 <?php
+<<<<<<< HEAD
 // error_reporting(0);
+=======
+error_reporting(0);
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 set_time_limit(0);
 date_default_timezone_set("Asia/Bangkok");
 
@@ -7,7 +11,11 @@ include("conn.php");
 $device = "172.23.225.209";
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpexcel/');
+<<<<<<< HEAD
 include '../../class/PHPExcel/PHPExcel/IOFactory.php';
+=======
+include 'PHPExcel/IOFactory.php';
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 
 // define some variables
 $local_file = 'C:\Users\Public\Documents\kanban_wh.csv';
@@ -22,8 +30,13 @@ $login_result = ftp_login($conn_id , 'keyence', 'keyence');
 if($login_result){
 	if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 		$file = 'Program/Transfer.csv';
+<<<<<<< HEAD
 		$inputFileName = "C:\\Users\Public\Documents\kanban_wh.csv";
         // C:\Users\Public\Documents
+=======
+		$inputFileName = "../../../../Users/Public/Documents/kanban_wh.csv";
+
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 		try {
 		    $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 		} catch(Exception $e) {
@@ -73,7 +86,11 @@ if($login_result){
 			}
 			
 			$sql ="insert into ztb_wh_kanban_trans (id,item_no,qty,flag,wo_no,plt_no,line_no,date_in,slip_no)
+<<<<<<< HEAD
 				select top 1 $id, $item, $qty, 1, '$wo', $plt, $line, '$hr','$kode' from item
+=======
+				select top 1  $id, $item, $qty, 0, '$wo', $plt, $line, '$hr','$kode' from ztb_wh_kanban_trans
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 				where not exists (select * from ztb_wh_kanban_trans where id=$id and item_no='$item')";
 			$sqlNya = sqlsrv_query($connect, $sql);
 
@@ -90,12 +107,17 @@ if($login_result){
 								'wo'=>$wo,
 								'sql'=>$sql
 							);
+<<<<<<< HEAD
             // echo $sql;
+=======
+
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 			$ln = trim($id);
 			$line++;
 		}
 
 		/*INSERT LOG*/
+<<<<<<< HEAD
 		$qry = "insert into ztb_wh_sync_log VALUES ('kanban_user',getdate(),'syncronize barcode ip: ".$device."')";
 		$sql_ins = sqlsrv_query($connect, $qry);
 
@@ -103,6 +125,15 @@ if($login_result){
 			$file_baru = 'C:\\Users\Public\Documents\kanban_wh_'.date("YmdHis").'.csv';
 
 			$fp = fopen('C:\\Users\Public\Documents\kanban_wh_'.date("YmdHis").'.json', 'w');
+=======
+		$qry = "insert into ztb_wh_sync_log VALUES ('kanban_user',TO_DATE('".date('Y-m-d H:i:s')."','yyyy/mm/dd hh24:mi:ss'),'syncronize barcode ip: ".$device."')";
+		$sql_ins = sqlsrv_query($connect, $qry);
+
+		if(file_exists($inputFileName)) {
+			$file_baru = '../../../../Users/Public/Documents/kanban_wh_'.date("YmdHis").'.csv';
+
+			$fp = fopen('../../../../Users/Public/Documents/kanban_wh_'.date("YmdHis").'.json', 'w');
+>>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 			fwrite($fp, json_encode($response));
 			fclose($fp);
 

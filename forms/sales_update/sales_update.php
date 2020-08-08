@@ -8,7 +8,7 @@ $menu_id = $_GET['id'];
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DELIVERY UPDATE/RESTORE</title>
+<title>SALES UPDATE/RESTORE</title>
 <link rel="icon" type="image/png" href="../../favicon.png">
 <script language="javascript">
 		function confirmLogOut(){
@@ -64,19 +64,19 @@ h2 {
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name));?>
 
 	<div id="toolbar">
-		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong>Delivery Update / Restore</strong></span></legend>
+		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong>Sales Update / Restore</strong></span></legend>
 			<div style="width:470px; float:left;">
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">EX Factory Date</span>
-					<input style="width:100px;" name="ex_factory_date" id="ex_factory_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+					<span style="width:100px;display:inline-block;">Invoice Date</span>
+					<input style="width:100px;" name="do_date" id="do_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
 					
 				</div>
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">Delivery Type.</span>
+					<span style="width:100px;display:inline-block;">Sales Type.</span>
 					<select  style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true" " >
                         <option value="None" selected>-- Select --</option>
-                        <option value="UPDATE">Delivery Update</option>
-                        <option value="RESTORE" >Delivery Restore</option>
+                        <option value="UPDATE">Sales Update</option>
+                        <option value="RESTORE" >Sales Restore</option>
                     </select>
 				</div>
 			</div>
@@ -89,29 +89,26 @@ h2 {
 				<a href="javascript:void(0)" style="width: 150px;height: 35px;" id="save_approve" class="easyui-linkbutton c2" onClick="save_approve()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Update / Restore</a>
 			</div>
             <div id="dlg-buttons-qty" align="center">
-			    <a href="javascript:void(0)" id="save_con" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveCon()" style="width:90px">SET</a>
+			    <a href="javascript:void(0)" id="save_con" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveBL()" style="width:90px">SET</a>
 		    </div>
 		</fieldset>
 		<div style="clear:both;"></div>
 	</div>
 
-    <div id="dlg_input" class="easyui-dialog" style="width: 550px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+    <div id="dlg_input" class="easyui-dialog" style="width: 300px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
 			
 			<div class="fitem">
-				<span style="width:100px;display:inline-block;">CONTAINER NO</span>
-				<input style="width: 400px;" name="con_no" id="con_no" class="easyui-textbox"/>
+				<span style="width:75px;display:inline-block;">BL DATE</span>
+				<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
 			</div>
 			
-			<div class="fitem" align="center">
-				<span style="width:100px;display:inline-block;">SEAL NO</span>
-				<input style="width:400px;" name="seal_no" id="seal_no" class="easyui-textbox"/>
-			</div>
+
 
           
 			
 		</div>
 
-	<table id="dg" title="DELIVERY UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
+	<table id="dg" title="SALES UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
 		var flagTipe = "";
@@ -151,19 +148,15 @@ h2 {
 			$('#dg').datagrid({
 			    columns:[[
 				    {field:'CK', checkbox:true, width:30, halign: 'center'},
-                    {field:'DO_NO',title:'INV NO.',width:75, halign: 'center', align: 'center'},
+                    {field:'DO_NO',title:'INV NO.',width:55, halign: 'center', align: 'center'},
 				    {field:'DO_DATE',title:'INV DATE',width:60, halign: 'center', align: 'center'},
-				    {field:'ANSWER_NO',title:'ANSWER NO.',width:75, halign: 'center', align: 'center', hidden: true},
-				    {field:'SO_NO',title:'SALES ORDER<br/>NO.',width:60, halign: 'center', align: 'center'},
-				    {field:'CUSTOMER_PO_NO',title:'PO NO',width:60, halign: 'center', align: 'center'},
-				    {field:'EX_FACTORY',title:'EX-FACTORY',width:60, halign: 'center', align: 'center'},
-				    {field:'ITEM_NO',title:'ITEM', width:50, halign: 'center'},
-                    {field:'DESCRIPTION',title:'DESCRIPTION', width:100, halign: 'center'},
-                    {field:'QTY',title:'QUANTITY', width:70, halign: 'center',align: 'right'},
-                    {field:'CUSTOMER',title:'CUSTOMER', width:100, halign: 'center'},
-                    {field:'INPUT',title:'INPUT', width:40, halign: 'center'},
-                    {field:'CONTAINER_NO',title:'CONTAINER', width:80, halign: 'center'},
-                    {field:'SEAL_NO',title:'SEAL', width:80, halign: 'center'}
+					{field:'CUSTOMER_CODE',title:'CUSTOMER CODE', width:60, halign: 'center'},
+					{field:'CUSTOMER',title:'CUSTOMER', width:150, halign: 'center'},
+					{field:'INPUT',title:'CHANGE<br> BL DATE', width:40, halign: 'center'},
+				    {field:'BL_DATE',title:'BL DATE.',width:35, halign: 'center', align: 'center'},
+				    {field:'CURR_MARK',title:'CURRENCY',width:40, halign: 'center', align: 'center'},
+				    {field:'AMT_O',title:'AMOUNT ORIGINAL',width:60, halign: 'center', align: 'right'},
+				    {field:'AMT_L',title:'AMOUNT LOCAL',width:60, halign: 'center', align: 'right'}
 			    ]]
 				
 			})
@@ -184,10 +177,10 @@ h2 {
 
         function filterDataUpdate(){
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue')
+				do_date: $('#do_date').datebox('getValue')
 			});
 			$('#dg').datagrid({
-				url:'get_delivery_update.php'
+				url:'get_sales_update.php'
 			})
 		   	$('#dg').datagrid('enableFilter');
 		   	$('#save_approve').linkbutton('enable');
@@ -195,10 +188,10 @@ h2 {
 
         function filterDataRestore(){
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue')
+				do_date: $('#do_date').datebox('getValue')
 			});
 			$('#dg').datagrid({
-				url:'get_delivery_restore.php'
+				url:'get_sales_restore.php'
 			})
 		   	$('#dg').datagrid('enableFilter');
 		   	$('#save_approve').linkbutton('enable');
@@ -210,15 +203,14 @@ h2 {
             for(i=0;i<rows.length;i++){
 				$('#dg').datagrid('endEdit',i);
 				dataRows.push({
-                    answer_no: rows[i].ANSWER_NO,
-                    container_no: rows[i].CONTAINER_NO,
-                    seal_no: rows[i].SEAL_NO  
+                    do_no: rows[i].DO_NO,
+                    bl_date: rows[i].BL_DATE 
                 });
 			}
             
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
-            $.post('post_delivery_update.php',{
+            $.post('post_sales_update.php',{
 						data: unescape(str_unescape)
 					}).done(function(res){
 						if(res == '"success"'){
@@ -240,13 +232,14 @@ h2 {
             for(i=0;i<rows.length;i++){
 				$('#dg').datagrid('endEdit',i);
 				dataRows.push({
-                    answer_no: rows[i].ANSWER_NO
+                    do_no: rows[i].DO_NO,
+                    bl_date: rows[i].BL_DATE 
                 });
 			}
             
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
-            $.post('post_delivery_restore.php',{
+            $.post('post_sales_restore.php',{
 						data: unescape(str_unescape)
 					}).done(function(res){
 						if(res == '"success"'){
@@ -275,22 +268,19 @@ h2 {
             }
 		}
         var ans = ''
-        function input_container(a){
+        function input_bl_date(a){
             var tipe = $('#cmb_delivery_type').combobox('getValue');
             if(tipe=='UPDATE'){
-                $('#dlg_input').dialog('open').dialog('setTitle', 'INPUT CONTAINER');	
+                $('#dlg_input').dialog('open').dialog('setTitle', 'INPUT BL DATE');	
                 var rows = $('#dg').datagrid('getRows');
-                var sealNo = '';
-                var conNo = '';
+                var bldate = '';
 
                 for(i=0;i<rows.length;i++){
-                    if(a == rows[i].ANSWER_NO){
-                        sealNo = rows[i].SEAL_NO;
-                        conNo = rows[i].CONTAINER_NO;
+                    if(a == rows[i].DO_NO){
+                        bldate = rows[i].BL_DATE;
                     }
                 }
-                $('#con_no').textbox('setValue',conNo);
-                $('#seal_no').textbox('setValue',sealNo);
+                $('#bl_date_datebox').datebox('setValue',bldate);
                 ans = a;
             }else if(tipe=='RESTORE'){
                 $.messager.alert('INFORMATION','Cannot Change Data','info');
@@ -300,16 +290,15 @@ h2 {
 			
 		}
         
-        function saveCon(){
+        function saveBL(){
             
-            var sealNo = $('#seal_no').textbox('getValue');
-            var conNo = $('#con_no').textbox('getValue');
+            var BL = $('#bl_date_datebox').datebox('getValue');
             var rows = $('#dg').datagrid('getRows');
             for(i=0;i<rows.length;i++){
-                if(ans == rows[i].ANSWER_NO){
+                if(ans == rows[i].DO_NO){
                     $('#dg').datagrid('updateRow', {
                         index: i,
-                        row: {CONTAINER_NO: conNo,SEAL_NO:sealNo}
+                        row: {BL_DATE: BL}
                     });
                 }
 			}
