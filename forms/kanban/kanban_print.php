@@ -72,7 +72,7 @@ $user_name = $_SESSION['id_wms'];
 </head>
 
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
 	<fieldset style="float:left;width:900px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>KANBAN PRINT FILTER</strong></span></legend>
