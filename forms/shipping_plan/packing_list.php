@@ -252,15 +252,15 @@ h2 {
 			dataRows.push({
 				pl_sts:	$('#dg').datagrid('getData').rows[i].STS,
 				pl_rowid: $('#dg').datagrid('getData').rows[i].ROW_ID,
-				pl_start: $('#dg').datagrid('getData').rows[i].START_BOX.replace(/,/g,''),
-				pl_end: $('#dg').datagrid('getData').rows[i].END_BOX.replace(/,/g,''),
-				pl_qty: $('#dg').datagrid('getData').rows[i].QTY.replace(/,/g,''),
-				pl_carton: $('#dg').datagrid('getData').rows[i].CARTON.replace(/,/g,''),
-				pl_carton_non_full: $('#dg').datagrid('getData').rows[i].CARTON_NON_FULL.replace(/,/g,''),
-				pl_gw: $('#dg').datagrid('getData').rows[i].GROSS.replace(/,/g,''),
-				pl_nw: $('#dg').datagrid('getData').rows[i].NET.replace(/,/g,''),
-				pl_msm: $('#dg').datagrid('getData').rows[i].MSM.replace(/,/g,''),
-				pl_pallet: $('#dg').datagrid('getData').rows[i].PALLET.replace(/,/g,'')
+				pl_start: $('#dg').datagrid('getData').rows[i].START_BOX,
+				pl_end: $('#dg').datagrid('getData').rows[i].END_BOX,
+				pl_qty: $('#dg').datagrid('getData').rows[i].QTY,
+				pl_carton: $('#dg').datagrid('getData').rows[i].CARTON,
+				pl_carton_non_full: $('#dg').datagrid('getData').rows[i].CARTON_NON_FULL,
+				pl_gw: $('#dg').datagrid('getData').rows[i].GROSS,
+				pl_nw: $('#dg').datagrid('getData').rows[i].NET,
+				pl_msm: $('#dg').datagrid('getData').rows[i].MSM,
+				pl_pallet: $('#dg').datagrid('getData').rows[i].PALLET
 			});
 		}
 

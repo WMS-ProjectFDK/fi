@@ -7,6 +7,8 @@ $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
+
+
 $ppbe = isset($_REQUEST['ppbe']) ? strval($_REQUEST['ppbe']) : '';
 
 $exp_ppbe = explode('/', $ppbe);
@@ -18,25 +20,27 @@ if ($exp_ppbe[1] =='W'){
     $nm = 'DEWI';
 }
 
-$sql_h = "select distinct LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, b.do_date, c.booking_no,
-    rtrim(replace(b.ship_name,chr(10),'<br>'),'|') as vessel, b.final_destination, b.etd, s.forwarder_name
-    from answer a
-    left join do_header b on a.si_no = b.si_no
-    left join forwarder_letter c on b.do_no = c.do_no
-    left join si_header s on a.si_no = s.si_no
-    where a.crs_remark = '$ppbe'";
+
+
+$sql_h = "select distinct dbo.LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, b.do_date, c.booking_no,
+replace(b.ship_name,char(10),'<br>') as vessel, b.final_destination, b.etd, s.forwarder_name
+from answer a
+left join do_header b on a.si_no = b.si_no
+left join forwarder_letter c on b.do_no = c.do_no
+left join si_header s on a.si_no = s.si_no
+	where a.crs_remark = '$ppbe'";
 $data_h = sqlsrv_query($connect, strtoupper($sql_h));
 $dt_h = sqlsrv_fetch_object($data_h);
 
-$sql = "select a.ppbe_no, LIST_COLLECT(b.SI_NO, ', ') as SI_NO, a.wo_no, a.item_no, it.description,
-    a.qty, a.net, a.gross, a.msm, a.pallet, a.container_no || chr(10) || '(' || a.containers || ')' as container_no, zti.pallet_pcs, zti.pallet_ctn, 
-    a.qty/(zti.pallet_pcs/zti.pallet_ctn) as carton_qty, a.tw, b.customer_po_no, a.enr
-    from ztb_shipping_detail a
-    left outer join answer b on a.wo_no = b.work_no and a.ppbe_no = b.crs_remark
-    inner join item it on a.item_no = it.item_no
-    left join ztb_item zti on a.item_no = zti.item_no
-    where a.ppbe_no='$ppbe'
-    order by a.container_no";
+$sql = "select a.ppbe_no, dbo.LIST_COLLECT(b.SI_NO, ', ') as SI_NO, a.wo_no, a.item_no, it.description,
+	a.qty, a.net, a.gross, a.msm, a.pallet, a.container_no + char(10) + '(' + a.containers + ')' as container_no, zti.pallet_pcs, zti.pallet_ctn, 
+	a.qty/(zti.pallet_pcs/zti.pallet_ctn) as carton_qty, a.tw, b.customer_po_no, a.enr
+	from ztb_shipping_detail a
+	left outer join answer b on a.wo_no = b.work_no and a.ppbe_no = b.crs_remark and a.answer_no = b.answer_no
+	inner join item it on a.item_no = it.item_no
+	left join ztb_item zti on a.item_no = zti.item_no
+	where a.ppbe_no='$ppbe'
+	order by a.container_no asc, b.so_no asc, b.so_line_no asc";
 $data = sqlsrv_query($connect, strtoupper($sql));
 
 function cellColor($cells,$color){
@@ -172,7 +176,7 @@ $grand_tot_nw = 0;          $tot_nw = 0;
 $grand_tot_msm = 0;         $tot_msm = 0;
 $grand_tot_plt = 0;         $tot_plt = 0;       
 $grand_tw = 0;              $tw = 0;
-while ($dt=oci_fetch_object($data)){
+while ($dt=sqlsrv_fetch_object($data)){
     $container = $dt->CONTAINER_NO;
     $qty = $dt->QTY;                        $nw = $dt->NET;
     $carton = $dt->CARTON_QTY;              $msm = number_format($dt->MSM,3);
@@ -360,7 +364,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('WMS-FDKI');
 $objDrawing->setDescription('FDKI');
-$objDrawing->setPath('../images/logo-print4.png');
+$objDrawing->setPath('../../images/logo-print4.png');
 $objDrawing->setWidth('500px');
 $objDrawing->setCoordinates('A1');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());

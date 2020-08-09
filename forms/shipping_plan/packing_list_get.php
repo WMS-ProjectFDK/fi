@@ -5,14 +5,14 @@
 	$rowno=0;
 	include("../../connect/conn.php");
 	
-	$sql = "select cast(a.ROWID as varchar(50)) ROW_ID, 'OLD' as sts, a.so_no, a.wo_no, c.description, a.item_no,
-		a.qty, a.pallet, a.carton, a.carton_non_full,
-		ltrim(to_char(a.gw,'99999990.00')) gross, 
-		ltrim(to_char(a.nw,'99999990.00')) net, 
-		ltrim(to_char(a.msm,'99999990.000')) msm,
-		a.answer_no, a.start_box, a.end_box
-		from ztb_shipping_ins a
-		inner join item c on a.item_no = c.item_no
+	$sql = "select rowid ROW_ID, 'OLD' as sts, a.so_no, a.wo_no, c.description, a.item_no,
+	a.qty, a.pallet, a.carton, a.carton_non_full,
+	a.gw gross, 
+	a.nw net, 
+	msm,
+	a.answer_no, a.start_box, a.end_box
+	from ztb_shipping_ins a
+	inner join item c on a.item_no = c.item_no
 		where a.remarks='$ppbe'
 		order by line_no asc";
 

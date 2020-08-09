@@ -13,6 +13,14 @@ if (isset($_SESSION['id_wms'])){
 	if ($bdc_container != 'TOTAL'){
 		$sql = "update ztb_shipping_detail set containers = '".$bdc_size ."' , TW = '". $bdc_tw ."', ENR = '". $bdc_enr ."', CONTAINER_NO = '". $bdc_container ."' where rowid = '". $bdc_row ."'  ";
 		$stmt = sqlsrv_query($connect, $sql);
+		if($stmt === false ) {
+			if(($errors = sqlsrv_errors() ) != null) {  
+				foreach( $errors as $error){  
+					$msg .= "message: ".$error[ 'message']."<br/>";  
+					die( print_r( sqlsrv_errors(), true));
+				}  
+			}
+		}
         /* Execute */		
         // $pesan = oci_error($stmt);
 		// $msg = $pesan['message'];
@@ -23,7 +31,7 @@ if (isset($_SESSION['id_wms'])){
 		// 	}		
 	};
 
-	//print_r($msg, true);
+	print_r($msg, true);
 	echo $msg;
 }else{
 	echo json_encode(array('errorMsg'=>'Session Expired'));

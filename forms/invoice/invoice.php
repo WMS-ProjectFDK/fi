@@ -533,7 +533,7 @@ if ($varConn=='Y'){
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Transport</span>
-					<input style="width:85px;" name="trans_edit" id="trans_edit" class="easyui-combobox" data-options=" url:'json/json_transport.json', method:'get', valueField:'id', textField:'transport', panelHeight:'100px',
+					<input style="width:85px;" name="trans_edit" id="trans_edit" class="easyui-combobox" data-options=" url:'../json/json_transport.json', method:'get', valueField:'id', textField:'transport', panelHeight:'100px',
 		        	onSelect: function(rec){
 		        		if (rec.id == 2){
 		        			$('#dlg_transport').dialog('open').dialog('setTitle','Setting Transport Edit');
@@ -984,29 +984,29 @@ if ($varConn=='Y'){
 			var del = "<?=$exp[2]?>";
 			var prn = "<?=$exp[4]?>";
 
-			if (add == 'ADD/T'){
-				$('#add').linkbutton('enable');
-			}else{
-				$('#add').linkbutton('disable');
-			}
+			// if (add == 'ADD/T'){
+			// 	$('#add').linkbutton('enable');
+			// }else{
+			// 	$('#add').linkbutton('disable');
+			// }
 
-			if (upd == 'UPDATE/T'){
-				$('#edit').linkbutton('enable');
-			}else{
-				$('#edit').linkbutton('disable');
-			}
+			// if (upd == 'UPDATE/T'){
+			// 	$('#edit').linkbutton('enable');
+			// }else{
+			// 	$('#edit').linkbutton('disable');
+			// }
 
-			if (del == 'DELETE/T'){
-				$('#delete').linkbutton('enable');
-			}else{
-				$('#delete').linkbutton('disable');
-			}
+			// if (del == 'DELETE/T'){
+			// 	$('#delete').linkbutton('enable');
+			// }else{
+			// 	$('#delete').linkbutton('disable');
+			// }
 
-			if (prn == 'PRINT/T'){
-				$('#print').linkbutton('enable');
-			}else{
-				$('#print').linkbutton('disable');
-			}			
+			// if (prn == 'PRINT/T'){
+			// 	$('#print').linkbutton('enable');
+			// }else{
+			// 	$('#print').linkbutton('disable');
+			// }			
 		}
 
 		$(function(){

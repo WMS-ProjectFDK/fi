@@ -14,7 +14,7 @@
 	$src = isset($_REQUEST['src']) ? strval($_REQUEST['src']) : '';
 	
 	if ($ck_date != "true"){
-		$date_do = "to_char(h.do_date,'YYYY-MM-DD') between '$date_awal' and '$date_akhir' and ";
+		$date_do = "h.do_date between '$date_awal' and '$date_akhir' and ";
 	}else{
 		$date_do = "";
 	}	
@@ -46,32 +46,32 @@
 	if ($src !='') {
 		$where="where h.do_no like '%$src%'";
 	}else{
-		$where ="where $cust $item_no $do $date_do $po to_char(h.do_date,'yyyy')>=(select to_char(add_months(sysdate,-36),'YYYY') from dual) AND h.do_type = 1 AND h.bl_date is null";
+		$where ="where $cust $item_no $do $date_do $po  h.do_type = 1 AND h.bl_date is null";
 	}
 	
 	include("../../connect/conn.php");
 
-	$sql = "select * from (select h.customer_code, c.company customer, h.do_no,do_date, cu.curr_mark, h.ship_end_flg, h.bl_date, 
-		rtrim(replace(h.remark,chr(10),'<br>'),'|') as remark1, h.remark, h.person_code, pe.person,
-		to_char(nvl(h.ex_rate,0),'99990.000000')  ex_rate, to_char(h.amt_o,'9,999,999,990.00') amt_o, to_char(h.amt_o * h.ex_rate,'9,999,999,990.00') amt_l,
-		h.curr_code, h.trade_term, h.attn, h.pby, h.pdays, h.pdesc, h.gst_rate, c.country_code, co.country, h.si_no, h.contract_seq, substr(h.trade_term, 0, 3) term,
-		rtrim(replace(h.ship_name,chr(10),'<br>'),'|') as ship_name, 
-		si.load_port_code, si.load_port, si.disch_port_code, h.port_discharge, si.final_dest_code, h.final_destination, 
-		rtrim(replace(h.notify,chr(10),'<br>'),'|') as notify,
-		to_char(h.eta,'YYYY-MM-DD') as eta, to_char(h.etd, 'YYYY-MM-DD') as etd, f.transport_type, f.forwarder_code, f.domestic_truck_code, f.booking_no,
-		f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, to_char(h.do_date,'YYYY-MM-DD') as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
-		from do_header h
-		inner join company c on h.customer_code = c.company_code
-		inner join country co on c.country_code = co.country_code
-		inner join currency cu on h.curr_code = cu.curr_code
-		left outer join si_header si on h.si_no = si.si_no
-		inner join FORWARDER_LETTER f on h.do_no = f.do_no
-		left join person pe on h.person_code = pe.person_code
-		left join (select distinct si_no, crs_remark as ppbe_no from answer) ppbe on h.si_no = ppbe.si_no and h.description = ppbe.ppbe_no
-		left join (select distinct inv_no, case when commit_date is null then 'NOT DELIVERY' else to_char(commit_date, 'DD-MM-YYYY') end sts, max(remark) as rmk
-			from indication group by inv_no, commit_date) idc on h.do_no = idc.inv_no
+	$sql = "select h.customer_code, c.company customer, h.do_no,cast(do_date as varchar(10)) do_date, cu.curr_mark, h.ship_end_flg, cast(h.bl_date as varchar(10)) bl_Date, 
+	replace(h.remark,char(10),'<br>') as remark1, h.remark, h.person_code, pe.person,
+	h.ex_rate  ex_rate, h.amt_o amt_o, h.amt_o * h.ex_rate amt_l,
+	h.curr_code, h.trade_term, h.attn, h.pby, h.pdays, h.pdesc, h.gst_rate, c.country_code, co.country, h.si_no, h.contract_seq, substring(h.trade_term, 0, 3) term,
+	replace(h.ship_name,char(10),'<br>') as ship_name, 
+	si.load_port_code, si.load_port, si.disch_port_code, h.port_discharge, si.final_dest_code, h.final_destination, 
+	replace(h.notify,char(10),'<br>')as notify,
+	cast(h.eta as varchar(10)) as eta, cast(h.etd as varchar(10))as etd, f.transport_type, f.forwarder_code, f.domestic_truck_code, f.booking_no,
+	f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, h.do_date as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
+	from do_header h
+	inner join company c on h.customer_code = c.company_code
+	inner join country co on c.country_code = co.country_code
+	inner join currency cu on h.curr_code = cu.curr_code
+	left outer join si_header si on h.si_no = si.si_no
+	inner join FORWARDER_LETTER f on h.do_no = f.do_no
+	left join person pe on h.person_code = pe.person_code
+	left join (select distinct si_no, crs_remark as ppbe_no from answer) ppbe on h.si_no = ppbe.si_no and h.description = ppbe.ppbe_no
+	left join (select distinct inv_no, case when commit_date is null then 'NOT DELIVERY' else cast(commit_date as varchar(10)) end sts, max(remark) as rmk
+		from indication group by inv_no, commit_date) idc on h.do_no = idc.inv_no
 		$where
-		order by h.customer_code,h.do_date desc) where rownum <=150";
+		order by h.customer_code,h.do_date desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

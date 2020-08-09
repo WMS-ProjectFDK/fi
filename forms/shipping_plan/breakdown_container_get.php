@@ -4,15 +4,16 @@
 	$items = array();
 	$rowno=0;
 	include("../../connect/conn.php");
-	
-	$sql = "select b.so_no, b.customer_po_no, a.wo_no, d.description, b.item_no,b.item_no ITEM2,
-		a.qty, ceil(a.pallet) pallet,CONTAINER_NO, 
-		c.pallet_ctn, ceil(a.qty / (c.pallet_pcs/c.pallet_ctn)) CARTON,
-		ltrim(to_char(a.gross,'99999990.00')) gross, 
-		ltrim(to_char(a.net,'99999990.00')) net, 
-		ltrim(to_char(a.msm,'99999990.000')) msm, 
-		cast(a.ROWID as varchar(50)) ROW_ID,
-		ltrim(to_char(a.container_value,'99999990.000')) container_value, 
+	//117/H/20
+	$sql = "
+		
+		select b.so_no, b.customer_po_no, a.wo_no, d.description, b.item_no,b.item_no ITEM2,
+		a.qty, ceiling(a.pallet) pallet,CONTAINER_NO, 
+		c.pallet_ctn, ceiling(a.qty / (c.pallet_pcs/c.pallet_ctn)) CARTON,
+		cast(a.gross as decimal(10,2)) gross, 
+		cast(a.net as decimal(10,2)) net, 
+		cast(a.msm as decimal(10,2)) msm, rowid ROW_ID,ppbe_no,
+		cast(a.container_value as decimal(10,2)) container_value, 
 		a.containers, 'OLD' as sts,a.answer_no, a.tw, a.enr
 		from ztb_shipping_detail a
 		inner join answer b on a.answer_no = b.answer_no

@@ -19,18 +19,18 @@ if ($exp_ppbe[1] =='W'){
 	$nm = 'DEWI';
 }
 
-$sql_h = "select distinct LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, b.do_date, c.booking_no,
-	rtrim(replace(b.ship_name,chr(10),'<br>'),'|') as vessel, b.final_destination, b.etd, s.forwarder_name
-	from answer a
-	left join do_header b on a.si_no = b.si_no
-	left join forwarder_letter c on b.do_no = c.do_no
-	left join si_header s on a.si_no = s.si_no
+$sql_h = "select distinct dbo.LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, b.do_date, c.booking_no,
+replace(b.ship_name,char(10),'<br>') as vessel, b.final_destination, b.etd, s.forwarder_name
+from answer a
+left join do_header b on a.si_no = b.si_no
+left join forwarder_letter c on b.do_no = c.do_no
+left join si_header s on a.si_no = s.si_no
 	where a.crs_remark = '$ppbe'";
 $data_h = sqlsrv_query($connect, strtoupper($sql_h));
 $dt_h = sqlsrv_fetch_object($data_h);
 
-$sql = "select a.ppbe_no, LIST_COLLECT(b.SI_NO, ', ') as SI_NO, a.wo_no, a.item_no, it.description,
-	a.qty, a.net, a.gross, a.msm, a.pallet, a.container_no || chr(10) || '(' || a.containers || ')' as container_no, zti.pallet_pcs, zti.pallet_ctn, 
+$sql = "select a.ppbe_no, dbo.LIST_COLLECT(b.SI_NO, ', ') as SI_NO, a.wo_no, a.item_no, it.description,
+	a.qty, a.net, a.gross, a.msm, a.pallet, a.container_no + char(10) + '(' + a.containers + ')' as container_no, zti.pallet_pcs, zti.pallet_ctn, 
 	a.qty/(zti.pallet_pcs/zti.pallet_ctn) as carton_qty, a.tw, b.customer_po_no, a.enr
 	from ztb_shipping_detail a
 	left outer join answer b on a.wo_no = b.work_no and a.ppbe_no = b.crs_remark and a.answer_no = b.answer_no
@@ -41,7 +41,7 @@ $sql = "select a.ppbe_no, LIST_COLLECT(b.SI_NO, ', ') as SI_NO, a.wo_no, a.item_
 $data = sqlsrv_query($connect, strtoupper($sql));
 
 $content = "	
-	<style>
+	<style>	
 		table {
 			border-collapse: collapse;
 			padding:4px;
@@ -60,7 +60,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:940px;font-size:9px'>
@@ -140,12 +140,12 @@ $cont = '';		$no=1;
 $grand_tot_qty = 0;			$tot_qty = 0;			
 $grand_tot_carton = 0;		$tot_carton = 0;		
 $grand_tot_gw  = 0;			$tot_gw = 0;
-$grand_tot_nw = 0;			$tot_nw = 0;
+$grand_tot_nw = 0;			$tot_nw = 0;	
 $grand_tot_msm = 0;			$tot_msm = 0;
 $grand_tot_plt = 0;			$tot_plt = 0;		
 $grand_tw = 0;				$tw = 0;
 
-while ($dt=oci_fetch_object($data)){
+while ($dt=sqlsrv_fetch_object($data)){
 	$container = $dt->CONTAINER_NO;
 	$qty = $dt->QTY;						$nw = $dt->NET;
 	$carton = $dt->CARTON_QTY;				$msm = number_format($dt->MSM,3);
@@ -266,7 +266,7 @@ $content .= "
 	</div>
 </page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('breakdown_'.$ppbe.'.pdf');

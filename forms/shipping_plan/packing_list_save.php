@@ -47,6 +47,13 @@ if (isset($_SESSION['id_wms'])){
 
 			$ins = "insert into ztb_shipping_ins ($field) select $value from ztb_shipping_ins where rowid='$pl_rowid' ";
 			$data_ins = sqlsrv_query($connect, $ins);
+			if($data_ins === false ) {
+				if(($errors = sqlsrv_errors() ) != null) {  
+					foreach( $errors as $error){  
+						$msg .= "message: ".$error[ 'message']."<br/>";  
+					}  
+				}
+			}
 			// $pesan = oci_error($data_ins);
 			// $msg = $pesan['message'];
 
@@ -67,6 +74,13 @@ if (isset($_SESSION['id_wms'])){
 					end_box=$pl_end
 				where rowid = '$pl_rowid' ";
 			$data_upd = sqlsrv_query($connect, $upd);
+			if($data_upd === false ) {
+				if(($errors = sqlsrv_errors() ) != null) {  
+					foreach( $errors as $error){  
+						$msg .= "message: ".$error[ 'message']."<br/>";  
+					}  
+				}
+			}
 			// $pesan = oci_error($data_upd);
 			// $msg = $pesan['message'];
 

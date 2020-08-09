@@ -14,13 +14,32 @@ if (isset($_SESSION['id_wms'])){
 	$bdc_answer_no = htmlspecialchars($_REQUEST['bdc_answer_no']);
 	
 	if ($bdc_container != 'TOTAL'){
-		$sql = "BEGIN ZSP_SHIP_DETAIL_1($bdc_item,'$bdc_qty','$bdc_ppbe','$bdc_wono','$bdc_container','$bdc_row','$bdc_answer_no','$bdc_tw','$bdc_enr'); end;";
-		$stmt = sqlsrv_query($connect, strtoupper($sql));
-		echo $sql;
+
+		$sql = "{call ZSP_SHIP_DETAIL_1(?,?,?,?,?,?,?,?,?)}";		
+		$params = array(  
+			array(  $bdc_item  , SQLSRV_PARAM_IN),
+			array(  $bdc_qty  , SQLSRV_PARAM_IN),
+			array(  $bdc_ppbe  , SQLSRV_PARAM_IN),
+			array(  $bdc_wono  , SQLSRV_PARAM_IN),
+			array(  $bdc_row  , SQLSRV_PARAM_IN),
+			array(  $bdc_answer_no  , SQLSRV_PARAM_IN),
+			array(  $bdc_tw  , SQLSRV_PARAM_IN),
+			array(  $bdc_enr  , SQLSRV_PARAM_IN),
+			array(  $bdc_container  , SQLSRV_PARAM_IN),
+		);
+		
+		$stmt = sqlsrv_query($connect, $sql,$params);
+		if($stmt === false ) {
+			if(($errors = sqlsrv_errors() ) != null) {  
+				foreach( $errors as $error){  
+					$msg .= "message: ".$error[ 'message']."<br/>";  
+				}  
+			}
+		}
 	};
 
-	print_r($res, true);
-	echo json_encode(array('successMsg'=>$bdc_i));
+	print_r($msg, true);
+	echo json_encode(array('successMsg'=>$msg));
 }else{
 	echo json_encode(array('errorMsg'=>'Session Expired'));
 }

@@ -14,7 +14,7 @@
 		inner join unit d on c.uom_q=d.unit_code
 		where a.do_no='$do'
 		order by b.line_no asc";
-	$data = sqlsrv_query($connect, strtoupper($rs))
+	$data = sqlsrv_query($connect, strtoupper($rs));
 	$items = array();
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);

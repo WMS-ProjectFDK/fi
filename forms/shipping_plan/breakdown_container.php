@@ -137,10 +137,11 @@ h2 {
                 {field:'MSM', title:'MSM<br/>(CBM)', halign:'center', align:'right', width:50},
                 {field:'PALLET', title:'PALLET<br/>QTY', halign:'center', align:'right', width:40},
                 {field:'CONTAINER_VALUE', title:'CONTAINER<br/>VALUE', halign:'center', align:'right', width:50},
-                {field:'ROW_ID', width: 40, hidden: true},
+                {field:'ROW_ID',title:'ROW',  width: 40,hidden: true},
                 {field:'ITEM2', width: 40, hidden: true},
                 {field:'STS', width: 40, hidden: true},
-                {field:'ANSWER_NO', width: 40, hidden: true}
+                {field:'ANSWER_NO', width: 40, hidden: true},
+				{field:'PPBE_NO', title:'PPBE', width: 100, halign: 'center', align: 'right'}
 			]],
 			
 		});
@@ -346,7 +347,7 @@ h2 {
 				if ($('#dg').datagrid('getData').rows[i].ITEM2 != undefined){
 					$.post('breakdown_container_save.php',{
 					bdc_item: $('#dg').datagrid('getData').rows[i].ITEM2,
-					bdc_qty: $('#dg').datagrid('getData').rows[i].QTY.replace(/,/g,''),
+					bdc_qty: $('#dg').datagrid('getData').rows[i].QTY,
 					bdc_tw: $('#dg').datagrid('getData').rows[i].TW,
 					bdc_enr: $('#dg').datagrid('getData').rows[i].ENR,
 					bdc_ppbe: $('#cmb_ppbe').combobox('getValue'),
