@@ -9,11 +9,7 @@
 
 	$rs = "select cast(t.slip_date as varchar(10)) slip_date, t.section_code, sc.section, t.item_no, i.item , i.description , 
 		i.stock_subject_code , st.stock_subject , t.slip_type , sl.description slip_description , sl.slip_name , a.slip_no, t.slip_quantity , 
-<<<<<<< HEAD
-		case sl.in_out_flag when 'I' then t.slip_quantity end IN_QTY, case sl.in_out_flag when 'O' then  t.slip_quantity end as OUT_QTY, t.slip_price, t.slip_amount , 
-=======
 		case sl.in_out_flag when 'I' then t.slip_quantity end IN_QTY, case sl.in_out_flag when 'O' then  t.slip_quantity end OUT_QTY, t.slip_price, t.slip_amount , 
->>>>>>> 98309ad210dd272194e297f5df3903d5e9c95742
 		t.curr_code , cu.curr_mark , t.standard_price, t.standard_amount , t.suppliers_price , t.cost_process_code, t.cost_subject_code, 
 		t.unit_stock, u.unit , t.ex_rate, t.company_code, t.order_number, c.company 
 		from ztb_wh_kanban_trans_fg a
