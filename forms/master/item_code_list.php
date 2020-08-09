@@ -8,7 +8,7 @@
 		inner join packing_information pi on i.pi_no = pi.pi_no
 		inner join ztb_item z on i.item_no = z.item_no
 		inner join pallet_size_type p on pi.pallet_size_type = p.pallet_size_type_code";
-	$data_sql = sqlsrv_query($connect, $sql);
+	$data_sql = sqlsrv_query($connect, $sql);	
 
 	$items = array();
 	

@@ -332,6 +332,7 @@ h2 {
 	});
 
 	function sett_ppbe(){
+		console.log('../json/json_kode_ppbe_to_shipping.php?user=<? echo $user_name; ?>');
 		$.ajax({
 			type: 'GET',
 			url: '../json/json_kode_ppbe_to_shipping.php?user=<? echo $user_name; ?>',
@@ -404,20 +405,21 @@ h2 {
 			cmb_si_no : $('#cmb_si_no').combobox('getValue')
 		});
 		
-		console.log('shipping_plan_get.php?date_awal='$('#date_awal').datebox('getValue'),
-			date_akhir: $('#date_akhir').datebox('getValue'),
-			ck_cr_date: ck_cr_date,
-			cmb_wo_no : $('#cmb_wo_no').combobox('getValue'),
-			ck_wo_no: ck_wo_no,
-			cmb_po_no : $('#cmb_po_no').combobox('getValue'),
-			ck_po_no: ck_po_no,
-			cmb_item_no: $('#cmb_item_no').combobox('getValue'),
-			ck_item_no: ck_item_no,
-			cmb_ppbe: $('#cmb_ppbe').combobox('getValue'),
-			ck_ppbe: ck_ppbe,
-			flag: flag,
-			ck_si: ck_si,
-			cmb_si_no )
+		// console.log('shipping_plan_get.php?date_awal='+$('#date_awal').datebox('getValue')+
+		// 	'&date_akhir='+$('#date_akhir').datebox('getValue')+
+		// 	'&ck_cr_date='+ck_cr_date+
+		// 	'&cmb_wo_no='+$('#cmb_wo_no').combobox('getValue')+
+		// 	'&ck_wo_no='+ck_wo_no+
+		// 	'&cmb_po_no='+$('#cmb_po_no').combobox('getValue')+
+		// 	'&ck_po_no='+ck_po_no+
+		// 	'&cmb_item_no='+$('#cmb_item_no').combobox('getValue')+
+		// 	'&ck_item_no='+ck_item_no+
+		// 	'&cmb_ppbe='+$('#cmb_ppbe').combobox('getValue')+
+		// 	'&ck_ppbe='+ck_ppbe+
+		// 	'&flag='+flag+
+		// 	'&ck_si='+ck_si+
+		// 	'&cmb_si_no='+$('#cmb_si_no').combobox('getValue')
+		// );
 
 		$('#dg').datagrid( {
 			url: 'shipping_plan_get.php',
@@ -505,16 +507,10 @@ h2 {
 				}
 				
 			};
-			
-
 			set_container('X',ppbe,wo);
-			
 	}
 
 	function set_container(x,z,wo){
-
-	
-
 		var si = $('#dg_add').datagrid('getData').rows[0].SI_NO;
 		var y = $('#ppbe_no').textbox('getValue');
 		var urlx = ''
@@ -679,6 +675,7 @@ h2 {
     	var rows1 = $('#dg').datagrid('getSelections');
 
 		for(iy=0;iy<rows1.length;iy++){
+			// alert(rows1[iy].ETD);
 			$('#dg').datagrid('endEdit');
 			if (rows1[iy].ACTION_ADD == 'T'){
 				if(rows1[iy].ITEM_SET == 'Y'){
@@ -814,7 +811,7 @@ h2 {
 
 	function SI_entry(){
 		var session = '<?php echo $user_name ?>';
-		window.open('http://sysfi01.indonesia.fdk.co.jp/pglosas/entry/si/si_entry1.asp?KEYWORD='+session);
+		window.open('../si/si.php?id=1002');
 	}
 
 	var SIno = '';
@@ -843,6 +840,8 @@ h2 {
 			for(i=0;i<total;i++){
 				SIno = $('#dg_add').datagrid('getData').rows[i].SI_NO;
 				
+				console.log($('#dg_add').datagrid('getData').rows[i].CR_DATE);
+
 				$.post('shipping_plan_save.php',{
 					WORK_ORDER: $('#dg_add').datagrid('getData').rows[i].WORK_ORDER,
 					ITEM_NO: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,

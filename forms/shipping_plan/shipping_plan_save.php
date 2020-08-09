@@ -28,18 +28,7 @@ if($varConn == 'Y'){
 		$real_integer = filter_var($QUANTITY, FILTER_SANITIZE_NUMBER_INT);
 
 		//cari ANSWER_NO
-		$kode = "select 'S' || 
-			substr('0000000' || FST_SEQ.nextval,-7,7) || 
-			(substr(10 - (
-			substr((substr('0000000' || FST_SEQ.nextval,-7,1) * 1),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-6,1) * 3),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-5,1) * 7),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-4,1) * 1),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-3,1) * 3),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-2,1) * 7),-1,1) + 
-			substr((substr('0000000' || FST_SEQ.nextval,-1,1) * 1),-1,1)
-			),-1,1)) as answer_no
-			from dual " ;
+		$kode = "select dbo.answer_nos() as ANSWER_NO" ;
 		echo $kode;
 		$data_kode = sqlsrv_query($connect, strtoupper($kode));
 		$dt_kode = sqlsrv_fetch_object($data_kode);
@@ -65,7 +54,7 @@ if($varConn == 'Y'){
 	    $sql .= " remark,"               ; $value .= "'$CR_REMARK'," ;
 	    $sql .= " customer_po_no,"       ; $value .= "'$PO_NO'," ;
 	    $sql .= " cr_date,"              ; $value .= "'$CR_DATE'," ;
-	    $sql .= " stuffy_date,"          ; $value .= "'$EX_FAC_DATE',,";
+	    $sql .= " stuffy_date,"          ; $value .= "'$EX_FAC_DATE',";
 	    $sql .= " etd,"                  ; $value .= "'$ETD_DATE'," ;
 	    $sql .= " eta,"                  ; $value .= "'$ETA_DATE'," ;
 	    $sql .= " vessel,"               ; $value .= "'$VESSEL'," ;
@@ -77,8 +66,8 @@ if($varConn == 'Y'){
 	    $sql .= " select $value " ;
 	    $sql .= " from item  i " ;
 	    $sql .= " where i.item_no = '$ITEM_NO'" ;
-	    $sql .= " and not exists (select * from answer where answer_no='$ans_no')" ;
-	    echo $sql;
+		$sql .= " and not exists (select * from answer where answer_no='$ans_no')" ;
+		
 	    $data_ins = sqlsrv_query($connect, $sql);
 		echo $sql.'<br/>';
 
@@ -95,7 +84,7 @@ if($varConn == 'Y'){
 		$field .= "PO_NO,"      ; $value_po .= "'$PO_NO',"							 	;
 		$field .= "LINE_NO,"    ; $value_po .= "'$LINE_NO',"							;
 		$field .= "QTY,"      	; $value_po .= "'$real_integer', "						;
-		$field .= "VESSEL,"      ; $value_po .= "'$VESSEL', "							;
+		$field .= "VESSEL,"     ; $value_po .= "'$VESSEL', "							;
 		$field .= "INV_NO"      ; $value_po .= "'$PPBE' "							 	;
 		$ins2 = "insert into ztb_shipping_plan ($field) select $value_po from dual";
 
@@ -106,7 +95,7 @@ if($varConn == 'Y'){
        	$qry_f  = "company_code," 		;	$qry_v  = "c0.company_code," 					; 
        	$qry_f .= "customer_code," 		;	$qry_v .= "soh.customer_code," 					; 
        	$qry_f .= "customer_po_no," 	;	$qry_v .= "soh.customer_po_no," 				; 
-       	$qry_f .= "customer_line_no," 	;	$qry_v .= "coalesce(sod.customer_po_line_no,'0') ," 	; 
+       	$qry_f .= "customer_line_no," 	;	$qry_v .= "isnull(sod.customer_po_line_no,'0') ," 	; 
        	$qry_f .= "error_flag," 		;	$qry_v .= "null," 								; 
        	$qry_f .= "error_comment," 		;	$qry_v .= "null," 								; 
        	$qry_f .= "item_no," 			;	$qry_v .= "sod.item_no," 						; 
@@ -134,8 +123,9 @@ if($varConn == 'Y'){
        	$qry .= " and soh.customer_code = gp.company_code " ; 
        	$qry .= " and ans.item_no = i.item_no " ; 
        	$qry .= " and ans.so_no ='$SO_NO' " ; 
-       	$qry .= " and ans.so_line_no ='$LINE_NO' " ;
-       	$data_ins2 = sqlsrv_query($connect, $qry);
+		$qry .= " and ans.so_line_no ='$LINE_NO' " ;
+		   
+       	$data_ins3 = sqlsrv_query($connect, $qry);
 		echo $qry.'<br/>';
 
 		echo json_encode(array('successMsg'=>'INSERT SUCCESS ('.$ans_no.')'));
