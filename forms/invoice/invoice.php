@@ -11,7 +11,7 @@ if ($varConn=='Y'){
     <head>
     <meta charset="UTF-8">
     <title>PACKING LIST & INVOICE</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="icon" type="image/png" href="../../favicon.png">
 	<script language="javascript">
 		var ct = 0;		var rmk_new = '';		var st_value = '';		var state = '';
 		function confirmLogOut(){
@@ -172,7 +172,7 @@ if ($varConn=='Y'){
 					<input style="width:200px;" name="attn_add" id="attn_add" class="easyui-textbox" disabled="" />
 					<span style="width:15px;display:inline-block;"></span>
 					<span style="display:inline-block;">Currency</span>
-					<input style="width:85px;" id="curr_add" class="easyui-combobox" data-options=" url:'json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
+					<input style="width:85px;" id="curr_add" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
 		        	onSelect: function(rec){
 		        		$.ajax({
 		        			type: 'GET',
@@ -276,7 +276,7 @@ if ($varConn=='Y'){
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Transport</span>
-					<input style="width:85px;" name="trans_add" id="trans_add" class="easyui-combobox" data-options=" url:'json/json_transport.json', method:'get', valueField:'id', textField:'transport', panelHeight:'100px',
+					<input style="width:85px;" name="trans_add" id="trans_add" class="easyui-combobox" data-options=" url:'../json/json_transport.json', method:'get', valueField:'id', textField:'transport', panelHeight:'100px',
 		        	onSelect: function(rec){
 		        		if (rec.id == 2){
 		        			$('#dlg_transport').dialog('open').dialog('setTitle','Setting Transport Add');
@@ -2325,6 +2325,7 @@ if ($varConn=='Y'){
 	            onClickRow:function(id,row){
 	            	var rows = $('#dg_contract').datagrid('getSelected');
 	            	if(value=='add'){
+						// console.log('invoice_get_si_no.php?id='+$('#customer_add').combobox('getValue')+'&term='+rows.TERM);
 	            		$('#sino_add').combogrid({
 							url: 'invoice_get_si_no.php?id='+$('#customer_add').combobox('getValue')+'&term='+rows.TERM
 						});
