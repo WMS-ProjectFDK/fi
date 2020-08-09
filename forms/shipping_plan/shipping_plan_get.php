@@ -1,4 +1,7 @@
 <?php
+	// error_reporting(0);
+
+	// http://localhost:8088/fi/forms/shipping_plan/shipping_plan_get.php?date_awal=2020-08-09?date_akhir=2020-08-09?ck_cr_dater=true?cmb_wo_nor=?ck_wo_nor=true?cmb_po_nor=?ck_po_nor=true?cmb_item_nor=?ck_item_nor=true?cmb_ppber=?ck_ppber=true?flagr=6?ck_sir=true?cmb_si_no=
 	session_start();
 	$date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
 	$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';
@@ -46,19 +49,15 @@
 	}else{
 		$ppbe = "";
 	}
-
-	if  ($flag == 4){
-		$filter = " rownum <= 150 and ";
-	}
-	
-	$where =" where $date $prf $item_no $supp $ppbe $filter  
+	// $date $prf $item_no $supp $ppbe
+	$where =" where $date  $prf $item_no $supp $ppbe
 		status = 'FM' 
 		and case when ds.customer_po_no is not null then substring(po_line_no, 0, len(po_line_no)-1) else po_line_no end = line_no";
 	
 	include("../../connect/conn.php");
-	
+	$s=0;
 	if ($ck_si != "true"){
-		$sql = "select distinct isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,cr_date,batery_type,cell_grade,mh.item_no,item_name,
+		$sql = "select top 150 isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,cr_date,batery_type,cell_grade,mh.item_no,item_name,
 				isnull(qty,0) Qty_order,isnull(qty_prod,0) Qty_Produksi,isnull(qty_plan,0) qty_plan, isnull(qty_invoiced,0) qty_invoiced,
 				inv.si_no,so_no,so.line_no,requested_etd etd, stuffy_date, inv.etd as etd_ans, eta, sh.shipping_type, shipp_d.containers,
 			customer_code, so.curr_code, so.u_price, case when mh.item_no=zi.item_no then 'Y' else 'N' end as item_set, inv.crs_remark
@@ -86,9 +85,10 @@
 			$where
 			order by so.line_no,cr_date";
 	}else{
-		$sql = "select distinct isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,cr_date,batery_type,cell_grade,mh.item_no,item_name,
+		$sql = "select top 150 isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,CAST(cr_date as varchar(10)) as cr_date,batery_type,cell_grade,mh.item_no,item_name,
 				isnull(qty,0) Qty_order,isnull(qty_prod,0) Qty_Produksi,isnull(qty_plan,0) qty_plan, isnull(qty_invoiced,0) qty_invoiced,
-				inv.si_no,so_no,so.line_no,requested_etd etd, stuffy_date, inv.etd as etd_ans, eta, sh.shipping_type, shipp_d.containers,
+				inv.si_no,so_no,so.line_no,CAST(requested_etd as varchar(10)) etd, CAST(stuffy_date as varchar(10)) as stuffy_date, 
+				CAST(inv.etd as varchar(10)) as etd_ans, CAST(eta as varchar(10)) as eta, sh.shipping_type, shipp_d.containers,
 			customer_code, so.curr_code, so.u_price, case when mh.item_no=zi.item_no then 'Y' else 'N' end as item_set, inv.crs_remark	
 			from mps_header mh
 				left join ztb_item zi on mh.item_no = zi.item_no
@@ -114,6 +114,8 @@
 			$where
 			order by so.line_no,cr_date";
 	}
+
+	// echo $sql.'<br/>';
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

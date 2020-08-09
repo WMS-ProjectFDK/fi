@@ -1,10 +1,11 @@
 <?php
 session_start();
+$user = $_SESSION['id_wms'];
 include("../../connect/conn.php");
 header("Content-type: application/json");
 $arrNo = 0;
 
-$user = isset($_REQUEST['user']) ? strval($_REQUEST['user']) : '';
+// $user = isset($_REQUEST['user']) ? strval($_REQUEST['user']) : '';
 
 $cek_user = "select substring(person,1,1) as initi from person where person_code='$user' ";
 $data_user = sqlsrv_query($connect, strtoupper($cek_user));
