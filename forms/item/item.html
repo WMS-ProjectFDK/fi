@@ -1,0 +1,1486 @@
+
+<HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=x-sjis"><TITLE>Item Entry</TITLE></HEAD><BODY BGCOLOR=White><IMG SRC=/pglosas/images/logo.gif><HR NOSHADE>
+<!-- add 2015/04/21 Start -->
+
+
+<SCRIPT>
+<!--
+// BACKボタン押下処理
+function go_back(){
+	var URL;
+	// var type = "NEW";
+	var type = "NEW"; //(mod 2015/07/03)
+	if ( type == "NEW" ) {
+		URL = "Item_Main.asp?NO_TYPE=GROUP&STOCK_SUB=5";
+	} else {
+		URL = "Item_Seek.asp?KEY=&SEEK_KEY=";
+	}
+	document.forms[0].method = "post";
+	document.forms[0].action = URL + "&KEYWORD=FI0122";
+	document.forms[0].submit();
+}
+
+// External Unit Number の値を、Outer Box(Unit Number) にコピー
+function copy(){
+	document.forms[0].o_unit_number.value = document.forms[0].external_unit_number.value;
+}
+
+// PackingInformation情報取得（リロード）
+function get_pack_info(){
+	var URL;
+	// var type = "NEW";
+	var type = "NEW"; //(mod 2015/07/03)
+	if ( type == "NEW" ) {
+		URL = "Item_Entry.asp?NO_TYPE=GROUP&STOCK_SUB=5";
+	} else {
+		URL = "Item_Entry.asp?KEY=&SEEK_KEY=";
+	}
+	document.forms[0].method = "post";
+	document.forms[0].action = URL + "&KEYWORD=FI0122&FLG=1";
+	document.forms[0].submit();
+}
+//-->
+</SCRIPT>
+<!-- add 2015/04/21 End -->
+
+<Div Align="center">
+
+<Form Method="post" Action="Item_Confirm.asp?KEYWORD=FI0122" Name="data_send" Target="_self">
+
+<!-- type(new,change,delete get start -->
+<Input Type="hidden" Name="type" Value="NEW">
+<Input Type="hidden" Name="GRP_FLG" Value=" ">
+
+<Input Type="hidden" Name="no_type"            Value="GROUP">
+<Input Type="hidden" Name="key"                Value="">
+<Input Type="hidden" Name="seek_key"           Value="">
+
+    <Input Type="hidden" Name="customer_code" Value="">
+    <Input Type="hidden" Name="customer_po_no" Value="">
+
+<!-- type(new,change,delete get end -->
+
+
+ <Input Type="submit" Name="confirm_button" Value="Confirm">
+ <!--<Input Type="Button" Value="BACK" onClick='history.back()'><BR>-->
+ <Input Type="Button" Value="BACK" onClick='go_back()'><BR><!-- mod 2015/04/21 -->
+
+
+
+
+Mode:NEW
+<Table Border Align="center" Width="100%" Height="100%" CellSpacing="1" BgColor="#ffffff" BorderColor="black">
+<!-- NEW(FROM ITEM ENTRY MAIN) -->
+
+
+ <Br>
+ If text color is <Font Color="#0000ff">Blue</Font>, Input Number only.   If background color is Yellow, need input.
+ <Tr>
+ <Td BgColor="#00FF00"><Font Color="#0000ff">Item No</Font></Td>
+ <Td ColSpan="2">
+ 
+  <!--<Input Type="text" Name="item_no" Size="8" Maxlength="8">-->
+  <Input Type="text" Name="item_no" Size="8" Maxlength="8" value='' style="background-color:#FFFF00"><!-- mod 2015/04/21 -->
+ 
+  Make an NG Materials <Input Type="checkbox" Name="ngmc" value="on" checked> 
+ 
+ </Td>
+ <Td BgColor="#00ff00">Item Code</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24" value=''></Td><!-- mod 2015/04/21 -->
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Item Name</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="item" Size="40" Maxlength="40"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="item" Size="40" Maxlength="40" value='' style="background-color:#FFFF00"></Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00">Item Flag</Td>
+ <Td ColSpan="2">
+ <Select Name="item_flag" Size="1">
+ 
+     <Option Value="1" SELECTED>1.Finished Good or WIP
+     <Option Value="2">2.Material
+ </Select></Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Description</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="description" Size="30" Maxlength="30"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="description" Size="30" Maxlength="30" value=''></Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00">Class Code</Td>
+ <Td ColSpan="2"><Select Name="class_code" Size="1" style="background-color:#FFFF00">
+  <Option Value="">
+ 
+    <!--<Option Value="222000">CR---->
+    <Option Value="222000" >CR--<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222111">CR-2016--->
+    <Option Value="222111" >CR-2016-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222211">CR-2025--->
+    <Option Value="222211" >CR-2025-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222311">CR-2032--->
+    <Option Value="222311" >CR-2032-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222312">CR-2032-200-->
+    <Option Value="222312" >CR-2032-200<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222313">CR-2032-220-->
+    <Option Value="222313" >CR-2032-220<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222411">CR-2032-LC-->
+    <Option Value="222411" >CR-2032-LC<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222711">CR-2050--->
+    <Option Value="222711" >CR-2050-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222511">CR-2430--->
+    <Option Value="222511" >CR-2430-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222611">CR-2450--->
+    <Option Value="222611" >CR-2450-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="222911">CR-COMMON--->
+    <Option Value="222911" >CR-COMMON-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111000">LR---->
+    <Option Value="111000" >LR--<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111311">LR-03--->
+    <Option Value="111311" >LR-03-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111312">LR-03-(P.P)-->
+    <Option Value="111312" >LR-03-(P.P)<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111314">LR-03-COMMON-->
+    <Option Value="111314" >LR-03-COMMON<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111313">LR-03-N-->
+    <Option Value="111313" >LR-03-N<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111111">LR-1--->
+    <Option Value="111111" >LR-1-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111411">LR-14--->
+    <Option Value="111411" >LR-14-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111511">LR-20--->
+    <Option Value="111511" >LR-20-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111211">LR-6--->
+    <Option Value="111211" >LR-6-<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111212">LR-6-(P.P)-->
+    <Option Value="111212" >LR-6-(P.P)<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111214">LR-6-COMMON-->
+    <Option Value="111214" >LR-6-COMMON<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111213">LR-6-N-->
+    <Option Value="111213" >LR-6-N<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111215">LR-6-T-->
+    <Option Value="111215" >LR-6-T<!-- mod 2015/04/21 -->
+    
+    <!--<Option Value="111911">LR-COMMON--->
+    <Option Value="111911" >LR-COMMON-<!-- mod 2015/04/21 -->
+    
+ </Select></Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Origin Code</Td>
+ <Td ColSpan="2">
+   <Select Name="origin_code" Size="1">
+     <Option Value="">
+     
+          <Option Value="601">AUSTRALIA
+          <Option Value="208">BELGIUM
+          <Option Value="410">BRAZIL
+          <Option Value="308">CANADA
+          <Option Value="409">CHILE
+          <Option Value="105">CHINA
+          <Option Value="506">EGYPT
+          <Option Value="210">FRANCE
+          <Option Value="213">GERMANY
+          <Option Value="300">GREECE
+          <Option Value="108">HONG KONG
+          <Option Value="123">INDIA
+          <Option Value="118" SELECTED >INDONESIA
+          <Option Value="143">ISRAEL
+          <Option Value="192">JAPAN
+          <Option Value="144">JORDAN
+          <Option Value="103">KOREA
+          <Option Value="237">LITHUANIA
+          <Option Value="113">MALAYSIA
+          <Option Value="305">MEXICO
+          <Option Value="131">NEPAL
+          <Option Value="207">NETHERLANDS
+          <Option Value="606">NEW ZEALAND
+          <Option Value="141">OMAN
+          <Option Value="407">PERU
+          <Option Value="117">PHILLIPINES
+          <Option Value="223">POLAND
+          <Option Value="217">PORTUGAL
+          <Option Value="112">SINGAPORE
+          <Option Value="218">SPAIN
+          <Option Value="125">SRI LANKA
+          <Option Value="215">SWITZERLAND
+          <Option Value="106">TAIWAN
+          <Option Value="111">THAILAND
+          <Option Value="147">UNITED ARAB EMIRATES
+          <Option Value="205">UNITED KINGDOM/UK
+          <Option Value="304">USA
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00">Curr Code</Td>
+ <Td ColSpan="2">
+ <Select Name="curr_code" Size="1">
+  <Option Value="">
+ 
+        <Option Value="7">EURO
+        <Option Value="23">RP 
+        <Option Value="5">SG$
+        <Option Value="1" SELECTED >US$
+        <Option Value="8">YEN
+ </Select>
+ </Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00"><Font Color="#0000ff">External Unit Number</Font></Td>
+ <!-- <Td ColSpan="2"><Input Type="text" Name="external_unit_number" Size="5" Maxlength="5"></Td> -->
+ <Td ColSpan="2"><Input Type="text" Name="external_unit_number" Size="5" Maxlength="5" value='' onChange="copy()"></Td> <!-- mod 2015/04/21 -->
+ 
+ <Td BgColor="#00ff00">Safety Stock</Td>
+ <!-- <Td ColSpan="2"><Input Type="text" Name="safety_stock" Size="9" Maxlength="9"></Td> -->
+ <Td ColSpan="2"><Input Type="text" Name="safety_stock" Size="9" Maxlength="9" value=''></Td><!-- mod 2015/04/21 -->
+ </Tr>
+ <Tr>
+ <!-- 
+ <Td BgColor="#00ff00">Unit of Quantity</Td>
+ <Td><Select Name="uom_q" Size="1">
+ <Option Value="">
+ 
+  <Option Value="">NO DATA FOUND
+ 
+  <Option Value="">
+ </Select></Td>
+  -->
+ <Td BgColor="#00ff00">Unit Stock</Td>
+ <Td ColSpan="2">
+   <Select Name="unit_stock" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+       
+           <!--<Option Value="130">BTL-->
+           <Option Value="130" >BTL<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="110">CC-->
+           <Option Value="110" >CC<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="35">KG-->
+           <Option Value="35" >KG<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="75">L-->
+           <Option Value="75" >L<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="70">M-->
+           <Option Value="70" >M<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="140">MM-->
+           <Option Value="140" >MM<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="10">PC-->
+           <Option Value="10" >PC<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="300">PK-->
+           <Option Value="300" >PK<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="20">PR-->
+           <Option Value="20" >PR<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="60">RL-->
+           <Option Value="60" >RL<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="50">SH-->
+           <Option Value="50" >SH<!-- mod 2015/04/21 -->
+           
+           <!--<Option Value="80">ST-->
+           <Option Value="80" >ST<!-- mod 2015/04/21 -->
+           
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00">Unit of Engineering</Td>
+ <Td ColSpan="2">
+   <Select Name="unit_engineering" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+     
+         <!-- <Option Value="130">BTL -->
+         <Option Value="130" >BTL<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="110">CC -->
+         <Option Value="110" >CC<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="35">KG -->
+         <Option Value="35" >KG<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="75">L -->
+         <Option Value="75" >L<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="70">M -->
+         <Option Value="70" >M<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="140">MM -->
+         <Option Value="140" >MM<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="10">PC -->
+         <Option Value="10" >PC<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="300">PK -->
+         <Option Value="300" >PK<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="20">PR -->
+         <Option Value="20" >PR<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="60">RL -->
+         <Option Value="60" >RL<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="50">SH -->
+         <Option Value="50" >SH<!-- mod 2015/04/21 -->
+         
+         <!-- <Option Value="80">ST -->
+         <Option Value="80" >ST<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ </Tr>
+ <Tr>
+ <Td ColSpan="3" BgColor="#00FF00">
+ <Font Color="#0000ff">Unit Stock Rate:Unit Engineer Rate</Font>
+ </Td>
+ <Td ColSpan="3">
+ <!--<Input Type="text" Name="unit_stock_rate" Size="6" Maxlength="6">-->
+ <Input Type="text" Name="unit_stock_rate" Size="6" Maxlength="6" value='' style="background-color:#FFFF00"><!-- mod 2015/04/21 -->
+ :
+ <!--<Input Type="text" Name="unit_engineer_rate" Size="6" Maxlength="6">-->
+ <Input Type="text" Name="unit_engineer_rate" Size="6" Maxlength="6" value='' style="background-color:#FFFF00"><!-- mod 2015/04/21 -->
+ </Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Weight</Font></Td>
+ <!--<Td><Input Type="text" Name="weight" Size="12" Maxlength="12"></Td>-->
+ <Td><Input Type="text" Name="weight" Size="12" Maxlength="12" value=''></Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00">Unit of Weight</Td>
+ <Td>
+ <Select Name="uom_w" Size="1" style="background-color:#FFFF00">
+   <Option Value="">
+   
+       <!--<Option Value="120">GM-->
+       <Option Value="120" >GM<!-- mod 2015/04/21 -->
+       
+       <!--<Option Value="30">KG-->
+       <Option Value="30" >KG<!-- mod 2015/04/21 -->
+       
+ </Select>
+ </Td>
+ <Td BgColor="#00ff00">Unit of Measurement</Td>
+ <Td>
+   <Select Name="uom_l" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+     
+         <!--<Option Value="40">M3-->
+         <Option Value="40" >M3<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">DRAWING NO</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="drawing_no" Size="15" Maxlength="15"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="drawing_no" Size="20" Maxlength="20" value=''></Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00">DRAWING REV</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="drawing_rev" Size="1" Maxlength="1"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="drawing_rev" Size="1" Maxlength="1" value=''></Td><!-- mod 2015/04/21 -->
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">APPLICABLE MODEL</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="applicable_model" Size="20" Maxlength="20"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="applicable_model" Size="20" Maxlength="20" value=''></Td>
+ <Td BgColor="#00ff00">CATALOG NO</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="catalog_no" Size="28" Maxlength="28"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="catalog_no" Size="28" Maxlength="28" value=''></Td>
+ </Tr>
+   
+     <Tr>
+       <Td BgColor="#00ff00"><Font Color="#0000ff">Standard Price</Font></Td>
+       <!--<Td><Input Type="text" Name="standard_price" Size="24" Maxlength="24"></Td>-->
+       <Td><Input Type="text" Name="standard_price" Size="24" Maxlength="24" value='' style="background-color:#FFFF00"></Td><!-- mod 2015/04/21 -->
+       <Td BgColor="#00ff00"><Font Color="#0000ff">Next Term Price</Font></Td>
+       <!--<Td><Input Type="text" Name="next_term_price" Size="24" Maxlength="24"></Td>-->
+       <Td><Input Type="text" Name="next_term_price" Size="24" Maxlength="24" value=''></Td><!-- mod 2015/04/21 -->
+       <Td BgColor="#00ff00"><Font Color="#0000ff">Suppliers Price</Font></Td>
+       <!--<Td><Input Type="text" Name="suppliers_price" Size="24" Maxlength="24"></Td>-->
+       <Td><Input Type="text" Name="suppliers_price" Size="24" Maxlength="24" value=''></Td><!-- mod 2015/04/21 -->
+     </Tr>
+   
+ 
+ <Tr>
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Manufact Lead Time</Font></Td>
+ <!--<Td><Input Type="text" Name="manufact_leadtime" Size="3" Maxlength="3">Days</Td>-->
+ <Td><Input Type="text" Name="manufact_leadtime" Size="3" Maxlength="3" value=''>Days</Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Purchase Lead Time</Font></Td>
+ <!--<Td><Input Type="text" Name="purchase_leadtime" Size="3" Maxlength="3">Days</Td>-->
+ <Td><Input Type="text" Name="purchase_leadtime" Size="3" Maxlength="3" value=''>Days</Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Adjustment Lead Time</Font></Td>
+ <!--<Td><Input Type="text" Name="adjustment_leadtime" Size="3" Maxlength="3">Days</Td>-->
+ <Td><Input Type="text" Name="adjustment_leadtime" Size="3" Maxlength="3" value=''>Days</Td><!-- mod 2015/04/21 -->
+ </Tr>
+ 
+ <!-- add 2015/10/28 start -->
+ <Tr>
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Labeling To Packaging Day</Font></Td>
+ <Td><Input Type="text" Name="lab_to_pack_day" Size="3" Maxlength="3" value=''>Days</Td>
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Assembling To Labeling Day</Font></Td>
+ <Td colspan="3"><Input Type="text" Name="assembling_to_lab_day" Size="3" Maxlength="3" value=''>Days</Td>
+ </Tr>
+ <!-- add 2015/10/28 end -->
+ 
+ <Tr>
+ <Td BgColor="#00ff00">Issue Policy</Td>
+ <Td>
+   <Select Name="issue_policy" Size="1">
+     <Option Value="">
+     
+         <!--<Option Value="D">GLOSS ISSUE-->
+         <Option Value="D" >GLOSS ISSUE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="A">KIT ISSUE-->
+         <Option Value="A" >KIT ISSUE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="E">REQUIRE ISSUE-->
+         <Option Value="E" >REQUIRE ISSUE<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00"><Font Color="blue">Issue Lot</Font></Td>
+ <!--<Td><Input Type="text" Name="issue_lot" Size="9" Maxlength="9"></Td>-->
+ <Td><Input Type="text" Name="issue_lot" Size="9" Maxlength="9" value=''></Td><!-- mod 2015/04/21 -->
+ <Td BgColor="#00ff00"><Font Color="#0000ff">Manufact Fail Rate</Font></Td>
+ <!--<Td><Input Type="text" Name="manufact_fail_rate" Size="3" Maxlength="3">%</Td>-->
+ <Td><Input Type="text" Name="manufact_fail_rate" Size="3" Maxlength="3" value=''>%</Td><!-- mod 2015/04/21 -->
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Section Code</Td>
+ <Td ColSpan="2">
+   <Select Name="section_code" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+     
+         <!--<Option Value="100">FI-->
+         <Option Value="100" >FI<!-- mod 2015/06/12 -->
+         
+         <!--<Option Value="200">YUSEN-->
+         <Option Value="200" >YUSEN<!-- mod 2015/06/12 -->
+         
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00">Stock Subject Code</Td>
+ <Td ColSpan="2">
+ Finished Goods<Input Type='hidden' Name='stock_subject_code' Value=5>
+ </Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Cost Process Code</Td>
+ <Td ColSpan="2">
+   <Select Name="cost_process_code" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+     
+         <!--<Option Value="410000">ACCOUNTING DEPARTEMENT-->
+         <Option Value="410000" >ACCOUNTING DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221410">ADHESIVE B-->
+         <Option Value="221410" >ADHESIVE B<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212150">ADHESIVE D-->
+         <Option Value="212150" >ADHESIVE D<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="690000">ADMINISTRATION COMMON-->
+         <Option Value="690000" >ADMINISTRATION COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="600000">ADMINISTRATIVE DIVISION-->
+         <Option Value="600000" >ADMINISTRATIVE DIVISION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211200">ANODE DISC PROCESS-->
+         <Option Value="211200" >ANODE DISC PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211290">ANODE DISC PROCESS COMN-->
+         <Option Value="211290" >ANODE DISC PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211230">ANODE DISC PROCESS LR.03-->
+         <Option Value="211230" >ANODE DISC PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211240">ANODE DISC PROCESS LR.03 N-->
+         <Option Value="211240" >ANODE DISC PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211210">ANODE DISC PROCESS LR.6 (P.P)-->
+         <Option Value="211210" >ANODE DISC PROCESS LR.6 (P.P)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211220">ANODE DISC PROCESS LR.6 N-->
+         <Option Value="211220" >ANODE DISC PROCESS LR.6 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221490">ASSEMBLY COMN-->
+         <Option Value="221490" >ASSEMBLY COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242900">ASSEMBLY COMN-->
+         <Option Value="242900" >ASSEMBLY COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242110">ASSEMBLY CR2016 PROCESS-->
+         <Option Value="242110" >ASSEMBLY CR2016 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242120">ASSEMBLY CR2025 PROCESS-->
+         <Option Value="242120" >ASSEMBLY CR2025 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242210">ASSEMBLY CR2032(200) PROCESS-->
+         <Option Value="242210" >ASSEMBLY CR2032(200) PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242220">ASSEMBLY CR2032(220) PROCESS-->
+         <Option Value="242220" >ASSEMBLY CR2032(220) PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242410">ASSEMBLY CR2050 PROCESS-->
+         <Option Value="242410" >ASSEMBLY CR2050 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242310">ASSEMBLY CR2430 PROCESS-->
+         <Option Value="242310" >ASSEMBLY CR2430 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242320">ASSEMBLY CR2450 PROCESS-->
+         <Option Value="242320" >ASSEMBLY CR2450 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="220000">ASSEMBLY DEPARTEMENT-->
+         <Option Value="220000" >ASSEMBLY DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221440">ASSEMBLY LINE LR.03-->
+         <Option Value="221440" >ASSEMBLY LINE LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221450">ASSEMBLY LINE LR.03 N-->
+         <Option Value="221450" >ASSEMBLY LINE LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221420">ASSEMBLY LINE LR.6-->
+         <Option Value="221420" >ASSEMBLY LINE LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221430">ASSEMBLY LINE LR.6N-->
+         <Option Value="221430" >ASSEMBLY LINE LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242100">ASSEMBLY LINE NO.3-->
+         <Option Value="242100" >ASSEMBLY LINE NO.3<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242190">ASSEMBLY LINE NO.3 COMN-->
+         <Option Value="242190" >ASSEMBLY LINE NO.3 COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242200">ASSEMBLY LINE NO.4-->
+         <Option Value="242200" >ASSEMBLY LINE NO.4<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242290">ASSEMBLY LINE NO.4 COMN-->
+         <Option Value="242290" >ASSEMBLY LINE NO.4 COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221400">ASSEMBLY PROCESS-->
+         <Option Value="221400" >ASSEMBLY PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221000">ASSEMBLY SECTION-->
+         <Option Value="221000" >ASSEMBLY SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="242000">ASSEMBLY SECTION-->
+         <Option Value="242000" >ASSEMBLY SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212110">BLACK MIX-->
+         <Option Value="212110" >BLACK MIX<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241100">BLACK MIX-->
+         <Option Value="241100" >BLACK MIX<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241190">BLACK MIX COMN-->
+         <Option Value="241190" >BLACK MIX COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241110">BLACK MIX LCM-1 PROCESS-->
+         <Option Value="241110" >BLACK MIX LCM-1 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241120">BLACK MIX LCM-15 PROCESS-->
+         <Option Value="241120" >BLACK MIX LCM-15 PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="900000">BOARD OF DIRECTOR-->
+         <Option Value="900000" >BOARD OF DIRECTOR<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241410">CAN COATING CR2016-->
+         <Option Value="241410" >CAN COATING CR2016<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241420">CAN COATING CR2025-->
+         <Option Value="241420" >CAN COATING CR2025<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241430">CAN COATING CR2032(200)-->
+         <Option Value="241430" >CAN COATING CR2032(200)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241440">CAN COATING CR2032(220)-->
+         <Option Value="241440" >CAN COATING CR2032(220)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241470">CAN COATING CR2050-->
+         <Option Value="241470" >CAN COATING CR2050<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241450">CAN COATING CR2430-->
+         <Option Value="241450" >CAN COATING CR2430<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241460">CAN COATING CR2450-->
+         <Option Value="241460" >CAN COATING CR2450<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241400">CAN COATING PROCESS-->
+         <Option Value="241400" >CAN COATING PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241490">CAN COATING PROCESS COMN-->
+         <Option Value="241490" >CAN COATING PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211150">CATHODE CAN PROCESS LR6 T-->
+         <Option Value="211150" >CATHODE CAN PROCESS LR6 T<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241200">CATHODE PELLET-->
+         <Option Value="241200" >CATHODE PELLET<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241290">CATHODE PELLET COMN-->
+         <Option Value="241290" >CATHODE PELLET COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241210">CATHODE PELLET MOLDING CR2016-->
+         <Option Value="241210" >CATHODE PELLET MOLDING CR2016<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241220">CATHODE PELLET MOLDING CR2025-->
+         <Option Value="241220" >CATHODE PELLET MOLDING CR2025<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241230">CATHODE PELLET MOLDING CR2032-->
+         <Option Value="241230" >CATHODE PELLET MOLDING CR2032<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221190">CCA PROCESS COMN-->
+         <Option Value="221190" >CCA PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212220">CHATODE CAN AFTER DEGREASE-->
+         <Option Value="212220" >CHATODE CAN AFTER DEGREASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212210">CHATODE CAN BEFORE DEGREASE-->
+         <Option Value="212210" >CHATODE CAN BEFORE DEGREASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211100">CHATODE CAN PROCESS-->
+         <Option Value="211100" >CHATODE CAN PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211190">CHATODE CAN PROCESS COMN-->
+         <Option Value="211190" >CHATODE CAN PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211130">CHATODE CAN PROCESS LR.03-->
+         <Option Value="211130" >CHATODE CAN PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211140">CHATODE CAN PROCESS LR.03 N-->
+         <Option Value="211140" >CHATODE CAN PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211110">CHATODE CAN PROCESS LR.6 (P.P)-->
+         <Option Value="211110" >CHATODE CAN PROCESS LR.6 (P.P)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211120">CHATODE CAN PROCESS LR.6 N-->
+         <Option Value="211120" >CHATODE CAN PROCESS LR.6 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212190">CHEMICAL COMN-->
+         <Option Value="212190" >CHEMICAL COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212100">CHEMICAL PROCESS-->
+         <Option Value="212100" >CHEMICAL PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212000">CHEMICAL SECTION-->
+         <Option Value="212000" >CHEMICAL SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211900">COMPONENT COMMON-->
+         <Option Value="211900" >COMPONENT COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="210000">COMPONENT DEPARTEMENT-->
+         <Option Value="210000" >COMPONENT DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211000">COMPONENT SECTION-->
+         <Option Value="211000" >COMPONENT SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221300">CONDUCTIVE PROCESS-->
+         <Option Value="221300" >CONDUCTIVE PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221390">CONDUCTIVE PROCESS COMN-->
+         <Option Value="221390" >CONDUCTIVE PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221330">CONDUCTIVE PROCESS LR.03-->
+         <Option Value="221330" >CONDUCTIVE PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221340">CONDUCTIVE PROCESS LR.03 N-->
+         <Option Value="221340" >CONDUCTIVE PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221310">CONDUCTIVE PROCESS LR.6-->
+         <Option Value="221310" >CONDUCTIVE PROCESS LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221320">CONDUCTIVE PROCESS LR.6N-->
+         <Option Value="221320" >CONDUCTIVE PROCESS LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211390">CURRENT COLECCTING ROD COMN-->
+         <Option Value="211390" >CURRENT COLECCTING ROD COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211300">CURRENT COLECTING ROD-->
+         <Option Value="211300" >CURRENT COLECTING ROD<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211330">CURRENT COLECTING ROD LR.03-->
+         <Option Value="211330" >CURRENT COLECTING ROD LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211310">CURRENT COLECTING ROD LR.6-->
+         <Option Value="211310" >CURRENT COLECTING ROD LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211320">CURRENT COLECTING ROD LR.6 N-->
+         <Option Value="211320" >CURRENT COLECTING ROD LR.6 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211340">CURRENT COLLECTING ROD LR.03N -->
+         <Option Value="211340" >CURRENT COLLECTING ROD LR.03N <!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212290">DEGREASE COMN-->
+         <Option Value="212290" >DEGREASE COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212200">DEGREASE PROCESS-->
+         <Option Value="212200" >DEGREASE PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="232000">DESIGN SECTION-->
+         <Option Value="232000" >DESIGN SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="521000">E/I SECTION-->
+         <Option Value="521000" >E/I SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="312090">ELECTRIC & COMMON SECTION-->
+         <Option Value="312090" >ELECTRIC & COMMON SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="312000">ELECTRIC SECTION-->
+         <Option Value="312000" >ELECTRIC SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212120">ELECTROLYTE D-->
+         <Option Value="212120" >ELECTROLYTE D<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212130">ELECTROLYTE K-->
+         <Option Value="212130" >ELECTROLYTE K<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="615000">ENVIRONMENT & SAFETY SECTION-->
+         <Option Value="615000" >ENVIRONMENT & SAFETY SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="100000">F.I-->
+         <Option Value="100000" >F.I<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="190000">FI COMMON-->
+         <Option Value="190000" >FI COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="400000">FINANCE DIVISION-->
+         <Option Value="400000" >FINANCE DIVISION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="490000">FINANCE DIVISION COMMON-->
+         <Option Value="490000" >FINANCE DIVISION COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231900">FINISHING COMMON-->
+         <Option Value="231900" >FINISHING COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="230000">FINISHING DEPARTEMENT-->
+         <Option Value="230000" >FINISHING DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231000">FINISHING SECTION-->
+         <Option Value="231000" >FINISHING SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241310">GASKET COATING CR2016-->
+         <Option Value="241310" >GASKET COATING CR2016<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241320">GASKET COATING CR2025-->
+         <Option Value="241320" >GASKET COATING CR2025<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241330">GASKET COATING CR2032(200)-->
+         <Option Value="241330" >GASKET COATING CR2032(200)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241340">GASKET COATING CR2032(220)-->
+         <Option Value="241340" >GASKET COATING CR2032(220)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241370">GASKET COATING CR2050-->
+         <Option Value="241370" >GASKET COATING CR2050<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241350">GASKET COATING CR2430-->
+         <Option Value="241350" >GASKET COATING CR2430<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241360">GASKET COATING CR2450-->
+         <Option Value="241360" >GASKET COATING CR2450<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241300">GASKET COATING PROCESS-->
+         <Option Value="241300" >GASKET COATING PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241390">GASKET COATING PROCESS COMN-->
+         <Option Value="241390" >GASKET COATING PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212140">GEL-->
+         <Option Value="212140" >GEL<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212141">GEL LF10F-->
+         <Option Value="212141" >GEL LF10F<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212142">GEL LF15F-->
+         <Option Value="212142" >GEL LF15F<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212143">GEL LF9-->
+         <Option Value="212143" >GEL LF9<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="612000">GENERAL AFFAIRS SECTION-->
+         <Option Value="612000" >GENERAL AFFAIRS SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="614000">ISO CENTER SECTION-->
+         <Option Value="614000" >ISO CENTER SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231100">LABEL PROCESS-->
+         <Option Value="231100" >LABEL PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231190">LABEL PROCESS COMN-->
+         <Option Value="231190" >LABEL PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231130">LABEL PROCESS LR.03-->
+         <Option Value="231130" >LABEL PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231140">LABEL PROCESS LR.03 N-->
+         <Option Value="231140" >LABEL PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231110">LABEL PROCESS LR.6-->
+         <Option Value="231110" >LABEL PROCESS LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231120">LABEL PROCESS LR.6N-->
+         <Option Value="231120" >LABEL PROCESS LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231150">LABEL PROCESS LR1-->
+         <Option Value="231150" >LABEL PROCESS LR1<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="240000">LITHIUM DEPARTMENT-->
+         <Option Value="240000" >LITHIUM DEPARTMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="311090">MAINTENANCE COMN-->
+         <Option Value="311090" >MAINTENANCE COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="310000">MAINTENANCE DEPARTEMENT-->
+         <Option Value="310000" >MAINTENANCE DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="311000">MAINTENANCE SECTION-->
+         <Option Value="311000" >MAINTENANCE SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="322090">MATERIAL & LABEL COMN-->
+         <Option Value="322090" >MATERIAL & LABEL COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="322000">MATERIAL & LABEL SECTION-->
+         <Option Value="322000" >MATERIAL & LABEL SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="613000">OCCUPATIONAL CLINIC SECTION-->
+         <Option Value="613000" >OCCUPATIONAL CLINIC SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="529000">P&EI COMMON-->
+         <Option Value="529000" >P&EI COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="619000">P&GA COMMON-->
+         <Option Value="619000" >P&GA COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="519000">P&IC COMMON-->
+         <Option Value="519000" >P&IC COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231200">PACKING PROCESS-->
+         <Option Value="231200" >PACKING PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231290">PACKING PROCESS COMN-->
+         <Option Value="231290" >PACKING PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231230">PACKING PROCESS LR.03-->
+         <Option Value="231230" >PACKING PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231240">PACKING PROCESS LR.03 N-->
+         <Option Value="231240" >PACKING PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231210">PACKING PROCESS LR.6-->
+         <Option Value="231210" >PACKING PROCESS LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231220">PACKING PROCESS LR.6N-->
+         <Option Value="231220" >PACKING PROCESS LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="231250">PACKING PROCESS LR1-->
+         <Option Value="231250" >PACKING PROCESS LR1<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241000">PART SECTION-->
+         <Option Value="241000" >PART SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="241900">PART SECTION COMN-->
+         <Option Value="241900" >PART SECTION COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="611000">PERSONNEL SECTION-->
+         <Option Value="611000" >PERSONNEL SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="610000">PERSONNELDEPARTEMENT-->
+         <Option Value="610000" >PERSONNELDEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212300">POLISHING PROCESS-->
+         <Option Value="212300" >POLISHING PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212390">POLISHING PROCESS COMN-->
+         <Option Value="212390" >POLISHING PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="290000">PRODUCTION COMMON-->
+         <Option Value="290000" >PRODUCTION COMMON<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="200000">PRODUCTION DIVISION-->
+         <Option Value="200000" >PRODUCTION DIVISION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="510000">PRODUCTION INV CONTROL DEPT-->
+         <Option Value="510000" >PRODUCTION INV CONTROL DEPT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="511000">PRODUCTION INV CONTROL SECTION-->
+         <Option Value="511000" >PRODUCTION INV CONTROL SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="500000">PRODUCTION SUPPORT DIVISION-->
+         <Option Value="500000" >PRODUCTION SUPPORT DIVISION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="520000">PURCHASING & E/I DEPARTEMENT-->
+         <Option Value="520000" >PURCHASING & E/I DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="522000">PURCHASING SECTION-->
+         <Option Value="522000" >PURCHASING SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="321090">QC COMN-->
+         <Option Value="321090" >QC COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="244000">QUALITY CONTROL LITHIUM-->
+         <Option Value="244000" >QUALITY CONTROL LITHIUM<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="321000">QUALITY CONTROL SECTION-->
+         <Option Value="321000" >QUALITY CONTROL SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="320000">QUALITY DEPARTEMENT-->
+         <Option Value="320000" >QUALITY DEPARTEMENT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211400">SEALING CAP-->
+         <Option Value="211400" >SEALING CAP<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212240">SEALING CAP AFTER DEGREASE-->
+         <Option Value="212240" >SEALING CAP AFTER DEGREASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="212230">SEALING CAP BEFORE DEGREASE-->
+         <Option Value="212230" >SEALING CAP BEFORE DEGREASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211490">SEALING CAP COMN-->
+         <Option Value="211490" >SEALING CAP COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211430">SEALING CAP LR.03-->
+         <Option Value="211430" >SEALING CAP LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211440">SEALING CAP LR.03 N-->
+         <Option Value="211440" >SEALING CAP LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211410">SEALING CAP LR.6 (P.P)-->
+         <Option Value="211410" >SEALING CAP LR.6 (P.P)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="211420">SEALING CAP LR.6 N-->
+         <Option Value="211420" >SEALING CAP LR.6 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221200">SEPARATOR PROCESS-->
+         <Option Value="221200" >SEPARATOR PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221290">SEPARATOR PROCESS COMN-->
+         <Option Value="221290" >SEPARATOR PROCESS COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221230">SEPARATOR PROCESS LR.03-->
+         <Option Value="221230" >SEPARATOR PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221240">SEPARATOR PROCESS LR.03 N-->
+         <Option Value="221240" >SEPARATOR PROCESS LR.03 N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221210">SEPARATOR PROCESS LR.6-->
+         <Option Value="221210" >SEPARATOR PROCESS LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221220">SEPARATOR PROCESS LR.6N-->
+         <Option Value="221220" >SEPARATOR PROCESS LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221100">SPOT-WELDING CCA PROCESS-->
+         <Option Value="221100" >SPOT-WELDING CCA PROCESS<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221130">SPOT-WELDING CCA PROCESS LR.03-->
+         <Option Value="221130" >SPOT-WELDING CCA PROCESS LR.03<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221110">SPOT-WELDING CCA PROCESS LR.6-->
+         <Option Value="221110" >SPOT-WELDING CCA PROCESS LR.6<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221120">SPOT-WELDING CCA PROCESS LR.6N-->
+         <Option Value="221120" >SPOT-WELDING CCA PROCESS LR.6N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="221140">SPOT-WELDING CCA PROCESSLR.03N-->
+         <Option Value="221140" >SPOT-WELDING CCA PROCESSLR.03N<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="300000">TECHNICAL DIVISION-->
+         <Option Value="300000" >TECHNICAL DIVISION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243190">TEST AND PACKAGING COMN-->
+         <Option Value="243190" >TEST AND PACKAGING COMN<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243110">TEST AND PACKAGING CR2016-->
+         <Option Value="243110" >TEST AND PACKAGING CR2016<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243120">TEST AND PACKAGING CR2025-->
+         <Option Value="243120" >TEST AND PACKAGING CR2025<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243130">TEST AND PACKAGING CR2032(200)-->
+         <Option Value="243130" >TEST AND PACKAGING CR2032(200)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243140">TEST AND PACKAGING CR2032(220)-->
+         <Option Value="243140" >TEST AND PACKAGING CR2032(220)<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243170">TEST AND PACKAGING CR2050-->
+         <Option Value="243170" >TEST AND PACKAGING CR2050<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243150">TEST AND PACKAGING CR2430-->
+         <Option Value="243150" >TEST AND PACKAGING CR2430<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243160">TEST AND PACKAGING CR2450-->
+         <Option Value="243160" >TEST AND PACKAGING CR2450<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243100">TEST AND PACKAGING LINE NO.3-->
+         <Option Value="243100" >TEST AND PACKAGING LINE NO.3<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="243000">TEST AND PACKAGING SECTION-->
+         <Option Value="243000" >TEST AND PACKAGING SECTION<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="512000">WAREHOUSE SECTION-->
+         <Option Value="512000" >WAREHOUSE SECTION<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00">Cost Subject Code</Td>
+ <Td ColSpan="2">
+   <Select Name="cost_subject_code" Size="1" style="background-color:#FFFF00">
+     <Option Value="">
+     
+         <!--<Option Value="130040">FINISH GOOD-->
+         <Option Value="130040" >FINISH GOOD<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="136040">INDIRECT MATERIAL OI-->
+         <Option Value="136040" >INDIRECT MATERIAL OI<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="136030">INDIRECT MATERIAL RM-->
+         <Option Value="136030" >INDIRECT MATERIAL RM<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="136020">PACKING MATERIAL-->
+         <Option Value="136020" >PACKING MATERIAL<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="136010">RAW MATERIAL-->
+         <Option Value="136010" >RAW MATERIAL<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ </Tr>
+ 
+ <!-- add 2015/10/28 start-->
+ <Tr>
+ <Td BgColor="#00ff00">Customer Item Code</Td>
+ <Td ColSpan="2">
+   <Input Type="text" Name="cust_item_no" Value='' Size="30" Maxlength="25">
+ </Td>
+ <Td BgColor="#00ff00">Customer Item Name</Td>
+ <Td ColSpan="2">
+   <Input Type="text" Name="cust_item_name" Value='' Size="40" Maxlength="50">
+ </Td>
+ </Tr>
+ <!-- add 2015/10/28 end-->
+ 
+ <Tr>
+ <Td BgColor="#00ff00">Order Policy</Td>
+ <Td ColSpan="5">
+   <Select Name="order_policy" Size="1">
+     <Option Value="">
+     
+       <!--<Option Value="2">FIXED SIZE REORDER-->
+       <Option Value="2" >FIXED SIZE REORDER<!-- mod 2015/04/21 -->
+       
+       <!--<Option Value="1">MRP ORDER-->
+       <Option Value="1" >MRP ORDER<!-- mod 2015/04/21 -->
+       
+       <!--<Option Value="3">REQUEST ORDER-->
+       <Option Value="3" >REQUEST ORDER<!-- mod 2015/04/21 -->
+       
+   </Select>
+ </Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Maker Flag</Td>
+ <Td ColSpan="2">
+   <Select Name="maker_flag" Size="1">
+     <Option Value="">
+     
+         <!--<Option Value="2">MANUFACT-->
+         <Option Value="2" >MANUFACT<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="4">OVERSEA FACTORY-->
+         <Option Value="4" >OVERSEA FACTORY<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="5">OVERSEA PURCHASE-->
+         <Option Value="5" >OVERSEA PURCHASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="1">PURCHASE-->
+         <Option Value="1" >PURCHASE<!-- mod 2015/04/21 -->
+         
+         <!--<Option Value="3">SUBCONTRACT-->
+         <Option Value="3" >SUBCONTRACT<!-- mod 2015/04/21 -->
+         
+   </Select>
+ </Td>
+ <Td BgColor="#00ff00">Maker</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="mak" Size="18" Maxlength="18"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="mak" Size="18" Maxlength="18" value=''></Td>
+ </Tr>
+ <Tr>
+ <Td BgColor="#00ff00">Item Type1</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="item_type1" Size="30" Maxlength="30"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="item_type1" Size="30" Maxlength="30" value=''></Td>
+ <Td BgColor="#00ff00">Item Type2</Td>
+ <!--<Td ColSpan="2"><Input Type="text" Name="item_type2" Size="18" Maxlength="18"></Td>-->
+ <Td ColSpan="2"><Input Type="text" Name="item_type2" Size="18" Maxlength="18" value=''></Td>
+ </Tr>
+ <!-- 
+ <Tr>
+  <Td BgColor="#00ff00">Supplier Code</Td>
+ <Td ColSpan="5"><Input Type="text" Name="supplier_code" Size="8" Maxlength="8"></Td>
+ </Tr>
+  -->
+ <!-- <Tr>
+ <Td BgColor="#00ff00">Reorder Point</Td>
+ <Td ColSpan="2"><Input Type="text" Name="reorder_point" Size="9" Maxlength="9"></Td>
+ <Td BgColor="#00ff00">Llc Code</Td>
+ <Td ColSpan="2"><Input Type="text" Name="llc_code" Size="3" Maxlength="3"></Td>
+ </Tr> -->
+
+<!-- NEW(FROM ITEM ENTRY MAIN) END -->
+
+<!-- NEW(FROM ORDER/FORCAST) -->
+
+<!-- NEW(FROM ORDER/FORECAST END -->
+
+
+<!-- CHANGE -->
+
+<!-- UPDATE END -->
+
+<!-- DELETE OR DELETED START -->
+
+<!-- DELETE END -->
+
+<!-- 2006/07/06 FIのみ、客先の内箱情報を追加 -->
+
+	    <TR>
+	       <TD BgColor="#00ff00">Package Unit Number</Td>
+	       <TD ColSpan="2">
+		       <INPUT TYPE=TEXT   NAME=package_unit_number VALUE="" Size=12 MaxLength=8 style="background-color:#FFFF00">
+		       <SELECT NAME=unit_package style="background-color:#FFFF00">
+		           <OPTION VALUE="">
+		           <OPTION VALUE='130' >BTL<OPTION VALUE='110' >CC<OPTION VALUE='35' >KG<OPTION VALUE='75' >L<OPTION VALUE='70' >M<OPTION VALUE='140' >MM<OPTION VALUE='10' >PC<OPTION VALUE='300' >PK<OPTION VALUE='20' >PR<OPTION VALUE='60' >RL<OPTION VALUE='50' >SH<OPTION VALUE='80' >ST
+		       </SELECT>
+	       </TD>
+	       <TD COLSPAN=4><BR></TD>
+	    </TR>
+	
+<!-- 2007/01/22 Add -->
+  <TR>
+  <TD bgcolor='#00ff00'><FONT color='#0000ff'>Unit Price(ORG)</FONT></TD>
+<TD><INPUT type='text' name='unit_price_o' value='0' size='14' maxlength='14'></TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Unit Price Rate</FONT></TD>
+<TD><INPUT type='text' name='unit_price_rate' value='0' size='14' maxlength='14'></TD>
+<TD bgcolor='#00ff00'>Unit Curr Code</TD>
+<TD>
+ <SELECT name='unit_curr_code'>
+<OPTION value=''>
+<OPTION VALUE='23' >RP 
+<OPTION VALUE='1' selected>US$
+<OPTION VALUE='5' >SG$
+<OPTION VALUE='8' >YEN
+<OPTION VALUE='7' >EURO
+</SELECT>
+</TD>
+</TR><TR><TD bgcolor='#00ff00'><FONT>Grade Code<BR>(Link from FDK ENERGY)</FONT></TD>
+<TD><INPUT type='text' name='grade_code'  size='12' maxlength='10' value=''></TD>
+<TD bgcolor='#00ff00'><FONT>Customer Type</FONT></TD>
+<TD><INPUT type='text' name='customer_type'  size='7' maxlength='5' value=''></TD>
+<TD bgcolor='#00ff00'><FONT>Package Type</FONT></TD>
+<TD>
+<SELECT name='PACKAGE_TYPE'>
+<OPTION value=''>
+<OPTION VALUE='A' >AUTO SHRINK LR6
+<OPTION VALUE='A3' >AUTO SHRINK LR03
+<OPTION VALUE='B' >BLISTER
+<OPTION VALUE='B1' >BLISTER 1,2
+<OPTION VALUE='B2' >BLISTER 3,4
+<OPTION VALUE='B3' >BLISTER 5,6
+<OPTION VALUE='C' >CLAMSHELL
+<OPTION VALUE='D' >BLISTER LR03
+<OPTION VALUE='E' >BLISTER LR6
+<OPTION VALUE='F' >BLISTER 7
+<OPTION VALUE='G' >BLOK SHRINK
+<OPTION VALUE='H' >ASSY
+<OPTION VALUE='I' >INSP
+<OPTION VALUE='L' >MULTI SHRINK
+<OPTION VALUE='M' >MPAC
+<OPTION VALUE='N' >BULK
+<OPTION VALUE='S' >SHRINK
+<OPTION VALUE='S1' >MANUAL SHRINK
+<OPTION VALUE='S2' >MANUAL SHRINK + BRCD
+<OPTION VALUE='' >RECL
+</SELECT>
+</TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Capacity</FONT></TD>
+<TD><INPUT type='text' name='capacity' size='18' maxlength='25' value='' style='background-color:#FFFF00'></TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Date Code Type</FONT></TD>
+<TD><INPUT type='text' name='date_code_type' size='12' maxlength='10' value=''></TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Date Code Month</FONT></TD>
+<TD><INPUT type='text' name='date_code_month' size='8' maxlength='6' value=''></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'><FONT>Packaging Grouping</FONT></TD>
+<TD>
+<SELECT name='label_type' style='background-color:#FFFF00'>
+<OPTION value=''>
+<OPTION VALUE='1' >AUTO SHRI
+<OPTION VALUE='2' >BLIS 2B LR03
+<OPTION VALUE='3' >BLIS 2B LR6
+<OPTION VALUE='4' >BLIS 4B LR03
+<OPTION VALUE='5' >BLIS 4B LR6
+<OPTION VALUE='6' >BLISTER
+<OPTION VALUE='7' >BULK LR03
+<OPTION VALUE='8' >BULK LR1
+<OPTION VALUE='9' >BULK LR6
+<OPTION VALUE='10' >MPAC
+<OPTION VALUE='11' >SHRI
+<OPTION VALUE='12' >MULTI SHRINK
+<OPTION VALUE='101' >BLISTER LR03 (2B)
+<OPTION VALUE='102' >BLISTER LR03 (2B) FU
+<OPTION VALUE='103' >BLISTER LR6 (2B)
+<OPTION VALUE='104' >BLISTER LR6 (2B) FU
+<OPTION VALUE='105' >BLISTER LR03 (4B)
+<OPTION VALUE='106' >BLISTER LR03 (4B) FU
+<OPTION VALUE='107' >BLISTER LR6 (4B)
+<OPTION VALUE='108' >BLISTER LR6 (4B) FU
+<OPTION VALUE='109' >BLISTER LR1 (1B)
+<OPTION VALUE='110' >BLISTER LR1 (2B)FU
+<OPTION VALUE='111' >BLISTER LR1 (2BN) INSP
+<OPTION VALUE='112' >BLISTER LR03 (2BN)
+<OPTION VALUE='113' >BLISTER LR6 (2BN)
+<OPTION VALUE='114' >BLISTER LR03 (1BX10)
+<OPTION VALUE='115' >BLISTER LR6 (1BX10)
+<OPTION VALUE='116' >BLISTER LR03 (1Bx12)
+<OPTION VALUE='117' >BLISTER LR6 (1Bx12)
+<OPTION VALUE='118' >BLISTER LR6 (20B)
+<OPTION VALUE='119' >BLISTER LR03 (20B)
+<OPTION VALUE='120' >BLISTER LR03 (8B)
+<OPTION VALUE='121' >BLISTER LR6 (8B)
+<OPTION VALUE='122' >BLISTER LR6 (4B+4) FU MIX
+<OPTION VALUE='123' >BLISTER LR03 (4B+4) FU
+<OPTION VALUE='124' >BLISTER LR6 (4B+4) FU
+<OPTION VALUE='125' >BLISTER LR03 (4B+2)
+<OPTION VALUE='126' >BLISTER LR6 (4B+2)
+<OPTION VALUE='127' >BULK LR03
+<OPTION VALUE='128' >BULK LR6
+<OPTION VALUE='129' >BULK LR1
+<OPTION VALUE='130' >BULK LR03 IN PACKAGING
+<OPTION VALUE='131' >BULK LR6 IN PACKAGING
+<OPTION VALUE='132' >MANUAL SHRINK LR6 (30S)
+<OPTION VALUE='133' >MANUAL SHRINK LR03 (20S)
+<OPTION VALUE='134' >MANUAL SHRINK LR6 (20S)
+<OPTION VALUE='135' >MANUAL SHRINK LR03 (12S)
+<OPTION VALUE='136' >MANUAL SHRINK LR03 (10S)
+<OPTION VALUE='137' >MANUAL SHRINK LR03 (8S)
+<OPTION VALUE='138' >MANUAL SHRINK LR03 (4S)
+<OPTION VALUE='139' >MANUAL SHRINK LR03 (4S) FU
+<OPTION VALUE='140' >MANUAL SHRINK LR03 (4S) FU INSP
+<OPTION VALUE='141' >MANUAL SHRINK LR6 (3S)
+<OPTION VALUE='142' >MANUAL SHRINK LR03 (2S)
+<OPTION VALUE='143' >MANUAL SHRINK LR6 (2S)
+<OPTION VALUE='144' >MANUAL SHRINK LR03 (2S) FU
+<OPTION VALUE='145' >MANUAL SHRINK LR03 (2S) INSP
+<OPTION VALUE='146' >MANUAL SHRINK LR03 (2S) FU
+<OPTION VALUE='147' >MANUAL SHRINK LR03 (2S) FU INSP
+<OPTION VALUE='148' >MANUAL SHRINK LR1 (1S)
+<OPTION VALUE='149' >MANUAL SHRINK LR1 (2S) INSP
+<OPTION VALUE='150' >AUTO SHRINK LR6 (2S)
+<OPTION VALUE='151' >AUTO SHRINK LR6 (2S) FU
+<OPTION VALUE='152' >AUTO SHRINK LR6 (2S) FU INSP
+<OPTION VALUE='153' >AUTO SHRINK LR6 (4S)
+<OPTION VALUE='154' >AUTO SHRINK LR6 (4S) FU
+<OPTION VALUE='155' >AUTO SHRINK LR6 (4S) FU INSP
+<OPTION VALUE='156' >MULTI SHRINK LR03 (20S)
+<OPTION VALUE='157' >MULTI SHRINK LR6 (20S)
+<OPTION VALUE='158' >MULTI SHRINK LR03 (2S)
+<OPTION VALUE='159' >MULTI SHRINK LR03 (4S)
+<OPTION VALUE='160' >MULTI SHRINK LR03 (4S) + 2nd Shrink
+<OPTION VALUE='161' >MULTI SHRINK LR03 (4S) + Block Shrink
+<OPTION VALUE='162' >MULTI SHRINK LR03 AMAZON (4Sx9)
+<OPTION VALUE='163' >MULTI SHRINK LR03 AMAZON (4Sx25)
+<OPTION VALUE='164' >MULTI SHRINK LR6 AMAZON (8S)
+<OPTION VALUE='165' >MULTI SHRINK LR03 AMAZON (8S)
+<OPTION VALUE='166' >MULTI SHRINK LR03 AMAZON (10Sx2)
+<OPTION VALUE='167' >MULTI SHRINK LR6 AMAZON (10Sx2)
+<OPTION VALUE='168' >AUTO SHRINK LR6 AMAZON (4Sx12)
+<OPTION VALUE='169' >AUTO SHRINK LR6 AMZON (4Sx25)
+<OPTION VALUE='170' >MULTIPACK LR03 (8M)
+<OPTION VALUE='171' >MULTIPACK LR6 (8M)
+<OPTION VALUE='172' >MULTIPACK LR6 (10M)
+<OPTION VALUE='173' >MULTIPACK (12M)
+<OPTION VALUE='174' >MULTIPACK LR03 (12M)
+<OPTION VALUE='175' >SHRINK LR6 (20S) MIX
+<OPTION VALUE='176' >MULTIPACK LR6 (20M)
+<OPTION VALUE='177' >MULTIPACK LR6 (24M)
+<OPTION VALUE='178' >AUTO SHRINK LR6 (4S) + 2nd Shrink
+<OPTION VALUE='179' >AUTO SHRINK LR6 (4S) + Block Shrink
+<OPTION VALUE='180' >CHARGER
+<OPTION VALUE='181' >BLISTER LR03 (36B)
+<OPTION VALUE='182' >BLISTER LR6 (36B)
+<OPTION VALUE='183' >BLISTER LR03 (24B)
+<OPTION VALUE='184' >BLISTER LR6 (24B)
+<OPTION VALUE='185' >BLISTER LR03 (2B+1)
+<OPTION VALUE='186' >BLISTER LR6 (2B+1)
+<OPTION VALUE='187' >MANUAL SHRINK LR6 (4S)
+<OPTION VALUE='188' >MANUAL SHRINK LR6 (6S)
+<OPTION VALUE='189' >MANUAL SHRINK LR6 (8S)
+<OPTION VALUE='190' >MANUAL SHRINK LR6 (10S)
+<OPTION VALUE='191' >MANUAL SHRINK LR6 (12S)
+<OPTION VALUE='192' >MULTI SHRINK LR6 (30S)
+<OPTION VALUE='193' >BLISTER LR03 (4B+4) FU MIX
+<OPTION VALUE='194' >MANUAL SHRINK LR03 (10S) MIX
+<OPTION VALUE='195' >AUTO SHRINK LR6 AMAZON (4Sx2)
+<OPTION VALUE='196' >AUTO SHRINK LR6 AMAZON (4Sx5)
+<OPTION VALUE='197' >MULTI SHRINK LR03 AMAZON (4SX2)
+<OPTION VALUE='198' >MULTI SHRINK LR03 AMAZON (4SX5)
+<OPTION VALUE='199' >MANUAL SHRINK LR03 (2S) + BARCODE
+<OPTION VALUE='200' >MANUAL SHRINK LR03 (2S) FU + BARCODE
+<OPTION VALUE='201' >MANUAL SHRINK LR03 (4S) + BARCODE
+<OPTION VALUE='202' >MANUAL SHRINK LR03 (4S) FU + BARCODE
+<OPTION VALUE='203' >MANUAL SHRINK LR6 (2S) + BARCODE
+<OPTION VALUE='204' >MANUAL SHRINK LR6 (2S) FU + BARCODE
+<OPTION VALUE='205' >MANUAL SHRINK LR6 (4S) + BARCODE
+<OPTION VALUE='206' >MANUAL SHRINK LR6 (4S) FU + BARCODE
+<OPTION VALUE='207' >MULTI SHRINK LR03 (2S)
+<OPTION VALUE='208' >MULTI SHRINK LR03 (4S)
+<OPTION VALUE='209' >AUTO SHRINK LR6 (2S)
+<OPTION VALUE='210' >AUTO SHRINK LR6 (2S) FU
+<OPTION VALUE='211' >AUTO SHRINK LR6 (4S)
+<OPTION VALUE='212' >AUTO SHRINK LR6 (4S) FU
+<OPTION VALUE='213' >MULTI SHRINK LR6 AMAZON (4SX12)
+<OPTION VALUE='214' >MULTI SHRINK LR6 AMAZON (4SX25)
+<OPTION VALUE='215' >MULTI SHRINK LR6 AMAZON (4SX5)
+<OPTION VALUE='216' >MULTI SHRINK LR6 AMAZON (4SX2)
+<OPTION VALUE='217' >MULTI SHRINK LR03 (4S) + 2nd Shrink
+<OPTION VALUE='218' >AUTO SHRINK LR03 AMAZON (4Sx2)
+<OPTION VALUE='219' >AUTO SHRINK LR03 AMAZON (4Sx5)
+<OPTION VALUE='220' >AUTO SHRINK LR03 AMAZON (4SX9)
+<OPTION VALUE='221' >AUTO SHRINK LR03 AMAZON (4Sx25)
+<OPTION VALUE='222' >AUTO SHRINK LR03 (2S)
+<OPTION VALUE='223' >AUTO SHRINK LR03 (2S) FU
+<OPTION VALUE='224' >AUTO SHRINK LR03 (4S)
+<OPTION VALUE='225' >AUTO SHRINK LR03 (4S) FU
+<OPTION VALUE='226' >AUTO SHRINK LR03 (8S)
+<OPTION VALUE='227' >AUTO SHRINK LR03 (10S)
+<OPTION VALUE='228' >MULTI SHRINK LR03 (30S)
+<OPTION VALUE='229' >MULTI SHRINK LR03 (10S)
+<OPTION VALUE='230' >MULTI SHRINK LR03 (8S)
+<OPTION VALUE='231' >MULTI SHRINK LR6 (10S)
+<OPTION VALUE='232' >MULTI SHRINK LR6 (8S)
+<OPTION VALUE='233' >MULTI SHRINK LR6 (2S)
+<OPTION VALUE='234' >MULTI SHRINK LR6 (4S)
+</SELECT>
+</TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Measurement</FONT></TD>
+<TD colspan='3'><INPUT type='text' name='measurement' size='18' maxlength='25' value=''></TD>
+</TR><TR>
+<TD bgcolor='#00ff00'>&nbsp;</TD>
+<TD bgcolor='#00ff00' align='center'><FONT color='#0000ff'>Height</FONT></TD>
+<TD bgcolor='#00ff00' align='center'><FONT color='#0000ff'>Width</FONT></TD>
+<TD bgcolor='#00ff00' align='center'><FONT color='#0000ff'>Depth</FONT></TD>
+<TD bgcolor='#00ff00' align='center' colspan='2'><FONT color='#0000ff'>Unit Number</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'>Inner Box</TD>
+<TD><FONT><INPUT type='text' name='i_height' size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='i_width'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='i_depth'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD colspan='2'><FONT><INPUT type='text' name='i_unit_number'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;PC</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'>Medium Box</TD>
+<TD><FONT><INPUT type='text' name='m_height' size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='m_width'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='m_depth'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD colspan='2'><FONT><INPUT type='text' name='m_unit_number'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;PC</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'>Outer Box</TD>
+<TD><FONT><INPUT type='text' name='o_height' size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='o_width'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD><FONT><INPUT type='text' name='o_depth'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD colspan='2'><FONT><INPUT type='text' name='o_unit_number'  size='18' maxlength='25' value='' style='text-align:right; border:none;' readonly>&nbsp;PC</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Ctn Gross Weight</FONT></TD>
+<TD colspan='5'><FONT><INPUT type='text' name='c_gross_weight' size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;KG</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#87CEEB' nowrap><FONT>Packing Information No.</FONT></TD>
+<TD><INPUT type='text' name='packing_information' size='22' maxlength='20' value='' onChange='get_pack_info()' style='background-color:#FFFF00'></TD>
+<TD bgcolor='#87CEEB'><FONT>PLT Spec No.</FONT></TD>
+<TD><INPUT type='text' name='plt_spec_no' size='22' maxlength='20' value='' style='background-color:#FFFF00'></TD>
+<TD bgcolor='#87CEEB'><FONT color='#0000ff'>Pallet Size Type</FONT></TD>
+<TD>
+<SELECT name='pallet_size_type' style='background-color:#FFFF00'>
+<OPTION value=''>
+<OPTION VALUE='1' >1,100 x 1,100 -PLASTIC-
+<OPTION VALUE='2' >1,100 x 1,100 -A-
+<OPTION VALUE='3' >1,100 x 1,100 -G-
+<OPTION VALUE='4' >1,130 x 800 -F-
+<OPTION VALUE='7' >1,200 X 800 -C-
+<OPTION VALUE='8' >1,200 X 800 -M-
+<OPTION VALUE='9' >1,200 x 1,000 -B-
+<OPTION VALUE='10' >1,200 x 1,000 -E-
+<OPTION VALUE='11' >1,200 X 1,000 -M-
+
+<OPTION VALUE='12' >1,200 x 1,000 -D-
+<OPTION VALUE='13' >1,200 x 800 -E PAL-
+<OPTION VALUE='14' >1,200 x 800 -N-
+</SELECT>
+&nbsp;</TD>
+</TR>
+<TR>
+<TD bgcolor='#87CEEB' rowspan='4'>Pallet</TD>
+<TD bgcolor='#87CEEB' align='center'><FONT color='#0000ff'>Height</FONT></TD>
+<TD bgcolor='#87CEEB' align='center'><FONT color='#0000ff'>Width</FONT></TD>
+<TD bgcolor='#87CEEB' align='center'><FONT color='#0000ff'>Depth</FONT></TD>
+<TD bgcolor='#87CEEB' align='center' colspan='2'><FONT color='#0000ff'>Unit Number</FONT></TD>
+</TR>
+<TR>
+<TD rowspan='3'><FONT><INPUT type='text' name='p_height' size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD rowspan='3'><FONT><INPUT type='text' name='p_width'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD rowspan='3'><FONT><INPUT type='text' name='p_depth'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;mm</FONT></TD>
+<TD colspan='2'><FONT><INPUT type='text' name='p_unit_number'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;PC</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#87CEEB' align='center'><FONT color='#0000ff'>Ctn Number</FONT></TD>
+<TD bgcolor='#87CEEB' align='center'><FONT color='#0000ff'>Step Ctn Number</FONT></TD>
+</TR>
+<TR>
+<TD><INPUT type='text' name='p_ctn_number'       size='18' maxlength='25' value='' style='text-align:right;'></TD>
+<TD><INPUT type='text' name='p_step_ctn_number'  size='18' maxlength='25' value='' style='text-align:right;'></TD>
+</TR>
+<TR>
+<TD bgcolor='#87CEEB' nowrap><FONT color='#0000ff'>Pallet Weight</FONT></TD>
+<TD colspan='5'><FONT><INPUT type='text' name='p_weight'  size='18' maxlength='25' value='' style='text-align:right;'>&nbsp;KG</FONT></TD>
+</TR>
+<TR>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Operation Time</FONT></TD>
+<TD><INPUT type='text' name='operation_time' size='18' maxlength='25' value='' style='background-color:#FFFF00'></TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Man Power</FONT></TD>
+<TD><INPUT type='text' name='man_power' size='18' maxlength='25' value=''></TD>
+<TD bgcolor='#00ff00'><FONT color='#0000ff'>Aging Day</FONT></TD>
+<TD><INPUT type='text' name='aging_day' size='5' maxlength='3' value='' style='background-color:#FFFF00'></TD>
+</TR>
+
+  </TR>
+<!-- 2007/01/22 End -->
+
+</Table>
+</Form>
+</Div>
+</Body>
+</Html>
