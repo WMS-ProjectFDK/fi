@@ -2264,7 +2264,7 @@ if ($varConn=='Y'){
 					window.open('../images/CAUTION_MARK.pdf');
 				}else{
 					$('#dlg_print').dialog('close');
-					window.open('http://sysfi01.indonesia.fdk.co.jp/pglosas/entry/iv2/iv2_sheet3_dummy.asp'+pdf_url);
+					window.open('invoice_print.php?do='+no_do+'&state='+s_type);
 				}
 
 			}
