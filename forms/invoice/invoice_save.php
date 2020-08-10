@@ -57,13 +57,13 @@ if (isset($_SESSION['id_wms'])){
 
 		$user = $_SESSION['id_wms'];
 		// HITUNG DUEDATE
-		$split_paym = split("-",$do_paym);
+		$split_paym = explode("-",$do_paym);
 		$plusDay = "+".intval($split_paym[0])." day";
 		$tambah_date = strtotime($plusDay,strtotime($do_date));
 		$due_date = date('Y-m-d',$tambah_date);
 
 		if ($do_sett_transport1 != ''){
-			$split_do_sett_transport1 = split("-", $do_sett_transport1);
+			$split_do_sett_transport1 = explode("-", $do_sett_transport1);
 			if (strtoupper($split_do_sett_transport1[0]) == 'UNDEFINED' || 
 				strtoupper($split_do_sett_transport1[1]) == 'UNDEFINED' || 
 				strtoupper($split_do_sett_transport1[2]) == 'UNDEFINED'){
@@ -83,7 +83,7 @@ if (isset($_SESSION['id_wms'])){
 		}
 
 		if($do_sett_transport2 != ''){	
-			$split_do_sett_transport2 = split("-", $do_sett_transport2);
+			$split_do_sett_transport2 = explode("-", $do_sett_transport2);
 			if (strtoupper($split_do_sett_transport2[0]) == 'UNDEFINED' || 
 				strtoupper($split_do_sett_transport2[1]) == 'UNDEFINED' || 
 				strtoupper($split_do_sett_transport2[2]) == 'UNDEFINED'){
@@ -112,11 +112,11 @@ if (isset($_SESSION['id_wms'])){
 
 		$field  = "DO_STS,"					;	$value 	= "'$do_sts',";
 		$field .= "DO_NO,"					;	$value .= "'$do_no',";
-		$field .= "DO_DATE,"				;	$value .= "to_date('$do_date','YYYY-MM-DD'),";
+		$field .= "DO_DATE,"				;	$value .= "'$do_date',";
 		$field .= "CUSTOMER_CODE,"			;	$value .= "$do_cust,";
 		$field .= "CURR_CODE,"				;	$value .= "$do_curr,";
 		$field .= "EX_RATE,"				;	$value .= "$do_rate,";
-		$field .= "DUE_DATE,"				;	$value .= "to_date('$due_date','YYYY-MM-DD'),";
+		$field .= "DUE_DATE,"				;	$value .= "'$due_date',";
 		$field .= "PDAYS,"					;	$value .= "$split_paym[0],";
 		$field .= "PDESC,"					;	$value .= "'$split_paym[1]',";
 		$field .= "GST_RATE,"				;	$value .= "$do_gst,";
@@ -132,7 +132,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f0 == count($rmk_s0)-1){
 						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."'";
 					}else{
-						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' || chr(13) || chr(10) || ";
+						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -152,7 +152,7 @@ if (isset($_SESSION['id_wms'])){
 					if($v == count($vsl_s)-1){
 						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."'";
 					}else{
-						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' || chr(13) || chr(10) || ";
+						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -163,8 +163,8 @@ if (isset($_SESSION['id_wms'])){
 
 		$field .= "PORT_LOADING,"			;	$value .= "'$do_port_load',";
 		$field .= "PORT_DISCHARGE,"			;	$value .= "'$do_port_disg',";
-		$field .= "ETD,"					;	$value .= "to_date('$do_etd','YYYY-MM-DD'),";
-		$field .= "ETA,"					;	$value .= "to_date('$do_eta','YYYY-MM-DD'),";
+		$field .= "ETD,"					;	$value .= "'$do_etd',";
+		$field .= "ETA,"					;	$value .= "'$do_eta',";
 		$field .= "CONTRACT_SEQ,"			;	$value .= "$do_contract,";
 		$field .= "PBY,"					;	$value .= "'$do_pby',";
 		$field .= "FINAL_DESTINATION,"		;	$value .= "'$do_port_dest',";
@@ -180,7 +180,7 @@ if (isset($_SESSION['id_wms'])){
 					if($n == count($ntf_s)-1){
 						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."'";
 					}else{
-						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."' || chr(13) || chr(10) || ";
+						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -227,7 +227,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f == count($rmk_s)-1){
 						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."'";
 					}else{
-						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' || chr(13) || chr(10) || ";
+						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -256,7 +256,7 @@ if (isset($_SESSION['id_wms'])){
 
 		chop($field);              				chop($value);
 
-		$ins_cc = "insert into ztb_do_temp ($field) select $value from dual";
+		$ins_cc = "insert into ztb_do_temp ($field) select $value ";
 		$data_cc = sqlsrv_query($connect, $ins_cc);
 		echo $ins_cc;
 		

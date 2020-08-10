@@ -59,7 +59,7 @@
 	si.load_port_code, si.load_port, si.disch_port_code, h.port_discharge, si.final_dest_code, h.final_destination, 
 	replace(h.notify,char(10),'<br>')as notify,
 	cast(h.eta as varchar(10)) as eta, cast(h.etd as varchar(10))as etd, f.transport_type, f.forwarder_code, f.domestic_truck_code, f.booking_no,
-	f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, h.do_date as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
+	f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, cast(h.do_date as varchar(10)) as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
 	from do_header h
 	inner join company c on h.customer_code = c.company_code
 	inner join country co on c.country_code = co.country_code

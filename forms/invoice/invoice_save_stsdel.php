@@ -22,7 +22,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f0 == count($rmk_s0)-1){
 						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."'";
 					}else{
-						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' || chr(13) || chr(10) || ";
+						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -42,7 +42,7 @@ if (isset($_SESSION['id_wms'])){
 					if($v == count($vsl_s)-1){
 						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."'";
 					}else{
-						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' || chr(13) || chr(10) || ";
+						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' + char(13) + char(10) + ";
 					}
 				}
 			}
@@ -51,11 +51,17 @@ if (isset($_SESSION['id_wms'])){
 			$value .= "VESSEL=$vsl_fix, ";
 		}
 
-		$field .= "ETD = to_date('$stsdel_etd','YYYY-MM-DD'), ";	$value .= "ETD = to_date('$stsdel_etd','YYYY-MM-DD'), ";
-		$field .= "ETA = to_date('$stsdel_eta','YYYY-MM-DD') ";		$value .= "ETA = to_date('$stsdel_eta','YYYY-MM-DD') ";
+		$field .= "ETD = '$stsdel_etd', ";	$value .= "ETD = '$stsdel_etd'), ";
+		$field .= "ETA = '$stsdel_eta') ";		$value .= "ETA = '$stsdel_eta') ";
 
 		$upd = "update ztb_do_temp set $field where do_no = '$stsdel_dono' ";
 		$data_upd = sqlsrv_query($connect, $upd);
+		if( $data_upd === false )
+			{
+				//die( printf("$sql") );
+				//echo "Error in executing statement 3.\n";
+				die( print_r( sqlsrv_errors(), true));
+			}
 		// $pesan = oci_error($data_upd);
 		// $msg = $pesan['message'];
 		// if($msg != ''){
@@ -65,6 +71,12 @@ if (isset($_SESSION['id_wms'])){
 
 		$upd2 = "update answer set $value where answer_no in (select answer_no1 from do_details where do_no='$stsdel_dono') ";
 		$data_upd2 = sqlsrv_query($connect, $upd2);
+		if( $data_upd2 === false )
+			{
+				//die( printf("$sql") );
+				//echo "Error in executing statement 3.\n";
+				die( print_r( sqlsrv_errors(), true));
+			}
 		// $pesan = oci_error($data_upd2);
 		// $msg = $pesan['message'];
 		// if($msg != ''){

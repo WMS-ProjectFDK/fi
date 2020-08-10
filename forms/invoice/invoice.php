@@ -2021,6 +2021,7 @@ if ($varConn=='Y'){
 			  	stsdel_vsl: $('#vessel_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>"),
 			  	stsdel_rmk: $('#remark_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>")
             },function(result){
+				console.log(res);
 				if (result.successMsg){
 					$.messager.progress('close');
 					$('#dlg_edit_stsdel').dialog('close');
