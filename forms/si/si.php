@@ -71,7 +71,7 @@ $menu_id = $_GET['id'];
 	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
 	<div id="toolbar">
 		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:70px; float:left;"><legend>SHIPPING INSTRUCTION FILTER</legend>
-			<div style="width:470px; float:left;">
+			<div style="float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CR Date</span>
 					<input style="width:85px;" name="date_awal" id="date_awal" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
@@ -80,35 +80,15 @@ $menu_id = $_GET['id'];
 					<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
                 </div>
                 <div class="fitem">
-					<span style="width:80px;display:inline-block;">SI/NO.</span>
-					<select style="width:330px;" name="cmb_si_no" id="cmb_si_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'si_no', textField:'si_no', panelHeight:'100px'"></select>
-					<label><input type="checkbox" name="ck_si_no" id="ck_si_no" checked="true">All</input></label>
+					<input style="width:310px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus/>	
+					<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER</a>
+					<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addPRF()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SI</a>
+					<a href="javascript:void(0)" style="width: 100px;" id="edit" class="easyui-linkbutton c2" onclick="editPRF()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SI</a>
+					<a href="javascript:void(0)" style="width: 100px;" id="delete" class="easyui-linkbutton c2" onclick="destroyPRF()"><i class="fa fa-trash" aria-hidden="true"></i> DELETE SI</a>
 				</div>
             </div>
-			<div>
-                <div class="fitem">
-                    <span style="width:100px;display:inline-block;"></span>
-                    <span style="width:100px;display:inline-block;">CONSIGNEE</span>
-                    <input style="width:85px;" name="consignee_code" id="consignee_code" class="easyui-textbox" disabled=""/>
-                    <select style="width:240px;" name="consignee_name" id="consignee_name" class="easyui-combobox"/></select>
-                    <label><input type="checkbox" name="ck_consignee" id="ck_consignee" checked="true">All</input></label>
-				</div>
-                <div class="fitem">
-                    <span style="width:100px;display:inline-block;"></span>
-                    <span style="width:100px;display:inline-block;">CUST PO/NO.</span>
-					<select style="width:330px;" name="cmb_cust_po" id="cmb_cust_po" class="easyui-combobox" data-options=" url:'../json/json_prf_no.php',method:'get',valueField:'prf_no',textField:'prf_no', panelHeight:'150px'"></select>
-					<label><input type="checkbox" name="ck_cust_po" id="ck_cust_po" checked="true">All</input></label>
-				</div>
-			</div>
 		</fieldset>
 		<div style="clear:both;"></div>
-		<div style="margin-top: 5px;margin: 5px;">
-			<input style="width:150px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" />
-			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addPRF()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SI</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="edit" class="easyui-linkbutton c2" onclick="editPRF()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SI</a>
-			<a href="javascript:void(0)" style="width: 100px;" id="delete" class="easyui-linkbutton c2" onclick="destroyPRF()"><i class="fa fa-trash" aria-hidden="true"></i> DELETE SI</a>
-		</div>
     </div>
     <script type="text/javascript">
 		function myformatter(date){

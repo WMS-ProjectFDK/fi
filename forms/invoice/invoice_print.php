@@ -11,6 +11,8 @@ $state = isset($_REQUEST['state']) ? strval($_REQUEST['state']) : '';
 
 if($state == 'packing_list'){
     $name = "PACKING LIST";
+}elseif($state=='debit_note'){
+    $name = "DEBIT NOTE";
 }else{
     $name = "INVOICE";
 }
@@ -29,14 +31,18 @@ $head = sqlsrv_query($connect, strtoupper($sql_h));
 $dt_h = sqlsrv_fetch_object($head);
 
 // MARKS
+$params = array();
+$options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
+
 $sql_marks = "select dm2.max_value  max_no, dm1.mark_no, dm1.MARKS 
     from do_marks  dm1,
     (select max(mark_no) max_value,do_no from do_marks group by do_no) dm2 
     where dm1.do_no = dm2.do_no
     and dm1.do_no = '$do'
     order by mark_no";
-$dt_marks = sqlsrv_query($connect, strtoupper($sql_marks));
+$dt_marks = sqlsrv_query($connect, strtoupper($sql_marks),$params, $options);
 $row_count = sqlsrv_num_rows($dt_marks);
+
 if ($row_count > 0){
     while($dt_m =sqlsrv_fetch_object($dt_marks)){
         $marks = $dt_m->MARKS;
@@ -126,7 +132,7 @@ if($state != 'packing_list'){
         and doh.curr_code = bk.curr_code
         order by dod.line_no";
 }else{
-    $qry = "select h.do_no, h.pl_line_no, d1.counter, h.description  class, h.case_no,
+    $qry = "select h.do_no, h.pl_line_no, d1.counter, d.FDK_PART+'('+d.CUSTOMER_PART_NO+')' class, h.case_no,
         RTrim(LTrim(CAST(h.qty as varchar))) total_qty, u1.unit_pl as total_qty_uom,
         RTrim(LTrim(CAST(h.case_total as varchar))) case_total, u2.unit_pl uom_p,
         LTrim(RTrim(CAST(h.net as varchar))) net, CAST(h.net as varchar)  w_net, u5.unit_pl  net_uom,
@@ -325,8 +331,8 @@ if($state != 'packing_list'){
                 <th colspan=3 valign='top'>
                     <table>
                     <tr>
-                        <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:25px;height:25px;'>NO.</th>
-                        <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:250px;height:25px;'>DESCRIPTION</th>
+                        <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:50px;height:25px;'>NO.</th>
+                        <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:225px;height:25px;'>DESCRIPTION</th>
                         <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>DATE CODE</th>
                         <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>QUANTITY</th>
                         <th valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>UNIT PRICE</th>
@@ -419,23 +425,29 @@ if($state != 'packing_list'){
                 <td colspan=3 valign='top'>
                     <table>
                     <tr>
-                        <td valign='middle' align='center' style='font-size:12px;width:25px;height:25px;border:0px solid #ffffff;'>
+                        <td valign='middle' align='center' style='font-size:12px;width:50px;height:25px;border:0px solid #ffffff;'>
                             <p>".$data->CASE_NO."</p>
+                            <p></p>
                         </td>
-                        <td valign='middle' align='center' style='font-size:12px;width:250px;height:25px;border:0px solid #ffffff;'>
+                        <td valign='middle' align='left' style='font-size:12px;width:225px;height:25px;border:0px solid #ffffff;'>
                             <p>( @".$data->CASE_QTY." ".$data->CASE_UOM_Q." X ".$data->INNER_PACKAGE." ".$data->INNER_UOM_P." )</p>
+                            <p>FOR ".$data->CLASS."</p>
                         </td>
-                        <td valign='middle' align='center' style='font-size:12px;width:108px;height:25px;border:0px solid #ffffff;'>
+                        <td valign='middle' align='right' style='font-size:12px;width:108px;height:25px;border:0px solid #ffffff;'>
+                            <p>".$data->TOTAL_QTY." ".$data->TOTAL_QTY_UOM."</p>
                             <p></p>
                         </td>
                         <td valign='middle' align='right' style='font-size:12px;width:108px;height:25px;border:0px solid #ffffff;'>
                             <p>".number_format($data->NET,2)." ".$data->NET_UOM."</p>
+                            <p></p>
                         </td>
                         <td valign='middle' align='right' style='font-size:12px;width:108px;height:25px;border:0px solid #ffffff;'>
                             <p>".number_format($data->GROSS,2)." ".$data->GROSS_UOM."</p>
+                            <p></p>
                         </td>
                         <td valign='middle' align='right' style='font-size:12px;width:108px;height:25px;border:0px solid #ffffff;'>
                             <p>".number_format($data->MEASUREMENT,3)." M3</p>
+                            <p></p>
                         </td>
                     </tr>
                     </table>

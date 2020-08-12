@@ -2252,7 +2252,8 @@ if ($varConn=='Y'){
 					$('#dlg_print_ppbe').dialog('open').dialog('setTitle','Print Properties');
 				}else if (s_type == 'delivery_slip'){
 					$('#dlg_print').dialog('close');
-					window.open('http://sysfi01.indonesia.fdk.co.jp/pglosas/entry/fl/fl_sheet3.asp?DO_NUM=1&do_no0='+no_do);
+					window.open('invoice_print_delivery_slip.php?do='+no_do+'&state='+s_type);
+					// window.open('http://sysfi01.indonesia.fdk.co.jp/pglosas/entry/fl/fl_sheet3.asp?DO_NUM=1&do_no0='+no_do);
 				}else if (s_type == 'attach_pallet_mark'){
 					$('#dlg_print').dialog('close');
 					window.open('invoice_print_attach_plt_mark.php?si='+no_si+'&ppbe='+no_ppbe+'&do='+no_do);
