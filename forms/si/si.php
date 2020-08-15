@@ -89,12 +89,18 @@ $menu_id = $_GET['id'];
 	</div>
 	
 	<!-- START ADD -->
-	<div id='win_add' class="easyui-window" style="width:1200px;height:565px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+	<div id='win_add' class="easyui-window" style="width:1105px;height:480px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		<form id="f_add" method="post" novalidate>
-		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left; margin:5px;"><legend>SETTINGS</legend>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>SETTINGS</legend>
 			<div class="fitem">
 				<span style="width:70px;display:inline-block;">SI NO.</span>
 				<input style="width:140px;" name="si_no_add" id="si_no_add" class="easyui-textbox" disabled="" />
+				<span style="width:45px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">PERSON IN CHARGE</span>
+				<input style="width:140px;" name="person_add" id="person_add" class="easyui-textbox"/>
+				<span style="width:45px;display:inline-block;"></span>
+				<span style="width:145px;display:inline-block;">DESC. OF GOODS</span>
+				<input style="width:140px;" name="goods_name_add" id="goods_name_add" class="easyui-textbox"/>
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET CUST. PO NO.</span>
@@ -115,15 +121,19 @@ $menu_id = $_GET['id'];
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET PORT LOADING</span>
-				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add','port_loading')" style="width:70px"> SET </a>
+				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add','PORT LOADING')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_port_loading" id="ck_port_loading" disabled="true"></input></label>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:140px;display:inline-block;">SET PORT DISCHARGE</span>
-				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add','port_discharge')" style="width:70px"> SET </a>
+				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add','PORT DISCHARGE')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_port_discharge" id="ck_port_discharge" disabled="true"></input></label>
 				<span style="width:20px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">FINAL DESTINATION</span>
+				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add', 'FINAL DESTINATION')" style="width:70px"> SET </a>
+				<label><input type="checkbox" name="ck_final_dest" id="ck_final_dest" disabled="true"></input></label>
+				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:140px;display:inline-block;">SET PLACE OF DELIVERY</span>
-				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add', 'place')" style="width:70px"> SET </a>
+				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_port_loading('add', 'PLACE OF DELIVERY')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_place" id="ck_place" disabled="true"></input></label>
 			</div>
 			<div class="fitem">
@@ -131,16 +141,24 @@ $menu_id = $_GET['id'];
 				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_consignee('add','CONSIGNEE')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_consignee" id="ck_consignee" disabled="true"></input></label>
 				<span style="width:20px;display:inline-block;"></span>
-				<span style="width:140px;display:inline-block;">SET NOTIFY</span>
+				<span style="width:140px;display:inline-block;">SET NOTIFY-1</span>
 				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_notify('add','NOTIFY')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_notify" id="ck_notify" disabled="true"></input></label>
+				<span style="width:20px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">SET NOTIFY-2</span>
+				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_notify2('add','NOTIFY 2')" style="width:70px"> SET </a>
+				<label><input type="checkbox" name="ck_notify2" id="ck_notify2" disabled="true"></input></label>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:140px;display:inline-block;">SET EMKL</span>
 				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="SET_emkl('add','EMKL')" style="width:70px"> SET </a>
 				<label><input type="checkbox" name="ck_emkl" id="ck_emkl" disabled="true"></input></label>
 			</div>
+			<div class="fitem">
+				<span style="width:180px;display:inline-block;">SPECIAL INSTRUCTION</span>
+				<input style="width:845px;" name="special_inst" id="special_inst" class="easyui-textbox"/>
+			</div>
 		</fieldset>
-		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left; margin:5px;"><legend>RESULT</legend>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>RESULT</legend>
 		<!-- hidden="true" -->
 			<input style="width:500px;" name="res_cust_po_no" id="res_cust_po_no" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_contract" id="res_contract" class="easyui-textbox" disabled=""/>
@@ -148,12 +166,14 @@ $menu_id = $_GET['id'];
 			<input style="width:500px;" name="res_forwarder" id="res_forwarder" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_port_loading" id="res_port_loading" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_port_discharge" id="res_port_discharge" class="easyui-textbox" disabled=""/>
+			<input style="width:500px;" name="res_final_dest" id="res_final_dest" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_place" id="res_place" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_consignee" id="res_consignee" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_notify" id="res_notify" class="easyui-textbox" disabled=""/>
+			<input style="width:500px;" name="res_notify2" id="res_notify2" class="easyui-textbox" disabled=""/>
 			<input style="width:500px;" name="res_emkl" id="res_emkl" class="easyui-textbox" disabled=""/>
 		</fieldset>
-		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left; margin:5px;"><legend>DOCUMENT</legend>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>DOCUMENT</legend>
 			<div class="fitem">	
 				<span style="width:180px;display:inline-block;">SHIPPING METHOD</span>
 				<select style="width:120px;" name="cmb_payment_method" id="cmb_payment_method" class="easyui-combobox" >
@@ -172,7 +192,7 @@ $menu_id = $_GET['id'];
 				</select>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:140px;display:inline-block;">PAYMENT REMARK</span>
-				<input style="width:330px;" name="payment_remark" id="payment_remark" class="easyui-textbox"/>
+				<input style="width:250px;" name="payment_remark" id="payment_remark" class="easyui-textbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 			</div>
 			<div class="fitem">
@@ -184,7 +204,7 @@ $menu_id = $_GET['id'];
 				<input style="width:50px;" name="sheet_bl_doc" id="sheet_bl_doc" class="easyui-textbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:500px;" name="detail_bl_doc" id="detail_bl_doc" class="easyui-textbox"/>
+				<input style="width:390px;" name="detail_bl_doc" id="detail_bl_doc" class="easyui-textbox"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">CERTIFICATE OF ORIGIN</span>
@@ -195,7 +215,7 @@ $menu_id = $_GET['id'];
 				<input style="width:50px;" name="sheet_certificate" id="sheet_certificate" class="easyui-textbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:500px;" name="detail_certificate" id="detail_certificate" class="easyui-textbox"/>
+				<input style="width:390px;" name="detail_certificate" id="detail_certificate" class="easyui-textbox"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;"></span>
@@ -205,7 +225,7 @@ $menu_id = $_GET['id'];
 				<input style="width:50px;" name="shett_inv" id="shett_inv" class="easyui-textbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:500px;" name="detail_inv" id="detail_inv" class="easyui-textbox"/>
+				<input style="width:390px;" name="detail_inv" id="detail_inv" class="easyui-textbox"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;"></span>
@@ -215,11 +235,11 @@ $menu_id = $_GET['id'];
 				<input style="width:50px;" name="sheet_pack" id="sheet_pack" class="easyui-textbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:500px;" name="detail_pack" id="detail_pack" class="easyui-textbox"/>
+				<input style="width:390px;" name="detail_pack" id="detail_pack" class="easyui-textbox"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">SPECIAL INFORMATION</span>
-				<input style="width:955px;" name="special_inform" id="special_inform" class="easyui-textbox"/>
+				<input style="width:845px;" name="special_inform" id="special_inform" class="easyui-textbox"/>
 			</div>
 		</fieldset>
 		<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
@@ -300,6 +320,16 @@ $menu_id = $_GET['id'];
 	</div>
 	<!-- END CONSIGNEE SETT -->
 
+	<!-- START NOTIFY-2 SETT -->
+	<div id="dlg_notify2" class="easyui-dialog" style="width: 700px;height: 500px;" closed="true" data-options="modal:true">
+		<table id="dg_notify2" class="easyui-datagrid" style="width:100%;height:400px;border-radius: 10px;"></table>
+		<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+			<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="select_notify2()" style="width:140px">
+				<i class="fa fa-ban" aria-hidden="true"></i> SELECT </a>
+		</div>
+	</div>
+	<!-- END CONSIGNEE SETT -->
+
 	<!-- START EMKL SETT -->
 	<div id="dlg_emkl" class="easyui-dialog" style="width: 700px;height: 500px;" closed="true" data-options="modal:true">
 		<table id="dg_emkl" class="easyui-datagrid" style="width:100%;height:400px;border-radius: 10px;"></table>
@@ -312,7 +342,89 @@ $menu_id = $_GET['id'];
 
 	<script type="text/javascript">
 		function simpan(){
+			var dataRows = [];
+			dataRows.push({
+				SI_NO: $('#si_no_add').textbox('getValue'),
+				CONTRACT_NO: 'NULL',
+				PERSON_NAME: $('#person_add').textbox('getValue'),
+				GOODS_NAME: $('#goods_name_add').textbox('getValue'),
+				SHIPPER_NAME: r_shipper[0].SHIPPER_NAME,
+				SHIPPER_ADDR1: r_shipper[0].ADDR1,
+				SHIPPER_ADDR2: r_shipper[0].ADDR2,
+				SHIPPER_ADDR3: r_shipper[0].ADDR3,
+				SHIPPER_TEL: r_shipper[0].TEL,
+				SHIPPER_FAX: r_shipper[0].FAX,
+				SHIPPER_ATTN: r_shipper[0].ATTN,
+				// CUST_SI_NO: 
+				LOAD_PORT_CODE: r_port_loading[0].CODE,
+				LOAD_PORT: r_port_loading[0].NAME,
+				DISCH_PORT_CODE: r_port_discharge[0].CODE,
+				DISCH_PORT: r_port_discharge[0].NAME,
+				FINAL_DEST_CODE: r_final_dest[0].CODE,
+				FINAL_DEST: r_final_dest[0].NAME,
+				PLACE_DELI_CODE: r_port_place_del[0].CODE,
+				PLACE_DELI: r_port_place_del[0].NAME,
+				SHIPPING_TYPE: $('#cmb_payment_method').combobox('getValue'),
+				PAYMENT_TYPE: $('#cmb_payment_type').combobox('getValue'),
+				PAYMENT_REMARK: $('#payment_remark').textbox('getValue'),
+				// BL_DATE:
+				FORWARDER_NAME: r_forwarder[0].FORWARDER_NAME,
+				FORWARDER_ADDR1: r_forwarder[0].ADDR1,
+				FORWARDER_ADDR2: r_forwarder[0].ADDR2,
+				FORWARDER_ADDR3: r_forwarder[0].ADDR3,
+				FORWARDER_TEL: r_forwarder[0].TEL,
+				FORWARDER_FAX: r_forwarder[0].FAX,
+				FORWARDER_ATTN: r_forwarder[0].ATTN,
+				SPECIAL_INST: $('#special_inst').textbox('getValue'),
+				// CONSIGNEE_NAME:
+				// CONSIGNEE_ADDR1:
+				// CONSIGNEE_ADDR2:
+				// CONSIGNEE_ADDR3:
+				// CONSIGNEE_TEL:
+				// CONSIGNEE_FAX:
+				// CONSIGNEE_ATTN:
+				NOTIFY_NAME: r_notify[0].NAME,
+				NOTIFY_ADDR1: r_notify[0].ADDR1,
+				NOTIFY_ADDR2: r_notify[0].ADDR2,
+				NOTIFY_ADDR3: r_notify[0].ADDR3,
+				NOTIFY_TEL: r_notify[0].TEL,
+				NOTIFY_FAX: r_notify[0].FAX,
+				NOTIFY_ATTN: r_notify[0].ATTN,
+				NOTIFY_NAME_2: r_notify[0].NAME,
+				NOTIFY_ADDR1_2: r_notify[0].ADDR1,
+				NOTIFY_ADDR2_2: r_notify[0].ADDR2,
+				NOTIFY_ADDR3_2: r_notify[0].ADDR3,
+				NOTIFY_TEL_2: r_notify[0].TEL,
+				NOTIFY_FAX_2: r_notify[0].FAX,
+				NOTIFY_ATTN_2: r_notify[0].ATTN,
+				EMKL_NAME: r_emkl[0].NAME,
+				EMKL_ADDR1: r_emkl[0].ADDR1,
+				EMKL_ADDR2: r_emkl[0].ADDR2,
+				EMKL_ADDR3: r_emkl[0].ADDR3,
+				EMKL_TEL: r_emkl[0].TEL,
+				EMKL_FAX: r_emkl[0].FAX,
+				EMKL_ATTN: r_emkl[0].ATTN,
+				SPECIAL_INFO: $('special_inform').textbox('getValue')
+			});
 
+			var myJSON=JSON.stringify(dataRows);
+			var str_unescape=unescape(myJSON);
+
+			console.log(unescape(str_unescape));
+
+			// $.post('si_save.php',{
+			// 	data: unescape(str_unescape)
+			// }).done(function(res){
+			// 	if(res == '"success"'){
+			// 		$('#win_add').dialog('close');
+			// 		$('#dg').datagrid('reload');
+			// 		$.messager.alert('INFORMATION','Insert Data Success..!!<br/>SI No. : '+$('#si_no_add').textbox('getValue'),'info');
+			// 		$.messager.progress('close');
+			// 	}else{
+			// 		$.messager.alert('ERROR',res,'warning');
+			// 		$.messager.progress('close');
+			// 	}
+			// });
 		}
 
 		function saveSI(value){
@@ -326,7 +438,7 @@ $menu_id = $_GET['id'];
 						// $.messager.progress('close');
 					}else{
 						$('#si_no_add').textbox('setValue', data[0].kode);
-						// simpan();
+						simpan();
 					}
 				}
 			});
@@ -347,8 +459,7 @@ $menu_id = $_GET['id'];
 			$('#dg_notify').datagrid('enableFilter');
 		}
 
-		var r_emkl = '';
-
+		var r_emkl = [];
 		function select_emkl(){
 			var arrEMKL = [];
 			var rows = $('#dg_emkl').datagrid('getSelections');
@@ -356,12 +467,18 @@ $menu_id = $_GET['id'];
 				arrEMKL.push({
 					'EMKL_NO': rows[i].EMKL_NO,
 					'NAME': rows[i].NAME,
-					'ADDR': rows[i].ADDR
+					'ADDR': rows[i].ADDR,
+					'ADDR1': rows[0].ADDR1,
+					'ADDR2': rows[0].ADDR2,
+					'ADDR3': rows[0].ADDR3,
+					'TEL': rows[0].TEL,
+					'FAX': rows[0].FAX,
+					'ATTN': rows[0].ATTN
 				});
 			}
 
 			r_emkl = arrEMKL;
-			console.log(JSON.stringify(r_emkl));
+			// console.log(JSON.stringify(r_emkl));
 			$('#res_emkl').textbox('setValue', JSON.stringify(r_emkl));
 			document.getElementById("ck_emkl").checked = true;
 			$('#dlg_emkl').dialog('close');
@@ -382,7 +499,7 @@ $menu_id = $_GET['id'];
 			$('#dg_notify').datagrid('enableFilter');
 		}
 
-		var r_notify = '';
+		var r_notify = [];
 		function select_notify(){
 			var arrNotify = [];
 			var rows = $('#dg_notify').datagrid('getSelections');
@@ -390,15 +507,61 @@ $menu_id = $_GET['id'];
 				arrNotify.push({
 					'NOTIFY_NO': rows[i].CONSIGNEE_NO,
 					'NAME': rows[i].NAME,
-					'ADDR': rows[i].ADDR
+					'ADDR': rows[i].ADDR,
+					'ADDR1': rows[0].ADDR1,
+					'ADDR2': rows[0].ADDR2,
+					'ADDR3': rows[0].ADDR3,
+					'TEL': rows[0].TEL,
+					'FAX': rows[0].FAX,
+					'ATTN': rows[0].ATTN
 				});
 			}
 
 			r_notify = arrNotify;
-			console.log(JSON.stringify(r_notify));
+			// console.log(JSON.stringify(r_notify));
 			$('#res_notify').textbox('setValue', JSON.stringify(r_notify));
 			document.getElementById("ck_notify").checked = true;
 			$('#dlg_notify').dialog('close');
+		}
+
+		function SET_notify2(value,res){
+			$('#dlg_notify2').dialog('open').dialog('setTitle','SET '+res);
+			$('#dg_notify2').datagrid({
+				url: '_get_notify.php',
+				fitColumns: true,
+				singleSelect: true,
+				columns:[[
+					{field:'NOTIFY_NO',title:'NOTIFY NO.',width:50,halign:'center', align:'center'},
+					{field:'NAME',title:'NAME',width:200,halign:'center'},
+					{field:'ADDR',title:'ADDRESS',width:250,halign:'center', align:'center'}
+				]]
+			});
+			$('#dg_notify2').datagrid('enableFilter');
+		}
+
+		var r_notify2 = [];
+		function select_notify2(){
+			var arrNotify2 = [];
+			var rows = $('#dg_notify2').datagrid('getSelections');
+			for(var i=0; i<rows.length; i++){
+				arrNotify2.push({
+					'NOTIFY_NO': rows[i].CONSIGNEE_NO,
+					'NAME': rows[i].NAME,
+					'ADDR': rows[i].ADDR,
+					'ADDR1': rows[0].ADDR1,
+					'ADDR2': rows[0].ADDR2,
+					'ADDR3': rows[0].ADDR3,
+					'TEL': rows[0].TEL,
+					'FAX': rows[0].FAX,
+					'ATTN': rows[0].ATTN
+				});
+			}
+
+			r_notify2 = arrNotify2;
+			// console.log(JSON.stringify(r_notify2));
+			$('#res_notify2').textbox('setValue', JSON.stringify(r_notify2));
+			document.getElementById("ck_notify2").checked = true;
+			$('#dlg_notify2').dialog('close');
 		}
 
 		function SET_consignee(value, res){
@@ -416,7 +579,7 @@ $menu_id = $_GET['id'];
 			$('#dg_consignee').datagrid('enableFilter');
 		}
 
-		var r_consignee = '';
+		var r_consignee = [];
 
 		function select_consignee(){
 			var arrConsignee = [];
@@ -430,13 +593,13 @@ $menu_id = $_GET['id'];
 			}
 
 			r_consignee = arrConsignee;
-			console.log(JSON.stringify(r_consignee));
+			// console.log(JSON.stringify(r_consignee));
 			$('#res_consignee').textbox('setValue', JSON.stringify(r_consignee));
 			document.getElementById("ck_consignee").checked = true;
 			$('#dlg_consignee').dialog('close');
 		}
 
-		var s_port='';
+		var s_port=[];
 		function SET_port_loading(value, res){
 			$('#dlg_port_loading').dialog('open').dialog('setTitle','SET '+res);
 			s_port = res;
@@ -445,40 +608,46 @@ $menu_id = $_GET['id'];
 				fitColumns: true,
 				singleSelect: true,
 				columns:[[
-					{field:'PORT_NO',title:'PORT NO.',width:45,halign:'center', align:'center'},
-					{field:'NAME',title:'NAME',width:250,halign:'center', align:'center'},
+					{field:'CODE',title:'CODE',width:45,halign:'center', align:'center'},
+					{field:'NAME',title:'NAME',width:250,halign:'center'},
 				]]
 			});
 			$('#dg_port_loading').datagrid('enableFilter');
 		}
 
-		var r_port_loading = '';
-		var r_port_discharge = '';
-		var r_port_place_del = '';
+		var r_port_loading = [];
+		var r_port_discharge = [];
+		var r_final_dest = [];
+		var r_port_place_del = [];
 
 		function select_port_loading(){
 			var arrPort_loading = [];
 			var rows = $('#dg_port_loading').datagrid('getSelections');
 			for(var i=0; i<rows.length; i++){
 				arrPort_loading.push({
-					'PORT_NO': rows[i].PORT_NO,
-					'PORT_NAME': rows[i].NAME
+					'CODE': rows[i].CODE,
+					'NAME': rows[i].NAME
 				});
 			}
 
-			if (s_port == 'port_loading'){
+			if (s_port == 'PORT LOADING'){
 				r_port_loading = arrPort_loading;
-				console.log(JSON.stringify(r_port_loading));
+				// console.log(JSON.stringify(r_port_loading));
 				$('#res_port_loading').textbox('setValue', JSON.stringify(r_port_loading));
 				document.getElementById("ck_port_loading").checked = true;
-			}else if (s_port == 'port_discharge'){
+			}else if (s_port == 'PORT DISCHARGE'){
 				r_port_discharge = arrPort_loading;
-				console.log(JSON.stringify(r_port_discharge));
+				// console.log(JSON.stringify(r_port_discharge));
 				$('#res_port_discharge').textbox('setValue', JSON.stringify(r_port_discharge));
 				document.getElementById("ck_port_discharge").checked = true;
-			}else if (s_port == 'place'){
+			}else if (s_port == 'FINAL DESTINATION'){
+				r_final_dest = arrPort_loading;
+				// console.log(JSON.stringify(r_final_dest));
+				$('#res_final_dest').textbox('setValue', JSON.stringify(r_final_dest));
+				document.getElementById("ck_final_dest").checked = true;
+			}else if (s_port == 'PLACE OF DELIVERY'){
 				r_port_place_del = arrPort_loading;
-				console.log(JSON.stringify(r_port_place_del));
+				// console.log(JSON.stringify(r_port_place_del));
 				$('#res_place').textbox('setValue', JSON.stringify(r_port_place_del));
 				document.getElementById("ck_place").checked = true;
 			}
@@ -495,14 +664,14 @@ $menu_id = $_GET['id'];
 				singleSelect: true,
 				columns:[[
 					{field:'FORWARDER_NO',title:'SHIPPER NO.',width:45,halign:'center', align:'center'},
-					{field:'NAME',title:'NAME.',width:200,halign:'center', align:'center'},
-					{field:'ADDR',title:'ADDRESS',width:250,halign:'center', align:'center'}
+					{field:'NAME',title:'NAME.',width:200,halign:'center'},
+					{field:'ADDR',title:'ADDRESS',width:250,halign:'center'}
 				]]
 			});
 			$('#dg_forwarder').datagrid('enableFilter');
 		}
 
-		var r_forwarder = '';
+		var r_forwarder = [];
 
 		function select_forwarder(){
 			var arrforwarder = [];
@@ -511,11 +680,17 @@ $menu_id = $_GET['id'];
 				arrforwarder.push({
 					'FORWARDER_NO': rows[i].FORWARDER_NO,
 					'FORWARDER_NAME': rows[i].NAME,
-					'FORWARDER_ADDR': rows[i].ADDR
+					'FORWARDER_ADDR': rows[i].ADDR,
+					'ADDR1': rows[0].ADDR1,
+					'ADDR2': rows[0].ADDR2,
+					'ADDR3': rows[0].ADDR3,
+					'TEL': rows[0].TEL,
+					'FAX': rows[0].FAX,
+					'ATTN': rows[0].ATTN
 				});
 			}
 			r_forwarder = arrforwarder;
-			console.log(JSON.stringify(r_forwarder));
+			// console.log(JSON.stringify(r_forwarder));
 			$('#res_forwarder').textbox('setValue', JSON.stringify(r_forwarder));
 			document.getElementById("ck_forwarder").checked = true;
 			$('#dlg_forwarder').dialog('close');
@@ -529,27 +704,33 @@ $menu_id = $_GET['id'];
 				singleSelect: true,
 				columns:[[
 					{field:'SHIPPER_NO',title:'SHIPPER NO.',width:45,halign:'center', align:'center'},
-					{field:'NAME',title:'NAME.',width:200,halign:'center', align:'center'},
-					{field:'ADDR',title:'ADDRESS',width:250,halign:'center', align:'center'}
+					{field:'NAME',title:'NAME.',width:200,halign:'center'},
+					{field:'ADDR',title:'ADDRESS',width:250,halign:'center'}
 				]]
 			});
 			$('#dg_shipper').datagrid('enableFilter');
 		}
 
-		var r_shipper = '';
+		var r_shipper = [];
 
 		function select_shipper(){
 			var arrShipper = [];
 			var rows = $('#dg_shipper').datagrid('getSelections');
-			for(var i=0; i<rows.length; i++){
+			// for(var i=0; i<rows.length; i++){
 				arrShipper.push({
-					'SHIPPER_NO': rows[i].SHIPPER_NO,
-					'SHIPPER_NAME': rows[i].NAME,
-					'SHIPPER_ADDR': rows[i].ADDR
+					'SHIPPER_NO': rows[0].SHIPPER_NO,
+					'SHIPPER_NAME': rows[0].NAME,
+					'SHIPPER_ADDR': rows[0].ADDR,
+					'ADDR1': rows[0].ADDR1,
+					'ADDR2': rows[0].ADDR2,
+					'ADDR3': rows[0].ADDR3,
+					'TEL': rows[0].TEL,
+					'FAX': rows[0].FAX,
+					'ATTN': rows[0].ATTN
 				});
-			}
+			// }
 			r_shipper = arrShipper;
-			console.log(JSON.stringify(r_shipper));
+			// console.log(JSON.stringify(r_shipper));
 			$('#res_shipper').textbox('setValue', JSON.stringify(r_shipper));
 			document.getElementById("ck_shipper").checked = true;
 			$('#dlg_shipper').dialog('close');
@@ -585,7 +766,7 @@ $menu_id = $_GET['id'];
 				}
 			}
 			r_cust = {"cust_po_no" : arrCust};
-			console.log(JSON.stringify(r_cust));
+			// console.log(JSON.stringify(r_cust));
 			$('#res_cust_po_no').textbox('setValue', JSON.stringify(r_cust));
 			document.getElementById("ck_cust_po_no").checked = true;
 			$('#dlg_cust').dialog('close');
@@ -725,7 +906,7 @@ $menu_id = $_GET['id'];
         }
 
 		function addSI(){
-			$('#win_add').window('open').window('SETitle','SHIPPING INSTRUCTION ENTRY');
+			$('#win_add').window('open').window('setTitle','SHIPPING INSTRUCTION ENTRY');
 			$('#win_add').window('center');
 			$('#f_add').form('reset');
 		}
