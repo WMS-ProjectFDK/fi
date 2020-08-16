@@ -9,9 +9,6 @@ $arrNo = 0;
 
 $sql = "select '$kode' + REPLACE(STR(max(substring(prf_no,10,5))+1,5),' ','0') as PRF_NO
 from prf_header where prf_no like '%$kode%'";
-
-
-
 $data = sqlsrv_query($connect, $sql);
 
 $row = sqlsrv_fetch_object($data);
