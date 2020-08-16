@@ -1,0 +1,77 @@
+
+
+@startuml
+
+  title  POST faq/v1/question
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Define Diagram Participants
+  ' http://plantuml.com/skinparam
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  actor Requestor as requestor #DeepSkyBlue
+  box "FAQ Microservice" #PowderBlue
+    entity "FAQ" as faq #DeepSkyBlue
+    database "subcategory" as subcategory #DeepSkyBlue
+    database "question" as question #DeepSkyBlue
+    
+  endbox
+
+  box "Everest" #PeachPuff
+    entity "elastic" as elastic #lightcoral
+    ' entity "card" as card #lightcoral
+  endbox
+
+
+'box "Surrounding System" #PeachPuff
+'     entity "ESB:ICS" as emas #lightcoral
+'   endbox
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Formatting Options
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  hide footbox
+  'autonumber
+  skinparam defaultFontName Comic Sans MS
+  skinparam sequence {
+  ParticipantFontSize 15
+  ActorFontSize 15
+  ArrowFontName Comic Sans MS
+  ParticipantFontName Comic Sans MS
+  }
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+  ' Microservice Logic Goes Here
+  '''''''''''''''''''''''''''''''''''''''''''''''''
+
+  == Post question ==
+ 
+requestor -> faq: categoryRequest
+activate faq
+
+  faq-> subcategory : getSubategory(subcatogryId)
+  activate subcategory
+  note right faq : checking subcategory exists or not
+  subcategory --> faq : subcategoryResponse
+  deactivate subcategory
+  break record not Exists
+    faq --> requestor : error 409, code 30049 : Record not Exists
+  end break
+ 
+
+    faq -> question : save(question)
+    faq -> elastic : insertElastic()
+ 
+ 
+
+deactivate faq
+faq --> requestor : http 200
+
+   
+	
+
+   
+
+ 
+@endumlƒ˙

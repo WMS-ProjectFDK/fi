@@ -3,13 +3,8 @@
 	$result = array();
 
 	$prf = isset($_REQUEST['prf']) ? strval($_REQUEST['prf']) : '';
-	include("../connect/conn.php");
-
-	$rowno=0;
-	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, cast(a.require_date as varchar(10))  require_date, a.qty, a.amt, a.ohsas, 
-		isnull(pod.po_no,'-') as po_no, isnull(pod.qty,0) as po_qty,a.qty - isnull(pod.qty,0)  as ost";
-
 	include("../../connect/conn.php");
+
 
 	$rowno=0;
 	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, cast(a.require_date as varchar(10))  require_date, a.qty, a.amt, a.ohsas, 
