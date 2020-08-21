@@ -38,7 +38,8 @@ if($si_sts == 'final_si'){
 		replace(sdoc_iv.doc_name,char(10),'<br>') doc_name_iv,
 		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(10),'<br>') end as special_info,
 		b.notify_name_2 + '<br/>  '+ b.notify_addr1_2+'<br/>'+ b.notify_addr2_2+'<br/>'+ b.notify_addr3_2+'<br/>'+b.notify_tel_2+'<br/>'+ b.notify_fax_2+'<br/>'+b.notify_attn_2 NOTIFY_NAME_2, 
-		replace(a.ship_name,char(10),'<br>') as ship_name, ans.crs_remark
+		replace(a.ship_name,char(10),'<br>') as ship_name, ans.crs_remark,
+		CAST(a.do_date as varchar(10)) as do_date
 		from do_header a
 		inner join si_header b on a.si_no=b.si_no
 		left outer join (select si_no,doc_detail,doc_name from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = b.si_no
@@ -50,7 +51,7 @@ if($si_sts == 'final_si'){
 		left outer join answer ans on b.si_no = ans.si_no
 		where a.do_no='$do' ";
 
-	$qry = "select aa.do_no, etd, eta, port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
+	$qry = "select aa.do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
 		sum(ceiling(carton)) as carton,
 		sum(ceiling(pallet)) as pallet,
 		sum(qty) as qty,
@@ -75,11 +76,13 @@ if($si_sts == 'final_si'){
 		group by aa.do_no, eta, etd, port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
 		uom_nw, uom_gw";
 
-	$qry_pallet = "select distinct 'Pallet Dimension : '+CAST(panjang_pallet as varchar)+' x '+CAST(lebar_pallet as varchar) + '<br>' as pallet
+	$qry_pallet = "select distinct 'Pallet Dimension : '+
+	CAST(CAST(panjang_pallet as int) as varchar)+' x '+
+	CAST(CAST(lebar_pallet as int) as varchar) + '<br>' as pallet
 		from ztb_item 
 		where item_no in (select distinct  item_no from do_details where do_no='$do')";
 
-	$qry_remark = "select replace(marks,char(10),'<br/>') as remark from do_marks where do_no='$do' order by mark_no asc";
+	$qry_remark = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as remark from do_marks where do_no='$do' order by mark_no asc";
 
 	$sts_doc = 'F I N A L&nbsp;&nbsp;&nbsp;&nbsp;S I';
 	$inv_no = $do;
@@ -89,7 +92,7 @@ if($si_sts == 'final_si'){
 		sih.consignee_name, sih.consignee_addr1, sih.consignee_addr2, sih.consignee_addr3+'<br />'+sih.consignee_tel+'<br />'+sih.consignee_FAX consignee_addr3, '' as booking_no, '' as si_no_fix,
 		sih.notify_name, sih.notify_addr1, sih.notify_addr2, sih.notify_addr3, sih.notify_tel, sih.notify_fax,
 		sih.forwarder_name, sih.forwarder_tel, sih.forwarder_fax, sih.forwarder_attn, 
-		replace(ans.vessel,char(10),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, getdate() as do_date,
+		replace(ans.vessel,char(10),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, CAST(getdate() as varchar(10)) as do_date,
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
 		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(10),'<br>') end as special_info,
 		sih.notify_name_2+'<br />  '+sih.notify_addr1_2+'<br />'+sih.notify_addr2_2+'<br />'+sih.notify_addr3_2+'<br />'+sih.notify_tel_2+'<br />'+sih.notify_fax_2+'<br/>'+sih.notify_attn_2 NOTIFY_NAME_2,
@@ -108,7 +111,7 @@ if($si_sts == 'final_si'){
 		on ans.crs_remark = zsd.ppbe_no
 		where ans.crs_remark='$do' ";
 
-	$qry = "select do_no, etd, eta, max(stuffy_date) stuffy_date, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
+	$qry = "select do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, max(stuffy_date) stuffy_date, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
 		sum(ceil(carton)) as carton,
 		sum(ceil(pallet)) as pallet,
 		sum(qty) as qty,
@@ -130,7 +133,9 @@ if($si_sts == 'final_si'){
 		group by do_no, eta, etd, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
 		uom_nw, uom_gw";
 
-	$qry_pallet = "select distinct 'Pallet Dimension : '+CAST(panjang_pallet as varchar)+' x '+CAST(lebar_pallet as varchar) + '<br>' as pallet
+	$qry_pallet = "select distinct 'Pallet Dimension : '+
+	CAST(CAST(panjang_pallet as int) as varchar)+' x '+
+	CAST(CAST(lebar_pallet as int) as varchar) + '<br>' as pallet
 		from ztb_item 
 		where item_no in (select distinct  item_no from do_details where do_no='$do')";
 
@@ -169,8 +174,9 @@ while($data_container = sqlsrv_fetch_object($row_container)){
 		array_push($Arrcontainer,$data_container->CONTAINERJUM);
 	}
 
+$container = '';
 for ($ii=0; $ii < count($Arrcontainer) ; $ii++) { 
-		$container .=  ''.$Arrcontainer[$ii].' <br> &nbsp;&nbsp; ';
+	$container .=  ''.$Arrcontainer[$ii].' <br> &nbsp;&nbsp; ';
 }
 
 if($si_sts == 'final_si'){
@@ -178,6 +184,7 @@ if($si_sts == 'final_si'){
 		array_push($ArrPallet,$data_pallet->PALLET);
 	}
 
+	$palletNya = '';
 	for ($ii=0; $ii < count($ArrPallet) ; $ii++) { 
 		$palletNya .= "&nbsp;&nbsp;&nbsp;<span style='font-size:9px'>".$ArrPallet[$ii]."</span>";
 	}
@@ -309,7 +316,7 @@ $content = "
 		<div style='margin-top:0;margin-left:620px;font-size:9px'>
 			<p align='' >Bekasi, ".$date."<br>Print By : ".$nama_user."</p>
 		</div>
-		".$ket."
+		".$ket_z."
 
 	<page_footer>
 		<div style='width:100%;text-align:right;margin-bottom:100%;font-size:9px;'>page [[page_cu]] of [[page_nb]]</div>
@@ -514,17 +521,17 @@ while ($data=sqlsrv_fetch_object($result)){
 				".$palletNya."
 			</td>
 		</tr>";
-	$total += $data->AMT_O;
+	$total +=0;
 	$nourut++;
 }
 
 	$content .= "
 		<tr>
-			".$height_rmk."
+			".''."
 		</tr>";
 
 $content .= "
-			".$tot."
+			".''."
 		</table>
 		<table>
 			<tr>
@@ -577,5 +584,5 @@ require_once '../../class/html2pdf/html2pdf.class.php';
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('PO-'.$po.'.pdf');
-//echo  $content;
+// echo  $content;
 ?>

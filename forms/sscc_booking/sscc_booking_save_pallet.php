@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/plain; charset="UTF-8"');
-error_reporting(0);
+// error_reporting(0);
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 session_start();
@@ -14,19 +14,19 @@ if (isset($_SESSION['id_wms'])){
 	$dt = json_decode(json_encode($data));
 	$str = preg_replace('/\\\\\"/',"\"", $dt);
 	$queries = json_decode($str);
+	$msg = '';
 
 	$sqlH = "delete from ztb_amz_container 
 		where booking='$bookingHeader' and container='$containerHeader'";
+	// echo $sqlH;
 	$data_H = sqlsrv_query($connect, $sqlH);
-	// $pesan = oci_error($data_H);
-	// $msg .= $pesan['message'];
-
-	// if($msg != ''){
-	// 	$msg .= " delete process Error : $pesan";
-	// 	break;
-	// }
-
-	$msg = '';
+	if($data_H === false ) {
+		if(($errors = sqlsrv_errors() ) != null) {  
+	         foreach( $errors as $error){  
+	            $msg .= "message: ".$error[ 'message']."<br/>";  
+	         }  
+	    }
+	}
 
 	foreach($queries as $query){
 		$plt_Booking = $query->plt_Booking;
@@ -48,15 +48,21 @@ if (isset($_SESSION['id_wms'])){
 		$plt_field .= "ID"				;	$plt_value  .=  "'$plt_ID'"			;
 		chop($plt_field);              		chop($plt_value);
 
-		$ins_plt = "insert into ztb_amz_container ($plt_field) select $plt_value from dual";
+		$ins_plt = "insert into ztb_amz_container ($plt_field) select $plt_value";
 		$data_plt = sqlsrv_query($connect, $ins_plt);
-		// $pesan = oci_error($data_plt);
-		// $msg .= $pesan['message'];
 
-		// if($msg != ''){
-		// 	$msg .= " Process insert pallet Error : $pesan";
-		// 	break;
-		// }
+		if($data_plt === false ) {
+			if(($errors = sqlsrv_errors() ) != null) {  
+		         foreach( $errors as $error){  
+		            $msg .= "message: ".$error[ 'message']."<br/>";  
+		         }  
+		    }
+		}
+
+		if($msg != ''){
+			$msg .= " Process insert pallet Error : $pesan";
+			break;
+		}
 	}
 }else{
 	$msg .= 'Session Expired';

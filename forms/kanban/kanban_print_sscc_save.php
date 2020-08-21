@@ -1,6 +1,6 @@
 <?php
 session_start();
-// error_reporting(0);
+error_reporting(0);
 // header("Content-type: application/json");
 date_default_timezone_set('Asia/Jakarta');
 if (isset($_SESSION['id_wms'])){
@@ -31,6 +31,7 @@ if (isset($_SESSION['id_wms'])){
 		left outer join company com on soh.consignee_code = cast(com.company as varchar(100))
 		where a.work_order='$wo_no'";
 	$dataH = sqlsrv_query($connect, strtoupper($qry));
+	$row = sqlsrv_fetch_object($dataH);
 	if( $data === false ) {
 		if( ($errors = sqlsrv_errors() ) != null) {
 			foreach( $errors as $error ) {
@@ -108,10 +109,12 @@ if (isset($_SESSION['id_wms'])){
 				if($i<$finish){
 					if ($sscc_country_code == '304' OR $sscc_country_code == '205' OR $sscc_country_code == '208' OR $sscc_country_code == '237' OR $sscc_country_code == '215' OR $sscc_country_code == '218' OR $sscc_country_code == '223' OR $sscc_country_code == '207' OR $sscc_country_code == '210' OR $sscc_country_code == '213' OR $sscc_country_code == '217'){
 						$n = '04976680'.substr($sscc_item,-3,3).$n_urut;
-						$sscc = sscc_kode_print($n);	
+						$sscc = sscc_kode_print($n);
+						$sts_sscc = '1';	
 					}else{
 						$n = '04976680'.substr($sscc_item,-3,3).$n_urut;
 						$sscc = sscc_kode_print($n);
+						$sts_sscc = '0';
 					}
 					
 					$response[] = array('PO' => trim($row->AMAZON_PO_NO),
@@ -127,20 +130,22 @@ if (isset($_SESSION['id_wms'])){
 										'ADDRESS4' => $row->ADDRESS4,
 										'WO_NO' => $wo_no,
 										'NO' => $i,
-										'PLT_NO' => $sscc_plt
+										'PLT_NO' => $sscc_plt,
+										'STS_SSCC' => $sts_sscc
 								);
 					$fp = fopen('kanban_print_sscc_result_'.$user.'.json', 'w');
 					fwrite($fp, json_encode($response));
 					fclose($fp);
 
 					$INS2 = "INSERT INTO ZTB_AMAZON_WO_DETAILS 
-						SELECT '$wo_no', $i, $no_carton_from, $tot_carton, $tot_carton, '$sscc', $sscc_qtyTotal, '".trim($row->ASIN)."', '".trim($row->AMAZON_PO_NO)."', 
+						SELECT '$wo_no', $i, $no_carton_from, $tot_carton, $tot_carton, '$sscc', $sscc_qtyTotal, '".trim($row->ASIN)."', 
+							'".trim($row->AMAZON_PO_NO)."', 
 							'".str_replace("'", "''", $row->ADDRESS1)."', 
 							'".str_replace("'", "''", $row->ADDRESS2)."', 
 							'".str_replace("'", "''", $row->ADDRESS3)."', 
 							'".str_replace("'", "''", $row->ADDRESS4)."', 
-							getdate(), '$user', $sscc_plt ";
-					//echo $n;
+							getdate(), '$user', $sscc_plt, '$sts_sscc' ";
+					// echo $n;
 					//echo $INS2;
 					$data_INS2 = sqlsrv_query($connect, $INS2);
 					if( $data_INS2 === false ) {

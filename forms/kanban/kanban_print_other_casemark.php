@@ -34,7 +34,7 @@ from mps_header a
 inner join so_header soh on a.po_no = soh.customer_po_no
 inner join so_details sod on soh.so_no=sod.so_no and 
 			case when len(a.po_line_no) > 1 then 
-				cast(substring(a.po_line_no,len(a.po_line_no)*-1,len(a.po_line_no)-1) as int) 
+				cast(left(a.po_line_no,1) as int) 
 			  else cast(a.po_line_no as int) end = sod.line_no
 left outer join item i on a.item_no=i.item_no
 left outer join company com on soh.consignee_code = cast(com.company as varchar(100))

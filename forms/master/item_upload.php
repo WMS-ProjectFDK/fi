@@ -87,6 +87,7 @@ h2 {
 	<script type="text/javascript">
 		var url;
 		var x = 0;
+
 		function uploaddata() {
 		x=1;
 		alert("Process around two minutes, please do not leave this page until the next message.");
@@ -98,6 +99,7 @@ h2 {
 			},
 			success: function(result){
 				$.messager.alert('ITEM NO',result,'info');
+				console.log(result);
 		 		$('#fileexcel').filebox('clear');
 				document.getElementById('upload').disabled = false;
 				x=0;

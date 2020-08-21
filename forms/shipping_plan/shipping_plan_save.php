@@ -86,7 +86,7 @@ if($varConn == 'Y'){
 		$field .= "QTY,"      	; $value_po .= "'$real_integer', "						;
 		$field .= "VESSEL,"     ; $value_po .= "'$VESSEL', "							;
 		$field .= "INV_NO"      ; $value_po .= "'$PPBE' "							 	;
-		$ins2 = "insert into ztb_shipping_plan ($field) select $value_po from dual";
+		$ins2 = "insert into ztb_shipping_plan ($field) select $value_po ";
 
 		$data_ins2 = sqlsrv_query($connect, $ins2);
 		echo $ins2.'<br/>';

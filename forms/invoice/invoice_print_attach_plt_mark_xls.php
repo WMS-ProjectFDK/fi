@@ -6,8 +6,8 @@ $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
-$user_name = $_SESSION['id_wms'];
-$nama_user = $_SESSION['name_wms'];
+// $user_name = $_SESSION['id_wms'];
+// $nama_user = $_SESSION['name_wms'];
 $si = isset($_REQUEST['si']) ? strval($_REQUEST['si']) : '';
 $ppbe = isset($_REQUEST['ppbe']) ? strval($_REQUEST['ppbe']) : '';
 $do = isset($_REQUEST['do']) ? strval($_REQUEST['do']) : '';
@@ -16,7 +16,9 @@ $q_si = "select distinct customer_po_no as po_no from answer where crs_remark='$
 $data = sqlsrv_query($connect, strtoupper($q_si));
 $dt = sqlsrv_fetch_object($data);
 
-$qry = "select rtrim(replace(marks,chr(10),'\n'),'|') as pallet_mark from do_marks where do_no='$do' order by mark_no asc";
+$qry = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as pallet_mark
+    from do_marks where do_no='$do' 
+    order by mark_no asc";
 $result = sqlsrv_query($connect, strtoupper($qry));
 
 $objPHPExcel = new PHPExcel(); 
@@ -50,7 +52,7 @@ $sheet->getStyle('A4')->applyFromArray(
 
 //$row_a=0;   $col_a=0;   $page_next=0;
 $nobaris=1; $noCell=6;
-while ($data=oci_fetch_object($result)){
+while ($data=sqlsrv_fetch_object($result)){
     if ($nobaris == 1){
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$noCell, $data->PALLET_MARK);
@@ -123,7 +125,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('WMS-FDKI');
 $objDrawing->setDescription('FDKI');
-$objDrawing->setPath('../images/logo-print4.png');
+$objDrawing->setPath('../../images/logo-print4.png');
 $objDrawing->setWidth('500px');
 $objDrawing->setCoordinates('A1');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());

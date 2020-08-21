@@ -3,7 +3,7 @@
 	session_start();
 	$cust_po_no = isset($_REQUEST['cust_po_no']) ? strval($_REQUEST['cust_po_no']) : '';
 
-	$sql = "select h.SI_NO, 
+	$sql = "select distinct h.SI_NO, 
 h.CONSIGNEE_NAME, 
 h.NOTIFY_NAME, 
 h.NOTIFY_NAME_2, 
@@ -18,7 +18,7 @@ from   SI_HEADER h
 inner join 
 ( select distinct SI_NO, PO_NO 
   from   SI_PO 
-  where  PO_NO = '$cust_po_no'
+  where  PO_NO like '%$cust_po_no%'
 ) p on h.SI_NO = p.SI_NO   
 left outer join 
 ( select SI_NO, DATA_DATE, ETD, ETA, row_number() over( partition by SI_NO order by OPERATION_DATE desc ) as RN

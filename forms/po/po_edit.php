@@ -92,9 +92,9 @@ if (isset($_SESSION['id_wms'])){
 			for($f0=0;$f0<count($rmk_s0);$f0++){
 				if($rmk_s0[$f0] != ''  || ! is_null($rmk_s0[$f0])) {
 					if($f0 == count($rmk_s0)-1){
-						$rmk_f0 .= "'".$rmk_s0[$f0]."'";
+						$rmk_f0 .= $rmk_s0[$f0];
 					}else{
-						$rmk_f0 .= "'".$rmk_s0[$f0]."' || chr(13) || chr(10) || ";
+						$rmk_f0 .= $rmk_s0[$f0]." char(10)";
 					}
 				}
 			}
@@ -110,9 +110,9 @@ if (isset($_SESSION['id_wms'])){
 			for($f1=0;$f1<count($rmk_s1);$f1++){
 				if($rmk_s1[$f1] != ''  || ! is_null($rmk_s1[$f1])) {
 					if($f1 == count($rmk_s1)-1){
-						$rmk_f1 .= "'".$rmk_s1[$f1]."'";
+						$rmk_f1 .= $rmk_s1[$f1];
 					}else{
-						$rmk_f1 .= "'".$rmk_s1[$f1]."' || chr(13) || chr(10) || ";
+						$rmk_f1 .= $rmk_s1[$f1]." char(10)";
 					}
 				}
 			}

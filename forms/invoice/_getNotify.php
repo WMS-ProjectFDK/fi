@@ -7,10 +7,10 @@
 	$word = isset($_REQUEST['sch']) ? strval($_REQUEST['sch']) : '';
 
 	if($word == ""){
-		$where = "where c.country_code = cou.country_code(+) 
+		$where = "where c.country_code = cou.country_code
 				  and company_type in (1,2,7) ";
 	}else{
-		$where = "where c.country_code = cou.country_code(+) 
+		$where = "where c.country_code = cou.country_code
 				  and (upper(c.company) like '%$word%' 
      					or cou.country like '%$word%' 
      					or c.company_code like '%$word%'
@@ -19,8 +19,8 @@
 	}
 
 	$rs = " select c.company_code, c.company, c.company_type, c.address1, c.address2, c.address3, c.address4, c.country_code, cou.country,
-		c.company || chr(10) || c.address1 || chr(10) || c.address2 || chr(10) || address3 || chr(10) || address4 notify 
-		from company c, country cou
+	isnull(c.company,'') + char(10) + isnull(c.address1,'') + char(10) + isnull(c.address2,'') + char(10) + isnull(address3,'') + char(10) + isnull(address4,'') notify 
+	from company c, country cou
 		$where 
         order by c.company ";
 	$data = sqlsrv_query($connect, strtoupper($rs));

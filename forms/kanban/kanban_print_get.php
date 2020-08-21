@@ -3,8 +3,6 @@ error_reporting(0);
 session_start();
 ini_set('max_execution_time', -1);
 include("../../connect/conn.php");
-
-
     $date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
 	$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';
 	$ck_cr_date = isset($_REQUEST['ck_cr_date']) ? strval($_REQUEST['ck_cr_date']) : '';
@@ -14,9 +12,7 @@ include("../../connect/conn.php");
 	$ck_po_no = isset($_REQUEST['ck_po_no']) ? strval($_REQUEST['ck_po_no']) : '';
 	$cmb_item_no = isset($_REQUEST['cmb_item_no']) ? strval($_REQUEST['cmb_item_no']) : '';
 	$ck_item_no = isset($_REQUEST['ck_item_no']) ? strval($_REQUEST['ck_item_no']) : '';
-	$flag = 0;
-
-    
+	$flag = 0; 
 
 	if ($ck_cr_date != "true"){
 		$date = " and cr_date between '$date_awal' and '$date_akhir'  ";
@@ -86,7 +82,7 @@ left outer join (select wo_no,
 left outer join (select distinct a.customer_po_no, b.country_code from so_header a 
                  inner join company b on a.consignee_code = b.company) com on r.po_no = com.customer_po_no
 left outer join (select wo, isnull(count(*),0) as jum_wo from ztb_amazon_wo group by wo) amz on r.work_order = amz.wo
-
+$where
 order by cr_date asc" ;
 
 $data_cek = sqlsrv_query($connect, strtoupper($cek));

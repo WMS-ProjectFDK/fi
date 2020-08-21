@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 header("Content-type: application/json");
 session_start();
 ini_set('max_execution_time', -1);
@@ -27,4 +28,6 @@ while ($row=sqlsrv_fetch_object($data)){
 
 $result["rows"] = $arrData;
 echo json_encode($arrData);
+
+
 ?>

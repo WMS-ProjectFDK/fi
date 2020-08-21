@@ -132,7 +132,7 @@ if ($varConn=='Y'){
 				</div>
 				<div class="fitem">
 					<span style="width:50px;display:inline-block;">PO No.</span>
-					<input style="width:163px;" name="po_no_add" id="po_no_add" class="easyui-textbox" required=""/>
+					<input style="width:163px;" name="po_no_add" id="po_no_add" class="easyui-textbox" required="" maxlength="15"/>
 					<span style="width:5px;display:inline-block;"></span>
 					<span style="width:55px;display:inline-block;">PO Date</span>
 					<input style="width:85px;" name="po_date_add" id="po_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
@@ -1103,7 +1103,7 @@ if ($varConn=='Y'){
 					if($('#supplier_add').combobox('getValue')==''){
 						msg = $.messager.alert('Warning','Please select supplier','warning');
 						hasil=1;
-					}else if($('#po_no_add').textbox('getValue')==''){
+					}else if($('#po_no_add').textbox('getValue')=='' && $('#po_no_add').textbox('getValue').length > 15){
 						msg = $.messager.alert('INFORMATION','PO No. Not Found','info');
 						hasil=1;
 					}else if($('#remark_add').textbox('getValue').length >= 999){

@@ -7,15 +7,14 @@
 		from ztb_item_pck a
 		inner join item i on a.item_no = i.item_no
 		order by description asc";
-	$data = sqlsrv_query($connect, $sql);
-
+	$data = sqlsrv_query($connect, strtoupper($sql));
 	$items = array();
 	$rowno=0;
 
 	while($row = sqlsrv_fetch_object($data)){
 		array_push($items, $row);
-		$c = $items[$rowno]->capacity;
-		$items[$rowno]->capacity = number_format($c);
+		$c = $items[$rowno]->CAPACITY;
+		$items[$rowno]->CAPACITY = number_format($c);
 		$rowno++;
 	}
 

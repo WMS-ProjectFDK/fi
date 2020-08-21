@@ -40,6 +40,7 @@
 		$item_no = " ";
 	}
 
+	$sts_appr = '';
 	if ($ck_sts_approval != "true"){
 		if($cmb_sts_approval=='0'){
 			$sts_appr = "a.approval_date is null and ";
@@ -66,7 +67,8 @@
 	    from mte_header a 
 		left join company b on a.company_code= b.company_code
 		left join person p on a.person_code = p.person_code
-		$where order by a.slip_date DESC";
+		--$where 
+		order by a.slip_date DESC";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

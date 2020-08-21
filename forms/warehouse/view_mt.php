@@ -10,7 +10,7 @@ $user_name = $_SESSION['id_wms'];
 <head>
 <meta charset="UTF-8">
 <title>MATERIALS TRANSACTION VIEW</title>
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="../../favicon.png">
 <script language="javascript">
 		function confirmLogOut(){
 		var is_confirmed;

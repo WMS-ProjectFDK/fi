@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 ini_set('memory_limit', '-1');
 set_time_limit(-1);
 include("../../connect/conn.php");
@@ -18,12 +19,12 @@ if ($exp_ppbe[1] =='W'){
     $nm = 'AGUNG';
 }elseif ($exp_ppbe[1] == 'D'){
     $nm = 'DEWI';
+}else{
+    $nm = 'ADMIN';
 }
 
-
-
-$sql_h = "select distinct dbo.LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, b.do_date, c.booking_no,
-replace(b.ship_name,char(10),'<br>') as vessel, b.final_destination, b.etd, s.forwarder_name
+$sql_h = "select distinct dbo.LIST_COLLECT(a.SI_NO, ', ') as SI_NO, a.crs_remark, b.do_no, cast(b.do_date as varchar(10)) as do_date, c.booking_no,
+replace(b.ship_name,char(10),'<br>') as vessel, b.final_destination, cast(b.etd as vachar(10)) as etd, s.forwarder_name
 from answer a
 left join do_header b on a.si_no = b.si_no
 left join forwarder_letter c on b.do_no = c.do_no

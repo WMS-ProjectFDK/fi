@@ -5,7 +5,7 @@
 	$prf = isset($_REQUEST['prf']) ? strval($_REQUEST['prf']) : '';
 	$rowno=0;
 
-	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, a.require_date, a.qty, a.amt, a.ohsas, 
+	$rs = "select a.line_no, a.item_no, b.description, a.uom_q, c.unit_pl, a.estimate_price, cast(a.require_date as varchar(100)) as require_date, a.qty, a.amt, a.ohsas, 
 		isnull(pod.po_no,'-') as po_no, isnull(pod.qty,0) as po_qty,a.qty - isnull(pod.qty,0)  as ost
 		from prf_details a
 		inner join item b on a.item_no = b.item_no

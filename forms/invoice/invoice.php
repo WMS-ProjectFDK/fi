@@ -1,4 +1,5 @@
 <?php 
+error_reporting(0);
 session_start();
 include("../../connect/conn.php");
 require_once('../___loginvalidation.php');
@@ -436,7 +437,7 @@ if ($varConn=='Y'){
 					<input style="width:200px;" name="attn_edit" id="attn_edit" class="easyui-textbox" disabled="" />
 					<span style="width:15px;display:inline-block;"></span>
 					<span style="display:inline-block;">Currency</span>
-					<input style="width:85px;" id="curr_edit" class="easyui-combobox" data-options=" url:'json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
+					<input style="width:85px;" id="curr_edit" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
 		        	onSelect: function(rec){
 		        		$.ajax({
 		        			type: 'GET',
@@ -1636,7 +1637,7 @@ if ($varConn=='Y'){
 			
 					}).done(function(res){
 						console.log(res);
-						//alert(res);
+						// alert(res);
 					});						
 				}
 				jmrow++;
@@ -1655,6 +1656,7 @@ if ($varConn=='Y'){
 						url: '../json/json_kode_do.php?do='+$('#do_no_add').textbox('getValue'),
 						data: { kode:'kode' },
 						success: function(data){
+							
 							if(data[0].kode == 'ALREADY'){
 								$.messager.alert('INFORMATION','Invoice No. Already Exists','info');
 								$.messager.progress('close');

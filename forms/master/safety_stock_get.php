@@ -43,31 +43,31 @@
 		left outer join whinventory c on a.item_no = c. item_no
 		$where
 		order by cast(a.year as int) desc, a.period desc, upload desc";
-	$data_sql = sqlsrv_query($connect, $sql);
+	$data_sql = sqlsrv_query($connect, strtoupper($sql));
 	$bln = array('-','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DES');
 	$items = array();
 	$rowno = 0;
 	while($row = sqlsrv_fetch_object($data_sql)){
 		array_push($items, $row);
 
-		$qty = $items[$rowno]->qty;
+		$qty = $items[$rowno]->QTY;
 		$items[$rowno]->qty = number_format($qty);
 
-		$inv = $items[$rowno]->this_inventory;
-		$items[$rowno]->this_inventory = number_format($inv);
+		$inv = $items[$rowno]->THIS_INVENTORY;
+		$items[$rowno]->THIS_INVENTORY = number_format($inv);
 
-		$p = intval($items[$rowno]->period);
-		$items[$rowno]->period = $bln[$p];
+		$p = intval($items[$rowno]->PERIOD);
+		$items[$rowno]->PERIOD = $bln[$p];
 
-		$s = $items[$rowno]->sts; 
+		$s = $items[$rowno]->STS; 
 		if($s == 'SAFETY STOCK'){
-			$items[$rowno]->sts = '<span style="color:blue;font-size:11px;"><b>SAFETY STOCK</b></span>';
+			$items[$rowno]->STS = '<span style="color:blue;font-size:11px;"><b>SAFETY STOCK</b></span>';
 		}else{
-			$items[$rowno]->sts = '<span style="color:red;font-size:11px;"><b>ORDERED</b></span>';
+			$items[$rowno]->STS = '<span style="color:red;font-size:11px;"><b>ORDERED</b></span>';
 		}
 
-		$sb = $items[$rowno]->sts_bundle;
-		$items[$rowno]->sts_bundle = '<span style="color:black;font-size:11px;"><b>'.$sb.'</b></span>';
+		$sb = $items[$rowno]->STS_BUNDLE;
+		$items[$rowno]->STS_BUNDLE = '<span style="color:black;font-size:11px;"><b>'.$sb.'</b></span>';
 
 		$rowno++;
 	}

@@ -26,7 +26,7 @@ if (isset($_SESSION['id_wms'])){
 	    $date=new DateTime( date('Y-m-d H:i:s.'.$micro_time,$time) );
 	    $dtime = $date->format("YmdHisu");
 
-	    $ins = "INSERT INTO ztb_wh_in_det(gr_no,line_no,qty,item_no,pallet,tanggal) VALUES ('$grn','$line',$qtypallet,'$item',$pallet,'$dtime')";
+	    $ins = "INSERT INTO ztb_wh_in_det(id,gr_no,line_no,qty,item_no,pallet,tanggal) VALUES ((select max(id) + 1 from ztb_wh_in_det),'$grn','$line',$qtypallet,'$item',$pallet,'$dtime')";
         $result = sqlsrv_query($connect, strtoupper($ins));
         
         if($result === false ) {

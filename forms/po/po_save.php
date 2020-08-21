@@ -46,9 +46,9 @@ if (isset($_SESSION['id_wms'])){
 		$amt_o = $query->amt_o;
 		$amt_l = $query->amt_l;
 		
-		//$split_payterm = split('-', $po_pterm);
-		$pday = '30';//$split_payterm[0];
-		$pdes = '123';//$split_payterm[1];
+		$split_payterm = explode('-', $po_pterm);
+		$pday = $split_payterm[0];
+		$pdes = $split_payterm[1];
 
 
 		if ($po_remark == ''){
@@ -61,11 +61,11 @@ if (isset($_SESSION['id_wms'])){
 					if($f0 == count($rmk_s0)-1){
 						$rmk_f0 .= $rmk_s0[$f0];
 					}else{
-						$rmk_f0 .= $rmk_s0[$f0]."' + char(13) + char(10) + ";
+						$rmk_f0 .= $rmk_s0[$f0]." char(10)";
 					}
 				}
 			}
-			$rmk_fix0 = str_replace("&amp;", "&", $rmk_f0);
+			$rmk_fix0 = $rmk_f0;//str_replace("&amp;", "&", $rmk_f0);
 			$po_remark = "$rmk_fix0";
 		}
 
@@ -79,7 +79,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f1 == count($rmk_s1)-1){
 						$rmk_f1 .= $rmk_s1[$f1];
 					}else{
-						$rmk_f1 .= $rmk_s1[$f1]."' + char(13) + char(10) + ";
+						$rmk_f1 .= $rmk_s1[$f1].' char(10)' ;
 					}
 				}
 			}
@@ -100,8 +100,8 @@ if (isset($_SESSION['id_wms'])){
 				array(  $pday  , SQLSRV_PARAM_IN),
 				array(  $pdes  , SQLSRV_PARAM_IN),
 				array(  $user  , SQLSRV_PARAM_IN),
-				array(  $po_remark  , SQLSRV_PARAM_IN),
 				array(  $po_ship_mark  , SQLSRV_PARAM_IN),
+				array(  $po_remark  , SQLSRV_PARAM_IN),
 				array(  $po_attn  , SQLSRV_PARAM_IN),
 				array(  $user  , SQLSRV_PARAM_IN),
 				array(  str_replace('&amp;', '&', $po_pterm)  , SQLSRV_PARAM_IN),

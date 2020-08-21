@@ -4,6 +4,7 @@ NAme : ueng hernana
 tanggal : 18-JAN-19
 deskripsi: print kanban label
  */
+error_reporting(0);
 ini_set('memory_limit','-1');
 ini_set('max_execution_time', 0);
 set_time_limit(0);
@@ -115,7 +116,7 @@ $content = "
 $row_a=0;	$col_a=0;
 while ($data=sqlsrv_fetch_object($result)){
 	$QR_CODE1 = str_replace(' ', '%20', $data->QR_CODE);
-	$link1 = 'http://localhost:8888/fi/forms/qr_generate.php?string='.$QR_CODE1;
+	$link1 = 'http://localhost:8088/wms/forms/qr_generate.php?string='.$QR_CODE1;
 	
 	
 	if ($row_a==0) {
@@ -262,6 +263,7 @@ while ($data=sqlsrv_fetch_object($result)){
 }
 
 $content .= "</page>";
+// echo $content;
 
 require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');

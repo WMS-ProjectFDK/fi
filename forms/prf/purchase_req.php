@@ -130,7 +130,7 @@ $menu_id = $_GET['id'];
 					<!-- validType="validDate" --> 
 					<span style="width:20px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">Cust. PO No.</span>
-					<input style="width:150px;" name="cust_pono_add" id="cust_pono_add" class="easyui-textbox"/>
+					<input style="width:150px;" name="cust_pono_add" id="cust_pono_add" class="easyui-textbox" disabled="true"/>
 					<span style="width:5px;display:inline-block;"></span>
 					<label><input type="checkbox" name="ck_new_add" id="ck_new_add">New Design</input></label>
 					<span style="width:20px;display:inline-block;"></span>
@@ -173,7 +173,7 @@ $menu_id = $_GET['id'];
 					<input style="width:85px;" name="prf_date_edit" id="prf_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" required=""/>
 					<span style="width:20px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">Cust. PO No.</span>
-					<input style="width:150px;" name="cust_pono_edit" id="cust_pono_edit" class="easyui-textbox"/>
+					<input style="width:150px;" name="cust_pono_edit" id="cust_pono_edit" class="easyui-textbox" disabled="true"/>
 					<span style="width:5px;display:inline-block;"></span>
 					<label><input type="checkbox" name="ck_new_edit" id="ck_new_edit">New Design</input></label>
 					<span style="width:20px;display:inline-block;"></span>

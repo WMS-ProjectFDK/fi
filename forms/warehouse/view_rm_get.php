@@ -15,19 +15,13 @@
 		$slip = "";
 	}
 
-	if ($ck_sts != "true"){
-		$st = "b.wo_no='$wo_no' and ";
-	}else{
-		$st = "";
-	}
-
 	if ($ck_item != "true"){
 		$item = "a.item_no='$item_no' and ";
 	}else{
 		$item = "";
 	}
 
-	$where ="where $slip $item to_char(a.wo_date,'YYYY-MM-DD') between '$date_awal' and '$date_akhir' and a.wo_date is not null";
+	$where ="where $slip $item a.wo_date between '$date_awal' and '$date_akhir' and a.wo_date is not null";
 	
 	include("../../connect/conn.php");
 
