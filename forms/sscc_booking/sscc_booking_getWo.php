@@ -10,7 +10,7 @@
 	
 	include("../../connect/conn.php");
 
-	$sql = "select a.work_order, a.item_no, c.description, so.asin, so.amazon_po_no, ceil((a.Qty/d.pallet_unit_number ) ) as TotalPallet
+	$sql = "select a.work_order, a.item_no, c.description, so.asin, so.amazon_po_no, ceiling((a.Qty/d.pallet_unit_number ) ) as TotalPallet
 		from mps_header a
 		inner join (select ax.so_no, ax.customer_po_no, bx.line_no, bx.item_no, bx.qty, bx.asin, bx.amazon_po_no
 		    from so_header ax

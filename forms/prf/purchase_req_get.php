@@ -56,15 +56,13 @@
 		array_push($items, $row);
 
 		if ($items[$rowno]->STS == '0'){
-			if (is_null($items[$rowno]->CUSTOMER_PO_NO)) {
+			if ($items[$rowno]->CUSTOMER_PO_NO=='') {
 				$items[$rowno]->status = '<span style="color:red;font-size:11px;"><b>NOT APPROVED</b></span>';
 			}else {
 				$items[$rowno]->status = '<span style="color:red;font-size:11px;"><b>FROM MRP</b></span>';
 			}
 		}else{
-		
-
-			if (is_null($items[$rowno]->CUSTOMER_PO_NO)) {
+			if ($items[$rowno]->CUSTOMER_PO_NO == '') {
 				$items[$rowno]->STATUS = '<span style="color:blue;font-size:11px;"><b>APPROVED</b></span>';
 			}else {
 				$items[$rowno]->STATUS = '<span style="color:blue;font-size:11px;"><b>FROM MRP</b></span>';

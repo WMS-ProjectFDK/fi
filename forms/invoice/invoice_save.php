@@ -1,4 +1,6 @@
 <?php
+
+error_reporting(0);
 session_start();
 include("../../connect/conn.php");
 if (isset($_SESSION['id_wms'])){

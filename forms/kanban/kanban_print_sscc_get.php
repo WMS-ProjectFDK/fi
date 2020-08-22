@@ -28,4 +28,6 @@ while ($row=sqlsrv_fetch_object($data)){
 
 $result["rows"] = $arrData;
 echo json_encode($arrData);
+
+
 ?>

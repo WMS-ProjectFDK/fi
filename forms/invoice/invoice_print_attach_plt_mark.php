@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 ini_set('memory_limit','-1');
 include("../../connect/conn.php");
 session_start();
@@ -10,15 +11,12 @@ $ppbe = isset($_REQUEST['ppbe']) ? strval($_REQUEST['ppbe']) : '';
 $do = isset($_REQUEST['do']) ? strval($_REQUEST['do']) : '';
 
 $q_si = "select distinct customer_po_no as po_no from answer where crs_remark='$ppbe' OR si_no='$si'";
-$data = oci_parse($connect, $q_si);
-oci_execute($data);
-$dt = oci_fetch_object($data);
+$data = sqlsrv_query($connect, strtoupper($q_si));
+$dt = sqlsrv_fetch_object($data);
 
-$qry = "select rtrim(replace(marks,chr(10),'<br/>'),'|') as pallet_mark from do_marks where do_no='$do' order by mark_no asc";
-/*$qry = "select pallet_mark_1 || '<br/>' || pallet_mark_2 || '<br/>' || pallet_mark_3 || '<br/>' || pallet_mark_4 || '<br/>' || pallet_mark_5
- || '<br/>' || pallet_mark_6 || '<br/>' || pallet_mark_7 || '<br/>' || pallet_mark_8 || '<br/>' || pallet_mark_9 || '<br/>' || pallet_mark_10 
- as pallet_mark
- from so_details where so_no in (select distinct so_no from answer where crs_remark='$ppbe' OR si_no='$si')";*/
+$qry = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as pallet_mark 
+	from do_marks where do_no='$do' 
+	order by mark_no asc";
 $result = sqlsrv_query($connect, strtoupper($qry));
 
 $content = " 
@@ -144,7 +142,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;height:100px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:620px;font-size:9px'>
@@ -294,7 +292,7 @@ while ($data=sqlsrv_fetch_object($result)){
 $content .= "
 	</page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('attachment_pallet_marks_'.$do.'.pdf');

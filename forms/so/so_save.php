@@ -42,6 +42,7 @@ if (isset($_SESSION['id_wms'])){
         $so_ex_fact_date = $query->so_ex_fact_date;
         $so_aging_day = $query->so_aging_day;
         $so_date_code = $query->so_date_code;
+        $so_po_line_no = $query->so_po_line_no;
         $so_asin = $query->so_asin;
         $so_amz_po_no = $query->so_amz_po_no;
         $so_category_mark = $query->so_category_mark;
@@ -101,7 +102,7 @@ if (isset($_SESSION['id_wms'])){
             $field_sod .= "amt_l  ,"                ; $value_sod .= "round($so_rate * $so_qty * $so_price,2)," ;
             $field_sod .= "customer_req_date,"      ; $value_sod .= "'$so_req_date'," ;
             $field_sod .= "etd    ,"                ; $value_sod .= "'$so_ex_fact_date'," ;
-            // $field_sod .= "customer_po_line_no,"    ; $value_sod .= "'$customer_po_line_no'," ;
+            $field_sod .= "customer_po_line_no,"    ; $value_sod .= "'$so_po_line_no'," ;
             // $field_sod .= "enduser_po_no,"          ; $value_sod .= "'$enduser_po_no'," ;
             $field_sod .= "del_qty,"                ; $value_sod .= "'0'," ;
             $field_sod .= "sret_qty,"               ; $value_sod .= "'0'," ;
@@ -132,7 +133,7 @@ if (isset($_SESSION['id_wms'])){
             // $field_sod .= "case_mark_9,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[8] . "'," ;
             // $field_sod .= "case_mark_10,"           ; $value_sod .= "'" . @CASEMARK_VAL_LIST[9] . "'," ;
             $field_sod .= "date_code,"              ; $value_sod .= "'$so_date_code'," ;
-            $field_sod .= "in_mps,"                 ; $value_sod .= "'0'," ;
+            $field_sod .= "in_mps,"                 ; $value_sod .= "'1'," ;
             $field_sod .= "asin,"                   ; $value_sod .= "'$so_asin'," ;
             $field_sod .= "amazon_po_no"            ; $value_sod .= "'$so_amz_po_no'" ;
             chop($field_sod) ;                      chop($value_sod) ;

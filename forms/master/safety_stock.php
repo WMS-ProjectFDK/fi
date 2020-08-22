@@ -271,15 +271,15 @@ h2 {
 
 			$('#dg').datagrid({
 			    columns:[[
-				    {field:'item_no', halign:'center', align:'center', title:'ITEM_NO',width:70},
-				    {field:'Item', halign:'center', title:'ITEM',width:100},
-				    {field:'description', halign:'center', title:'DESCRIPTION',width:200},
-				    {field:'Period', halign:'center', align:'center', title:'MONTH',width:40},
-				    {field:'year', halign:'center', align:'center', title:'YEAR',width:40},
-				    {field:'qty', halign:'center', align:'right', title:'SAFETY QTY',width:70},
-				    {field:'this_inventory', halign:'center', align:'right', title:'INVENTORY',width:70},
-				    {field:'sts_bundle', halign:'center', title:'STATUS BUNDLE',width:100},
-				    {field:'sts', halign:'center', title:'STATUS',width:70}
+				    {field:'ITEM_NO', halign:'center', align:'center', title:'ITEM_NO',width:70},
+				    {field:'ITEM', halign:'center', title:'ITEM',width:100},
+				    {field:'DESCRIPTION', halign:'center', title:'DESCRIPTION',width:200},
+				    {field:'PERIOD', halign:'center', align:'center', title:'MONTH',width:40},
+				    {field:'YEAR', halign:'center', align:'center', title:'YEAR',width:40},
+				    {field:'QTY', halign:'center', align:'right', title:'SAFETY QTY',width:70},
+				    {field:'THIS_INVENTORY', halign:'center', align:'right', title:'INVENTORY',width:70},
+				    {field:'STS_BUNDLE', halign:'center', title:'STATUS BUNDLE',width:100},
+				    {field:'STS', halign:'center', title:'STATUS',width:70}
 
 			    ]]
 		    });

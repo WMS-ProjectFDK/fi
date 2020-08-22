@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 date_default_timezone_set("Asia/Bangkok");
 
 session_start();
@@ -36,9 +36,6 @@ $now = Date('Y-m-d H:i:s');
 //delete from MPS_DETAILS
 $del2 = "delete from MPS_DETAILS";
 sqlsrv_query($connect, $del2);
-
-
-
 
 for($i=5;$i<=$hasildata;$i++){
     $a = trim($data->val($i,1));
@@ -93,7 +90,7 @@ for($i=5;$i<=$hasildata;$i++){
    
     // INSERT MPS HEADER
     $field1 = "ITEM_NO,";                    $value1 = "$a,";
-    $field1 .= "ITEM_NAME,";                 $value1 .= "'$b',";
+    $field1 .= "ITEM_NAME,";                 $value1 .= "LEFT('$b',30),";
     $field1 .= "BATERY_TYPE,";               $value1 .= "'$c',";
     $field1 .= "CELL_GRADE,";                $value1 .= "'$d',";
     $field1 .= "PO_NO,";                     $value1 .= "'$e',";

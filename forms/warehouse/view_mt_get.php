@@ -40,7 +40,7 @@
 		inner join unit e on c.uom_q= e.unit_code
 		$where
 		order by b.wo_no asc, b.plt_no asc";
-	$data = sqlsrv_query($connect, strtotupper($sql));
+	$data = sqlsrv_query($connect, strtoupper($sql) );
 
 	$items = array();
 	$rowno=0;

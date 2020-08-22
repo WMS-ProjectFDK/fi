@@ -37,13 +37,13 @@ if ($jns_export == 'lokal'){
 	$notes = "<b>".strtoupper($note)."</b>";
 }
 
-$sql = "select distinct a.do_date, a.customer_code, b.company, c.booking_no, c.forwarder_code, d.forwarder, e.emkl_name, e.final_dest,
+$sql = "select distinct CAST(a.do_date as varchar(10)) as do_date, a.customer_code, b.company, c.booking_no, c.forwarder_code, d.forwarder, e.emkl_name, e.final_dest,
 	e.consignee_name, a.person_code, f.person, g.net_uom, g.gross_uom, h.unit_pl,
 	zts.net as nw, zts.gross as gw, zts.msm as cbm,  
 	a.description, c.cargo_type1, cm.description as desc_method1, c.cargo_size1, cs.description as desc_size1, c.transport_type, c.cargo_qty1,
-	nvl(c.cargo_type2,0) cargo_type2, cm2.description as desc_method2, 
-  	nvl(c.cargo_size2,0) cargo_size2, cs2.description as desc_size2, 
-  	nvl(c.cargo_qty2,0) cargo_qty2
+	isnull(c.cargo_type2,0) cargo_type2, cm2.description as desc_method2, 
+  	isnull(c.cargo_size2,0) cargo_size2, cs2.description as desc_size2, 
+  	isnull(c.cargo_qty2,0) cargo_qty2
 	from do_header a
 	left join company b on a.customer_code = b.company_code
 	left join FORWARDER_LETTER c on a.do_no = c.do_no
@@ -64,8 +64,8 @@ $data_header = sqlsrv_query($connect, strtoupper($sql));
 $dt = sqlsrv_fetch_object($data_header);
 
 $qry = "select a.line_no, a.item_no, c.description, zz.qty, b.customer_po_no, b.work_no, 
-	ceil((zz.qty /  (zi.pallet_pcs / zi.pallet_ctn)))  case_total, ceil(zz.pallet) as pallet, ceil(zz.pallet)* zi.pallet_ctn carton, zs.box_pcs,
-	floor(zz.pallet) full_pallet,carton_not_full ctn_terakir,'(' || CONTAINER_NO || ') ' || CONTAINERS CONTAINER_NO  
+	ceiling((zz.qty /  (zi.pallet_pcs / zi.pallet_ctn)))  case_total, ceiling(zz.pallet) as pallet, ceiling(zz.pallet)* zi.pallet_ctn carton, zs.box_pcs,
+	floor(zz.pallet) full_pallet,carton_not_full ctn_terakir,'(' + CONTAINER_NO + ') ' + CONTAINERS CONTAINER_NO  
 	from do_details a
 	inner join answer b on a.answer_no1 = b.answer_no
 	inner join item c on a.item_no = c.item_no
@@ -136,7 +136,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:940px;font-size:9px'>
@@ -230,7 +230,7 @@ $content .= "
 	</thead>";
 $s=0;
 while ($s <= $dt->CARGO_QTY1) {
-	while ($data=oci_fetch_object($result)){
+	while ($data=sqlsrv_fetch_object($result)){
 		if($data->CARTON < $data->BOX_PCS){
 			$full_plt = "-" ;
 			$ctn_last = $data->CARTON;
@@ -335,7 +335,7 @@ $content .= "
 	</div>
 </page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('outgoing.pdf');	

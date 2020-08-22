@@ -16,8 +16,12 @@
 		s.GOODS_NAME, a.VESSEL, CAST(a.ETD as varchar) as ETD_F, CAST(a.ETA as varchar) as ETA_F, f1.FORWARDER_CODE as FORWARDER_CODE, 
 		f2.FORWARDER_CODE as EMKL_CODE, c.METHOD_TYPE as SHIPPING_TYPE_CODE,
 		dbo.LIST_COLLECT(a.SI_NO, ', ') as PO_NO,
-	s.CONSIGNEE_NAME + char(13) + char(10) + s.CONSIGNEE_ADDR1 + char(13) + char(10) + s.CONSIGNEE_ADDR2 + char(13) + char(10) + 
-	s.CONSIGNEE_ADDR3 + char(13) + char(10) + s.CONSIGNEE_ATTN + char(13) + char(10) + s.CONSIGNEE_TEL CONSIGNEE_FULL,
+	ISNULL(s.CONSIGNEE_NAME,'') + CHAR(10) + 
+	ISNULL(s.CONSIGNEE_ADDR1,'') + CHAR(10) + 
+	ISNULL(s.CONSIGNEE_ADDR2,'') + CHAR(10) + 
+	ISNULL(s.CONSIGNEE_ADDR3,'') + CHAR(10) + 
+	ISNULL(s.CONSIGNEE_ATTN,'') + CHAR(10) + 
+	ISNULL(s.CONSIGNEE_TEL,'') as CONSIGNEE_FULL,
 	s.PAYMENT_TYPE, s.PAYMENT_REMARK, CAST(a.stuffy_date as varchar) as ex_fact_date, a_sub.rmk as REMARK
 	FROM (select a.SI_NO, min(a.ANSWER_NO) as ANSWER_NO_MIN, sum(a.QTY) as QTY_SUM, b.rmk, a.crs_remark 
 			from ANSWER a

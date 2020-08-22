@@ -3,7 +3,7 @@
 	session_start();
 	$cust_po_no = isset($_REQUEST['cust_po_no']) ? strval($_REQUEST['cust_po_no']) : '';
 
-	$sql = "select h.SI_NO, 
+	$sql = "select distinct h.SI_NO, 
 h.CONSIGNEE_NAME, 
 h.NOTIFY_NAME, 
 h.NOTIFY_NAME_2, 

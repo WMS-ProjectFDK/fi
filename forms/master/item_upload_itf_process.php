@@ -27,10 +27,10 @@ for($i=2;$i<=$hasildata;$i++){
 
 	if ($item_no != ''){
 		$ins = "delete from ztb_itf_code where item_no = '$item_no'";
-		$data_ins = sqlsrv_query($connect, $ins);
+		$data_ins = sqlsrv_query($connect, strtoupper($ins));
 
 		$ins = "insert into ZTB_ITF_code (Item_no,SHIRNK,Blister,Inner,Medium,Outer,berat_inner,toleransi_plus,toleransi_minus,isi_inner) values ('$item_no','$shrink','$blister','$inner','$medium','$outer','$berat','$plus','$minus','$isi')";
-		$data_ins = sqlsrv_query($connect, $ins);
+		$data_ins = sqlsrv_query($connect, strtoupper($ins));
 	
 		if($data_ins){
 			$success++;	

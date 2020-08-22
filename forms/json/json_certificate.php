@@ -10,9 +10,11 @@
 	$arrNo = 0;
 	$arrData = array();
 	while ($row=sqlsrv_fetch_array($result)){
-		$arrData[$arrNo] = array(
-			"doc_name"=>rtrim($row[0])
-		);
+		if (trim($row[0]) == 'Form IJEPA'){
+			$arrData[$arrNo] = array("doc_name"=>rtrim($row[0]), "selected"=>"true");
+		}else{
+			$arrData[$arrNo] = array("doc_name"=>rtrim($row[0]));
+			}
 		$arrNo++;
 	}
 	echo json_encode($arrData);

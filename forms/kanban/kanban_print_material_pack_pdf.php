@@ -4,6 +4,7 @@ NAme : ueng hernana
 tanggal : 18-JAN-19
 deskripsi: print kanban packaging
  */
+error_reporting(0);
 ini_set('memory_limit','-1');
 ini_set('max_execution_time', 0);
 set_time_limit(0);
@@ -77,10 +78,10 @@ $content = "
 
 $row_a=0;	$col_a=0;
 while ($data=sqlsrv_fetch_object($result)){
-	$link1 = "http://localhost:8888/fi/forms/qr_generate_material.php?id=".$data->ID;
+	$link1 = "http://localhost:8088/wms/forms/qr_generate_material.php?id=".$data->ID;
 
 	if($data->ITEM_NO != '73012220'){
-		$link2 = "http://localhost:8888/fi/forms/qr_generate_material_datecode.php?id=".$data->ID;	
+		$link2 = "http://localhost:8088/wms/forms/qr_generate_material_datecode.php?id=".$data->ID;	
 	}else{
 		$link2 = '';
 	}

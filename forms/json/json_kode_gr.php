@@ -14,7 +14,7 @@ $row = sqlsrv_fetch_object($data);
 
 if (intval($row->JUM) == 0){
     $sql2 = "select count(*) as j from whinventory 
-		where this_month = (SELECT CONVERT(nvarchar(6), cast('2020-07-01' as date), 112))";
+		where this_month = (SELECT CONVERT(nvarchar(6), cast(GETDATE() as date), 112))";
 
     $data2 = sqlsrv_query($connect, strtoupper($sql2));
 	$row2 = sqlsrv_fetch_object($data2);

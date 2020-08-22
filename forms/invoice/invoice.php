@@ -1,4 +1,5 @@
 <?php 
+error_reporting(0);
 session_start();
 include("../../connect/conn.php");
 require_once('../___loginvalidation.php');
@@ -1636,7 +1637,7 @@ if ($varConn=='Y'){
 			
 					}).done(function(res){
 						console.log(res);
-						//alert(res);
+						// alert(res);
 					});						
 				}
 				jmrow++;
@@ -1655,6 +1656,7 @@ if ($varConn=='Y'){
 						url: '../json/json_kode_do.php?do='+$('#do_no_add').textbox('getValue'),
 						data: { kode:'kode' },
 						success: function(data){
+							
 							if(data[0].kode == 'ALREADY'){
 								$.messager.alert('INFORMATION','Invoice No. Already Exists','info');
 								$.messager.progress('close');

@@ -7,7 +7,7 @@ include("../../connect/conn.php");
 
 $data = new Spreadsheet_Excel_Reader($_FILES['fileexcel']['tmp_name']);
 $hasildata = $data->rowcount($sheet_index=0);
-$user = htmlspecialchars($_REQUEST['user_name']);
+$user = $_SESSION['id_wms'];//htmlspecialchars($_REQUEST['user_name']);
 $success = 0;
 $failed = 0;
 $ins = '';

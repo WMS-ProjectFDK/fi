@@ -3,7 +3,8 @@ header('Content-Type: text/plain; charset="UTF-8"');
 error_reporting(0);
 session_start();
 include("../../connect/conn.php");
-
+$user = $_SESSION['id_wms'];
+// $user_name = $_SESSION['id_wms'];
 
 if (isset($_SESSION['id_wms'])){
 	$data = isset($_REQUEST['data']) ? strval($_REQUEST['data']) : '';

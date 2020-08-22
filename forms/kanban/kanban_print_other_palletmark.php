@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 ini_set('memory_limit','-1');
 include("../../connect/conn.php");
 session_start();
@@ -32,7 +32,7 @@ $sql = "select a.po_no as path, a.work_order, a.batery_type, a.cell_grade, a.po_
 	sod.ASIN,sod.AMAZON_PO_NO,com.address1,com.address2,com.address3,com.address4
 	from mps_header a
 	inner join so_header soh on a.po_no = soh.customer_po_no
- 	inner join so_details sod on soh.so_no=sod.so_no and substring(a.po_line_no,1,2) = sod.line_no
+ 	inner join so_details sod on soh.so_no=sod.so_no and substring(a.po_line_no,1,1) = sod.line_no
 	left outer join item i on a.item_no=i.item_no
 	left outer join company com on soh.consignee_code = cast(com.company as varchar(100))
 	where a.work_order='$wo'";

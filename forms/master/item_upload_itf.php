@@ -63,7 +63,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php //include ('../ico_logout.php'); 
+<?php include ('../../ico_logout.php'); 
 
 	// $newformat = "201812";
 	// $newformat .= "01";
@@ -108,16 +108,16 @@ h2 {
 		$(function(){
 			$('#dg').datagrid({
 			    columns:[[
-				    {field:'item_no', halign:'center', align:'center', title:'ITEM NO',width:70},
-				    {field:'shrink', halign:'center', title:'SHRINK',width:70},
-				    {field:'blister', halign:'center', title:'BLISTER',width:70},
-				    {field:'inner', halign:'center', align:'center', title:'INNER',width:70},
-				    {field:'medium', halign:'center', align:'center', title:'MEDIUM',width:70},
-				    {field:'outer', halign:'center', align:'right', title:'OUTER',width:70},
-				    {field:'berat_inner', halign:'center', title:'BERAT INNER',width:50},
-				    {field:'toleransi_plus', halign:'center', title:'TOLERANSI PLUS',width:50},
-				    {field:'toleransi_minus', halign:'center', align:'center', title:'TOLERANSI MINUS',width:40},
-				    {field:'isi_inner', halign:'center', align:'center', title:'ISI INNER',width:40},
+				    {field:'ITEM_NO', halign:'center', align:'center', title:'ITEM NO',width:70},
+				    {field:'SHRINK', halign:'center', title:'SHRINK',width:70},
+				    {field:'BLISTER', halign:'center', title:'BLISTER',width:70},
+				    {field:'INNER', halign:'center', align:'center', title:'INNER',width:70},
+				    {field:'MEDIUM', halign:'center', align:'center', title:'MEDIUM',width:70},
+				    {field:'OUTER', halign:'center', align:'right', title:'OUTER',width:70},
+				    {field:'BERAT_INNER', halign:'center', title:'BERAT INNER',width:50},
+				    {field:'TOLERANSI_PLUS', halign:'center', title:'TOLERANSI PLUS',width:50},
+				    {field:'TOLERANSI_MINUS', halign:'center', align:'center', title:'TOLERANSI MINUS',width:40},
+				    {field:'ISI_INNER', halign:'center', align:'center', title:'ISI INNER',width:40},
 			    ]]
 		    });
 			var dg = $('#dg').datagrid();

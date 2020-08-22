@@ -401,7 +401,7 @@ h2 {
 			var myJSON=JSON.stringify(dataPallet);
 			var str_unescape=unescape(myJSON);
 
-			console.log('sscc_booking_save_pallet.php?data='+unescape(str_unescape));
+			console.log('sscc_booking_save_pallet.php?data='+unescape(str_unescape)+'&bookingHeader='+b+'&containerHeader='+c);
 
 			$.post('sscc_booking_save_pallet.php',{
 				data: unescape(str_unescape),
@@ -412,10 +412,10 @@ h2 {
 	                title:'Please waiting',
 	                msg:'Saving Pallet data...'
 	            });
-				// if(res != '"success"'){
-				// 	$.messager.alert('ERROR',res,'warning');
-				// 	$.messager.progress('close');
-				// }
+				if(res != '"success"'){
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
 			});
 
 			var myJSON2=JSON.stringify(dataCarton);

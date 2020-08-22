@@ -1109,7 +1109,7 @@ if ($varConn=='Y'){
 					if($('#supplier_add').combobox('getValue')==''){
 						msg = $.messager.alert('Warning','Please select supplier','warning');
 						hasil=1;
-					}else if($('#po_no_add').textbox('getValue')==''){
+					}else if($('#po_no_add').textbox('getValue')=='' && $('#po_no_add').textbox('getValue').length > 15){
 						msg = $.messager.alert('INFORMATION','PO No. Not Found','info');
 						hasil=1;
 					}else if($('#remark_add').textbox('getValue').length >= 999){

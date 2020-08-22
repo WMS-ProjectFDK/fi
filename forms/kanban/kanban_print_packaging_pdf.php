@@ -125,8 +125,8 @@ while ($data=sqlsrv_fetch_object($result)){
 	 	$QR_CODE1 = str_replace(' ', '%20',$data->QR_CODE1);
 	 	$QR_CODE2 = str_replace(' ', '%20',$data->QR_CODE2);
 		
-	 	$link1 = 'http://localhost:8088/fi/forms/qr_generate.php?string='.$QR_CODE1;
-		$link2 = 'http://localhost:8088/fi/forms/qr_generate_timbangan.php?string='.$QR_CODE2;
+	 	$link1 = 'http://172.23.225.113:8088/wms/forms/qr_generate.php?string='.$QR_CODE1;
+		$link2 = 'http://172.23.225.113:8088/wms/forms/qr_generate_timbangan.php?string='.$QR_CODE2;
 		 
 		// echo $link1;
 

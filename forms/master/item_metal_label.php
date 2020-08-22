@@ -1,9 +1,8 @@
 <?php
-include("../connect/conn.php");
-//session_start();
-//require_once('___loginvalidation.php');
-//$user_name = $_SESSION['id_wms'];
-$user_name = htmlspecialchars($_REQUEST['user_name']);
+include("../../connect/conn.php");
+session_start();
+require_once('../___loginvalidation.php');
+$user_name = $_SESSION['id_wms'];
 ?>
 
 <!DOCTYPE html>
@@ -19,15 +18,15 @@ $user_name = htmlspecialchars($_REQUEST['user_name']);
 		return is_confirmed;
 		}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
 <style>
 *{
 font-size:12px;
@@ -63,11 +62,10 @@ h2 {
 </style>
 </head>
 <body>
-<?php //include ('../ico_logout.php'); 
-
-	// $newformat = "201812";
-	// $newformat .= "01";
-	// echo date('Y-m-d', strtotime($newformat));
+<?php include ('../../ico_logout.php'); 
+	$newformat = "201812";
+	$newformat .= "01";
+	echo date('Y-m-d', strtotime($newformat));
 ?>
 	<table id="dg" title="ITEM METAL LABEL" class="easyui-datagrid" style="width:100%;height:auto;"  url="item_metal_label_list.php" toolbar="#toolbar" fitcolumns="true" rownumbers="true"></table>
 

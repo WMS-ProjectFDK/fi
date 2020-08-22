@@ -45,7 +45,7 @@
 
 	$where ="where $slip_date $scan_date $slip $item $wo a.slip_no is not null";
 	
-	include("../connect/conn.php");
+	include("../../connect/conn.php");
 
 	$sql = "select top 150 a.slip_no, cast(a.slip_date as varchar(10)) slip_date, a.item_no, a.item_name, a.item_description, 
 		cast(a.approval_date as varchar(10)) as approval_date, a.slip_quantity, a.wo_no, c.plt_no,
@@ -56,7 +56,6 @@
 		$where
 		order by a.slip_date desc ";
 	$data = sqlsrv_query($connect, strtoupper($sql));
-
 
 	$items = array();
 	$rowno=0;

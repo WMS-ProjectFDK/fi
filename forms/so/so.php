@@ -174,7 +174,7 @@ $menu_id = $_GET['id'];
 					<span><a href="javascript:void(0)" onclick="consignee_data('add')">SET</a></span>
 				</div>
 			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:750px;margin-left: 510px;">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:740px;margin-left: 510px;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CURR</span>
 					<!-- <input required="true" style="width:100px;" name="curr_add" id="curr_add" class="easyui-textbox" disabled=true/>	 -->
@@ -333,7 +333,7 @@ $menu_id = $_GET['id'];
 		<!-- ADD PALLET & CASE END -->
 
 		<!-- ADD QTY -->
-		<div id="dlg_input_qty" class="easyui-dialog" style="width: 250px;height: 30`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+		<div id="dlg_input_qty" class="easyui-dialog" style="width: 270px;height: 30`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
 			<div class="fitem" hidden="true">
 				<input style="width: 100px;" name="sts_order" id="sts_order" class="easyui-textbox"/>
 			</div>
@@ -357,6 +357,10 @@ $menu_id = $_GET['id'];
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">DATE-CODE</span>
 				<input style="width:100px;" name="date_code_add" id="date_code_add" class="easyui-textbox"/>
+			</div>
+			<div class="fitem" align="center">
+				<span style="width:120px;display:inline-block;">CUST PO LINE NO.</span>
+				<input style="width:100px;" name="cust_po_line_no_add" id="cust_po_line_no_add" class="easyui-textbox"/>
 			</div>
 			<div class="fitem" align="center">
 				<span style="width:100px;display:inline-block;">ASIN</span>
@@ -576,6 +580,7 @@ $menu_id = $_GET['id'];
 							fitColumns: true,
 							columns:[[
 								{field:'LINE_NO', title:'LINE NO.', halign:'center', align:'center', width:50},
+								{field:'CUSTOMER_PO_LINE_NO', title:'CUST PO LINE NO.', halign:'center', align:'center', width:50},
 				                {field:'ITEM_NO',title:'ITEM NO.', halign:'center', align:'center', width:65, sortable: true},
 				                {field:'DESCRIPTION', title:'ITEM<br>DESCRIPTION', halign:'center', width:150},
 				                {field:'UNIT', title:'UNIT', halign:'center', align:'center', width:35},
@@ -683,6 +688,7 @@ $menu_id = $_GET['id'];
 						{field:'EXFACT_DATE', title:'EX FACT<br/>DATE', halign: 'center', width:100, align:'center'},
 						{field:'AGING_DAY', title:'AGING<br/>DAY', halign: 'center', width:100, align:'center'},
 						{field:'DATE_CODE', title:'DATE<br/>CODE', halign: 'center', width:100, align:'center'},
+						{field:'CUSTOMER_PO_LINE_NO', title:'CUST PO<br/>LINE NO.', halign:'center', align:'center', width:50},
 						{field:'ASIN', title:'ASIN', halign: 'center', width:100, align:'center'},
 						{field:'AMZ_PO', title:'AMZ PO', halign: 'center', width:100, align:'center'},
 						{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
@@ -832,6 +838,7 @@ $menu_id = $_GET['id'];
 					$('#qty_order').textbox('setValue','');
 					$('#aging_day_add').numberbox('setValue', '');
 					$('#date_code_add').textbox('setValue', '');
+					$('#cust_po_line_no_add').textbox('setValue', '');
 					$('#asin_add').textbox('setValue', '');
 					$('#amz_po_no_add').textbox('setValue', '');
 					b == '' ?  $('#row_qty').textbox('setValue', 1) : $	('#row_qty').textbox('setValue', b);
@@ -863,6 +870,7 @@ $menu_id = $_GET['id'];
 							EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
 							AGING_DAY: $('#aging_day_add').numberbox('getValue'),
 							DATE_CODE: $('#date_code_add').textbox('getValue'),
+							CUSTOMER_PO_LINE_NO : $('#cust_po_line_no_add').textbox('getValue'),
 							ASIN: $('#asin_add').textbox('getValue'),
 							AMZ_PO: $('#amz_po_no_add').textbox('getValue')
 
@@ -878,6 +886,7 @@ $menu_id = $_GET['id'];
 							EXFACT_DATE : $('#exfact_date_add').datebox('getValue'),
 							AGING_DAY: $('#aging_day_add').numberbox('getValue'),
 							DATE_CODE: $('#date_code_add').textbox('getValue'),
+							CUSTOMER_PO_LINE_NO : $('#cust_po_line_no_add').textbox('getValue'),
 							ASIN: $('#asin_add').textbox('getValue'),
 							AMZ_PO: $('#amz_po_no_add').textbox('getValue')
 
@@ -1088,6 +1097,7 @@ $menu_id = $_GET['id'];
 						so_ex_fact_date: $('#dg_add').datagrid('getData').rows[i].EXFACT_DATE,
 						so_aging_day: $('#dg_add').datagrid('getData').rows[i].AGING_DAY,
 						so_date_code: $('#dg_add').datagrid('getData').rows[i].DATE_CODE,
+						so_po_line_no: $('#dg_add').datagrid('getData').rows[i].CUSTOMER_PO_LINE_NO,
 						so_asin: $('#dg_add').datagrid('getData').rows[i].ASIN,
 						so_amz_po_no: $('#dg_add').datagrid('getData').rows[i].AMZ_PO,
 					});
@@ -1184,6 +1194,7 @@ $menu_id = $_GET['id'];
 							{field:'EXFACT_DATE', title:'EX FACT<br/>DATE', halign: 'center', width:100, align:'center'},
 							{field:'AGING_DAY', title:'AGING<br/>DAY', halign: 'center', width:100, align:'center'},
 							{field:'DATE_CODE', title:'DATE<br/>CODE', halign: 'center', width:100, align:'center'},
+							{field:'CUSTOMER_PO_LINE_NO', title:'CUST PO<br/>LINE NO.', halign:'center', align:'center', width:50},
 							{field:'ASIN', title:'ASIN', halign: 'center', width:100, align:'center'},
 							{field:'AMZ_PO', title:'AMZ PO', halign: 'center', width:100, align:'center'},
 							{field:'P_MARK', title:'PALLET<br/>MARK', halign: 'center',width:50, align:'center'},
@@ -1264,6 +1275,7 @@ $menu_id = $_GET['id'];
 						so_ex_fact_date: $('#dg_edit').datagrid('getData').rows[i].EXFACT_DATE,
 						so_aging_day: $('#dg_edit').datagrid('getData').rows[i].AGING_DAY,
 						so_date_code: $('#dg_edit').datagrid('getData').rows[i].DATE_CODE,
+						so_po_line_no: $('#dg_edit').datagrid('getData').rows[i].CUSTOMER_PO_LINE_NO,
 						so_asin: $('#dg_edit').datagrid('getData').rows[i].ASIN,
 						so_amz_po_no: $('#dg_edit').datagrid('getData').rows[i].AMZ_PO,
 					});
