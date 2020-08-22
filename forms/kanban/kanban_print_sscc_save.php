@@ -139,7 +139,7 @@ if (isset($_SESSION['id_wms'])){
 							'".str_replace("'", "''", $row->ADDRESS2)."', 
 							'".str_replace("'", "''", $row->ADDRESS3)."', 
 							'".str_replace("'", "''", $row->ADDRESS4)."', 
-							getdate(), '$user', $sscc_plt ";
+							getdate(), '$user', $sscc_plt,1 ";
 					//echo $n;
 					//echo $INS2;
 					$data_INS2 = sqlsrv_query($connect, $INS2);

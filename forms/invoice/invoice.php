@@ -436,7 +436,7 @@ if ($varConn=='Y'){
 					<input style="width:200px;" name="attn_edit" id="attn_edit" class="easyui-textbox" disabled="" />
 					<span style="width:15px;display:inline-block;"></span>
 					<span style="display:inline-block;">Currency</span>
-					<input style="width:85px;" id="curr_edit" class="easyui-combobox" data-options=" url:'json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
+					<input style="width:85px;" id="curr_edit" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
 		        	onSelect: function(rec){
 		        		$.ajax({
 		        			type: 'GET',

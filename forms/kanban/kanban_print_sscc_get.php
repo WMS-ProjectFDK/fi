@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 header("Content-type: application/json");
 session_start();
 ini_set('max_execution_time', -1);

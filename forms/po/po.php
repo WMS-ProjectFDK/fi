@@ -132,7 +132,7 @@ if ($varConn=='Y'){
 				</div>
 				<div class="fitem">
 					<span style="width:50px;display:inline-block;">PO No.</span>
-					<input style="width:163px;" name="po_no_add" id="po_no_add" class="easyui-textbox" required=""/>
+					<input style="width:163px;" name="po_no_add" id="po_no_add" class="easyui-textbox" required="" maxlength="15"/>
 					<span style="width:5px;display:inline-block;"></span>
 					<span style="width:55px;display:inline-block;">PO Date</span>
 					<input style="width:85px;" name="po_date_add" id="po_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
@@ -487,6 +487,8 @@ if ($varConn=='Y'){
 			}
 		}
 
+		
+
 		function filter(event){
 			var src = document.getElementById('src').value;
 			var search = src.toUpperCase();
@@ -507,6 +509,8 @@ if ($varConn=='Y'){
 				//document.getElementById('src').value = '';
 		    }
 		}
+
+		
 
 		function filterREC(){
 			var x = document.getElementById('src_item').value;
@@ -773,6 +777,8 @@ if ($varConn=='Y'){
 			$('#remark_add').textbox('setValue','');
 			$('#shipp_mark_add').textbox('setValue','');
 			$('#dg_add').datagrid('loadData',[]);
+
+			
 
 			$('#dg_add').datagrid({
 			    singleSelect: true,

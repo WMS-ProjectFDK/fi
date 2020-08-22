@@ -1,0 +1,117 @@
+@startuml 
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' define diagram participants
+' http://plantuml.com/skinparam
+'''''''''''''''''''''''''''''''''''''''''''''''''
+
+actor Requestor as requestor #DeepSkyBlue
+
+box "Back Office MS" #PowderBlue
+
+entity "BackOffice" as backOffice #DeepSkyBlue
+
+database "temporary_replacement" as tempo #DeepSkyBlue
+
+endbox
+
+box "Surrounding System" #PeachPuff
+entity "CASA" as CASA #lightcoral
+endbox
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' formatting options
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+hide footbox
+
+'autonumber
+
+skinparam defaultFontName Comic Sans MS
+skinparam sequence {
+  ParticipantFontSize 15
+  ActorFontSize 15
+  ArrowFontName Comic Sans MS
+  ParticipantFontName Comic Sans MS
+}
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+' Microservice Logic Goes Here
+'''''''''''''''''''''''''''''''''''''''''''''''''
+== Temporary Replacement Validate ==
+
+requestor -> backOffice : getRequestTask
+activate backOffice
+note right of backOffice
+  get userId ,originBranch and branch from access token
+end note
+
+break periodStart > periodEnd 
+  backOffice --> requestor : error 409, code 30361 : Record Already Exists   
+end break
+
+break difference date periodStart and periodEnd more than 14 days 
+     backOffice --> requestor : error 409, code 30361 : Record Already Exists 
+end break
+
+
+backOffice -> CASA : GET casa/v1/branch(branch)
+activate CASA
+    note right backOffice : get branch name and originalBranch name from token
+    CASA --> backOffice : branchName
+deactivate CASA
+
+note  right of  backOffice 
+    if access Token branch <> access Token originalBranch
+        set activeTemporary == true
+    else 
+        set activeTemporary == false
+end note
+backOffice --> backOffice
+
+alt activeTemporary
+    note right backOffice : only accept request to originalBranch
+    break request.destinationBranch <> access token originalBranch
+        backOffice --> requestor : error 409, code 30361 : Record Already Exists
+    end break
+
+  
+else else 
+    note right backOffice : Not accept request to originalBranch
+    break request.destinationBranch == access token originalBranch
+        backOffice --> requestor : error 409, code 30361 : Record Already Exists
+    end break
+ 
+    backOffice --> backOffice
+end alt 
+
+backOffice -> tempo :getActiveTempReplaceDateNow(userId)
+activate tempo
+    tempo --> backOffice : existingValueResponse
+deactivate tempo
+
+alt existingValue not found 
+   
+
+    note right backOffice: update active temporary replacement to not active when period is now
+    backOffice -> tempo : updateActiveReplacementDateNow(userID)
+else 
+    note right backOffice
+        1. update isActive to 0 when is in period request
+        2, insert request change branch
+    end note
+    backOffice -> tempo : save(periodStart,periodEnd,userId)
+    
+end 
+
+ note right :sad  <color: PapayaWhip>  note <color> is sad
+
+
+
+
+backOffice --> requestor : <strike>tempReplacementResponse</strike>
+
+deactivate backOffice
+
+@enduml
