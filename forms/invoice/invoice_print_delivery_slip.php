@@ -31,7 +31,7 @@ $sql = "select
     com2.company  customer,
     fwd.forwarder,
     truck.forwarder domestic_truck,
-    CAST(doh.do_date as varchar(10)) invoice_date,
+    CONVERT(varchar,doh.do_date, 103) invoice_date,
     pld.customer_part_no,
     isnull(pld.inner_package,0) * isnull(plh.case_total,0)  inner_package,
     pld.inner_quantity,
@@ -50,11 +50,11 @@ $sql = "select
     CASE cm1.description
         WHEN null THEN null
         WHEN 'LCL' THEN 'LCL'
-        ELSE cm1.description + ' '  + cs1.description + '~' + CAST(fl.cargo_qty1 AS VARCHAR) + 'CONTAINER(S) ' END as container_info1, 
+        ELSE cm1.description + ' '  + cs1.description + '~' + CAST(CAST(fl.cargo_qty1 AS INT) AS VARCHAR) + ' CONTAINER(S) ' END as container_info1, 
 
     CASE cm2.description 
         WHEN null THEN null
-        ELSE cm2.description + ' '  + cs2.description + '~' + CAST(fl.cargo_qty2 AS VARCHAR) + 'CONTAINER(S) ' END as container_info2
+        ELSE cm2.description + ' '  + cs2.description + '~' + CAST(CAST(fl.cargo_qty2 AS INT) AS VARCHAR) + ' CONTAINER(S) ' END as container_info2
     from forwarder_letter fl
     left join company com1 on fl.customer_code = com1.company_code
     left join company com2 on fl.customer_code = com2.company_code
@@ -91,10 +91,15 @@ $dt_po = sqlsrv_fetch_object($result_po);
 // WEIGHT
 $sql_weight = "select 
     CAST(sum(net) as decimal(14,2)) net,
+    net_uom, u1.UNIT_PL as net_unit,
     CAST(sum(gross) as decimal(14,2)) gross,
+    gross_uom, u2.UNIT_PL as gross_unit,
     CAST(sum(measurement) as decimal(14,3)) measurement 
-    from do_pl_header 
-    where do_no = '$do'";
+    from do_pl_header a
+    left join UNIT u1 on a.NET_UOM=u1.UNIT_CODE
+    left join UNIT u2 on a.GROSS_UOM=u2.UNIT_CODE
+    where do_no = '$do'
+    group by NET_UOM, GROSS_UOM, u1.UNIT_PL, u2.UNIT_PL";
 $result_weight = sqlsrv_query($connect, strtoupper($sql_weight));
 $dt_weight = sqlsrv_fetch_object($result_weight);
 
@@ -103,6 +108,14 @@ $sql_carton = "SELECT * FROM ZVW_JUM_CARTON where do_no='$do'";
 $result_carton = sqlsrv_query($connect, strtoupper($sql_carton));
 $dt_carton = sqlsrv_fetch_object($result_carton);
 
+//WO
+$sql_wo = "select work_no, remark from answer 
+    where answer_no in (select answer_no 
+                        from indication 
+                        where inv_no = '413/FILR/20') 
+    order by item_no, work_no";
+$result_wo = sqlsrv_query($connect, strtoupper($sql_wo));
+$dt_wo = sqlsrv_fetch_object($result_wo);
 
 // DETAILS
 $qry = "select 
@@ -205,34 +218,34 @@ $content = "
                     <td colspan=4 style='border-top:0px solid #ffffff;border-left:0px solid #ffffff;border-right:0px solid #ffffff;'>
                         <table align='center'>
                             <tr>
-                                <td style='border:0px solid #ffffff;width:100px;'>MESSRS :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->OWN_COMPANY."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>MESSRS</td>
+                                <td style='border:0px solid #ffffff;width:230px;'>: ".$dt_h->OWN_COMPANY."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
-                                <td style='border:0px solid #ffffff;width:100px;'>SLIP NO. :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->SLIP_NO."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>SLIP NO.</td>
+                                <td style='border:0px solid #ffffff;width:225px;'>: ".$dt_h->SLIP_NO."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
                                 <td style='border:0px solid #ffffff;width:100px;'></td>
                                 <td style='border:0px solid #ffffff;width:225px;'></td>
                             </tr>
                             <tr>
-                                <td style='border:0px solid #ffffff;width:100px;'>FORWARDER :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->FORWARDER."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>FORWARDER</td>
+                                <td style='border:0px solid #ffffff;width:230px;'>: ".$dt_h->FORWARDER."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
-                                <td style='border:0px solid #ffffff;width:100px;'>INVOICE NO. :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->DO_NO."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>INVOICE NO.</td>
+                                <td style='border:0px solid #ffffff;width:225px;'>: ".$dt_h->DO_NO."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
-                                <td style='border:0px solid #ffffff;width:100px;'>TRUCK NO.</td>
+                                <td style='border:0px solid #ffffff;width:150px;'>TRUCK NO. / DRIVER</td>
                                 <td style='border:0px solid #ffffff;width:225px;'></td>
                             </tr>
                             <tr>
-                                <td style='border:0px solid #ffffff;width:100px;'>TRUCKING :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->DOMESTIC_TRUCK."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>TRUCKING</td>
+                                <td style='border:0px solid #ffffff;width:230px;'>: ".$dt_h->DOMESTIC_TRUCK."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
-                                <td style='border:0px solid #ffffff;width:100px;'>INVOICE DATE :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'>".$dt_h->INVOICE_DATE."</td>
+                                <td style='border:0px solid #ffffff;width:100px;'>INVOICE DATE</td>
+                                <td style='border:0px solid #ffffff;width:225px;'>: ".$dt_h->INVOICE_DATE."</td>
                                 <td style='border:0px solid #ffffff;width:10px;'></td>
-                                <td style='border:0px solid #ffffff;width:100px;'>CONT. /SEAL NO. :</td>
-                                <td style='border:0px solid #ffffff;width:225px;'></td>
+                                <td style='border:0px solid #ffffff;width:150px;'>CONT. /SEAL NO.</td>
+                                <td style='border:0px solid #ffffff;width:225px;'>: </td>
                             </tr>
                         </table>
                     </td>
@@ -267,9 +280,9 @@ while ($data=sqlsrv_fetch_object($result)){
     if ($no==1){
         $content .= "
                         <td rowspan=".$row_count." valign='top' align='left' style='font-size:10px;width:300px;padding: 10px 10px; border-bottom:0px solid #ffffff;'>
-                            GROSS WEIGHT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$dt_weight->GROSS."<br/>
-                            NET WEIGHT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$dt_weight->NET."<br/>
-                            MEASUREMENT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$dt_weight->MEASUREMENT."
+                            GROSS WEIGHT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".number_format($dt_weight->GROSS,2)." ".$dt_weight->GROSS_UNIT."<br/>
+                            NET WEIGHT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".number_format($dt_weight->NET,2)." ".$dt_weight->NET_UNIT."<br/>
+                            MEASUREMENT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".number_format($dt_weight->MEASUREMENT,3)." M3
                             <br/><br/>
                             PO NO. ".$dt_po->CUSTOMER_PO_NO." <br/>
                             CONTAINER NO. 
@@ -280,10 +293,7 @@ while ($data=sqlsrv_fetch_object($result)){
                             <br/>
                             FINAL DESTINATION : ".$dt_h->FINAL_DESTINATION." <br/>
                             PORT OF DISCHARGE : ".$dt_h->DISCHARGE_PORT." <br/>
-                            SHIPMENT METHOD : <br/>
-                                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                              ".$dt_h->TRANSPORT."<br/>
+                            SHIPMENT METHOD : ".$dt_h->TRANSPORT."<br/>
                                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                               ".$dt_h->CONTAINER_INFO1." <br/>
@@ -308,7 +318,7 @@ $content .= "
                         <td style='border-top:0px solid #ffffff;padding: 10px 10px;'>BOOKING NO: ".$dt_h->BOOKING_NO."</td>
                     </tr>
                     <tr>
-                        <td colspan=4 style='padding: 10px 10px;'>WORK NO. : </td>
+                        <td colspan=4 style='padding: 10px 10px;'>WORK NO. : ".$dt_wo->WORK_NO."</td>
                     </tr>
                     <tr>
                         <td colspan=4 style='padding: 10px 10px;'>PALLET NO. : </td>

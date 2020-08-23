@@ -1,5 +1,5 @@
 <?php 
-//error_reporting(0);
+// error_reporting(0);
 include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
@@ -17,12 +17,13 @@ if($state == 'packing_list'){
     $name = "INVOICE";
 }
 
-$sql_h = "select doh.do_no, doh.inv_no, CAST(doh.inv_date as varchar(10)) inv_date, doh.ship_name, doh.revise_flg, doh.remark, 
+$sql_h = "select doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, doh.ship_name, doh.revise_flg, 
+    replace(doh.remark,char(13),'<br/>') as remark,
     doh.notify, doh.attn  h_attn, doh.address_flg, c1.company, c1.address1, c1.address2, c1.address3, c1.address4,
     c1.attn  com_attn, doh.port_loading port_of_loading, doh.port_discharge port_of_discharge, doh.final_destination,
-    CAST(doh.etd as varchar(10)) etd, CAST(doh.eta as varchar(10)) eta, doh.trade_term, doh.lc_no,
-    CAST(doh.lc_date as varchar(10)) lc_date, doh.issuing_bank, 
-    CAST(doh.due_date as varchar(10)) due_date, doh.pby, doh.pdays, doh.pdesc 
+    CONVERT(varchar,doh.etd,103) etd, CONVERT(varchar,doh.eta,103) eta, doh.trade_term, doh.lc_no,
+    CONVERT(varchar,doh.lc_date,103) lc_date, doh.issuing_bank, 
+    CONVERT(varchar,doh.due_date,103) due_date, doh.pby, doh.pdays, doh.pdesc 
     from do_header doh,
     company c1 
     where doh.do_no = '$do'
@@ -34,28 +35,71 @@ $dt_h = sqlsrv_fetch_object($head);
 $params = array();
 $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
 
-$sql_marks = "select dm2.max_value  max_no, dm1.mark_no, dm1.MARKS 
+$sql_marks = "select dm2.max_value  max_no, 'SHIPPING MARKS '+CAST(dm1.mark_no as char(2))+' :' as mark_no,
+    REPLACE(CONVERT(varchar(max),dm1.MARKS),'&lt;BR&gt;','<br/>') as marks
     from do_marks  dm1,
     (select max(mark_no) max_value,do_no from do_marks group by do_no) dm2 
     where dm1.do_no = dm2.do_no
     and dm1.do_no = '$do'
-    order by mark_no";
+    order by cast(mark_no as int) asc";
+// echo $sql_marks;
 $dt_marks = sqlsrv_query($connect, strtoupper($sql_marks),$params, $options);
 $row_count = sqlsrv_num_rows($dt_marks);
 
 if ($row_count > 0){
-    while($dt_m =sqlsrv_fetch_object($dt_marks)){
-        $marks = $dt_m->MARKS;
+    $ship_no=1;
+    $marks = "
+        <tr>
+            <td colspan=3 valign='top'>
+                <table>";
+    $row_a=0;	$col_a=0;       $rowNo=1;
+    while($dt_m=sqlsrv_fetch_object($dt_marks)){
+        $dt_m->MARKS;
+        if ($row_a==0) {
+            if($col_a==0){
+                $marks .= "
+                    <tr>
+                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                        <td style='border:0px solid #fffffff;width:30px;'></td>";
+                $col_a++;
+            }elseif($col_a==1){
+                $marks .= "
+                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                        <td style='border:0px solid #fffffff;width:30px;'></td>";
+                $col_a++;
+            }elseif($col_a==2){
+                $marks .= "
+                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                        <td style='border:0px solid #fffffff;width:30px;'></td>
+                    </tr>
+                    <tr><td colspan=6 style='border:0px solid #fffffff;height:20px;'></td></tr>
+                    ";
+                $col_a=0;
+            }
+        }
+
+        if($rowNo == $row_count AND $rowNo == 1){
+            if($col_a < 2){
+                $marks .= "</tr>";
+            }
+        }
+        $rowNo++;
     }
+    $marks .= "
+                </table>
+            </td>
+        </tr>
+                ";
 }else{
     $marks = '';
 }
+// echo $marks;
 
 // TOTAL GW,NW,MSM
 $sql_gw = "select case when d1.total_net = NULL then '0' else LTrim(CAST(d1.total_net as varchar)) end as total_net,
-    u1.unit as net_unit,
+    u1.unit_pl as net_unit,
     case when d1.total_gross = NULL then '0' else LTrim(CAST(d1.total_gross as varchar)) end as total_gross,
-    u2.unit as gross_unit,
+    u2.unit_pl as gross_unit,
     LTrim(CAST(d1.total_measurement as varchar)) total_measurement 
     from 
     (select sum(isnull(h.net,0)) total_net,net_uom, 
@@ -85,17 +129,17 @@ $data_cou = sqlsrv_query($connect, strtoupper($sql_cou));
 $dt_cou = sqlsrv_fetch_object($data_cou);
 
 if($state != 'packing_list'){
-    $qry = "select  doh.customer_code, doh.do_no, doh.inv_no, CAST(doh.inv_date as varchar(10)) inv_date, doh.ship_name,
+    $qry = "select  doh.customer_code, doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, doh.ship_name,
         doh.SHIP_NAME as shipped_per1, dod.ITEM_NO,
         --substring(doh.ship_name,1,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)-1)  shipped_per1, 
         --substring(doh.ship_name,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)+2) shipped_per2, 
-        doh.remark, doh.notify, doh.attn  h_attn, 
+        REPLACE(doh.remark, char(13),'<br/>') as remark, doh.notify, doh.attn  h_attn, 
         --decode(isnull(dod.customer_part_no,''),'','','(' + dod.customer_part_no + ')')  customer_part_no, 
         dod.qty, dod.amt_o  amount, dod.u_price  unit_price, dod.remark2, dod.carved_stamp, doh.address_flg, c1.company, 
         c1.address1, c1.address2, c1.address3, c1.address4, c1.attn  com_attn, doh.port_loading port_of_loading, 
-        doh.port_discharge port_of_discharge, doh.final_destination, CAST(doh.etd as varchar(10)) etd, 
-        CAST(doh.eta as varchar(10)) eta, doh.trade_term, doh.lc_no, CAST(doh.lc_date as varchar(10)) lc_date, doh.issuing_bank, 
-        CAST(doh.due_date as varchar(10)) due_date, doh.pby,
+        doh.port_discharge port_of_discharge, doh.final_destination, CONVERT(varchar,doh.etd,103) etd, 
+        CONVERT(varchar,doh.eta,103) eta, doh.trade_term, doh.lc_no, CONVERT(varchar,doh.lc_date,103) lc_date, doh.issuing_bank, 
+        CONVERT(varchar,doh.due_date,103) due_date, doh.pby,
         doh.pdays, doh.pdesc, doh.revise_flg, dod.description  class, dod.line_no, i.description   item, i.item   item_name, 
         i.customer_item_name + case   when i.customer_item_no is null then  ''  else '(' + i.customer_item_no + ')' end as customer_item,
         u.unit, u.unit_pl, u2.unit customer_unit, u2.unit_pl  customer_unit_pl, cur.curr_mark, doh.gst_amt_l, 
@@ -375,7 +419,6 @@ if($state != 'packing_list'){
         $tot_amount += $data->AMOUNT;
         $tot_qty += $data->QTY;
         $pl = $data->UNIT_PL;
-        $rmk = $data->REMARK;
 
         $content .= "     
             <tr>
@@ -456,28 +499,21 @@ if($state != 'packing_list'){
     }
 }
 
-$content .=  "
-            <tr>
-                <td colspan=3 valign='top'>
-                    <b>SHIPPING MARKS 1 :</b>
-                    <br/>
-                    ".str_replace(' ','<br/>',$marks)."
-                </td>
-            </tr>";
+$content .=  $marks;
 
 $content .=  "
             <tr>
-                <td colspan=3 valign='top'>
+                <td colspan=3 valign='top' style='padding: 5px 5px;'>
                     <b>COUNTRY OF ORIGIN IS ".$dt_cou->COUNTRY." :</b>
                     <br/>
-                    ".$marks."
+                    ".$dt_h->REMARK."
                 </td>
             </tr>";
 
 if($state != 'packing_list'){
-$content .=  "
+    $content .=  "
             <tr>
-                <td colspan=3 valign='top'>
+                <td colspan=3 valign='top' style='padding: 5px 5px;'>
                     <b>BANK DETAIL :</b> 
                     <br/>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$bnk."\n
@@ -490,7 +526,10 @@ $content .=  "
                 </td>
             </tr>";
 }
-$content .=  "
+
+
+if($state != 'packing_list'){
+    $content .=  "
             <tr>
                 <td colspan=3 valign='top'>
                     <table>
@@ -498,6 +537,26 @@ $content .=  "
                         <td valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:25px;height:25px;'></td>
                         <td valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:250px;height:25px;'></td>
                         <td valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'></td>
+                        <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'></td>
+                        <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'></td>
+                        <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>
+                            ".number_format($tot_amount,2)."
+                        </td>
+                    </tr>
+                    </table>
+                </td>
+            </tr>";
+}else{
+    $content .=  "
+            <tr>
+                <td colspan=3 valign='top'>
+                    <table>
+                    <tr>
+                        <td valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:25px;height:25px;'></td>
+                        <td valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:250px;height:25px;'></td>
+                        <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>
+                            ".number_format($tot_qty)." ".$pl."
+                        </td>
                         <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>
                             ".number_format($tot_nw,2)." ".$uom_nw."
                         </td>
@@ -511,6 +570,7 @@ $content .=  "
                     </table>
                 </td>
             </tr>";
+}
 
 $content .=  "
             <tr>
@@ -542,7 +602,7 @@ $content .=  "
                                     TOTAL GROSS WEIGHT :
                                 </td>
                                 <td valign='middle' align='left' style='border:0px solid #ffffff;font-size:12px;width:150px;'>
-                                    ".number_format($dt_gw->TOTAL_GROSS)." ".$dt_gw->GROSS_UNIT."
+                                    ".number_format($dt_gw->TOTAL_GROSS,2)." ".$dt_gw->GROSS_UNIT."
                                 </td>
                               </tr>
                               <tr>
@@ -550,7 +610,7 @@ $content .=  "
                                     TOTAL MEASUREMENT : 
                                 </td>
                                 <td valign='middle' align='left' style='border:0px solid #ffffff;font-size:12px;width:150px;'>
-                                    ".number_format($dt_gw->TOTAL_MEASUREMENT)." M3
+                                    ".number_format($dt_gw->TOTAL_MEASUREMENT,3)." M3
                                 </td>
                               </tr>  
                             </table>";
@@ -582,7 +642,7 @@ $content .=  "
 
                         $content .= "
                         </td>
-                        <td colspan=2 valign='middle' align='center' style='border:0px solid #fffffffont-size:12px;width:70%;'>
+                        <td colspan=2 valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:70%;'>
                             PT FDK INDONESIA
                             <br/>
                             <br/>
@@ -602,5 +662,5 @@ require_once('../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('INVOICE-'.$do.'.pdf');
-// echo  $content;
+echo  $content;
 ?>
