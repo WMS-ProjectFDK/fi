@@ -39,7 +39,7 @@ if($si_sts == 'final_si'){
 		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(10),'<br>') end as special_info,
 		b.notify_name_2 + '<br/>  '+ b.notify_addr1_2+'<br/>'+ b.notify_addr2_2+'<br/>'+ b.notify_addr3_2+'<br/>'+b.notify_tel_2+'<br/>'+ b.notify_fax_2+'<br/>'+b.notify_attn_2 NOTIFY_NAME_2, 
 		replace(a.ship_name,char(10),'<br>') as ship_name, ans.crs_remark,
-		CAST(a.do_date as varchar(10)) as do_date
+		CONVERT(varchar, a.do_date,103) as do_date
 		from do_header a
 		inner join si_header b on a.si_no=b.si_no
 		left outer join (select si_no,doc_detail,doc_name from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = b.si_no
@@ -51,7 +51,8 @@ if($si_sts == 'final_si'){
 		left outer join answer ans on b.si_no = ans.si_no
 		where a.do_no='$do' ";
 
-	$qry = "select aa.do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
+	$qry = "select aa.do_no, CONVERT(varchar,etd, 103) as etd, CONVERT(varchar, eta, 103) as eta, 
+		port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
 		sum(ceiling(carton)) as carton,
 		sum(ceiling(pallet)) as pallet,
 		sum(qty) as qty,
@@ -96,12 +97,12 @@ if($si_sts == 'final_si'){
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
 		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(10),'<br>') end as special_info,
 		sih.notify_name_2+'<br />  '+sih.notify_addr1_2+'<br />'+sih.notify_addr2_2+'<br />'+sih.notify_addr3_2+'<br />'+sih.notify_tel_2+'<br />'+sih.notify_fax_2+'<br/>'+sih.notify_attn_2 NOTIFY_NAME_2,
-		'<br />'+replace(sdoc_bl.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
-		'<br />  '+ replace(sdoc_co.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
-		'<br />  '+ replace(sdoc_iv.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
-		'<br />  '+ replace(sdoc_bl.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
-		'<br />  '+ replace(sdoc_co.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
-		'<br />  '+ replace(sdoc_iv.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
+		'<br />&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_bl.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
 		from answer ans
 		inner join si_header sih on ans.si_no = sih.si_no
 		left outer join (select si_no,doc_detail,doc_name from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = sih.si_no
@@ -112,8 +113,8 @@ if($si_sts == 'final_si'){
 		where ans.crs_remark='$do' ";
 
 	$qry = "select do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, max(stuffy_date) stuffy_date, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
-		sum(ceil(carton)) as carton,
-		sum(ceil(pallet)) as pallet,
+		sum(ceiling(carton)) as carton,
+		sum(ceiling(pallet)) as pallet,
 		sum(qty) as qty,
 		sum(round(gw,2)) as gw, uom_gw,
 		sum(round(nw,2)) as nw, uom_nw,
@@ -205,13 +206,18 @@ if($si_sts == 'final_si'){
 	//$notify = $dt_h->PBY." ".$dt_h->PDAYS." ".$dt_h->PDESC;
 	$notify = $dt_h->NOTIFY_NAME.'<br>'.$dt_h->NOTIFY_ADDR1.'<br>'.$dt_h->NOTIFY_ADDR2.'<br>'.$dt_h->NOTIFY_ADDR3.'<br>'.$dt_h->NOTIFY_TEL.'<br>'.$dt_h->NOTIFY_FAX."<br>".$dt_h->NOTIFY_ATTN;
 	$notify2 = $dt_h->NOTIFY_NAME_2;
-	if ($dt_h->DESC_METHOD == 'FCL'){
-		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>&nbsp;&nbsp;&nbsp;".$container."<br/>&nbsp;&nbsp;&nbsp;CONTAINER GRADE A<br/>&nbsp;&nbsp;&nbsp;SEAL BOTTLE<br/>&nbsp;&nbsp;&nbsp;HAVE VENTILATION<br/><br/>";
 
-		$ket_z = "<td colspan=4 style='font-size:9px;border:0px solid #ffffff;' align='right'><b>CONTAINER GRADE A</b></td>";
+	if ($dt_h->DESC_METHOD == 'FCL'){
+		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>
+				  &nbsp;&nbsp;&nbsp;".$container."<br/>
+				  &nbsp;&nbsp;&nbsp;CONTAINER GRADE A<br/>
+				  &nbsp;&nbsp;&nbsp;SEAL BOTTLE<br/>
+				  &nbsp;&nbsp;&nbsp;HAVE VENTILATION<br/><br/>";
+
+		$ket_z = "<td style='font-size:9px;border:0px solid #ffffff;' align='center'><b>CONTAINER GRADE A</b></td>";
 	}else{
 		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/><br/><br/>";
-		$ket_z = "<td colspan=4 style='font-size:9px;border:0px solid #ffffff;' align='right'></td>";
+		$ket_z = "<td style='font-size:9px;border:0px solid #ffffff;' align='center'></td>";
 	}
 }else{
 	while($data_pallet = sqlsrv_fetch_object($row_pallet)){
@@ -219,7 +225,7 @@ if($si_sts == 'final_si'){
 	}
 
 	while($data_remark = sqlsrv_fetch_object($row_remark)){
-		array_push($ArrREmark,$data_remark->REMARK);
+		array_push($ArrREmark,"&nbsp;&nbsp;&nbsp;".$data_remark->REMARK);
 	}
 
 	for ($ii=0; $ii < count($ArrPallet) ; $ii++) { 
@@ -243,11 +249,15 @@ if($si_sts == 'final_si'){
 	$notify2 = $dt_h->NOTIFY_NAME_2;
 
 	if ($dt_h->DESC_METHOD == 'FCL'){
-		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>&nbsp;&nbsp;&nbsp;".$container."<br/>&nbsp;&nbsp;&nbsp;CONTAINER GRADE A<br/>&nbsp;&nbsp;&nbsp;SEAL BOTTLE<br/>&nbsp;&nbsp;&nbsp;HAVE VENTILATION<br/><br/>";
-		$ket_z = "<td colspan=4 style='font-size:9px;border:0px solid #ffffff;' align='right'><b>CONTAINER GRADE A</b></td>";
+		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>
+				  &nbsp;&nbsp;&nbsp;".$container."<br/>
+				  &nbsp;&nbsp;&nbsp;CONTAINER GRADE A<br/>
+				  &nbsp;&nbsp;&nbsp;SEAL BOTTLE<br/>
+				  &nbsp;&nbsp;&nbsp;HAVE VENTILATION<br/><br/>";
+		$ket_z = "<tdstyle='font-size:9px;border:0px solid #ffffff;' align='center'><b>CONTAINER GRADE A</b></td>";
 	}else{
 		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/><br/><br/>";
-		$ket_z = "<td colspan=4 style='font-size:9px;border:0px solid #ffffff;' align='right'></td>";
+		$ket_z = "<td style='font-size:9px;border:0px solid #ffffff;' align='center'></td>";
 	}
 	
 }
@@ -316,7 +326,6 @@ $content = "
 		<div style='margin-top:0;margin-left:620px;font-size:9px'>
 			<p align='' >Bekasi, ".$date."<br>Print By : ".$nama_user."</p>
 		</div>
-		".$ket_z."
 
 	<page_footer>
 		<div style='width:100%;text-align:right;margin-bottom:100%;font-size:9px;'>page [[page_cu]] of [[page_nb]]</div>
@@ -327,25 +336,25 @@ $content = "
 	
 	<div style='margin-top:20px;margin-bottom:100%;position:absolute;'>
 		<h3 align='center'>SHIPPING INSTRUCTION</h3>
-		<table align='center' style='width:100%;font-size:12px;'>
+		<table align='center' style='width:800px;font-size:12px;'>
 			<tr>
-				<td valign='top' style='font-size:10px;width:300px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
-			              <td style='font-size:11px;border:0px solid #ffffff;'><b>SHIPPER</b></td>
+			              <td style='font-size:11px;border:0px solid #ffffff;width:70px;'><b>SHIPPER</b></td>
 			              <td style='font-size:11px;border:0px solid #ffffff;'>:</td>
-			              <td style='width:330px;font-size:11px;border:0px solid #ffffff;'></td>
+			              <td style='width:220px;font-size:11px;border:0px solid #ffffff;'></td>
 			            </tr>
 			            <tr>
-			            	<td colspan=3 style='font-size:11px;border:0px solid #ffffff;'>".$dt_h->SHIPPER_NAME."<br/>
-			            																   ".$dt_h->SHIPPER_ADDR1."<br/>
-			            																   ".$dt_h->SHIPPER_ADDR2."
+							<td colspan=3 style='width:350px;font-size:11px;border:0px solid #ffffff;'>
+								".$dt_h->SHIPPER_NAME."<br/>
+								".$dt_h->SHIPPER_ADDR1."<br/>
+								".$dt_h->SHIPPER_ADDR2."
 			            	</td>
 			            </tr>
 			        </table>
 			    </td>
-				<td style='border:0px solid #ffffff;'></td>
-				<td valign='top' style='border:0px solid #ffffff;font-size:10px;width:350px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
 			              <td style='font-size:11px;border:0px solid #ffffff;'><b>INV NO.</b></td>
@@ -361,25 +370,25 @@ $content = "
 				</td>
 			</tr>
 			<tr>
-				<td valign='top' style='font-size:10px;width:300px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
-			              <td style='border:0px solid #ffffff;'><b>CONSIGNEE</b></td>
+			              <td style='border:0px solid #ffffff;width:70px;'><b>CONSIGNEE</b></td>
 			              <td style='border:0px solid #ffffff;'>:</td>
-			              <td style='border:0px solid #ffffff;width:300px;'></td>
+			              <td style='border:0px solid #ffffff;'></td>
 			            </tr>
 			            <tr>
-			              <td colspan=3 style='border:0px solid #ffffff;'>".$dt_h->CONSIGNEE_NAME."<br/>
-			              												  ".$dt_h->CONSIGNEE_ADDR1."<br/>
-			              												  ".$dt_h->CONSIGNEE_ADDR2."<br/>
-			              												  ".$dt_h->CONSIGNEE_ADDR3."<br/>
-			              												  ".$dt_h->CONSIGNEE_TEL."
+						  <td colspan=3 style='border:0px solid #ffffff;'>
+							  ".$dt_h->CONSIGNEE_NAME."<br/>
+							  ".$dt_h->CONSIGNEE_ADDR1."<br/>
+							  ".$dt_h->CONSIGNEE_ADDR2."<br/>
+							  ".$dt_h->CONSIGNEE_ADDR3."<br/>
+							  ".$dt_h->CONSIGNEE_TEL."
 			              </td>
 			            </tr>
 			        </table>
 				</td>
-				<td style='border:0px solid #ffffff;'></td>
-				<td valign='top' style='border-right:0px solid #ffffff;font-size:10px;width:350px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
 			              <td style='border:0px solid #ffffff;'><b>BOOKING NO.</b></td>
@@ -387,17 +396,16 @@ $content = "
 			              <td style='border:0px solid #ffffff;'>".$book_no."</td>
 			            </tr>
 			            <tr>
-			              <td style='border:5px solid #ffffff;'><b>SI NO.</b></td>
+						  <td style='border:0px solid #ffffff;'><b>SI NO.</b></td>
 			              <td style='border:5px solid #ffffff;'>:</td>
-			              <td style='border:5px solid #ffffff;'>".$SI_Nya."</td>
+			              <td style='width:100px;border:5px solid #ffffff;'>".$SI_Nya."</td>
 			            </tr>
 			        </table>
 				</td>
 			</tr>
 			<tr>
-				<td valign='top' style='font-size:10px;width:300px;height:65px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:65px;'>
 					<table>
-
 			            <tr>
 			              <td style='border:0px solid #ffffff;width:160px;'><b>Notify Party :</b></td>
 			              <td style='border:0px solid #ffffff;width:2px;'><b></b></td>
@@ -410,14 +418,13 @@ $content = "
 			            </tr>
 			        </table>
 				</td>
-				<td style='border:0px solid #ffffff;'></td>
-				<td colspan=3 style='border-right:5px solid #ffffff;' align='center'>
-					<b>STATUS DOCUMENT :<br>BOOKING S/I</b>
-					<br/><span style='font-size:26px;color:red'><b>".$sts_doc."</b></span>
+				<td style='width: 363px;' align='center'>
+					<b>STATUS DOCUMENT :<br>BOOKING S/I</b><br/>
+					<span style='font-size:26px;color:red'><b>".$sts_doc."</b></span>
 				</td>
 			</tr>
 			<tr>
-				<td valign='top' style='font-size:10px;width:175px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
 			              <td style='border:0px solid #ffffff;width:160px'><b>PRE-CARRIEGE BY :</b></td>
@@ -431,14 +438,12 @@ $content = "
 			            </tr>
 			        </table>
 				</td>
-				<td style='border:0px solid #ffffff;'></td>
-				<td rowspan=2 valign='top' style='border:0px solid #ffffff;font-size:10px;width:350px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:360px;height:25px;padding:5px 5px;'>
 					<b>FORWARDER :</b><br/>".$dt_h->FORWARDER_NAME."<br/>
 					TEL : ".$dt_h->FORWARDER_TEL." FAX : ".$dt_h->FORWARDER_FAX."<br/>
 					ATTN : ".$dt_h->FORWARDER_ATTN."<br/>
 				</td>
 			</tr>
-
 			<tr>
 				<td valign='top' style='font-size:10px;width:300px;height:25px;'>
 					<table>
@@ -454,9 +459,10 @@ $content = "
 			            </tr>
 			        </table>
 				</td>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'></td>
 			</tr>
 			<tr>
-				<td valign='top' style='font-size:10px;width:300px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<table>
 			            <tr>
 			              <td style='border:0px solid #ffffff;width:160px;'><b>Port Of Discharge :</b></td>
@@ -470,111 +476,143 @@ $content = "
 			            </tr>
 			        </table>
 				</td>
-				<td style='border:0px solid #ffffff;'></td>
-				<td valign='top' style='border:0px solid #ffffff;font-size:10px;width:350px;height:25px;'>
+				<td valign='top' style='font-size:10px;width:363px;height:25px;'>
 					<b>EMKL : </b><br/>".$dt_h->EMKL_NAME."<br/>
 					TEL : ".$dt_h->EMKL_TEL." FAX : ".$dt_h->EMKL_FAX."<br/>
 					ATTN : ".$dt_h->EMKL_ATTN."<br/>
 				</td>
 			</tr>
-		</table>
-		<table align='center'>";
+
+			<tr>
+                <td colspan=2 valign='top' style='height:3px;border-left:0px solid #ffffff;border-right:0px solid #ffffff;'></td>
+			</tr>
+			
+			<tr>
+				<td colspan=2 valign='top' style='width:700px;'>
+					<table style='width:100%;'>
+						<tr>
+							<td valign='middle' align='center' style='border-left:0px solid #ffffff;border-top:0px solid #ffffff;font-size:10px;width:113px;height:25px;'><b>Container No.<br/>Seal No, Marks&Nos</b></td>
+							<td valign='middle' align='center' style='border-top:0px solid #ffffff;font-size:10px;width:90px;height:25px;'><b>Quantity&Kind<br/>Of Packages</b></td>
+							<td valign='middle' align='center' style='border-top:0px solid #ffffff;font-size:10px;width:330px;height:25px;'><b>Description Of Goods</b></td>
+							<td valign='middle' align='center' style='border-top:0px solid #ffffff;border-right:0px solid #ffffff;font-size:10px;width:180px;height:25px;'><b>Measurement (CBM)<br/>Gross Weight(kg)</b></td>
+						</tr>";
+
 $nourut = 1;
-$content .= "
-	<thead>
-		<tr>
-			<th valign='middle' align='center' style='font-size:10px;width:113px;height:25px;'>Container No.<br/>Seal No, Marks&Nos</th>
-			<th valign='middle' align='center' style='font-size:10px;width:90px;height:25px;'>Quantity&Kind<br/>Of Packages</th>
-			<th valign='middle' align='center' style='font-size:10px;width:350px;height:25px;'>Description Of Goods</th>
-			<th valign='middle' align='center' style='font-size:10px;width:180px;height:25px;'>Measurement (CBM)<br/>Gross Weight(kg)</th>
-		</tr>
-	</thead>";
 $total=0;
 while ($data=sqlsrv_fetch_object($result)){
 	if($si_sts == 'final_si'){
-		$et = "&nbsp;&nbsp;&nbsp;STUFFING : ".$dt_h->DO_DATE."<br>&nbsp;&nbsp;&nbsp;ETD ".$data->PORT_LOADING." : ".$data->ETD."<br>&nbsp;&nbsp;&nbsp;ETA ".$data->FINAL_DESTINATION." : ".$data->ETA."<br><br>&nbsp;&nbsp;&nbsp;";
+		$et = "STUFFING : ".$dt_h->DO_DATE."<br>
+			   &nbsp;&nbsp;&nbsp;ETD ".$data->PORT_LOADING." : ".$data->ETD."<br>
+			   &nbsp;&nbsp;&nbsp;ETA ".$data->FINAL_DESTINATION." : ".$data->ETA."<br><br>
+			   &nbsp;&nbsp;&nbsp;";
 	}else{
-		$et = "&nbsp;&nbsp;&nbsp;STUFFING : ".$data->STUFFY_DATE."<br>&nbsp;&nbsp;&nbsp;ETD : ".$data->ETD."<br>&nbsp;&nbsp;&nbsp;ETA : ".$data->ETA."<br><br>&nbsp;&nbsp;&nbsp; ";
+		$et = "STUFFING : ".$data->STUFFY_DATE."<br>
+			   &nbsp;&nbsp;&nbsp;ETD : ".$data->ETD."<br>
+			   &nbsp;&nbsp;&nbsp;ETA : ".$data->ETA."<br><br>
+			   &nbsp;&nbsp;&nbsp; ";
     }
-    
-	$content .= "
-		<tr>
-			<td valign='middle' align='left' style='font-size:10px;height:25px;width:113px;'>".$remarkNya."</td>
-			<td valign='middle' align='center' style='font-size:10px;height:25px;width:90px;'>
-				".number_format($data->CARTON)."&nbsp;CARTON<br/>".$data->PALLET."&nbsp;PALLET
-			</td>
-			<td valign='middle' style='font-size:10px;height:25px;width:350px;'>
-				&nbsp;&nbsp;&nbsp;".number_format($data->QTY)."&nbsp;PIECES &nbsp;".$dt_h->DOC_DETAIL_CO."&nbsp; OF<br/>&nbsp;&nbsp;&nbsp;".$data->DESCRIPTION."
-				<br/>
-				&nbsp;&nbsp;&nbsp;".$dt_h->DOC_DETAIL_BL."
-				<br/>
-				<br/><br/>
-				".$et."
-				<br/>
-				<p style:'font-size: 9px;'><b>".$dt_h->DOC_DETAIL_IV."</b></p>
-			</td>
-			<td valign='middle' style='font-size:10px;height:25px;width:180px;'><br/><br/><br/>
-				&nbsp;&nbsp;&nbsp;GW&nbsp;&nbsp;:&nbsp;".number_format($data->GW,2)."&nbsp;&nbsp;&nbsp;".$data->UOM_GW."<br/>
-				&nbsp;&nbsp;&nbsp;NW&nbsp;&nbsp;:&nbsp;".number_format($data->NW,2)."&nbsp;&nbsp;&nbsp;".$data->UOM_NW."<br/>
-				&nbsp;&nbsp;&nbsp;MSM&nbsp;&nbsp;&nbsp;:&nbsp;".number_format($data->MSM,3)."&nbsp;&nbsp;&nbsp;CBM<br/><br/><br/>
-				".$truck."
-				".$palletNya."
-			</td>
-		</tr>";
+$content .= "			
+						<tr>
+							<td valign='middle' align='left' style='border-left:0px solid #ffffff;border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:113px;'>".$remarkNya."</td>
+							<td valign='middle' align='center' style='border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:90px;'>
+								".number_format($data->CARTON)."&nbsp;CARTON<br/>
+								".$data->PALLET."&nbsp;PALLET
+							</td>
+							<td valign='middle' style='border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:300px;padding: 0px 5px;'>
+								&nbsp;&nbsp;&nbsp;".number_format($data->QTY)."&nbsp;PIECES &nbsp;".$dt_h->DOC_DETAIL_CO."&nbsp; OF<br/>
+								&nbsp;&nbsp;&nbsp;".$data->DESCRIPTION."<br/>
+								&nbsp;&nbsp;&nbsp;".$dt_h->DOC_DETAIL_BL."<br/><br/><br/>
+								&nbsp;&nbsp;&nbsp;".$et."<br/>
+								&nbsp;&nbsp;&nbsp;<p style:'font-size: 9px;'><b>".$dt_h->DOC_DETAIL_IV."</b></p>
+							</td>
+							<td valign='middle' style='border-right:0px solid #ffffff;border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:180px;'><br/><br/><br/>
+								&nbsp;&nbsp;&nbsp;GW&nbsp;&nbsp;:&nbsp;".number_format($data->GW,2)."&nbsp;&nbsp;&nbsp;".$data->UOM_GW."<br/>
+								&nbsp;&nbsp;&nbsp;NW&nbsp;&nbsp;:&nbsp;".number_format($data->NW,2)."&nbsp;&nbsp;&nbsp;".$data->UOM_NW."<br/>
+								&nbsp;&nbsp;&nbsp;MSM&nbsp;&nbsp;&nbsp;:&nbsp;".number_format($data->MSM,3)."&nbsp;&nbsp;&nbsp;CBM<br/><br/><br/>
+								".$truck."
+								".$palletNya."
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>";	
 	$total +=0;
 	$nourut++;
 }
-
-	$content .= "
-		<tr>
-			".''."
-		</tr>";
-
 $content .= "
-			".''."
-		</table>
-		<table>
 			<tr>
-				".$ket_z."
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;'>
+						<tr>
+							".$ket_z."
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;'> PAYMENT</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>".$prep."</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>".$coll."</td>
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;'>
+						<tr>
+							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'> PAYMENT</td>
+							<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
+							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'>".$prep."</td>
+							<td style='width:300px;font-size:10px;border:0px solid #ffffff;'>".$coll."</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;'> SHIPPING METHOD</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>".$shipp_A."</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>".$shipp_B."</td>
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;'>
+						<tr>
+							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'> SHIPPING METHOD</td>
+							<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
+							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'>".$shipp_A."</td>
+							<td style='width:300px;font-size:10px;border:0px solid #ffffff;'>".$shipp_B."</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;'> REQUIREMENT <br>OF SHIPPING DOCUMENT</td>
-				<td style='font-size:10px;border:0px solid #ffffff;' valign='middle'>:</td>
-				<td style='font-size:10px;border:0px solid #ffffff;' valign='middle'>".$dt_h->DOC_NAME_BL."</td>
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;'>
+						<tr>
+							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'> REQUIREMENT <br>OF SHIPPING DOCUMENT</td>
+							<td style='font-size:10px;border:0px solid #ffffff;' valign='middle'>:</td>
+							<td style='width:400px;font-size:10px;border:0px solid #ffffff;' valign='middle'>".$dt_h->DOC_NAME_BL."</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;'> NOTE</td>
-				<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
-				<td colspan=2 style='font-size:10px;border:0px solid #ffffff;'><b>1)THIS BOOKING S/I IS ATTENDED ONLY FOR SHIPMENT BOOKING(CONTAINER, SPACE),<br>
-								&nbsp;&nbsp;&nbsp;WE'LL SEND YOU FINAL S/I ONCE THE ABOVE SHIPMENT DATA IS COMPLETE.<br>
-							  2)PLEASE CONTACT US IF YOU HAVEN'T RECEIVED THE FINAL S/I FROM US BEFORE<br>
-							  	&nbsp;&nbsp;&nbsp;INTENDED S/I CUT OFF.</b>
-				</td> 
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;'>
+						<tr>
+							<td style='width:113px;font-size:10px;border:0px solid #ffffff;'> NOTE</td>
+							<td style='font-size:10px;border:0px solid #ffffff;'>:</td>
+							<td style='font-size:10px;border:0px solid #ffffff;'><b>1)THIS BOOKING S/I IS ATTENDED ONLY FOR SHIPMENT BOOKING(CONTAINER, SPACE),<br>
+											&nbsp;&nbsp;&nbsp;WE'LL SEND YOU FINAL S/I ONCE THE ABOVE SHIPMENT DATA IS COMPLETE.<br>
+										2)PLEASE CONTACT US IF YOU HAVEN'T RECEIVED THE FINAL S/I FROM US BEFORE<br>
+											&nbsp;&nbsp;&nbsp;INTENDED S/I CUT OFF.</b>
+							</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;' colspan=3></td>
-				<td style='font-size:10px;border:0px solid #ffffff;height:10px;' valign='bottom' align='center'></td>
-			</tr>
-			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;' colspan=3></td>
-				<td style='font-size:10px;border:0px solid #ffffff;height:20px;' valign='bottom' align='center'>Bekasi, ".$date2."</td>
-			</tr>
-			<tr>
-				<td style='font-size:10px;border:0px solid #ffffff;' colspan=3></td>
-				<td style='font-size:10px;border:0px solid #ffffff;height:50px;' valign='bottom' align='center'>Purchasing & Export-Import Manager</td>
-			</tr>
+				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
+					<table style='width:800px;' align='center'>
+						<tr>
+							<td style='font-size:10px;border:0px solid #ffffff;'></td>
+							<td style='font-size:10px;border:0px solid #ffffff;height:20px;' valign='bottom' align='center'>Bekasi, ".$date2."</td>
+						</tr>
+						<tr>
+							<td style='font-size:10px;border:0px solid #ffffff;'></td>
+							<td style='font-size:10px;border:0px solid #ffffff;height:50px;' valign='bottom' align='center'>Purchasing & Export-Import Manager</td>
+						</tr>
+					</table>
+				</td>
+			</tr>			
 		</table>
 		<p style='font-size:10px;'>".$dt_h->SPECIAL_INFO."</p>
 	</div>

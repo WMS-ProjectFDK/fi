@@ -37,13 +37,16 @@ if ($jns_export == 'lokal'){
 	$notes = "<b>".strtoupper($note)."</b>";
 }
 
-$sql = "select distinct CAST(a.do_date as varchar(10)) as do_date, a.customer_code, b.company, c.booking_no, c.forwarder_code, d.forwarder, e.emkl_name, e.final_dest,
+$sql = "select distinct CONVERT(varchar,a.do_date, 103) as do_date, a.customer_code, b.company, c.booking_no, 
+	c.forwarder_code, d.forwarder, e.emkl_name, e.final_dest,
 	e.consignee_name, a.person_code, f.person, g.net_uom, g.gross_uom, h.unit_pl,
-	zts.net as nw, zts.gross as gw, zts.msm as cbm,  
-	a.description, c.cargo_type1, cm.description as desc_method1, c.cargo_size1, cs.description as desc_size1, c.transport_type, c.cargo_qty1,
-	isnull(c.cargo_type2,0) cargo_type2, cm2.description as desc_method2, 
-  	isnull(c.cargo_size2,0) cargo_size2, cs2.description as desc_size2, 
-  	isnull(c.cargo_qty2,0) cargo_qty2
+	zts.net as nw, zts.gross as gw, zts.msm as cbm, a.description, c.transport_type,
+	isnull(CAST(c.cargo_type1 as int),0) as cargo_type1, cm.description as desc_method1,  
+	isnull(cast(c.cargo_size1 as int),0) as cargo_size1, cs.description as desc_size1, 
+	isnull(CAST(c.cargo_qty1 as int),0) as cargo_qty1,
+	isnull(cast(c.cargo_type2 as int),0) cargo_type2, cm2.description as desc_method2, 
+	isnull(cast(c.cargo_size2 as int),0) cargo_size2, cs2.description as desc_size2, 
+	isnull(CAST(c.cargo_qty2 as int),0) cargo_qty2
 	from do_header a
 	left join company b on a.customer_code = b.company_code
 	left join FORWARDER_LETTER c on a.do_no = c.do_no
@@ -93,7 +96,7 @@ if($dt->TRANSPORT_TYPE == 2){
 }
 
 if($dt->TRANSPORT_TYPE == 2){
-	if(is_null($dt->CARGO_TYPE2)) {
+	if($dt->CARGO_TYPE == 0) {
 		$shipp1 = $shipp_method1;
 		$shipp2 = '';
 	}else{
