@@ -47,13 +47,8 @@ if (isset($_SESSION['id_wms'])){
 		$amt_l = $query->amt_l;
 		
 		$split_payterm = explode('-', $po_pterm);
-<<<<<<< HEAD
-		$split_payterm[0];
-		$split_payterm[1];
-=======
 		$pday = $split_payterm[0];
 		$pdes = $split_payterm[1];
->>>>>>> bddbd3f9a7828b641644287839aaa4e87df70682
 
 
 		if ($po_remark == ''){
