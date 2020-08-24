@@ -487,8 +487,6 @@ if ($varConn=='Y'){
 			}
 		}
 
-		
-
 		function filter(event){
 			var src = document.getElementById('src').value;
 			var search = src.toUpperCase();
@@ -509,8 +507,6 @@ if ($varConn=='Y'){
 				//document.getElementById('src').value = '';
 		    }
 		}
-
-		
 
 		function filterREC(){
 			var x = document.getElementById('src_item').value;
@@ -777,8 +773,6 @@ if ($varConn=='Y'){
 			$('#remark_add').textbox('setValue','');
 			$('#shipp_mark_add').textbox('setValue','');
 			$('#dg_add').datagrid('loadData',[]);
-
-			
 
 			$('#dg_add').datagrid({
 			    singleSelect: true,

@@ -12,7 +12,7 @@ if ($varConn=='Y'){
 <head>
 <meta charset="UTF-8">
 <title>SHIPPING PLAN</title>
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="../../favicon.png">
 <script language="javascript">
 	function confirmLogOut(){
 		var is_confirmed;

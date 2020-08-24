@@ -7,6 +7,8 @@ $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 include("../../connect/conn.php");
 
+//http://localhost:8088/fi/forms/warehouse/inventory_excel.php?cmbBln=202008&cmbBln_txt=08-2020&src=&rdo_sts=check_WP
+
 $cmbBln = isset($_REQUEST['cmbBln']) ? strval($_REQUEST['cmbBln']) : '';
 $cmbBln_txt = isset($_REQUEST['cmbBln_txt']) ? strval($_REQUEST['cmbBln_txt']) : '';
 $rdo_sts = isset($_REQUEST['rdo_sts']) ? strval($_REQUEST['rdo_sts']) : '';
@@ -59,7 +61,6 @@ if($dt_result->THIS_MONTH == $cmbBln){
         inner join unit c on b.uom_q=c.unit_code
         $where order by b.item asc, b.description asc"; 
     $result = sqlsrv_query($connect, strtoupper($sql));
-    
 }else{
     $sql = "select a.item_no, b.item, b.description, b.uom_q, c.unit, a.this_month, 
         a.last_inventory as this_inventory, 
@@ -290,7 +291,7 @@ $objPHPExcel->getDefaultStyle()
             ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
  
 // Rename worksheet
-$objPHPExcel->getActiveSheet()->setTitle('ITEM - '.$wh);
+// $objPHPExcel->getActiveSheet()->setTitle('ITEM - '.$wh);
  
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $objPHPExcel->setActiveSheetIndex(0);

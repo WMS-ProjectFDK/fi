@@ -89,18 +89,22 @@ $menu_id = $_GET['id'];
 	</div>
 	
 	<!-- START ADD -->
-	<div id='win_add' class="easyui-window" style="width:1105px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+	<div id='win_add' class="easyui-window" style="width:1105px;height:540px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		<form id="f_add" method="post" novalidate>
 		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>SETTINGS</legend>
 			<div class="fitem">
 				<span style="width:70px;display:inline-block;">SI NO.</span>
-				<input style="width:140px;" name="si_no_add" id="si_no_add" class="easyui-textbox" disabled="" />
-				<span style="width:45px;display:inline-block;"></span>
+				<input style="width:160px;" name="si_no_add" id="si_no_add" class="easyui-textbox" disabled="" />
+				<span style="width:25px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">SI NO. FROM CUST</span>
+				<input style="width:605px;height:30px;" name="si_no_from_cust_add" id="si_no_from_cust_add" class="easyui-textbox" multiline="true"/>
+			</div>
+			<div class="fitem">
 				<span style="width:140px;display:inline-block;">PERSON IN CHARGE</span>
-				<input style="width:140px;" name="person_add" id="person_add" class="easyui-textbox"/>
-				<span style="width:45px;display:inline-block;"></span>
-				<span style="width:145px;display:inline-block;">DESC. OF GOODS</span>
-				<input style="width:140px;" name="goods_name_add" id="goods_name_add" class="easyui-textbox"/>
+				<input style="width:236px;height:30px;" name="person_add" id="person_add" class="easyui-textbox" multiline="true"/>
+				<span style="width:21px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">DESC. OF GOODS</span>
+				<input style="width:462px;height:30px;" name="goods_name_add" id="goods_name_add" class="easyui-textbox" multiline="true"/>
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET CUST. PO NO.</span>
@@ -250,20 +254,23 @@ $menu_id = $_GET['id'];
 	</div>
 	<!-- END ADD -->
 
-
 	<!-- START EDIT -->
-	<div id='win_edit' class="easyui-window" style="width:1105px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+	<div id='win_edit' class="easyui-window" style="width:1105px;height:540px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		<form id="f_edit" method="post" novalidate>
 		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>SETTINGS</legend>
 			<div class="fitem">
 				<span style="width:70px;display:inline-block;">SI NO.</span>
-				<input style="width:140px;" name="si_no_edit" id="si_no_edit" class="easyui-textbox" disabled="" />
-				<span style="width:45px;display:inline-block;"></span>
+				<input style="width:160px;" name="si_no_edit" id="si_no_edit" class="easyui-textbox" disabled="" />
+				<span style="width:25px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">SI NO. FROM CUST</span>
+				<input style="width:605px;height:30px;" name="si_no_from_cust_edit" id="si_no_from_cust_edit" class="easyui-textbox" multiline="true"/>
+			</div>
+			<div class="fitem">
 				<span style="width:140px;display:inline-block;">PERSON IN CHARGE</span>
-				<input style="width:140px;" name="person_edit" id="person_edit" class="easyui-textbox"/>
-				<span style="width:45px;display:inline-block;"></span>
-				<span style="width:145px;display:inline-block;">DESC. OF GOODS</span>
-				<input style="width:140px;" name="goods_name_edit" id="goods_name_edit" class="easyui-textbox"/>
+				<input style="width:236px;height:30px;" name="person_edit" id="person_edit" class="easyui-textbox" multiline="true"/>
+				<span style="width:21px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">DESC. OF GOODS</span>
+				<input style="width:462px;height:30px;" name="goods_name_edit" id="goods_name_edit" class="easyui-textbox" multiline="true"/>
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET CUST. PO NO.</span>
@@ -551,6 +558,7 @@ $menu_id = $_GET['id'];
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
 				$('#win_edit').window('open').dialog('setTitle','EDIT SALES INSTRUCTION ('+row.SI_NO+')');
+				$('#si_no_from_cust_edit').textbox('setValue', row.CUST_SI_NO);
 				$('#person_edit').textbox('setValue', row.PERSON_NAME);
 				$('#goods_name_edit').textbox('setValue', row.GOODS_NAME);
 				$('#special_inform_edit').textbox('setValue', row.SPECIAL_INFO);
@@ -665,6 +673,7 @@ $menu_id = $_GET['id'];
 					SI_NO_OLD: '-',
 					SI_NO: $('#si_no_add').textbox('getValue'),
 					CONTRACT_NO: 'NULL',
+					SINO_FROM_CUST: $('#si_no_from_cust_add').textbox('getValue'),
 					PERSON_NAME: $('#person_add').textbox('getValue'),
 					GOODS_NAME: $('#goods_name_add').textbox('getValue'),
 					SHIPPER_NAME: r_shipper[0].SHIPPER_NAME,
@@ -710,6 +719,7 @@ $menu_id = $_GET['id'];
 					SI_NO_OLD: sino_lama,
 					SI_NO: $('#si_no_edit').textbox('getValue'),
 					CONTRACT_NO: 'NULL',
+					SINO_FROM_CUST: $('#si_no_from_cust_edit').textbox('getValue'),
 					PERSON_NAME: $('#person_edit').textbox('getValue'),
 					GOODS_NAME: $('#goods_name_edit').textbox('getValue'),
 					SHIPPER_NAME: r_shipper[0].SHIPPER_NAME,

@@ -8,6 +8,9 @@ $user_name = $_SESSION['id_wms'];
 $nama_user = $_SESSION['name_wms'];
 $date=date("d M y / H:i:s",time());
 
+//http://localhost:8088/fi/forms/warehouse/inventory_pdf.php?cmbBln=202008&cmbBln_txt=08-2020&src=&rdo_sts=check_WP
+
+
 $cmbBln = isset($_REQUEST['cmbBln']) ? strval($_REQUEST['cmbBln']) : '';
 $cmbBln_txt = isset($_REQUEST['cmbBln_txt']) ? strval($_REQUEST['cmbBln_txt']) : '';
 $rdo_sts = isset($_REQUEST['rdo_sts']) ? strval($_REQUEST['rdo_sts']) : '';

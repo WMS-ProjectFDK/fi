@@ -20,6 +20,7 @@ if (isset($_SESSION['id_wms'])){
         $SI_NO_OLD = $query->SI_NO_OLD;
         $SI_NO = $query->SI_NO;
         $CONTRACT_NO = $query->CONTRACT_NO;
+        $SINO_FROM_CUST = $query->SINO_FROM_CUST;
         $PERSON_NAME = $query->PERSON_NAME;
         $GOODS_NAME = $query->GOODS_NAME;
         $SHIPPER_NAME = $query->SHIPPER_NAME;
@@ -88,6 +89,7 @@ if (isset($_SESSION['id_wms'])){
             $field .= "IP_ADDRESS,"                 ;       $value .= "'$ip',";
             $field .= "SI_NO,"                      ;       $value .= "'$SI_NO',";
             $field .= "CONTRACT_NO,"                ;       $value .= "'$CONTRACT_NO',";
+            $field .= "SINO_FROM_CUST,"             ;       $value .= "'$SINO_FROM_CUST',";
             $field .= "PERSON_NAME,"                ;       $value .= "'$PERSON_NAME',";
             $field .= "GOODS_NAME,"                 ;       $value .= "'$GOODS_NAME',";
             $field .= "SHIPPER_NAME,"               ;       $value .= "'$SHIPPER_NAME',";
@@ -147,7 +149,7 @@ if (isset($_SESSION['id_wms'])){
             $field .= "EMKL_FAX,"                   ;       $value .= "'$EMKL_FAX',";
             $field .= "EMKL_ATTN,"                  ;       $value .= "'$EMKL_ATTN',";
             $field .= "SPECIAL_INFO"                ;       $value .= "'$SPECIAL_INFO'";
-            chop($field);              			        chop($value);
+            chop($field);              			            chop($value);
 
             $ins = "INSERT INTO si_header ($field) SELECT $value ";
             //echo $ins;
@@ -169,6 +171,7 @@ if (isset($_SESSION['id_wms'])){
             $field2 .= "IP_ADDRESS,"                 ;       $value2 .= "'$ip',";
             $field2 .= "SI_NO,"                      ;       $value2 .= "'$SI_NO',";
             $field2 .= "CONTRACT_NO,"                ;       $value2 .= "ISNULL(CONTRACT_NO,'$CONTRACT_NO'),";
+            $field2 .= "CUST_SI_NO,"             ;           $value2 .= "'$SINO_FROM_CUST',";
             $field2 .= "PERSON_NAME,"                ;       $value2 .= "ISNULL(PERSON_NAME,'$PERSON_NAME'),";
             $field2 .= "GOODS_NAME,"                 ;       $value2 .= "ISNULL(GOODS_NAME,'$GOODS_NAME'),";
             $field2 .= "SHIPPER_NAME,"               ;       $value2 .= "ISNULL(SHIPPER_NAME,'$SHIPPER_NAME'),";
