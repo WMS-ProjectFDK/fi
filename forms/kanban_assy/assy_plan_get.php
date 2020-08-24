@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	include("../connect/conn_kanbansys.php");
+	include("../../connect/conn.php");
 
 	$pl_bulan = isset($_REQUEST['pl_bulan']) ? strval($_REQUEST['pl_bulan']) : '';
 	$pl_tahun = isset($_REQUEST['pl_tahun']) ? strval($_REQUEST['pl_tahun']) : '';
@@ -58,20 +58,20 @@
 	$where = " where $date $line $type $rev $days qty!= 0 ";
 
 	if($pl_cdate != "true" OR $pl_cline != "true" OR $pl_cktyp != "true" OR $pl_crev != "true" OR $pl_cday != "true"){
-		$sql = "select * from ztb_assy_plan $where ";
+		$sql = "select CELL_TYPE, ASSY_LINE, TANGGAL, BULAN, TAHUN, QTY, REVISI, USED, ID_PLAN, UPLOAD_TIME
+			from ztb_assy_plan $where ";
 	}else{
-		$sql = "select * from 
-				(select * from ztb_assy_plan $where) 
-				where rownum <= 450";
+		$sql = "select top 450 CELL_TYPE, ASSY_LINE, TANGGAL, BULAN, TAHUN, QTY, REVISI, USED, ID_PLAN, UPLOAD_TIME
+			from ztb_assy_plan 
+			where qty!= 0";
 	}
-	
-	$data_sql = odbc_exec($connect, $sql);
+	$data_sql = sqlsrv_query($connect, $sql);
 
 	$bln = array('-','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DES');
 	$items = array();
 	$rowno = 0;
 
-	while($row = odbc_fetch_object($data_sql)){
+	while($row = sqlsrv_fetch_object($data_sql)){
 		array_push($items, $row);
 		$qty = $items[$rowno]->QTY;
 		$items[$rowno]->QTY = number_format($qty);

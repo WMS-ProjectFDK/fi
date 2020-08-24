@@ -89,7 +89,7 @@ if (isset($_SESSION['id_wms'])){
             $field .= "IP_ADDRESS,"                 ;       $value .= "'$ip',";
             $field .= "SI_NO,"                      ;       $value .= "'$SI_NO',";
             $field .= "CONTRACT_NO,"                ;       $value .= "'$CONTRACT_NO',";
-            $field .= "SINO_FROM_CUST,"             ;       $value .= "'$SINO_FROM_CUST',";
+            $field .= "CUST_SI_NO,"                 ;       $value .= "'$SINO_FROM_CUST',";
             $field .= "PERSON_NAME,"                ;       $value .= "'$PERSON_NAME',";
             $field .= "GOODS_NAME,"                 ;       $value .= "'$GOODS_NAME',";
             $field .= "SHIPPER_NAME,"               ;       $value .= "'$SHIPPER_NAME',";
@@ -99,7 +99,7 @@ if (isset($_SESSION['id_wms'])){
             $field .= "SHIPPER_TEL,"                ;       $value .= "'$SHIPPER_TEL',";
             $field .= "SHIPPER_FAX,"                ;       $value .= "'$SHIPPER_FAX',";
             $field .= "SHIPPER_ATTN,"               ;       $value .= "'$SHIPPER_ATTN',";
-            $field .= "CUST_SI_NO,"                 ;       $value .= "'$CUST_SI_NO',";
+            // $field .= "CUST_SI_NO,"                 ;       $value .= "'$CUST_SI_NO',";
             $field .= "LOAD_PORT_CODE,"             ;       $value .= "'$LOAD_PORT_CODE',";
             $field .= "LOAD_PORT,"                  ;       $value .= "'$LOAD_PORT',";
             $field .= "DISCH_PORT_CODE,"            ;       $value .= "'$DISCH_PORT_CODE',";
@@ -158,7 +158,7 @@ if (isset($_SESSION['id_wms'])){
             if($data_ins === false ) {
                 if(($errors = sqlsrv_errors() ) != null) {  
                     foreach( $errors as $error){  
-                        $msg .= "message: ".$error[ 'message']."<br/>";  
+                        $msg .= "message: ".$error['message']."<br/>";  
                     }  
                 }
             }
@@ -171,7 +171,6 @@ if (isset($_SESSION['id_wms'])){
             $field2 .= "IP_ADDRESS,"                 ;       $value2 .= "'$ip',";
             $field2 .= "SI_NO,"                      ;       $value2 .= "'$SI_NO',";
             $field2 .= "CONTRACT_NO,"                ;       $value2 .= "ISNULL(CONTRACT_NO,'$CONTRACT_NO'),";
-            $field2 .= "CUST_SI_NO,"             ;           $value2 .= "'$SINO_FROM_CUST',";
             $field2 .= "PERSON_NAME,"                ;       $value2 .= "ISNULL(PERSON_NAME,'$PERSON_NAME'),";
             $field2 .= "GOODS_NAME,"                 ;       $value2 .= "ISNULL(GOODS_NAME,'$GOODS_NAME'),";
             $field2 .= "SHIPPER_NAME,"               ;       $value2 .= "ISNULL(SHIPPER_NAME,'$SHIPPER_NAME'),";
@@ -181,7 +180,7 @@ if (isset($_SESSION['id_wms'])){
             $field2 .= "SHIPPER_TEL,"                ;       $value2 .= "ISNULL(SHIPPER_TEL,'$SHIPPER_TEL'),";
             $field2 .= "SHIPPER_FAX,"                ;       $value2 .= "ISNULL(SHIPPER_FAX,'$SHIPPER_FAX'),";
             $field2 .= "SHIPPER_ATTN,"               ;       $value2 .= "ISNULL(SHIPPER_ATTN,'$SHIPPER_ATTN'),";
-            $field2 .= "CUST_SI_NO,"                 ;       $value2 .= "ISNULL(CUST_SI_NO, '$CUST_SI_NO'),";
+            $field2 .= "CUST_SI_NO,"                 ;       $value2 .= "'$SINO_FROM_CUST',";
             $field2 .= "LOAD_PORT_CODE,"             ;       $value2 .= "ISNULL(LOAD_PORT_CODE,'$LOAD_PORT_CODE'),";
             $field2 .= "LOAD_PORT,"                  ;       $value2 .= "ISNULL(LOAD_PORT,  '$LOAD_PORT'),";
             $field2 .= "DISCH_PORT_CODE,"            ;       $value2 .= "ISNULL(DISCH_PORT_CODE,'$DISCH_PORT_CODE'),";
@@ -234,7 +233,7 @@ if (isset($_SESSION['id_wms'])){
             chop($field2);              			         chop($value2);
 
             $ins = "INSERT INTO si_header ($field2)
-                (SELECT $value2 from si_header where si_no='$SI_NO_OLD') ";
+                SELECT $value2 from si_header where si_no='$SI_NO_OLD'";
             // echo $ins;
             $data_ins = sqlsrv_query($connect, $ins);
             
@@ -252,7 +251,8 @@ if (isset($_SESSION['id_wms'])){
         $rowno = 1;
         // echo '<br/>';
         // echo count($exp_po);//[0];
-
+        // echo '<br/>';
+        // echo $exp_po[0];
 
         for ($i=0; $i < count($exp_po); $i++) { 
             if($exp_po[$i] != ''){

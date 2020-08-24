@@ -1,7 +1,7 @@
 <?php
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 ?>
 <!-- 
@@ -23,15 +23,15 @@ description : assembly plan dibuat untuk upload plan assembly dari excel
 		return is_confirmed;
 		}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
 <style>
 *{
 font-size:12px;
@@ -67,14 +67,14 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../ico_logout.php'); ?>
 
 	<div id="toolbar" style="padding:3px 3px;">
 		<fieldset style="float:left;width:850px;border-radius:4px;height: 80px;"><legend><span class="style3"><strong>Assembly Plan Filter</strong></span></legend>
 			<div style="width:350px; float:left;">
 				<div class="fitem">
 					<span style="width:70px;display:inline-block;">Period</span>
-					<input style="width:135px;" name="cmb_bln" id="cmb_bln" class="easyui-combobox" data-options="url:'json/json_month.json', method:'get', valueField:'id', textField:'month', panelHeight:'150px'"/>
+					<input style="width:135px;" name="cmb_bln" id="cmb_bln" class="easyui-combobox" data-options="url:'../json/json_month.json', method:'get', valueField:'id', textField:'month', panelHeight:'150px'"/>
 					<input style="width:80px;" name="txt_tahun" id="txt_tahun" class="easyui-textbox" value="<?php echo date('Y');?>"/>
 					<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
 				</div>
@@ -87,19 +87,19 @@ h2 {
 					<label><input type="checkbox" name="ck_day" id="ck_day" checked="true">All</input></label>
 					<span style="width:13px;display:inline-block;"></span>
 					<span style="display:inline-block;">Revisi</span>
-					<select style="width:60px;" name="cmb_rev" id="cmb_rev" class="easyui-combobox" style="width:142px;"  data-options="url:'json/json_revisi_plan_assy.php', method:'get', valueField:'revisi', textField:'revisi', panelHeight:120"/></select>
+					<select style="width:60px;" name="cmb_rev" id="cmb_rev" class="easyui-combobox" style="width:142px;"  data-options="url:'../json/json_revisi_plan_assy.php', method:'get', valueField:'revisi', textField:'revisi', panelHeight:120"/></select>
 					<label><input type="checkbox" name="ck_revisi" id="ck_revisi" checked="true">All</input></label>
 				</div>
 			</div>
 			<div style="width:400px; margin-left: 450px;">
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Cell Type</span>
-					<select style="width:120px;" name="cmb_cell_type" id="cmb_cell_type" class="easyui-combobox" data-options="url:'json/json_cell_type.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'" /></select>
+					<select style="width:120px;" name="cmb_cell_type" id="cmb_cell_type" class="easyui-combobox" data-options="url:'../json/json_cell_type.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'" /></select>
 					<label><input type="checkbox" name="ck_cell_type" id="ck_cell_type" checked="true">All</input></label>
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Assembly Line</span>
-					<select style="width:120px;" name="cmb_assy_line" id="cmb_assy_line" class="easyui-combobox" data-options="url:'json/json_assy_line.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'" /></select>
+					<select style="width:120px;" name="cmb_assy_line" id="cmb_assy_line" class="easyui-combobox" data-options="url:'../json/json_assy_line.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'" /></select>
 					<label><input type="checkbox" name="ck_assy_ln" id="ck_assy_ln" checked="true">All</input></label>
 				</div>
 			</div>
@@ -275,6 +275,7 @@ h2 {
 					  "&pl_day="+$('#cmb_day').combobox('getValue')+
 					  "&pl_cday="+ck_day
 					  //"&pl_cuse="+ck_use ;
+			console.log('assy_plan_get.php'+pdf_url);
 		}
 
 		function print_assy(){

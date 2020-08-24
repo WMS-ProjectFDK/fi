@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 if (isset($_SESSION['id_kanban'])) {
 
 	$assy_line = htmlspecialchars($_REQUEST['assy_line']);
@@ -24,8 +24,8 @@ if (isset($_SESSION['id_kanban'])) {
 					coalesce(right(replicate('0',5)+cast(cast(max(substring(ng_no,9,5))as integer)+1 as varchar(5)),5), '00001') as ng_no
 			from ztb_assy_trans_ng
 			where substring(ng_no,3,6) = FORMAT(GETDATE(), 'yyMMdd')";
-	$data_kd = odbc_exec($connect, $kode);
-	$dt_kode = odbc_fetch_object($data_kd);
+	$data_kd = sqlsrv_query($connect, $kode);
+	$dt_kode = sqlsrv_fetch_object($data_kd);
 	$code = $dt_kode->ng_no;
 
 	// insert ke ztb_assy_kanban
@@ -40,11 +40,11 @@ if (isset($_SESSION['id_kanban'])) {
 	$field .= "NG_NO," 				; 	$value .= "'$code',"							;
 	$field .= "ID_PRINT," 			; 	$value .= "$id,"								;
 	$field .= "ID_PLAN" 			; 	$value .= "'$plan'"								;
-	chop($field);              		chop($value) ;
+	chop($field);              			chop($value) ;
   
 	$ins1  = "insert into ztb_assy_trans_ng ($field) VALUES ($value)" ;
 	echo $ins1;
-	$data_ins1 = odbc_exec($connect, $ins1);
+	$data_ins1 = sqlsrv_query($connect, $ins1);
 	
 	if ($data_ins1){
 		echo json_encode(array('successMsg'=>'success'));

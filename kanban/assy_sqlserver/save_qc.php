@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 if (isset($_SESSION['id_kanban'])) {
 	$assy_line = htmlspecialchars($_REQUEST['assy_line']);
 	$cell_type = htmlspecialchars($_REQUEST['cell_type']);
@@ -35,12 +35,12 @@ if (isset($_SESSION['id_kanban'])) {
 	$field .= "NG_ID,"					; 	$value .= "0,"								;
 	$field .= "NG_QTY,"					; 	$value .= "0,"								;
 	$field .= "TANGGAL_ACTUAL"  		; 	$value .= "CONVERT(DATE, '$tgl_prod')" 		;
-	chop($field);              			chop($value) ;
+	chop($field);              				chop($value) ;
 
 	$ins  = "insert into ztb_assy_kanban ($field) select $value from dual 
 		WHERE not exists (select * from ztb_assy_kanban where id_plan='QC' AND pallet = $pallet AND END_DATE is null AND assy_line='$assy_line')" ;
-	echo $ins;
-	$data_ins = oDBc_exec($connect, $ins);
+	// echo $ins;
+	$data_ins = sqlsrv_query($connect, $ins);
 	
 	if ($data_ins){
 		echo json_encode(array('successMsg'=>'success'));

@@ -1,23 +1,23 @@
 <?php 
 session_start();
+include("../../connect/conn.php");
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $menu_id = $_GET['id'];
+if ($varConn=='Y'){
 ?>
 <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <title>SHIPPING INSTRUCTION</title>
-
     <link rel="icon" type="image/png" href="../../favicon.png">
-
 	<script language="javascript">
-			function confirmLogOut(){
+		function confirmLogOut(){
 			var is_confirmed;
 			is_confirmed = window.confirm("End current session?");
 			return is_confirmed;
-			}
+		}
 	</script> 
 	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
@@ -66,7 +66,7 @@ $menu_id = $_GET['id'];
     <body>
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
 	
-	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
+	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;" data-options="fitColumns:true"></table>
 	<div id="toolbar" style="padding:3px 3px;">
 		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:70px; float:left;"><legend>SHIPPING INSTRUCTION FILTER</legend>
 			<div style="float:left;">
@@ -78,7 +78,7 @@ $menu_id = $_GET['id'];
 					<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
                 </div>
                 <div class="fitem">
-					<input style="width:310px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus/>	
+					<input style="width:310px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus="autofocus"/>
 					<a href="javascript:void(0)" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER</a>
 					<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addSI()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SI</a>
 					<a href="javascript:void(0)" style="width: 200px;" id="edit" class="easyui-linkbutton c2" onclick="copySI()"><i class="fa fa-pencil" aria-hidden="true"></i> COPY DATA FOR NEW SI</a>
@@ -661,7 +661,7 @@ $menu_id = $_GET['id'];
 
 				// alert(row.CUST_SI_NO);
 				// r_cust = row.CUST_SI_NO;
-				r_cust = {"cust_po_no" : row.CUST_SI_NO};
+				r_cust = {"cust_po_no" : row.CUST_PO_NO};
 			}
 		}
 
@@ -1212,10 +1212,20 @@ $menu_id = $_GET['id'];
 				var src = document.getElementById('src').value;
 				// alert(src);
 				$('#dg').datagrid('load', {
-					src: document.getElementById('src').value
+					src: search
 				});
 				
-				filterData();
+				$('#dg').datagrid('enableFilter');
+
+				if (src=='') {
+					filterData();
+				};
+				
+				$('#dg').datagrid({
+					url:'si_get.php'
+				});
+
+				$('#dg').datagrid('enableFilter');
 		    }
 		}
 
@@ -1273,19 +1283,22 @@ $menu_id = $_GET['id'];
             $('#dg').datagrid({
 				url:'si_get.php',
 		    	singleSelect: true,
-			    fitColumns: true,
 				rownumbers: true,
+				sortName: 'po_date',
+				sortOrder: 'asc',
 			    columns:[[
-				    {field:'SI_NO',title:'SI NO.',width:75, halign: 'center'},
-					{field:'CUST_SI_NO',title:'SI NO.<br/>FROM CUST',width:100, halign: 'center'},
-					{field:'CUST_PO_NO',title:'PO NO.<br/>CUSTOMER',width:100, halign: 'center'},
-					{field:'PERSON_NAME',title:'PERSON IN CHARGE',width:100, halign: 'center'},
-					{field:'GOODS_NAME',title:'DESCRIPTION',width:200, halign: 'center'},
+				    {field:'SI_NO',title:'SI NO.',width:150, halign: 'center'},
+					{field:'CUST_SI_NO',title:'SI NO.<br/>FROM CUST',width:150, halign: 'center'},
+					{field:'CUST_PO_NO',title:'PO NO.<br/>CUSTOMER',width:200, halign: 'center'},
+					{field:'PERSON_NAME',title:'PERSON IN CHARGE',width:150, halign: 'center'},
+					{field:'GOODS_NAME',title:'DESCRIPTION',width:250, halign: 'center'},
 					{field:'FORWARDER_NAME',title:'FORWARDER',width:150, halign: 'center'},
 					{field:'CONSIGNEE_NAME',title:'CONSIGNEE',width:150, halign: 'center'},
-					{field:'CR_DATE',title:'CR DATE',width:75, halign: 'center'}
+					{field:'CR_DATE',title:'CR DATE',width:100, halign: 'center'}
 			    ]]
             });
+
+			$('#dg').datagrid('enableFilter');
         });
 
         function filterData(){
@@ -1304,7 +1317,8 @@ $menu_id = $_GET['id'];
 			$('#dg').datagrid('load', {
 				date_awal: $('#date_awal').datebox('getValue'),
 				date_akhir: $('#date_akhir').datebox('getValue'),
-				ck_date: ck_date
+				ck_date: ck_date,
+				src: ''
 			});
 
 			console.log('si_get.php?date_awal='+$('#date_awal').datebox('getValue')+'&date_akhir='+$('#date_akhir').datebox('getValue')+'&ck_date='+ck_date+'&src='+document.getElementById('src').value);
@@ -1313,7 +1327,7 @@ $menu_id = $_GET['id'];
 				url:'si_get.php'
 			});
 
-		   	$('#dg').datagrid('enableFilter');
+			$('#dg').datagrid('enableFilter');
         }
 
 		function addSI(){
@@ -1323,4 +1337,7 @@ $menu_id = $_GET['id'];
 		}
     </Script>
 	</body>
-    </html>
+	</html>
+<?php }else{
+	echo "<script type='text/javascript'>location.href='../404.html';</script>";
+}

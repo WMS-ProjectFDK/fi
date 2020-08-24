@@ -1,10 +1,10 @@
 <?php
 ini_set('memory_limit', '-1');
-require_once '../class/phpexcel/PHPExcel.php';
+require_once '../../class/phpexcel/PHPExcel.php';
 $cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 
 $pl_bulan = isset($_REQUEST['pl_bulan']) ? strval($_REQUEST['pl_bulan']) : '';
 $pl_tahun = isset($_REQUEST['pl_tahun']) ? strval($_REQUEST['pl_tahun']) : '';
@@ -61,9 +61,10 @@ if($pl_cday != "true"){
 
 $where = " where $date $line $type $rev $days qty!= 0 ";
 
-$qry = "select * from ztb_assy_plan $where
+$qry = "select CELL_TYPE, ASSY_LINE, TANGGAL, BULAN, TAHUN, QTY, REVISI, USED, ID_PLAN, UPLOAD_TIME 
+    from ztb_assy_plan $where
     order by tanggal, bulan, tahun, assy_line";
-$result = odbc_exec($connect, $qry);
+$result = sqlsrv_query($connect, $qry);
 
 function cellColor($cells,$color){
     global $objPHPExcel;
@@ -117,7 +118,7 @@ $noUrut = 1;
 $no=2;
 $p = '';
 $rev = 0;
-while ($data=odbc_fetch_object($result)) {
+while ($data=sqlsrv_fetch_object($result)) {
     $tgl = $data->TAHUN.'-'.$data->BULAN.'-'.$data->TANGGAL;
     $rev = $data->REVISI;
     $bln = $data->BULAN;

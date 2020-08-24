@@ -1,7 +1,7 @@
 <?php
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 session_start();
-require_once('___loginvalidation.php');
+require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 ?>
 
@@ -33,15 +33,15 @@ Deskripsi : tanggal produksi hanya 1(bukan date to date)
 		return is_confirmed;
 		}
 </script> 
-<link rel="stylesheet" type="text/css" href="../plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
-<link rel="stylesheet" type="text/css" href="../themes/color.css" />
-<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/datagrid-filter.js"></script>
-<script type="text/javascript" src="../js/datagrid-detailview.js"></script>
-<script type="text/javascript" src="../js/jquery.edatagrid.js"></script>
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script>
 <style>
 *{
 font-size:12px;
@@ -77,7 +77,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../ico_logout.php'); ?>
 
 	<div id="toolbar" style="padding: 3px  3px;">
 		<fieldset style="width:97%;border-radius:4px;height: 230px;">
@@ -89,7 +89,7 @@ h2 {
 				</div>
 				<div class="fitem">
 					<span style="width:130px;display:inline-block;">Assembling Line</span>
-					<input style="width:100px;" name="cmb_Line" id="cmb_Line" class="easyui-combobox" data-options="url:'json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" />
+					<input style="width:100px;" name="cmb_Line" id="cmb_Line" class="easyui-combobox" data-options="url:'../json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" />
 				</div>
 				<div class="fitem" style="width: 650px;">
 					<a href="javascript:void(0)" id="PrintBtn" class="easyui-linkbutton c2" onClick="PrintData()" style="width:200px;">Print Kanban</a>
@@ -100,7 +100,7 @@ h2 {
 			<div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Cell Type</span>
-					<select style="width:120px;" name="cmb_cell_type" id="cmb_cell_type" class="easyui-combobox" data-options="url:'json/json_cell_type.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'"></select>
+					<select style="width:120px;" name="cmb_cell_type" id="cmb_cell_type" class="easyui-combobox" data-options="url:'../json/json_cell_type.php', method:'get', valueField:'NAME', textField:'NAME', panelHeight:'auto'"></select>
 				</div>
 			</div>
 		</fieldset>
@@ -132,11 +132,13 @@ h2 {
 
 		function PrintData(){
 			var ln = $('#cmb_Line').combobox('getValue');
+			console.log(ln);
 			if (ln!=''){
 				url ="?date_prod="+$('#date_prod').datebox('getValue')+
 					 "&cell_type="+$('#cmb_cell_type').combobox('getValue')+
 					 "&Line="+$('#cmb_Line').combobox('getValue')+
 					 "&sts=KANBAN";
+				console.log('assy_print2.php'+url);
 				$.ajax({
 					type: 'GET',
 					url: 'assy_print2.php'+url,

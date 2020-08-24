@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 
 $date_prod = isset($_REQUEST['date_prod']) ? strval($_REQUEST['date_prod']) : '';
 $cell_type = isset($_REQUEST['cell_type']) ? strval($_REQUEST['cell_type']) : '';
@@ -26,15 +26,15 @@ if ($Line != ''){
 
 $where = "where $cell $dt_prod $assy_ln a.asyline is not null ";
 
-$sql_h = "select TOP 150 ASYLINE, CELL_TYPE, DATE_PROD, PALLET, QTY, ID, PRINTED, ID_PLAN, BOX, UPTO_DATE
+$sql_h = "select TOP 150 ASYLINE, CELL_TYPE, CAST(DATE_PROD as varchar(10)) as DATE_PROD, PALLET, QTY, ID, PRINTED, ID_PLAN, BOX, UPTO_DATE
 	from ztb_assy_print a 
 	$where
 	order by a.date_prod desc";
-$dt = odbc_exec($connect, $sql_h);
+$dt = sqlsrv_query($connect, $sql_h);
 $items = array();
 $rowno=0;
 
-while ($data = odbc_fetch_object($dt)){
+while ($data = sqlsrv_fetch_object($dt)){
 	array_push($items, $data);
 	$rowno++;
 }

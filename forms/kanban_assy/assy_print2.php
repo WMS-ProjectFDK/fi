@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 header("Content-type: application/json");
 
 $date_prod = isset($_REQUEST['date_prod']) ? strval($_REQUEST['date_prod']) : '';
@@ -8,7 +8,7 @@ $Line = isset($_REQUEST['Line']) ? strval($_REQUEST['Line']) : '';
 $cell_type = isset($_REQUEST['cell_type']) ? strval($_REQUEST['cell_type']) : '';
 $sts = isset($_REQUEST['sts']) ? strval($_REQUEST['sts']) : '';
 
-$date = split('-',$date_prod);
+$date = explode('-',$date_prod);
 
 $Hari = intval($date[2]);
 $Bulan = intval($date[1]);
@@ -30,12 +30,12 @@ if ($sts == 'KANBAN'){
 		order by assy_line asc";
 }
 
-$result = odbc_exec($connect, $sql_h);
+$result = sqlsrv_query($connect, $sql_h);
 
 $arrData = array();		$arrID = array();
 $noid = '';
 $arrNo = 0;		$rowno=0;
-while ($data=odbc_fetch_object($result)){
+while ($data=sqlsrv_fetch_object($result)){
 	if ($sts == 'KANBAN'){
 		$tgl = $data->TANGGAL."/".$data->BULAN."/".$data->TAHUN;
 		$jmlperPallet = intval($data->jumlahPallet);
@@ -59,11 +59,11 @@ while ($data=odbc_fetch_object($result)){
 
 			$ins = "insert into ztb_assy_print(asyline, cell_type, date_prod, pallet, qty, id_plan,box, upto_date)
 				VALUES ('".$data->ASSY_LINE."', '".$data->CELL_TYPE."', CONVERT(DATE, '".$date_prod."'), ".$i.", ".$qty_save.", '".$data->ID_PLAN."', ".$box.", '".date('Y-m-d H:i:s')."')";
-			$data_in = odbc_exec($connect, $ins);
+			$data_in = sqlsrv_query($connect, $ins);
 			
 			$qry = "select max(id) as id_print from ztb_assy_print where id_plan='".$data->ID_PLAN."' and pallet= ".$i." ";
-			$data_cek = odbc_exec($connect, $qry);
-			$dt = odbc_fetch_object($data_cek);
+			$data_cek = sqlsrv_query($connect, $qry);
+			$dt = sqlsrv_fetch_object($data_cek);
 
 			array_push($arrID, $dt->id_print);
 			
@@ -74,13 +74,13 @@ while ($data=odbc_fetch_object($result)){
 		for ($j=1; $j<=9; $j++) {
 			$ins = "insert into ztb_assy_print(asyline, cell_type, date_prod, pallet, qty, id_plan,box, upto_date)
 				VALUES ('".$data->ASSY_LINE."', '0', CONVERT(DATE, '".$date_prod."'), ".$j.", ".$data->QTY_TOTAL.", 'LEBIH', ".$data->QTY_BOX_PALLET.", '".date('Y-m-d H:i:s')."')";
-			$data_in = odbc_exec($connect, $ins);
+			$data_in = sqlsrv_query($connect, $ins);
 		}
 
 		$qry = "select top 9 id as id_print from ztb_assy_print where id_plan='LEBIH' AND cell_type = '0' order by id desc";
-		$data_cek = odbc_exec($connect, $qry);
+		$data_cek = sqlsrv_query($connect, $qry);
 		
-		while ($dt = odbc_fetch_object($data_cek)){
+		while ($dt = sqlsrv_fetch_object($data_cek)){
 			array_push($arrID, $dt->id_print);
 		}
 

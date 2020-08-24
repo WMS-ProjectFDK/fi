@@ -2,8 +2,8 @@
 error_reporting(0);
 date_default_timezone_set("Asia/Bangkok");
 session_start();
-include "../class/excel_reader.php";
-include("../connect/conn_kanbansys.php");
+include "../../class/excel_reader.php";
+include("../../connect/conn.php");
 
 // Create By : Reza Vebrian
 // Date : 26-April-2017
@@ -22,12 +22,12 @@ $failed = 0;
 
 // Reza start ID 1
 	$IU  = "update ztb_assy_plan set USED = 0 where bulan = '$bln_H' AND tahun = '$thn_H' ";
-	$data_IU = odbc_exec($connect, $IU);
+	$data_IU = sqlsrv_query($connect, $IU);
 //Reza End ID 1
 
 $cek = "select coalesce(cast(cast(max(revisi) as integer)+1 as char(2)),0) as max from ztb_assy_plan where tahun='$thn_H' and bulan='$bln_H' ";
-$data_cek = odbc_exec($connect, $cek);
-$row = odbc_fetch_object($data_cek);
+$data_cek = sqlsrv_query($connect, $cek);
+$row = sqlsrv_fetch_object($data_cek);
 
 $rev = intval($row->max);
 $now=date('Y-m-d H:i:s');
@@ -58,8 +58,8 @@ for($i=3;$i<=$hasildata;$i++){
 				coalesce(right(replicate('0',4)+CAST(CAST(SUBSTRING(max(id_plan),11,4) as int)+1 as varchar(4)),4),'0001') as id_plan
 				from ZTB_ASSY_PLAN
 				where convert(char(4), getdate(), 12) = SUBSTRING(id_plan,6,4)";
-			$data_kd = odbc_exec($connect, $kode);
-			$dt_kode = odbc_fetch_object($data_kd);
+			$data_kd = sqlsrv_query($connect, $kode);
+			$dt_kode = sqlsrv_fetch_object($data_kd);
 			$code = $dt_kode->ID_PLAN;
 
 			#-------------------------------------------
@@ -78,7 +78,7 @@ for($i=3;$i<=$hasildata;$i++){
 			chop($field);				chop($value);
 
 			$ins  = "insert into ztb_assy_plan ($field) VALUES ($value)" ;
-			$data_ins = odbc_exec($connect, $ins);
+			$data_ins = sqlsrv_query($connect, $ins);
 
 			if($data_ins){
 				$success++;	

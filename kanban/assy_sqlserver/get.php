@@ -2,17 +2,17 @@
 	session_start();
 	$id_kanban = $_SESSION['id_kanban'];
 
-	include("../../connect/conn_kanbansys.php");
+	include("../../connect/conn.php");
 
-	$sql = "select top 3 a.ID, a.ID_PLAN, a.ID_PRINT, a.ASSY_LINE, a.CELL_TYPE, a.PALLET, a.TANGGAL_PRODUKSI, a.QTY_ACT_PERPALLET, a.QTY_ACT_PERBOX, a.START_DATE, coalesce(a.END_DATE, 'BELUM<br/>SELESAI') as END_DATE from ztb_assy_kanban a
+	$sql = "select top 3 a.ID, a.ID_PLAN, a.ID_PRINT, a.ASSY_LINE, a.CELL_TYPE, a.PALLET, CAST(a.TANGGAL_PRODUKSI as varchar(10)) as TANGGAL_PRODUKSI, a.QTY_ACT_PERPALLET, a.QTY_ACT_PERBOX, a.START_DATE, coalesce(a.END_DATE, 'BELUM<br/>SELESAI') as END_DATE from ztb_assy_kanban a
 		where a.worker_id1='$id_kanban'
 		order by id desc";
 		//and id=(select max(id) from ztb_assy_kanban where worker_id1='$id_kanban')";
-	$data = odbc_exec($connect, $sql);
+	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();
 	$rowno=0;
-	while($row = odbc_fetch_object($data)){
+	while($row = sqlsrv_fetch_object($data)){
 		array_push($items, $row);
 		$qty_act_p = $items[$rowno]->QTY_ACT_PERPALLET;
 		$items[$rowno]->QTY_ACT_PERPALLET = number_format($qty_act_p);

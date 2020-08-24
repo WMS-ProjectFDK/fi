@@ -1,5 +1,5 @@
 <?php
-	include("../../connect/conn_kanbansys.php");
+	include("../../connect/conn.php");
 	header("Content-type: application/json");
 	$arrData = array();
 	$arrNo = 0;
@@ -9,15 +9,15 @@
 	$cek = "select count(*) as j from ZTB_ASSY_KANBAN w
 		where id_print = $id_print AND 
 		id=(select max(id) from ztb_assy_kanban where id_print = $id_print)";
-	$data_cek = odbc_exec($connect, $cek);
-	$jum = odbc_fetch_object($data_cek);
+	$data_cek = sqlsrv_query($connect, $cek);
+	$jum = sqlsrv_fetch_object($data_cek);
 
 	if($jum->j == 1){
 		$jumlah = "select sum(qty_act_perbox) as selisih_box, sum(qty_act_perpallet) as selisih_pcs
 			from ztb_assy_kanban 
 			where id_print = $id_print";
-		$data_jumlah = odbc_exec($connect, $jumlah);
-		$hasil_jum = odbc_fetch_object($data_jumlah);
+		$data_jumlah = sqlsrv_query($connect, $jumlah);
+		$hasil_jum = sqlsrv_fetch_object($data_jumlah);
 		$box = $hasil_jum->selisih_box;
 		$plt = $hasil_jum->selisih_pcs;
 
@@ -25,8 +25,8 @@
 			TANGGAL_PRODUKSI, QTY_PERPALLET, QTY_ACT_PERPALLET, QTY_PERBOX, QTY_ACT_PERBOX, ID_PRINT
 			from ztb_assy_kanban 
 			where id_print = $id_print AND id=(select max(id) from ztb_assy_kanban where id_print = $id_print)";
-		$data = odbc_exec($connect, $sql);
-		while ($row = odbc_fetch_object($data)){
+		$data = sqlsrv_query($connect, $sql);
+		while ($row = sqlsrv_fetch_object($data)){
 			array_push($arrData, $row);
 
 			if($box != $arrData[$arrNo]->QTY_PERBOX AND $plt != $arrData[$arrNo]->QTY_PERPALLET AND ! is_null($arrData[$arrNo]->END_DATE)) {

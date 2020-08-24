@@ -1,7 +1,7 @@
 <?php 
 session_start();
 date_default_timezone_set('Asia/Jakarta');
-include "../connect/conn_kanbansys.php"; 
+include "../connect/conn.php"; 
 include "../detect.php";
 $usr = 0;
 ?>
@@ -101,8 +101,8 @@ $usr = 0;
                         }else{
                             if($usr != 0){
                                 $sql = "select * from ztb_worker where worker_id=$usr ";
-                                $result = odbc_exec($connect, $sql);
-                                $row = odbc_fetch_object($result);
+                                $result = sqlsrv_query($connect, $sql);
+                                $row = sqlsrv_fetch_object($result);
 
                                 if(trim($usr) == trim($row->WORKER_ID) AND ($row->NAME != '' OR ! is_null($row->NAME))) {
                                     $_SESSION['id_kanban'] = $row->WORKER_ID;
@@ -120,7 +120,7 @@ $usr = 0;
                                                                                     '".$server."',
                                                                                     '".$pcName."',
                                                                                     '".$mac_user."')";
-                                        $insert = odbc_exec($connect, $ins);
+                                        $insert = sqlsrv_query($connect, $ins);
                                     }
 
                                     echo "<script type='text/javascript'>location.href='assy_sqlserver/index.php';</script>";

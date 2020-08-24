@@ -1,7 +1,8 @@
 <?php
-    // error_reporting(0);
+    error_reporting(0);
 	session_start();
-    header("Content-type: application/json");
+	// header("Content-type: application/json");
+	include("../../connect/conn.php");
 	$items = array();
 	$result = array();
 	$rowno=0;
@@ -18,13 +19,14 @@
 	}
 
 	if ($src != '') {
-		$where =" where $c_date 
-			(b.CUST_PO_NO like '$src%' OR a.CONSIGNEE_NAME like '$src%' OR a.SI_NO like '$src%') AND a.SI_NO is not null ";
+		$where =" where (b.CUST_PO_NO like '%$src%' OR 
+					 a.CONSIGNEE_NAME like '%$src%' OR 
+					 a.SI_NO like '%$src%'
+					) AND a.SI_NO is not null ";
 	}else{
 		$where =" where $c_date a.SI_NO is not null ";
 	}
 	
-	include("../../connect/conn.php");
     $sql  = "select top 150 CAST(a.CREATE_DATE as varchar(10)) as CREATE_DATE, a.ENTRY_PERSON_CODE, a.IP_ADDRESS, a.SI_NO, a.CONTRACT_NO, a.CUST_SI_NO, b.CUST_PO_NO, 
 		a.PERSON_NAME, a.GOODS_NAME, a.SHIPPER_NAME, a.LOAD_PORT_CODE, a.LOAD_PORT, a.DISCH_PORT_CODE, a.DISCH_PORT, 
 		a.FINAL_DEST_CODE, a.FINAL_DEST, a.PLACE_DELI_CODE, a.PLACE_DELI, a.SHIPPING_TYPE, a.PAYMENT_TYPE, a.PAYMENT_REMARK, 
@@ -51,5 +53,6 @@
 		array_push($items, $row);
 		$rowno++;
 	}
-	echo json_encode($items);
+	$result["rows"] = $items;
+	echo json_encode($result);
 ?>
