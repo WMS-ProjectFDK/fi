@@ -54,36 +54,37 @@ if ($row_count > 0){
                 <table>";
     $row_a=0;	$col_a=0;       $rowNo=1;
     while($dt_m=sqlsrv_fetch_object($dt_marks)){
-        $dt_m->MARKS;
-        if ($row_a==0) {
-            if($col_a==0){
-                $marks .= "
-                    <tr>
-                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
-                        <td style='border:0px solid #fffffff;width:30px;'></td>";
-                $col_a++;
-            }elseif($col_a==1){
-                $marks .= "
-                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
-                        <td style='border:0px solid #fffffff;width:30px;'></td>";
-                $col_a++;
-            }elseif($col_a==2){
-                $marks .= "
-                        <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
-                        <td style='border:0px solid #fffffff;width:30px;'></td>
-                    </tr>
-                    <tr><td colspan=6 style='border:0px solid #fffffff;height:20px;'></td></tr>
-                    ";
-                $col_a=0;
+        if($dt_m->MARKS != ''){ 
+            if ($row_a==0) {
+                if($col_a==0){
+                    $marks .= "
+                        <tr>
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:30px;'></td>";
+                    $col_a++;
+                }elseif($col_a==1){
+                    $marks .= "
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:30px;'></td>";
+                    $col_a++;
+                }elseif($col_a==2){
+                    $marks .= "
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:30px;'></td>
+                        </tr>
+                        <tr><td colspan=6 style='border:0px solid #fffffff;height:20px;'></td></tr>
+                        ";
+                    $col_a=0;
+                }
             }
-        }
 
-        if($rowNo == $row_count AND $rowNo == 1){
-            if($col_a < 2){
-                $marks .= "</tr>";
+            if($rowNo == $row_count AND $rowNo == 1){
+                if($col_a < 2){
+                    $marks .= "</tr>";
+                }
             }
+            $rowNo++;
         }
-        $rowNo++;
     }
     $marks .= "
                 </table>

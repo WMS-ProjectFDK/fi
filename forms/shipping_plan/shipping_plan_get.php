@@ -52,7 +52,7 @@
 	// $date $prf $item_no $supp $ppbe
 	$where =" where $date  $prf $item_no $supp $ppbe
 		status = 'FM' 
-		and case when ds.customer_po_no is not null then substring(po_line_no, 0, len(po_line_no)-1) else po_line_no end = line_no";
+		and case when ds.customer_po_no is not null then substring(po_line_no, 1, len(po_line_no)-1) else po_line_no end = line_no";
 	
 	include("../../connect/conn.php");
 	$s=0;
@@ -79,9 +79,12 @@
 							group by s.so_no, s.customer_po_no
 							having count(line_no) < 10
 			)ds on mh.po_no = ds.customer_po_no
-			left outer join (select wo_no, case when j=0 then '-' else j+'x'+containers end as containers from (
-							select wo_no, count(distinct container_no) as j, containers as containers
-							from ztb_shipping_detail group by wo_no, containers) a) shipp_d on mh.work_order = shipp_d.wo_no
+			left outer join (select wo_no, CAST(
+											case when j=0 then '-' else CAST(j as char(2))+' x '+containers end 
+										   as varchar(20)) as containers 
+							 from (select wo_no, count(distinct container_no) as j, containers as containers 
+							 from ztb_shipping_detail group by wo_no, containers) a
+			) shipp_d on mh.work_order = shipp_d.wo_no
 			$where
 			order by so.line_no,cr_date";
 	}else{
@@ -108,9 +111,11 @@
 							group by s.so_no, s.customer_po_no
 							having count(line_no) < 10
 			)ds on mh.po_no = ds.customer_po_no
-			left outer join (select wo_no, case when j=0 then '-' else j+'x'+containers end as containers from (
-							select wo_no, count(distinct container_no) as j, containers as containers
-							from ztb_shipping_detail group by wo_no, containers) a) shipp_d on mh.work_order = shipp_d.wo_no
+			left outer join (select wo_no, CAST(
+											case when j=0 then '-' else CAST(j as char(2))+' x '+containers end as varchar(20)) as containers 
+							 from (select wo_no, count(distinct container_no) as j, containers as containers 
+								   from ztb_shipping_detail group by wo_no, containers) a
+			) shipp_d on mh.work_order = shipp_d.wo_no
 			$where
 			order by so.line_no,cr_date";
 	}

@@ -21,14 +21,6 @@ if (isset($_SESSION['id_wms'])){
 				}  
 			}
 		}
-        /* Execute */		
-        // $pesan = oci_error($stmt);
-		// $msg = $pesan['message'];
-		// 	if($msg == ''){
-		// 		$msg = 'Save Success !';
-		// 	}else{
-		// 		$msg = " Save Failed ";
-		// 	}		
 	};
 
 	print_r($msg, true);

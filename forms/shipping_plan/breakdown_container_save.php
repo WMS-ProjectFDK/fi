@@ -1,5 +1,7 @@
 <?php
+// error_reporting(0);
 session_start();
+$msg = '';
 if (isset($_SESSION['id_wms'])){
 	include("../../connect/conn.php");
 	$bdc_item = htmlspecialchars($_REQUEST['bdc_item']);
@@ -8,24 +10,23 @@ if (isset($_SESSION['id_wms'])){
 	$bdc_enr = htmlspecialchars($_REQUEST['bdc_enr']);
 	$bdc_ppbe = htmlspecialchars($_REQUEST['bdc_ppbe']);
 	$bdc_wono = htmlspecialchars($_REQUEST['bdc_wono']);
-	$bdc_i = htmlspecialchars($_REQUEST['bdc_i']);
+	// $bdc_i = htmlspecialchars($_REQUEST['bdc_i']);
 	$bdc_container = htmlspecialchars($_REQUEST['bdc_container']);
 	$bdc_row = htmlspecialchars($_REQUEST['bdc_row']);
 	$bdc_answer_no = htmlspecialchars($_REQUEST['bdc_answer_no']);
 	
 	if ($bdc_container != 'TOTAL'){
-
 		$sql = "{call ZSP_SHIP_DETAIL_1(?,?,?,?,?,?,?,?,?)}";		
 		$params = array(  
-			array(  $bdc_item  , SQLSRV_PARAM_IN),
-			array(  $bdc_qty  , SQLSRV_PARAM_IN),
-			array(  $bdc_ppbe  , SQLSRV_PARAM_IN),
-			array(  $bdc_wono  , SQLSRV_PARAM_IN),
-			array(  $bdc_row  , SQLSRV_PARAM_IN),
-			array(  $bdc_answer_no  , SQLSRV_PARAM_IN),
-			array(  $bdc_tw  , SQLSRV_PARAM_IN),
-			array(  $bdc_enr  , SQLSRV_PARAM_IN),
-			array(  $bdc_container  , SQLSRV_PARAM_IN),
+			array($bdc_item  , SQLSRV_PARAM_IN),
+			array($bdc_qty  , SQLSRV_PARAM_IN),
+			array($bdc_ppbe  , SQLSRV_PARAM_IN),
+			array($bdc_wono  , SQLSRV_PARAM_IN),
+			array($bdc_row  , SQLSRV_PARAM_IN),
+			array($bdc_answer_no  , SQLSRV_PARAM_IN),
+			array($bdc_tw  , SQLSRV_PARAM_IN),
+			array($bdc_enr  , SQLSRV_PARAM_IN),
+			array($bdc_container  , SQLSRV_PARAM_IN),
 		);
 		
 		$stmt = sqlsrv_query($connect, $sql,$params);
@@ -38,8 +39,12 @@ if (isset($_SESSION['id_wms'])){
 		}
 	};
 
-	print_r($msg, true);
-	echo json_encode(array('successMsg'=>$msg));
+	// echo $stmt;
+	if($msg != ''){
+		echo json_encode(array('ErrorMsg'=>$msg));
+	}else{
+		echo json_encode(array('successMsg'=>'success'));
+	}
 }else{
 	echo json_encode(array('errorMsg'=>'Session Expired'));
 }

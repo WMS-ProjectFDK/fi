@@ -85,8 +85,18 @@ for ($i=1; $i <= 8; $i++) {
               where do_no = '".$do."'
               and customer_po_no".$i." is not null ";
 }
-$result_po = sqlsrv_query($connect, strtoupper($SQL));
-$dt_po = sqlsrv_fetch_object($result_po);
+// echo $SQL;
+$result_po = sqlsrv_query($connect, strtoupper($SQL), $params, $options);
+$row_count_po = sqlsrv_num_rows($result_po);
+
+$po = '';
+if ($row_count_po > 0){
+    while ($dt_po = sqlsrv_fetch_object($result_po)) {
+        $po .= $dt_po->CUSTOMER_PO_NO."<br/>";
+    }
+}else{
+    $po .= $dt_po->CUSTOMER_PO_NO;
+}
 
 // WEIGHT
 $sql_weight = "select 
@@ -112,10 +122,19 @@ $dt_carton = sqlsrv_fetch_object($result_carton);
 $sql_wo = "select work_no, remark from answer 
     where answer_no in (select answer_no 
                         from indication 
-                        where inv_no = '413/FILR/20') 
+                        where inv_no = '$do') 
     order by item_no, work_no";
-$result_wo = sqlsrv_query($connect, strtoupper($sql_wo));
-$dt_wo = sqlsrv_fetch_object($result_wo);
+$result_wo = sqlsrv_query($connect, strtoupper($sql_wo),$params, $options);
+$row_count_wo = sqlsrv_num_rows($result_wo);
+
+$wo = '';
+if ($row_count_wo > 0){
+    while ($dt_wo = sqlsrv_fetch_object($result_wo)) {
+        $wo .= $dt_wo->WORK_NO.", ";
+    }
+}else{
+    $wo .= $dt_wo->WORK_NO;
+}
 
 // DETAILS
 $qry = "select 
@@ -284,7 +303,7 @@ while ($data=sqlsrv_fetch_object($result)){
                             NET WEIGHT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".number_format($dt_weight->NET,2)." ".$dt_weight->NET_UNIT."<br/>
                             MEASUREMENT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".number_format($dt_weight->MEASUREMENT,3)." M3
                             <br/><br/>
-                            PO NO. ".$dt_po->CUSTOMER_PO_NO." <br/>
+                            PO NO. ".$po." <br/>
                             CONTAINER NO. 
 
                             <br/>
@@ -318,7 +337,7 @@ $content .= "
                         <td style='border-top:0px solid #ffffff;padding: 10px 10px;'>BOOKING NO: ".$dt_h->BOOKING_NO."</td>
                     </tr>
                     <tr>
-                        <td colspan=4 style='padding: 10px 10px;'>WORK NO. : ".$dt_wo->WORK_NO."</td>
+                        <td colspan=4 style='padding: 10px 10px;'>WORK NO. : ".$wo."</td>
                     </tr>
                     <tr>
                         <td colspan=4 style='padding: 10px 10px;'>PALLET NO. : </td>
