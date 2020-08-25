@@ -17,6 +17,8 @@ $success = 0;       $failed = 0;
 $now = Date('Y-m-d H:i:s');
 
 
+
+
  //Insert MPS_HEADER_RIREKI
  $qry = "insert into MPS_HEADER_RIREKI 
          select ITEM_NO,ITEM_NAME,BATERY_TYPE,CELL_GRADE,PO_NO,PO_LINE_NO,WORK_ORDER,CONSIGNEE,PACKAGING_TYPE,DATE_CODE,CR_DATE,REQUESTED_ETD,STATUS,LABEL_ITEM_NUMBER,LABEL_NAME,QTY,MAN_POWER,OPERATEION_TIME,LABEL_TYPE,CAPACITY,cast(upload_date as datetime),REMARK,BOM_LEVEL,BOM_EDIT_STAT 
@@ -155,6 +157,11 @@ for($i=5;$i<=$hasildata;$i++){
        
     }
 }
+
+//UPDATE STATUS IN MPS TO 1
+$qry = "update SO_DETAILS set IN_MPS = 1
+where so_no in (select so_no from so_header inner join MPS_HEADER on SO_HEADER.CUSTOMER_PO_NO = MPS_HEADER.PO_NO)";
+sqlsrv_query($connect, $qry);
 
 $sql = "{call zsp_mps_remain}";
 $stmt = sqlsrv_query($connect, $sql);
