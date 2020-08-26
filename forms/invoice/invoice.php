@@ -2329,7 +2329,7 @@ if ($varConn=='Y'){
 	            onClickRow:function(id,row){
 	            	var rows = $('#dg_contract').datagrid('getSelected');
 	            	if(value=='add'){
-						// console.log('invoice_get_si_no.php?id='+$('#customer_add').combobox('getValue')+'&term='+rows.TERM);
+						console.log('invoice_get_si_no.php?id='+$('#customer_add').combobox('getValue')+'&term='+rows.TERM);
 	            		$('#sino_add').combogrid({
 							url: 'invoice_get_si_no.php?id='+$('#customer_add').combobox('getValue')+'&term='+rows.TERM
 						});

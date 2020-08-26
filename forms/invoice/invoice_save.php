@@ -134,7 +134,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f0 == count($rmk_s0)-1){
 						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."'";
 					}else{
-						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' + char(13) + char(10) + ";
+						$rmk_f0 .= "'".str_replace("'","''",$rmk_s0[$f0])."' + char(13) + ";
 					}
 				}
 			}
@@ -154,7 +154,7 @@ if (isset($_SESSION['id_wms'])){
 					if($v == count($vsl_s)-1){
 						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."'";
 					}else{
-						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' + char(13) + char(10) + ";
+						$vsl_f .= "'".str_replace("'","''",$vsl_s[$v])."' + char(13) + ";
 					}
 				}
 			}
@@ -182,7 +182,7 @@ if (isset($_SESSION['id_wms'])){
 					if($n == count($ntf_s)-1){
 						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."'";
 					}else{
-						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."' + char(13) + char(10) + ";
+						$ntf_f .= "'".str_replace("'","''",$ntf_s[$n])."' + char(13) + ";
 					}
 				}
 			}
@@ -229,7 +229,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f == count($rmk_s)-1){
 						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."'";
 					}else{
-						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' + char(13) + char(10) + ";
+						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' + char(13) + ";
 					}
 				}
 			}

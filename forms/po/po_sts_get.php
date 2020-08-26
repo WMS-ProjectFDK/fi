@@ -76,8 +76,8 @@ if ($ck_endorder != "true"){
 
 $where ="where $date_po $supp $item_no $po $eta $ck_endorder_str $prf  $gr d.item_no is not null";
 
-$qry = "select curr_mark,gg.gr_no,h.supplier_code,company, d.po_no, h.po_date, d.item_no, itm.description, line_no,d.eta, d.qty, d.gr_qty,gg.qty as Receipt_Qty, 
-    gg.gr_Date, c.accpac_company_code, d.eta etad, gg.gr_Date grd, 
+$qry = "select curr_mark,gg.gr_no,h.supplier_code,company, d.po_no, CAST(h.po_date as varchar(10)) as po_date, d.item_no, itm.description, line_no,d.eta, d.qty, d.gr_qty,gg.qty as Receipt_Qty, 
+    gg.gr_Date, c.accpac_company_code, CAST(d.eta as varchar(10)) as etad, CAST(gg.gr_Date as varchar(10)) as grd, 
     DATEDIFF(day,d.eta,gg.gr_date) as diff, d.u_price,itm.standard_price,d.amt_o, d.amt_l,d.bal_qty from po_header h
     left join po_details d on h.po_no = d.po_no
     left join company c on h.supplier_code = c.company_code and c.company_type = 3

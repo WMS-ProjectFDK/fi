@@ -160,6 +160,8 @@ $menu_id = $_GET['id'];
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">SO DATE</span>
 					<input style="width:100px;" name="so_date_add" id="so_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+					<span style="width:55px;display:inline-block;"></span>
+					<label><input type="checkbox" name="ck_in_mps" id="ck_in_mps" checked="true">IN MPS</input></label>
 				</div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">SO NO.</span>
@@ -248,6 +250,8 @@ $menu_id = $_GET['id'];
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">SO DATE</span>
 					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+					<span style="width:55px;display:inline-block;"></span>
+					<label><input type="checkbox" name="ck_in_mps_edit" id="ck_in_mps_edit" checked="true">IN MPS</input></label>
 				</div>
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">SO NO.</span>
@@ -1071,6 +1075,11 @@ $menu_id = $_GET['id'];
 				var t = $('#dg_add').datagrid('getRows');
 				var total = t.length;
 
+				var ck_in_mps = "false";
+				if ($('#ck_in_mps').attr("checked")) {
+					ck_in_mps = "true";
+				};
+
 				for(i=0;i<total;i++){
 					jmrow = i+1;
 					$('#dg_add').datagrid('endEdit',i);
@@ -1099,7 +1108,7 @@ $menu_id = $_GET['id'];
 						so_date_code: $('#dg_add').datagrid('getData').rows[i].DATE_CODE,
 						so_po_line_no: $('#dg_add').datagrid('getData').rows[i].CUSTOMER_PO_LINE_NO,
 						so_asin: $('#dg_add').datagrid('getData').rows[i].ASIN,
-						so_amz_po_no: $('#dg_add').datagrid('getData').rows[i].AMZ_PO,
+						so_amz_po_no: $('#dg_add').datagrid('getData').rows[i].AMZ_PO
 					});
 
 					amt = parseFloat($('#dg_add').datagrid('getData').rows[i].AMOUNT_RESULT).toFixed(2);
@@ -1123,7 +1132,8 @@ $menu_id = $_GET['id'];
 						so_p_mark: $('#so_remark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].P_MARK_RESULT,
 						so_c_mark: $('#so_casemark_add').textbox('getValue'), //$('#dg_add').datagrid('getData').rows[i].C_MARK_RESULT,
 						so_category_mark: $('#so_category_add').textbox('getValue'),
-						so_amount: tot_amt
+						so_amount: tot_amt,
+						so_in_mps: ck_in_mps
 					});
 					}
 				}
@@ -1249,6 +1259,11 @@ $menu_id = $_GET['id'];
 				var t = $('#dg_edit').datagrid('getRows');
 				var total = t.length;
 
+				var ck_in_mps = "false";
+				if ($('#ck_in_mps_edit').attr("checked")) {
+					ck_in_mps = "true";
+				};
+
 				for(i=0;i<total;i++){
 					jmrow = i+1;
 					$('#dg_edit').datagrid('endEdit',i);
@@ -1301,7 +1316,8 @@ $menu_id = $_GET['id'];
 						so_p_mark: $('#so_remark_edit').textbox('getValue'), //$('#dg_edit').datagrid('getData').rows[i].P_MARK_RESULT,
 						so_c_mark: $('#so_casemark_edit').textbox('getValue'), //$('#dg_edit').datagrid('getData').rows[i].C_MARK_RESULT,
 						so_category_mark: $('#so_category_edit').textbox('getValue'),
-						so_amount: tot_amt
+						so_amount: tot_amt,
+						so_in_mps: ck_in_mps
 					});
 					}
 				}

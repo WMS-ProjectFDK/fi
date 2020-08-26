@@ -1,5 +1,5 @@
 <?php 
-// error_reporting(0);
+error_reporting(0);
 include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
@@ -114,9 +114,14 @@ $result_weight = sqlsrv_query($connect, strtoupper($sql_weight));
 $dt_weight = sqlsrv_fetch_object($result_weight);
 
 // CARTON
+$plt_qty = '-';
+$crtn_qty = '-';
 $sql_carton = "SELECT * FROM ZVW_JUM_CARTON where do_no='$do'";
 $result_carton = sqlsrv_query($connect, strtoupper($sql_carton));
 $dt_carton = sqlsrv_fetch_object($result_carton);
+$plt_qty .= $dt_carton->PALLET_QTY;
+$crtn_qty .= $dt_carton->CARTON_QTY;
+
 
 //WO
 $sql_wo = "select work_no, remark from answer 
@@ -329,10 +334,10 @@ while ($data=sqlsrv_fetch_object($result)){
 $content .= "
                     <tr>
                         <td colspan=3 style='padding: 10px 10px;'>
-                            ".$dt_carton->PALLET_QTY."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            ".$dt_carton->CARTON_QTY."
+                            ".$plt_qty."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            ".$crtn_qty."
                         </td>
                         <td style='border-top:0px solid #ffffff;padding: 10px 10px;'>BOOKING NO: ".$dt_h->BOOKING_NO."</td>
                     </tr>

@@ -25,7 +25,7 @@ $sql .= " where doh.do_no = dod.do_no  " ;
 $sql .= "   and doh.customer_code = c.company_code  " ;
 $sql .= "   and doh.curr_code = cu.curr_code  " ;
 $sql .= "   and doh.ship_end_flg is not null " ;
-//$sql .= "   and do_date = '$do_date'" ;
+$sql .= "   and do_date = '$do_date'" ;
 $sql .= " order by do_type,c.company,doh.do_no" ;
 
 $data_cek = sqlsrv_query($connect, strtoupper($sql));

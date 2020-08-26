@@ -17,17 +17,19 @@ if($state == 'packing_list'){
     $name = "INVOICE";
 }
 
-$sql_h = "select doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, doh.ship_name, doh.revise_flg, 
+$sql_h = "select doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, 
+    replace(doh.ship_name,char(13),'<br/>') as ship_name,
+    doh.revise_flg, sih.PERSON_NAME,
     replace(doh.remark,char(13),'<br/>') as remark,
     doh.notify, doh.attn  h_attn, doh.address_flg, c1.company, c1.address1, c1.address2, c1.address3, c1.address4,
     c1.attn  com_attn, doh.port_loading port_of_loading, doh.port_discharge port_of_discharge, doh.final_destination,
     CONVERT(varchar,doh.etd,103) etd, CONVERT(varchar,doh.eta,103) eta, doh.trade_term, doh.lc_no,
     CONVERT(varchar,doh.lc_date,103) lc_date, doh.issuing_bank, 
     CONVERT(varchar,doh.due_date,103) due_date, doh.pby, doh.pdays, doh.pdesc 
-    from do_header doh,
-    company c1 
+    from do_header doh, company c1, SI_HEADER sih
     where doh.do_no = '$do'
-    and doh.customer_code = c1.company_code";
+    and doh.customer_code = c1.company_code
+	and doh.SI_NO=sih.SI_NO";
 $head = sqlsrv_query($connect, strtoupper($sql_h));
 $dt_h = sqlsrv_fetch_object($head);
 
@@ -271,6 +273,13 @@ $content = "
                             <td style='width:10px;font-size:12px;border:0px solid #ffffff;'></td>
                             <td style='width:330px;font-size:12px;border:0px solid #ffffff;'>".wordwrap($dt_h->ADDRESS4, 36, '<br />', true)."</td>
                         </tr>
+                        <tr>
+                            <td colspan=2 style='height:5px;font-size:12px;border:0px solid #ffffff;'></td>
+                        </tr>
+                        <tr>
+                            <td style='width:10px;font-size:12px;border:0px solid #ffffff;'></td>
+                            <td style='width:330px;font-size:12px;border:0px solid #ffffff;'>ATTN : ".$dt_h->PERSON_NAME."</td>
+                        </tr>
 			        </table>
 			    </td>
 				<td style='border-top:5px solid #ffffff;border-bottom:5px solid #ffffff;'></td>
@@ -294,7 +303,7 @@ $content = "
                         <tr>
 			              <td style='border:0px solid #ffffff;width:80px;'><b>SHIPPED PER</b></td>
 			              <td style='border:0px solid #ffffff;'>:</td>
-			              <td style='border:0px solid #ffffff;width:200px;'>".wordwrap($dt_h->SHIP_NAME, 30, '<br />', true)."</td>
+			              <td style='border:0px solid #ffffff;width:200px;'>".$dt_h->SHIP_NAME."</td>
                         </tr>
                         <tr>
 			              <td style='border:0px solid #ffffff;width:80px;'><b>PORT OF LOADING</b></td>

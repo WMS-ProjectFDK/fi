@@ -7,7 +7,7 @@
 	$rowno=0;
 	$rs = "select sod.pallet_mark_1, sod.pallet_mark_2, sod.pallet_mark_3, sod.pallet_mark_4, sod.pallet_mark_5,
 		sod.pallet_mark_6, sod.pallet_mark_7, sod.pallet_mark_8, sod.pallet_mark_9, sod.pallet_mark_10,
-		'P/NO. '||'1 - '|| ceil(ans.qty/ ztb_item.pallet_pcs) as pallet_mark_11
+		'P/NO. '+'1 - '+ cast(ceiling(ans.qty/ztb_item.pallet_pcs) as varchar(6)) as pallet_mark_11
 		from answer ans 
 		left join so_details sod on ans.so_no=sod.so_no and ans.so_line_no=sod.line_no
 		left join ztb_shipping_ins sins on ans.answer_no = sins.answer_no
