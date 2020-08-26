@@ -1,5 +1,5 @@
 <?php
-include("../../connect/conn_kanbansys.php"); 
+include("../../connect/conn.php"); 
 session_start();
 if(isset($_SESSION['id_kanban'])){
 	$id_kanban = $_SESSION['id_kanban'];
@@ -139,9 +139,9 @@ if(isset($_SESSION['id_kanban'])){
 				</div>
 				<div class="fitem">
 					<select style="width:200px; height:30px;" name="cmb_ng_proses" id="cmb_ng_proses" class="easyui-combobox" 
-						data-options="url:'../../forms_sqlserver/json/json_ng_proses.php',method:'get',valueField:'ng_proses_id',textField:'ng_proses_name', panelHeight:'150px',
+						data-options="url:'../../forms/json/json_ng_proses.php',method:'get',valueField:'ng_proses_id',textField:'ng_proses_name', panelHeight:'150px',
 									  onSelect: function(rec){
-									  	var link = '../../forms_sqlserver/json/json_ng_name.php?ng_pro='+rec.ng_proses_id;
+									  	var link = '../../forms/json/json_ng_name.php?ng_pro='+rec.ng_proses_id;
 									  	$('#cmb_ng').combobox('reload', link);
 									  }
 						"
@@ -169,7 +169,7 @@ if(isset($_SESSION['id_kanban'])){
 		<div id="toolbar_view" style="padding: 5px 5px;">
 			<span style="width:80px;display:inline-block;">Assy LIne</span>
 			<input style="width:100px;" name="cmb_Line" id="cmb_Line" class="easyui-combobox" 
-				data-options="url:'../../forms_sqlserver/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" 
+				data-options="url:'../../forms/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" 
 			/>
 			<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_view_line()">SEARCH ITEM</a>
 			<span style="width:200px;display:inline-block;color: red; font-size: 9px;">Double Click to view Trouble.</span>
@@ -182,7 +182,7 @@ if(isset($_SESSION['id_kanban'])){
 		<div id="toolbar_daily" style="padding: 5px 5px;">
 			<span style="width:80px;display:inline-block;">Assy LIne</span>
 			<input style="width:100px;" name="cmb_Line_hasil" id="cmb_Line_hasil" class="easyui-combobox" 
-				data-options="url:'../../forms_sqlserver/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" 
+				data-options="url:'../../forms/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME', panelHeight:'160px'" required="" 
 			/>
 			<span style="width:50px;display:inline-block;"></span>
 			<span style="width:80px;display:inline-block;">Tgl Scan</span>
@@ -196,7 +196,7 @@ if(isset($_SESSION['id_kanban'])){
 			<div class="fitem">
 				<span style="width:80px;display:inline-block;">Assy Line</span>
 				<input style="width:150px;" name="cmb_Line_edit" id="cmb_Line_edit" class="easyui-combobox" 
-				data-options="url:'../../forms_sqlserver/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME'" disabled="true" />
+				data-options="url:'../../forms/json/json_assy_line.php', method:'get', valueField:'NAME2', textField:'NAME'" disabled="true" />
 				<span style="width:50px;display:inline-block;"></span>
 				<span style="width:80px;display:inline-block;">Cell Type</span>
 				<input style="width:150px;" name="cell_type_edit" id="cell_type_edit" class="easyui-combobox" data-options="url:'../../forms/json/json_cell_type.json', method:'get', valueField:'cell_type', textField:'cell_type', panelHeight: 'auto'"/><!-- disabled="true" -->
@@ -268,7 +268,7 @@ if(isset($_SESSION['id_kanban'])){
 		    <div class="fitem">
 				<span style="width:80px;display:inline-block;">ASSY LINE</span>
 				<input style="width:150px;" name="cmb_Line_qc" id="cmb_Line_qc" class="easyui-combobox" 
-				data-options="url:'../../forms_sqlserver/json/json_assy_line.php', method:'get', valueField:'NAME', textField:'NAME2'" disabled="true" />
+				data-options="url:'../../forms/json/json_assy_line.php', method:'get', valueField:'NAME', textField:'NAME2'" disabled="true" />
 				<span style="width:50px;display:inline-block;"></span>
 				<span style="width:80px;display:inline-block;">CELL TYPE</span>
 				<input style="width:150px;" name="cell_type_qc" id="cell_type_qc" class="easyui-combobox" data-options="url:'../../forms/json/json_cell_type.json', method:'get', valueField:'cell_type', textField:'cell_type'" required="true"/>
@@ -728,7 +728,7 @@ if(isset($_SESSION['id_kanban'])){
 					$.messager.alert('INFORMATION','FIELD TIDAK BOLEH KOSONG..!!','info');
 				}else{
 					$('#dg_view').datagrid('load',{line: ln, st: 'R'});
-					$('#dg_view').datagrid({url: 'result_line.php',});
+					$('#dg_view').datagrid({url: 'result_line.php'});
 					$('#cmb_Line').combobox('setValue','');
 				}
 			}
@@ -736,7 +736,7 @@ if(isset($_SESSION['id_kanban'])){
 			function report(){
 				$('#dlg_daily').dialog('open').dialog('setTitle','VIEW LAPORAN HARIAN ASSEMBLING');
 				$('#cmb_Line_hasil').combobox('setValue','');
-				$('#tgl_scn').datebox('setValue','<? echo date('Y'); ?>');
+				// $('#tgl_scn').datebox('setValue','<? //echo date('Y'); ?>');
 				$('#dg_daily').datagrid('load',{line: '', tgl: '', st: ''});
 				$('#dg_daily').datagrid({
 					fitColumns: true,

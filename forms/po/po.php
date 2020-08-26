@@ -19,6 +19,16 @@ if ($varConn=='Y'){
 			return is_confirmed;
 		}
 	</script> 
+	<!-- <link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/style.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
+	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
+	<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
+	<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
 	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
@@ -487,8 +497,6 @@ if ($varConn=='Y'){
 			}
 		}
 
-		
-
 		function filter(event){
 			var src = document.getElementById('src').value;
 			var search = src.toUpperCase();
@@ -509,8 +517,6 @@ if ($varConn=='Y'){
 				//document.getElementById('src').value = '';
 		    }
 		}
-
-		
 
 		function filterREC(){
 			var x = document.getElementById('src_item').value;
@@ -777,8 +783,6 @@ if ($varConn=='Y'){
 			$('#remark_add').textbox('setValue','');
 			$('#shipp_mark_add').textbox('setValue','');
 			$('#dg_add').datagrid('loadData',[]);
-
-			
 
 			$('#dg_add').datagrid({
 			    singleSelect: true,

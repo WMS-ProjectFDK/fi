@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	error_reporting(0);
 	$id_kanban = $_SESSION['id_kanban'];
 	$st = isset($_REQUEST['st']) ? strval($_REQUEST['st']) : '';
 	$line = isset($_REQUEST['line']) ? strval($_REQUEST['line']) : '';
@@ -15,24 +16,32 @@
 	$box1=0;		$box2=0;		$box3=0;
 	$pcs1=0;		$pcs2=0;		$pcs3=0;
 
-	include("../../connect/conn_kanbansys.php");
+	include("../../connect/conn.php");
 
 	if($st == 'R'){
-		$sql = "select top 50 a.*, b.NAME, 
+		$sql = "select top 50 ID, WORKER_ID1, ID_PLAN, START_DATE, END_DATE, a.ASSY_LINE, CELL_TYPE, PALLET, 
+		CAST(TANGGAL_PRODUKSI as varchar(10)) as TANGGAL_PRODUKSI, 
+		QTY_PERPALLET, QTY_ACT_PERPALLET, QTY_PERBOX, QTY_ACT_PERBOX, ID_PRINT, ng_id, NG_QTY,
+		TANGGAL_ADHESIVE, TANGGAL_CCA, TANGGAL_SEPARATOR, TANGGAL_GEL, COMM_ADHESIVE, COMM_ADHESIVE, COMM_SEPARATOR,
+		TANGGAL_ELECTROLYTE, TANGGAL_ACTUAL, b.NAME, 
 			(select count(*) from ztb_assy_trans_ng where assy_line= a.assy_line AND 
 		    cell_type= a.cell_type AND pallet= a.pallet AND tanggal_produksi= a.tanggal_produksi AND worker_id= a.worker_id1) as VW_TROUBLE,
-		    a.tanggal_produksi as TGL_PROD, a.TANGGAL_ACTUAL as TGL_ACT, c.QTY_BOX
+		    CAST(a.tanggal_produksi as varchar(10)) as TGL_PROD, CAST(a.TANGGAL_ACTUAL as varchar(10)) as TGL_ACT, c.QTY_BOX
 			from ztb_assy_kanban a
 			left join ztb_worker b on a.worker_id1=b.worker_id
 			inner join ztb_assy_set_pallet c on a.assy_line=c.assy_line
 			where replace(a.assy_line,'#','-') = '$line' 
 			order by a.id desc";	
 	}else{
-		$sql = "select top 50 a.*, b.NAME, 
+		$sql = "select top 50 ID, WORKER_ID1, ID_PLAN, START_DATE, END_DATE, a.ASSY_LINE, CELL_TYPE, PALLET, 
+			CAST(TANGGAL_PRODUKSI as varchar(10)) as TANGGAL_PRODUKSI, 
+			QTY_PERPALLET, QTY_ACT_PERPALLET, QTY_PERBOX, QTY_ACT_PERBOX, ID_PRINT, ng_id, NG_QTY,
+			TANGGAL_ADHESIVE, TANGGAL_CCA, TANGGAL_SEPARATOR, TANGGAL_GEL, COMM_ADHESIVE, COMM_ADHESIVE, COMM_SEPARATOR,
+			TANGGAL_ELECTROLYTE, CAST(TANGGAL_ACTUAL as varchar(10)) as TANGGAL_ACTUAL, b.NAME, 
 			(select count(*) from ztb_assy_trans_ng where assy_line= a.assy_line AND 
 		    cell_type= a.cell_type AND pallet= a.pallet AND tanggal_produksi= a.tanggal_produksi AND worker_id= a.worker_id1) as VW_TROUBLE,
 		    (select count(*) from ztb_assy_kanban where id_print= a.id_print) as VW_HASIL,
-		    a.tanggal_produksi as TGL_PROD, a.tanggal_actual as TGL_ACT, c.QTY_BOX,
+		    CAST(a.tanggal_produksi as varchar(10)) as TGL_PROD, CAST(a.tanggal_actual as varchar(10)) as TGL_ACT, c.QTY_BOX,
 		    case when a.start_date >= '$a1' and start_date < '$z1' then 'SHIFT-1'
            	when a.start_date >= '$a2' and start_date < '$z2' then 'SHIFT-2'
            	when a.start_date >= '$a3' and start_date < '$z3' then 'SHIFT-3' end as SHIFT
@@ -44,19 +53,19 @@
 	}
 
 	//echo $sql;
-	$data = odbc_exec($connect, $sql);
+	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();
 	$foot = array();
 	$tot_plt = 0 ;		$tot_box = 0 ;
 	$rowno=0;
-	while($row = odbc_fetch_object($data)){
+	while($row = sqlsrv_fetch_object($data)){
 		array_push($items, $row);
 		$id_p = $items[$rowno]->ID_PRINT;
 
 		$j = "select sum(qty_act_perbox) as j from ztb_assy_kanban where ID_PRINT=$id_p";
-		$dt = odbc_exec($connect, $j);
-		$rdt = odbc_fetch_object($dt);
+		$dt = sqlsrv_query($connect, $j);
+		$rdt = sqlsrv_fetch_object($dt);
 		$jum = $rdt->j;
 
 		$items[$rowno]->TOTAL_ACT = $jum;

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 if (isset($_SESSION['id_kanban'])) {
 	if(! $connect){
 		echo json_encode(array('errorMsg'=>'CONNECT TO SERVER FAILED ... !!'));
@@ -27,10 +27,10 @@ if (isset($_SESSION['id_kanban'])) {
 
 		$ins2  = "insert into ztb_assy_kanban ($field2) select $value2 from ztb_assy_print WHERE id = $id";
 		echo $ins2.'<br/>';
-		$data_ins2 = odbc_exec($connect, $ins2);
+		$data_ins2 = sqlsrv_query($connect, $ins2);
 
 		$updprint = "update ztb_assy_print set printed = 1 where id= $idNya ";
-		$data_updprint = odbc_exec($connect, $updprint);
+		$data_updprint = sqlsrv_query($connect, $updprint);
 
 		echo json_encode(array('successMsg'=>'SUCCESS'));
 	}

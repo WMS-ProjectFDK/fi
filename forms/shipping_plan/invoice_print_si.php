@@ -1,5 +1,5 @@
 <?php 
-error_reporting(0);
+// error_reporting(0);
 include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
@@ -72,8 +72,9 @@ if($si_sts == 'final_si'){
     	left join unit un2 on plh.gross_uom = un2.unit_code
 		where doh.do_no='$do'
 		) aa
-		left outer join (select do_no, description from do_details where do_no='$do'
-		and description is not null) dod2 on aa.do_no = dod2.do_no
+		left outer join (select distinct do_no, description from do_details  
+						 where do_no='$do'
+						 and description is not null AND description != '') dod2 on aa.do_no = dod2.do_no
 		group by aa.do_no, eta, etd, port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
 		uom_nw, uom_gw";
 
@@ -154,6 +155,8 @@ if($si_sts == 'final_si'){
 		inner join so_details sd on ans.so_no = sd.so_no and ans.so_line_no = sd.line_no
 		where crs_remark='$do'";
 }
+
+// echo $qry;
 
 $ArrREmark = array();		$ArrPallet = array();
 $Arrcontainer = array();
@@ -532,14 +535,14 @@ $content .= "
 								".$truck."
 								".$palletNya."
 							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>";	
+						</tr>";	
 	$total +=0;
 	$nourut++;
 }
 $content .= "
+					</table>
+				</td>
+			</tr>
 			<tr>
 				<td colspan=2 valign='top' style='width:700px;border:0px solid #ffffff;'>	
 					<table style='width:800px;'>
@@ -621,6 +624,6 @@ $content .= "
 require_once '../../class/html2pdf/html2pdf.class.php';
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
-$html2pdf->Output('PO-'.$po.'.pdf');
+$html2pdf->Output('PO-'.$do.'.pdf');
 // echo  $content;
 ?>

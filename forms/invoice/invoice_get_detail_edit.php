@@ -9,12 +9,8 @@
 	$rowno=0;
 
 	$rs = "select dod.item_no, dod.customer_part_no, it.description, dod.so_no1 as so_no, dod.so_line_no1 as line_no, dod.customer_po_no1 as customer_po_no, dod.answer_no1 as answer_no, 
-<<<<<<< HEAD
-		dod.qty1 as delivery_qty, dod.uom_q, dod.u_price, dod.carved_stamp as date_code, dod.origin_code, replace(cast(mrk.marks as varchar(500)),'char(10)','<BR>') as remark_shipping
-=======
 		dod.qty1 as delivery_qty, dod.uom_q, dod.u_price, dod.carved_stamp as date_code, dod.origin_code,
 		replace(cast(mrk.marks as varchar(max)),char(10),'<br>') as remark_shipping
->>>>>>> bddbd3f9a7828b641644287839aaa4e87df70682
 		from do_details dod
 		inner join item it on dod.item_no=it.item_no
 		left join DO_MARKS mrk on dod.do_no = mrk.do_no and dod.line_no = mrk.mark_no

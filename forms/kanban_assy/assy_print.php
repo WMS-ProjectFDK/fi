@@ -8,15 +8,17 @@
 
 /*id =2
 NAme : ueng hernana
-tanggal : 27-Apr-2017
+tanggal : 24-AUG-2017
 deskripsi: perbaikan report kanban
 tanggal : 05-may-2017
 deskripsi: perbaikan where dengan 1 tanggal
+tanggal : 25-aug-2020
+deskripsi: rebuild to sqlserver
 */
 
-//error_reporting(0);
+error_reporting(0);
 ini_set('memory_limit','-1');
-include("../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
 $user_name = $_SESSION['id_wms'];
@@ -25,11 +27,12 @@ $kodeid = isset($_REQUEST['kodeid']) ? strval($_REQUEST['kodeid']) : '';
 
 $kd = str_replace("-", ",", $kodeid);
 
-$sql_h = "select a.*, b.qty_box_pallet, b.qty_box, a.date_prod as dateprod from ztb_assy_print a 
+$sql_h = "select a.ASYLINE, a.CELL_TYPE, CAST(a.DATE_PROD as varchar(10)) as DATE_PROD, a.PALLET, a.QTY, a.ID, a.PRINTED, a.ID_PLAN, a.BOX, a.UPTO_DATE,
+	b.qty_box_pallet, b.qty_box, a.date_prod as dateprod from ztb_assy_print a 
 	inner join ztb_assy_set_pallet b on a.asyline = b.assy_line
 	where a.id in (".$kd.")
 	order by a.pallet asc";
-$result = odbc_exec($connect, $sql_h);
+$result = sqlsrv_query($connect, strtoupper($sql_h));
 //echo $sql_h;
 
 $content = " 
@@ -65,7 +68,7 @@ $content = "
 
 
 		.class_10{
-			border:1px;width:340px;height:225px;border-radius:4px;margin-top:13px;
+			border:1px;width:340px;height:225px;border-radius:4px;margin-top:10px;
 		}
 		.class_11{
 			position:absolute;margin-left:350px;border:1px;width:340px;height:225px;border-radius:4px;margin-top:265px;
@@ -75,7 +78,7 @@ $content = "
 		}
 
 		.class_20{
-			border:1px;width:340px;height:225px;border-radius:4px;margin-top:13px;
+			border:1px;width:340px;height:225px;border-radius:4px;margin-top:9px;
 		}
 		.class_21{
 			position:absolute;margin-left:350px;border:1px;width:340px;height:225px;border-radius:4px;margin-top:505px;
@@ -90,7 +93,7 @@ $content = "
 
 $row_a=0;	$col_a=0;     
 $row_z=2;	$col_Z=2;
-while ($data=odbc_fetch_object($result)){
+while ($data=sqlsrv_fetch_object($result)){
 
 	if ($row_a==0) {
 		if($col_a==0){
@@ -189,7 +192,7 @@ while ($data=odbc_fetch_object($result)){
 $content .= "
 	</page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('KanbanAssembling.pdf');

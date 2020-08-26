@@ -1,5 +1,5 @@
 <?php
-require_once '../class/phpexcel/PHPExcel.php';
+require_once '../../class/phpexcel/PHPExcel.php';
 
 $Arr_AssLine = array('LR01#1','LR03#1','LR03#2','LR03#3','LR06#1','LR06#2','LR06#3','LR06#4(T)','LR06#5','LR06#6');
 $Arr_cellType = array('C01','C01NC','G06','G06NC','G07','G07NC','G08','G08NC','G08E');
@@ -229,7 +229,7 @@ $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(25);
 $objPHPExcel->getDefaultStyle()
     ->getNumberFormat()
     ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-$objPHPExcel->getActiveSheet()->setTitle('ASSEMBLY PLAN '.$dt);
+$objPHPExcel->getActiveSheet()->setTitle('ASSEMBLY PLAN '.$dt);     
 $objPHPExcel->setActiveSheetIndex(0);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 $objWriter->save(str_replace('.php', '.xls', __FILE__));

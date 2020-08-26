@@ -52,7 +52,7 @@
 	include("../../connect/conn.php");
 
 	$sql = "select top 150 a.PO_NO, cast(a.po_date as varchar(10)) as po_date, a.supplier_code, b.company, c.curr_short, c.curr_mark, a.amt_o, a.amt_l,
-		a.remark1,a.req, prsn.person,replace(replace(replace(replace(remark1,'char(10)','<br/>'),'chr(10)','<br/>'),'chr(13)','<br/>'),'||','') as remark1_2, cast(b.pdays as varchar(10))+'-'+b.pdesc as pterm, 
+		a.remark1,a.req, prsn.person,replace(remark1,'char(10)','<br/>') as remark1_2, cast(b.pdays as varchar(10))+'-'+b.pdesc as pterm, 
 		cast(b.country_code as varchar(20))+'-'+cnt.country as country, a.curr_code, a.attn, a.shipto_code,a.tterm, 
 		a.ex_rate, a.transport, a.marks1, a.di_output_type, a.revise, a.reason1
 		from po_header a

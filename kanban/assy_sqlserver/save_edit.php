@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 if (isset($_SESSION['id_kanban'])) {
 	$edit_cells = htmlspecialchars($_REQUEST['edit_cells']);
 	$edit_tprod = htmlspecialchars($_REQUEST['edit_tprod']);
@@ -28,7 +28,7 @@ if (isset($_SESSION['id_kanban'])) {
 	$field .= "TANGGAL_ACTUAL = CONVERT(DATE, '$edit_tscan') " 				;
 
 	$upd = "update ztb_assy_kanban set $field where id = $edit_idpln";
-	$data_upd = odbc_exec($connect, $upd);
+	$data_upd = sqlsrv_query($connect, $upd);
 	
 	echo json_encode(array('successMsg'=>'success'));
 }else{

@@ -144,13 +144,8 @@ if (isset($_SESSION['id_wms'])){
 							'".str_replace("'", "''", $row->ADDRESS2)."', 
 							'".str_replace("'", "''", $row->ADDRESS3)."', 
 							'".str_replace("'", "''", $row->ADDRESS4)."', 
-<<<<<<< HEAD
-							getdate(), '$user', $sscc_plt,1 ";
-					//echo $n;
-=======
 							getdate(), '$user', $sscc_plt, '$sts_sscc' ";
 					// echo $n;
->>>>>>> bddbd3f9a7828b641644287839aaa4e87df70682
 					//echo $INS2;
 					$data_INS2 = sqlsrv_query($connect, $INS2);
 					if( $data_INS2 === false ) {

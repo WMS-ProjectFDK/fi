@@ -12,7 +12,7 @@ if ($varConn=='Y'){
 <head>
 <meta charset="UTF-8">
 <title>SHIPPING PLAN</title>
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="../../favicon.png">
 <script language="javascript">
 	function confirmLogOut(){
 		var is_confirmed;
@@ -386,8 +386,6 @@ h2 {
 			$.messager.alert('INFORMATION','No filter data, system only show 150 records','info');
 		}		
 
-		
-
 		$('#dg').datagrid('load', {
 			date_awal: $('#date_awal').datebox('getValue'),
 			date_akhir: $('#date_akhir').datebox('getValue'),
@@ -405,21 +403,21 @@ h2 {
 			cmb_si_no : $('#cmb_si_no').combobox('getValue')
 		});
 		
-		// console.log('shipping_plan_get.php?date_awal='+$('#date_awal').datebox('getValue')+
-		// 	'&date_akhir='+$('#date_akhir').datebox('getValue')+
-		// 	'&ck_cr_date='+ck_cr_date+
-		// 	'&cmb_wo_no='+$('#cmb_wo_no').combobox('getValue')+
-		// 	'&ck_wo_no='+ck_wo_no+
-		// 	'&cmb_po_no='+$('#cmb_po_no').combobox('getValue')+
-		// 	'&ck_po_no='+ck_po_no+
-		// 	'&cmb_item_no='+$('#cmb_item_no').combobox('getValue')+
-		// 	'&ck_item_no='+ck_item_no+
-		// 	'&cmb_ppbe='+$('#cmb_ppbe').combobox('getValue')+
-		// 	'&ck_ppbe='+ck_ppbe+
-		// 	'&flag='+flag+
-		// 	'&ck_si='+ck_si+
-		// 	'&cmb_si_no='+$('#cmb_si_no').combobox('getValue')
-		// );
+		console.log('shipping_plan_get.php?date_awal='+$('#date_awal').datebox('getValue')+
+			'&date_akhir='+$('#date_akhir').datebox('getValue')+
+			'&ck_cr_date='+ck_cr_date+
+			'&cmb_wo_no='+$('#cmb_wo_no').combobox('getValue')+
+			'&ck_wo_no='+ck_wo_no+
+			'&cmb_po_no='+$('#cmb_po_no').combobox('getValue')+
+			'&ck_po_no='+ck_po_no+
+			'&cmb_item_no='+$('#cmb_item_no').combobox('getValue')+
+			'&ck_item_no='+ck_item_no+
+			'&cmb_ppbe='+$('#cmb_ppbe').combobox('getValue')+
+			'&ck_ppbe='+ck_ppbe+
+			'&flag='+flag+
+			'&ck_si='+ck_si+
+			'&cmb_si_no='+$('#cmb_si_no').combobox('getValue')
+		);
 
 		$('#dg').datagrid( {
 			url: 'shipping_plan_get.php',

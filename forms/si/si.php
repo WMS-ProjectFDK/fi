@@ -1,23 +1,23 @@
 <?php 
 session_start();
+include("../../connect/conn.php");
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 $menu_id = $_GET['id'];
+if ($varConn=='Y'){
 ?>
 <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <title>SHIPPING INSTRUCTION</title>
-
     <link rel="icon" type="image/png" href="../../favicon.png">
-
 	<script language="javascript">
-			function confirmLogOut(){
+		function confirmLogOut(){
 			var is_confirmed;
 			is_confirmed = window.confirm("End current session?");
 			return is_confirmed;
-			}
+		}
 	</script> 
 	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
@@ -66,7 +66,7 @@ $menu_id = $_GET['id'];
     <body>
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
 	
-	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
+	<table id="dg" title="SHIPPING INSTRUCTION" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;" data-options="fitColumns:true"></table>
 	<div id="toolbar" style="padding:3px 3px;">
 		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:70px; float:left;"><legend>SHIPPING INSTRUCTION FILTER</legend>
 			<div style="float:left;">
@@ -78,7 +78,7 @@ $menu_id = $_GET['id'];
 					<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
                 </div>
                 <div class="fitem">
-					<input style="width:310px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus/>	
+					<input style="width:310px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus="autofocus"/>
 					<a href="javascript:void(0)" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER</a>
 					<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addSI()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SI</a>
 					<a href="javascript:void(0)" style="width: 200px;" id="edit" class="easyui-linkbutton c2" onclick="copySI()"><i class="fa fa-pencil" aria-hidden="true"></i> COPY DATA FOR NEW SI</a>
@@ -89,18 +89,22 @@ $menu_id = $_GET['id'];
 	</div>
 	
 	<!-- START ADD -->
-	<div id='win_add' class="easyui-window" style="width:1105px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+	<div id='win_add' class="easyui-window" style="width:1105px;height:540px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		<form id="f_add" method="post" novalidate>
 		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>SETTINGS</legend>
 			<div class="fitem">
 				<span style="width:70px;display:inline-block;">SI NO.</span>
-				<input style="width:140px;" name="si_no_add" id="si_no_add" class="easyui-textbox" disabled="" />
-				<span style="width:45px;display:inline-block;"></span>
+				<input style="width:160px;" name="si_no_add" id="si_no_add" class="easyui-textbox" disabled="" />
+				<span style="width:25px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">SI NO. FROM CUST</span>
+				<input style="width:605px;height:30px;" name="si_no_from_cust_add" id="si_no_from_cust_add" class="easyui-textbox" multiline="true"/>
+			</div>
+			<div class="fitem">
 				<span style="width:140px;display:inline-block;">PERSON IN CHARGE</span>
-				<input style="width:140px;" name="person_add" id="person_add" class="easyui-textbox"/>
-				<span style="width:45px;display:inline-block;"></span>
-				<span style="width:145px;display:inline-block;">DESC. OF GOODS</span>
-				<input style="width:140px;" name="goods_name_add" id="goods_name_add" class="easyui-textbox"/>
+				<input style="width:236px;height:30px;" name="person_add" id="person_add" class="easyui-textbox" multiline="true"/>
+				<span style="width:21px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">DESC. OF GOODS</span>
+				<input style="width:462px;height:30px;" name="goods_name_add" id="goods_name_add" class="easyui-textbox" multiline="true"/>
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET CUST. PO NO.</span>
@@ -250,20 +254,23 @@ $menu_id = $_GET['id'];
 	</div>
 	<!-- END ADD -->
 
-
 	<!-- START EDIT -->
-	<div id='win_edit' class="easyui-window" style="width:1105px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+	<div id='win_edit' class="easyui-window" style="width:1105px;height:540px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		<form id="f_edit" method="post" novalidate>
 		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1050px; float:left; margin:5px;"><legend>SETTINGS</legend>
 			<div class="fitem">
 				<span style="width:70px;display:inline-block;">SI NO.</span>
-				<input style="width:140px;" name="si_no_edit" id="si_no_edit" class="easyui-textbox" disabled="" />
-				<span style="width:45px;display:inline-block;"></span>
+				<input style="width:160px;" name="si_no_edit" id="si_no_edit" class="easyui-textbox" disabled="" />
+				<span style="width:25px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">SI NO. FROM CUST</span>
+				<input style="width:605px;height:30px;" name="si_no_from_cust_edit" id="si_no_from_cust_edit" class="easyui-textbox" multiline="true"/>
+			</div>
+			<div class="fitem">
 				<span style="width:140px;display:inline-block;">PERSON IN CHARGE</span>
-				<input style="width:140px;" name="person_edit" id="person_edit" class="easyui-textbox"/>
-				<span style="width:45px;display:inline-block;"></span>
-				<span style="width:145px;display:inline-block;">DESC. OF GOODS</span>
-				<input style="width:140px;" name="goods_name_edit" id="goods_name_edit" class="easyui-textbox"/>
+				<input style="width:236px;height:30px;" name="person_edit" id="person_edit" class="easyui-textbox" multiline="true"/>
+				<span style="width:21px;display:inline-block;"></span>
+				<span style="width:140px;display:inline-block;">DESC. OF GOODS</span>
+				<input style="width:462px;height:30px;" name="goods_name_edit" id="goods_name_edit" class="easyui-textbox" multiline="true"/>
 			</div>
 			<div class="fitem">
 				<span style="width:140px;display:inline-block;">SET CUST. PO NO.</span>
@@ -551,6 +558,7 @@ $menu_id = $_GET['id'];
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
 				$('#win_edit').window('open').dialog('setTitle','EDIT SALES INSTRUCTION ('+row.SI_NO+')');
+				$('#si_no_from_cust_edit').textbox('setValue', row.CUST_SI_NO);
 				$('#person_edit').textbox('setValue', row.PERSON_NAME);
 				$('#goods_name_edit').textbox('setValue', row.GOODS_NAME);
 				$('#special_inform_edit').textbox('setValue', row.SPECIAL_INFO);
@@ -653,7 +661,7 @@ $menu_id = $_GET['id'];
 
 				// alert(row.CUST_SI_NO);
 				// r_cust = row.CUST_SI_NO;
-				r_cust = {"cust_po_no" : row.CUST_SI_NO};
+				r_cust = {"cust_po_no" : row.CUST_PO_NO};
 			}
 		}
 
@@ -665,6 +673,7 @@ $menu_id = $_GET['id'];
 					SI_NO_OLD: '-',
 					SI_NO: $('#si_no_add').textbox('getValue'),
 					CONTRACT_NO: 'NULL',
+					SINO_FROM_CUST: $('#si_no_from_cust_add').textbox('getValue'),
 					PERSON_NAME: $('#person_add').textbox('getValue'),
 					GOODS_NAME: $('#goods_name_add').textbox('getValue'),
 					SHIPPER_NAME: r_shipper[0].SHIPPER_NAME,
@@ -710,6 +719,7 @@ $menu_id = $_GET['id'];
 					SI_NO_OLD: sino_lama,
 					SI_NO: $('#si_no_edit').textbox('getValue'),
 					CONTRACT_NO: 'NULL',
+					SINO_FROM_CUST: $('#si_no_from_cust_edit').textbox('getValue'),
 					PERSON_NAME: $('#person_edit').textbox('getValue'),
 					GOODS_NAME: $('#goods_name_edit').textbox('getValue'),
 					SHIPPER_NAME: r_shipper[0].SHIPPER_NAME,
@@ -1202,10 +1212,20 @@ $menu_id = $_GET['id'];
 				var src = document.getElementById('src').value;
 				// alert(src);
 				$('#dg').datagrid('load', {
-					src: document.getElementById('src').value
+					src: search
 				});
 				
-				filterData();
+				$('#dg').datagrid('enableFilter');
+
+				if (src=='') {
+					filterData();
+				};
+				
+				$('#dg').datagrid({
+					url:'si_get.php'
+				});
+
+				$('#dg').datagrid('enableFilter');
 		    }
 		}
 
@@ -1263,19 +1283,22 @@ $menu_id = $_GET['id'];
             $('#dg').datagrid({
 				url:'si_get.php',
 		    	singleSelect: true,
-			    fitColumns: true,
 				rownumbers: true,
+				sortName: 'po_date',
+				sortOrder: 'asc',
 			    columns:[[
-				    {field:'SI_NO',title:'SI NO.',width:75, halign: 'center'},
-					{field:'CUST_SI_NO',title:'SI NO.<br/>FROM CUST',width:100, halign: 'center'},
-					{field:'CUST_PO_NO',title:'PO NO.<br/>CUSTOMER',width:100, halign: 'center'},
-					{field:'PERSON_NAME',title:'PERSON IN CHARGE',width:100, halign: 'center'},
-					{field:'GOODS_NAME',title:'DESCRIPTION',width:200, halign: 'center'},
+				    {field:'SI_NO',title:'SI NO.',width:150, halign: 'center'},
+					{field:'CUST_SI_NO',title:'SI NO.<br/>FROM CUST',width:150, halign: 'center'},
+					{field:'CUST_PO_NO',title:'PO NO.<br/>CUSTOMER',width:200, halign: 'center'},
+					{field:'PERSON_NAME',title:'PERSON IN CHARGE',width:150, halign: 'center'},
+					{field:'GOODS_NAME',title:'DESCRIPTION',width:250, halign: 'center'},
 					{field:'FORWARDER_NAME',title:'FORWARDER',width:150, halign: 'center'},
 					{field:'CONSIGNEE_NAME',title:'CONSIGNEE',width:150, halign: 'center'},
-					{field:'CR_DATE',title:'CR DATE',width:75, halign: 'center'}
+					{field:'CR_DATE',title:'CR DATE',width:100, halign: 'center'}
 			    ]]
             });
+
+			$('#dg').datagrid('enableFilter');
         });
 
         function filterData(){
@@ -1294,7 +1317,8 @@ $menu_id = $_GET['id'];
 			$('#dg').datagrid('load', {
 				date_awal: $('#date_awal').datebox('getValue'),
 				date_akhir: $('#date_akhir').datebox('getValue'),
-				ck_date: ck_date
+				ck_date: ck_date,
+				src: ''
 			});
 
 			console.log('si_get.php?date_awal='+$('#date_awal').datebox('getValue')+'&date_akhir='+$('#date_akhir').datebox('getValue')+'&ck_date='+ck_date+'&src='+document.getElementById('src').value);
@@ -1303,7 +1327,7 @@ $menu_id = $_GET['id'];
 				url:'si_get.php'
 			});
 
-		   	$('#dg').datagrid('enableFilter');
+			$('#dg').datagrid('enableFilter');
         }
 
 		function addSI(){
@@ -1313,4 +1337,7 @@ $menu_id = $_GET['id'];
 		}
     </Script>
 	</body>
-    </html>
+	</html>
+<?php }else{
+	echo "<script type='text/javascript'>location.href='../404.html';</script>";
+}

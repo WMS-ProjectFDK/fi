@@ -346,21 +346,30 @@ h2 {
 			$('#dg').datagrid('endEdit',i);
 				if ($('#dg').datagrid('getData').rows[i].ITEM2 != undefined){
 					$.post('breakdown_container_save.php',{
-					bdc_item: $('#dg').datagrid('getData').rows[i].ITEM2,
-					bdc_qty: $('#dg').datagrid('getData').rows[i].QTY,
-					bdc_tw: $('#dg').datagrid('getData').rows[i].TW,
-					bdc_enr: $('#dg').datagrid('getData').rows[i].ENR,
-					bdc_ppbe: $('#cmb_ppbe').combobox('getValue'),
-					bdc_wono: $('#dg').datagrid('getData').rows[i].WO_NO,
-					bdc_container: $('#dg').datagrid('getData').rows[i].CONTAINER_NO,
-					bdc_i : x,
-					bdc_row: $('#dg').datagrid('getData').rows[i].ROW_ID,
-					bdc_answer_no: $('#dg').datagrid('getData').rows[i].ANSWER_NO
-				}).done(function(res){
-					console.log(res);
-				})
-				x++;
-			};
+						bdc_item: $('#dg').datagrid('getData').rows[i].ITEM2,
+						bdc_qty: $('#dg').datagrid('getData').rows[i].QTY,
+						bdc_tw: $('#dg').datagrid('getData').rows[i].TW,
+						bdc_enr: $('#dg').datagrid('getData').rows[i].ENR,
+						bdc_ppbe: $('#cmb_ppbe').combobox('getValue'),
+						bdc_wono: $('#dg').datagrid('getData').rows[i].WO_NO,
+						bdc_container: $('#dg').datagrid('getData').rows[i].CONTAINER_NO,
+						bdc_row: $('#dg').datagrid('getData').rows[i].ROW_ID,
+						bdc_answer_no: $('#dg').datagrid('getData').rows[i].ANSWER_NO
+					}).done(function(res){
+						console.log(res);
+					})
+
+					console.log('breakdown_container_save.php?bdc_item='+$('#dg').datagrid('getData').rows[i].ITEM2+
+						'&bdc_qty='+ $('#dg').datagrid('getData').rows[i].QTY+
+						'&bdc_tw='+$('#dg').datagrid('getData').rows[i].TW+
+						'&bdc_enr='+$('#dg').datagrid('getData').rows[i].ENR+
+						'&bdc_ppbe='+$('#cmb_ppbe').combobox('getValue')+
+						'&bdc_wono='+$('#dg').datagrid('getData').rows[i].WO_NO+
+						'&bdc_container='+$('#dg').datagrid('getData').rows[i].CONTAINER_NO+
+						'&bdc_row='+$('#dg').datagrid('getData').rows[i].ROW_ID+
+						'&bdc_answer_no='+$('#dg').datagrid('getData').rows[i].ANSWER_NO);
+					x++;
+				}
 			
 		};
 		filterData();
@@ -450,4 +459,4 @@ h2 {
 </html>
 <?php }else{	
 	echo "<script type='text/javascript'>location.href='../404.html';</script>";
-}
+} ?>

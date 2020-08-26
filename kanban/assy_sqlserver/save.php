@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../connect/conn_kanbansys.php");
+include("../../connect/conn.php");
 if (isset($_SESSION['id_kanban'])){
 	if(! $connect){
 		echo json_encode(array('errorMsg'=>'CONNECT TO SERVER FAILED ... !!'));
@@ -54,7 +54,7 @@ if (isset($_SESSION['id_kanban'])){
 		$upd = "update ztb_assy_kanban set $field 
 			where id = (select max(id) from ztb_assy_kanban where id_print = $id)";
 		echo $upd;
-		$data_upd = odbc_exec($connect, $upd);
+		$data_upd = sqlsrv_query($connect, $upd);
 		
 		echo json_encode(array('successMsg'=>'SUCCESS'));
 	}
