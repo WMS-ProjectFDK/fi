@@ -46,11 +46,19 @@ if (isset($_SESSION['id_wms'])){
         $so_asin = $query->so_asin;
         $so_amz_po_no = $query->so_amz_po_no;
         $so_category_mark = $query->so_category_mark;
+        $so_in_mps = $query->so_in_mps;
 
         $amt_l = $so_amount * $so_rate;
         
         $pmark_f='';        $pmark_v='';
         $cmark_f='';        $cmark_v='';
+
+        $in_mps = '';
+        if ($so_in_mps == "true"){
+            $in_mps = 1;
+        }else{
+            $in_mps = 0;
+        }
 
         if ($so_sts == 'HEADER') {
             # INSERT PRF HEADER
@@ -67,6 +75,7 @@ if (isset($_SESSION['id_wms'])){
             $field_so .= "person_code,"     ; $value_so .= "'$user',"                   ;
             $field_so .= "consignee_code,"  ; $value_so .= "'$so_consignee_code',"      ;
             $field_so .= "consignee_name,"  ; $value_so .= "'$so_consignee_name',"      ;
+            $field_so .= "in_mps,"          ; $value_so .= "'$in_mps',"                 ;//1=status sudah diupload, 3=belum masuk MPS
             $field_so .= "consignee_from_jp"; $value_so .= "'$so_category_mark'"        ;
             chop($field_so) ;              	  chop($value_so) ;
 
@@ -133,7 +142,7 @@ if (isset($_SESSION['id_wms'])){
             // $field_sod .= "case_mark_9,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[8] . "'," ;
             // $field_sod .= "case_mark_10,"           ; $value_sod .= "'" . @CASEMARK_VAL_LIST[9] . "'," ;
             $field_sod .= "date_code,"              ; $value_sod .= "'$so_date_code'," ;
-            $field_sod .= "in_mps,"                 ; $value_sod .= "'1'," ;
+            $field_sod .= "in_mps,"                 ; $value_sod .= "'3'," ;//1=status sudah diupload, 3=belum masuk MPS
             $field_sod .= "asin,"                   ; $value_sod .= "'$so_asin'," ;
             $field_sod .= "amazon_po_no"            ; $value_sod .= "'$so_amz_po_no'" ;
             chop($field_sod) ;                      chop($value_sod) ;

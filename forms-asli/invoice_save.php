@@ -227,7 +227,7 @@ if (isset($_SESSION['id_wms'])){
 					if($f == count($rmk_s)-1){
 						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."'";
 					}else{
-						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' || chr(13) || chr(10) || ";
+						$rmk_f .= "'".str_replace("'","''",$rmk_s[$f])."' || chr(13) || ";
 					}
 				}
 			}

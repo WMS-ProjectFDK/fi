@@ -2,6 +2,7 @@
 session_start();
 ini_set('max_execution_time', -1);
 include("../../connect/conn.php");
+$msg = '';
 
 $item_no = isset($_REQUEST['item_no']) ? strval($_REQUEST['item_no']) : '';
 $level_no = isset($_REQUEST['level_no']) ? strval($_REQUEST['level_no']) : '';
