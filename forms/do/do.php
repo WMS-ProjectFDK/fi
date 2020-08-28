@@ -253,7 +253,7 @@ h2 {
 	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_print').dialog('close');$('#dg').datagrid('reload');" style="width:90px">Cancel</a>
 </div>
 
-<table id="dg" title="MATERIALS TRANSACTION" class="easyui-datagrid" toolbar="#toolbar	" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
+<table id="dg" title="MATERIALS & FINISH GOODS TRANSACTION" class="easyui-datagrid" toolbar="#toolbar	" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
 
 <script type="text/javascript">
 	function myformatter(date){

@@ -27,7 +27,7 @@ if (isset($_SESSION['id_wms'])){
 
 		//delete ztb_shipping_plan
 		$sql  = " delete from  ztb_shipping_plan " ;
-		$sql .= " where rowid = '$id' ";
+		$sql .= " where row_id = '$id' ";
 		$data_del = sqlsrv_query($connect, $sql);
 		
 		$sql2  = " delete from grpans_out " ;

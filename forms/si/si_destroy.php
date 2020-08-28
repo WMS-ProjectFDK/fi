@@ -35,6 +35,22 @@ if($msg != ''){
 	// break;
 }
 
+$del3 = "delete from si_doc where si_no='".$si_no."'";
+$data_del3 = sqlsrv_query($connect, $del3);
+
+if( $data_del3 === false ) {
+	if( ($errors = sqlsrv_errors() ) != null) {
+         foreach($errors as $error){
+            $msg .= $error[ 'message']; 
+         }
+    }
+}
+
+if($msg != ''){
+	$msg .= " Delete-Details Process Error : $del3";
+	// break;
+}
+
 if ($msg != ''){
 	echo json_encode(array('errorMsg'=>$msg));
 }else{

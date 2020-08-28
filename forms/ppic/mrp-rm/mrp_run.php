@@ -40,13 +40,15 @@ SELECT aa.bulan+aa.tahun as period, aa.bulan, aa.tahun, bb.tot,
 bb.upload_time, case when bb.tot=0 then 'N' else 'Y' end as KET
 FROM (
 	select distinct bulan, tahun from ztb_assy_plan
-	where bulan = 7 and tahun=2020 OR bulan = 8 and tahun=2020 OR bulan = 9 and tahun=2020
+	where ((bulan = ".$b1." and tahun=".$t1.") OR (bulan = ".$b2." and tahun=".$t2.") OR (bulan = ".$b3." and tahun=".$t3."))
 	) aa
 	left outer join
 	(select bulan, tahun, upload_time, coalesce(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
 	group by bulan, tahun, upload_time) bb 
 	on aa.bulan=bb.bulan AND aa.tahun=bb.tahun
 ";
+
+// echo $q;
 
 $sq = "
 select substring(assy_line, 0, 4)+cell_type as Grade,
@@ -57,7 +59,7 @@ case when tot=0 then 'N' else 'Y' end as ket
 	(select bulan bulanx, tahun tahunx, upload_time up, coalesce(count(distinct tanggal),0) as tot from ztb_assy_plan where used=1 
 	group by bulan, tahun, upload_time) bb 
 	on aa.bulan=bb.bulanx AND aa.tahun=bb.tahunx
-	where ((bulan = 7 and tahun=2020) OR (bulan = 8 and tahun=2020) OR (bulan = 9 and tahun=2020))  and used=1 
+	where ((bulan = ".$b1." and tahun=".$t1.") OR (bulan = ".$b2." and tahun=".$t2.") OR (bulan = ".$b1." and tahun=".$t3."))  and used=1 
   group by bulan,tahun,upload_time,substring(assy_line, 0, 4)+cell_type,tot";
 
 
