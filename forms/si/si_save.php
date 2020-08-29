@@ -158,7 +158,7 @@ if (isset($_SESSION['id_wms'])){
             if($data_ins === false ) {
                 if(($errors = sqlsrv_errors() ) != null) {  
                     foreach( $errors as $error){  
-                        $msg .= "message: ".$error['message']."<br/>";  
+                        $msg .= "message: 1-".$error['message']."<br/>";  
                     }  
                 }
             }
@@ -240,7 +240,7 @@ if (isset($_SESSION['id_wms'])){
             if($data_ins === false ) {
                 if(($errors = sqlsrv_errors() ) != null) {  
                     foreach( $errors as $error){  
-                        $msg .= "message: ".$error[ 'message']."<br/>";  
+                        $msg .= "message: 1-".$error[ 'message']."<br/>";  
                     }  
                 }
             }
@@ -258,17 +258,33 @@ if (isset($_SESSION['id_wms'])){
             if($exp_po[$i] != ''){
                 $sql2 = "INSERT INTO si_po  (create_date,operation_date, si_no, line_no,po_no)
                 VALUES (GETDATE(), SYSDATETIME(), '$SI_NO', $rowno , '$exp_po[$i]') ";
-                // echo $sql2.'<br/>';
+                echo $sql2.'<br/>';
                 $data_sql2 = sqlsrv_query($connect, strtoupper($sql2));
                 if($data_sql2 === false ) {
                     if(($errors = sqlsrv_errors() ) != null) {  
                         foreach( $errors as $error){  
-                            $msg .= "message: ".$error[ 'message']."<br/>";  
-                        }  
+                            $msg .= "message: 2-".$error[ 'message']."<br/>";  
+                        } 
                     }
                 }
             }
             $rowno++;
+        }
+
+
+        // insert si doc
+        $ins_doc = "insert into si_doc
+            select GETDATE(), GETDATE(), '$SI_NO', LINE_NO, DOC_TYPE, SHEET_NO, DOC_NAME, DOC_DETAIL
+            from SI_DOC
+            where si_no = '$SI_NO_OLD'";
+        $data_doc = sqlsrv_query($connect, strtoupper($ins_doc));
+        // echo $ins_doc."<br/>";
+        if($data_doc === false ) {
+            if(($errors = sqlsrv_errors() ) != null) {  
+                foreach( $errors as $error){  
+                    $msg .= "message: 3-".$error[ 'message']."<br/>";  
+                }  
+            }
         }
 	}
 }else{

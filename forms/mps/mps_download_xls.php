@@ -3,28 +3,37 @@ set_time_limit(0);
 date_default_timezone_set('Asia/Jakarta');
 include("../../connect/conn.php");
 
-$q_date = "select RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) as off_old,
-    RIGHT(CONVERT(nvarchar(10), dateadd(month,-1,getdate()), 105),8) as m_old,
+$q_date = "select RIGHT(CAST(eomonth(dateadd(month,-2,getdate())) as varchar(10)),2) as off_old1,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,-2,getdate()), 103),8) as m_old1,
+    RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) as off_old,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,-1,getdate()), 103),8) as m_old,
     RIGHT(CAST(eomonth(getdate()) as varchar(10)),2) as off_now,
-    RIGHT(CONVERT(nvarchar(10), getdate(), 105),8) as m_now,
+    RIGHT(CONVERT(nvarchar(10), getdate(), 103),8) as m_now,
     RIGHT(CAST(eomonth(dateadd(month,+1,getdate())) as varchar(10)),2) as off_plus_1,
-    RIGHT(CONVERT(nvarchar(10), dateadd(month,+1,getdate()), 105),8) as m_plus1,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,+1,getdate()), 103),8) as m_plus1,
     RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as off_plus_2,
-    RIGHT(CONVERT(nvarchar(10), dateadd(month,+2,getdate()), 105),8) as m_plus2,
-    RIGHT(CAST(eomonth(dateadd(month,+3,getdate())) as varchar(10)),2) as off_plus_3,
-    RIGHT(CONVERT(nvarchar(10), dateadd(month,+3,getdate()), 105),8) as m_plus3,
+    RIGHT(CONVERT(nvarchar(10), dateadd(month,+2,getdate()), 103),8) as m_plus2,
+    CAST(RIGHT(CAST(eomonth(dateadd(month,-2,getdate())) as varchar(10)),2) AS INT) +
     CAST(RIGHT(CAST(eomonth(dateadd(month,-1,getdate())) as varchar(10)),2) AS INT) +
     CAST(RIGHT(CAST(eomonth(getdate()) as varchar(10)),2) as INT) +
     CAST(RIGHT(CAST(eomonth(dateadd(month,+1,getdate())) as varchar(10)),2) as INT) +
-    CAST(RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as INT) +
-    CAST(RIGHT(CAST(eomonth(dateadd(month,+3,getdate())) as varchar(10)),2) as INT) as JUM_HARI";
+    CAST(RIGHT(CAST(eomonth(dateadd(month,+2,getdate())) as varchar(10)),2) as INT) as JUM_HARI";
 $data = sqlsrv_query ($connect, strtoupper($q_date));
 $dt = sqlsrv_fetch_object($data);
 
 $t = intval($dt->JUM_HARI);
 
-$Aold = intval($dt->OFF_OLD);    $Anow = intval($dt->OFF_NOW);    $Apl1 = intval($dt->OFF_PLUS_1);    $Apl2 = intval($dt->OFF_PLUS_2);    $Apl3 = intval($dt->OFF_PLUS_3);
-$Dold = $dt->M_OLD;         $Dnow = $dt->M_NOW;         $Dpl1 = $dt->M_PLUS1;          $Dpl2 = $dt->M_PLUS2;          $Dpl3 = $dt->M_PLUS3;
+$Aold1 = intval($dt->OFF_OLD1);
+$Aold = intval($dt->OFF_OLD);    
+$Anow = intval($dt->OFF_NOW);    
+$Apl1 = intval($dt->OFF_PLUS_1);    
+$Apl2 = intval($dt->OFF_PLUS_2);
+
+$Dold1 = $dt->M_OLD1;         
+$Dold = $dt->M_OLD;         
+$Dnow = $dt->M_NOW;         
+$Dpl1 = $dt->M_PLUS1;          
+$Dpl2 = $dt->M_PLUS2;
 
 $sts = "OLD";
 $r_aRR = array();
@@ -46,8 +55,8 @@ $arrHr = array ('V','W','X','Y','Z',
             );
 
 function s_day($a){
-    $timestamp = strtotime($a);
-    return strtoupper(date("D", $timestamp));
+    $date = str_replace('/', '-', $a);
+    return strtoupper(date('D', strtotime($date)));
 }
 
 /* START CONTENT ATACHMENT*/
@@ -113,12 +122,12 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('U'.$noRow, 'REMARK');
             
             $tgl = 1;
-            for ($i=0;$i<$Aold; $i++) { 
-                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $n_hari = s_day($tglR.$Dold);
-                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dold, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
+            for ($i=0;$i<$Aold1; $i++) { 
+                $tglR = $tgl< 10 ? '0'.$tgl : $tgl;
+                $n_hari = s_day($tglR.$Dold1);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dold1, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dold)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dold1)
                 ;
 
                 if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
@@ -155,7 +164,48 @@ $objPHPExcel->setActiveSheetIndex(0)
             }
 
             $tgl = 1;
-            for ($i=$Aold;$i<$Aold+$Anow;$i++) { 
+            for ($i=$Aold1;$i<$Aold1+$Aold;$i++) { 
+                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
+                $n_hari = s_day($tglR.$Dold);
+                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dold, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dold)
+                ;
+
+                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'FFD4AA')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }else{
+                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
+                        array(
+                            'fill' => array(
+                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                'color' => array('rgb' => 'AAFFFF')
+                            ),
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                                )
+                            )
+                        )
+                    );
+                }
+                $tgl++;
+            }
+
+            $tgl = 1;
+            for ($i=$Aold1+$Aold;$i<$Aold1+$Aold+$Anow;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
                 $n_hari = s_day($tglR.$Dnow);
                 $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dnow, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
@@ -196,7 +246,7 @@ $objPHPExcel->setActiveSheetIndex(0)
             }
 
             $tgl = 1;
-            for ($i=$Aold+$Anow;$i<$Aold+$Anow+$Apl1;$i++) { 
+            for ($i=$Aold1+$Aold+$Anow;$i<$Aold1+$Aold+$Anow+$Apl1;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
                 $n_hari = s_day($tglR.$Dpl1);
                 $r_aRR[$i] = array('D_'.$tglR.$Dpl1 => $arrHr[$i]);
@@ -239,54 +289,12 @@ $objPHPExcel->setActiveSheetIndex(0)
             }
 
             $tgl = 1;
-            for ($i=$Aold+$Anow+$Apl1;$i<$Aold+$Anow+$Apl1+$Apl2;$i++) { 
+            for ($i=$Aold1+$Aold+$Anow+$Apl1;$i<$Aold1+$Aold+$Anow+$Apl1+$Apl2;$i++) { 
                 $tglR = $tgl<10 ? '0'.$tgl : $tgl;
                 $n_hari = s_day($tglR.$Dpl2);
                 $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dpl2, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl2)
-                ;
-
-                if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
-                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
-                        array(
-                            'fill' => array(
-                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                'color' => array('rgb' => 'FFD4AA')
-                            ),
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                                )
-                            )
-                        )
-                    );
-                }else{
-                    $sheet->getStyle($arrHr[$i].$noRow)->applyFromArray(
-                        array(
-                            'fill' => array(
-                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                'color' => array('rgb' => 'AAFFFF')
-                            ),
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN
-                                )
-                            )
-                        )
-                    );
-                }
-
-                $tgl++;
-            }
-
-            $tgl = 1;
-            for ($i=$Aold+$Anow+$Apl1+$Apl2;$i<$Aold+$Anow+$Apl1+$Apl2+$Apl3;$i++) { 
-                $tglR = $tgl<10 ? '0'.$tgl : $tgl;
-                $n_hari = s_day($tglR.$Dpl3);
-                $r_aRR[$i] = array('KOLOM_DATE' => $tglR.$Dpl3, 'KOLOM_URUT' => $arrHr[$i], 'KOLOM_HARI' => $n_hari);
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($arrHr[$i].$noRow, $tglR.$Dpl3)
                 ;
 
                 if ($n_hari == 'SAT' OR $n_hari == 'SUN'){
@@ -355,7 +363,7 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('B'.$noRow, $value['ITEM_NAME'])
                 ->setCellValue('C'.$noRow, $value['BATERY_TYPE'])
                 ->setCellValue('D'.$noRow, $value['CELL_GRADE'])
-                ->setCellValue('E'.$noRow, $value['PO_NO'])
+                ->setCellValue('E'.$noRow, "'".$value['PO_NO'])
                 ->setCellValue('F'.$noRow, $value['PO_LINE_NO'])
                 ->setCellValue('G'.$noRow, $value['WORK_ORDER'])
                 ->setCellValue('H'.$noRow, $value['CONSIGNEE'])
@@ -386,6 +394,11 @@ foreach ($someArray as $key => $value) {
             }
         }
     }
+
+    // menghilangkan single quotes 
+    $sheet->setCellValueExplicit('E'.$noRow, $value['PO_NO'], PHPExcel_Cell_DataType::TYPE_STRING);
+    // merubah format cell menjadi text
+    $sheet->getStyle('E'.$noRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
     if ($value['FLG'] != 'MPS') {
         $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(

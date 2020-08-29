@@ -91,8 +91,8 @@ if($si_sts == 'final_si'){
 	
 }else{
 	$sql_h = "select distinct ans.crs_remark as description, sih.shipper_name, sih.shipper_addr1, sih.shipper_addr2,
-		sih.consignee_name, sih.consignee_addr1, sih.consignee_addr2, sih.consignee_addr3+'<br />'+sih.consignee_tel+'<br />'+sih.consignee_FAX consignee_addr3, '' as booking_no, '' as si_no_fix,
-		sih.notify_name, sih.notify_addr1, sih.notify_addr2, sih.notify_addr3, sih.notify_tel, sih.notify_fax,
+		sih.consignee_name, sih.consignee_addr1, sih.consignee_addr2, sih.consignee_addr3+'<br />'+sih.consignee_tel+'<br />'+sih.consignee_FAX consignee_addr3, sih.consignee_tel, '' as booking_no, '' as si_no_fix,
+		sih.notify_name, sih.notify_addr1, sih.notify_addr2, sih.notify_addr3, sih.notify_tel, sih.notify_fax, notify_attn,
 		sih.forwarder_name, sih.forwarder_tel, sih.forwarder_fax, sih.forwarder_attn, 
 		replace(ans.vessel,char(10),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, CAST(getdate() as varchar(10)) as do_date,
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
@@ -113,14 +113,16 @@ if($si_sts == 'final_si'){
 		on ans.crs_remark = zsd.ppbe_no
 		where ans.crs_remark='$do' ";
 
-	$qry = "select do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, max(stuffy_date) stuffy_date, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
+	$qry = "select do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, max(stuffy_date) stuffy_date, 
+		port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
 		sum(ceiling(carton)) as carton,
 		sum(ceiling(pallet)) as pallet,
-		sum(qty) as qty,
+		sum(CAST(qty as decimal(18,0))) as qty,
 		sum(round(gw,2)) as gw, uom_gw,
 		sum(round(nw,2)) as nw, uom_nw,
 		sum(msm) as msm from (
-			select '-' as do_no, ans.ETD, ans.ETA, sih.load_port as port_loading, sih.final_dest as final_destination, ans.stuffy_date,
+			select '-' as do_no, CAST(ans.ETD as varchar(10)) as etd, CAST(ans.ETA as varchar(10)) as eta, sih.load_port as port_loading, sih.final_dest as final_destination, 
+			CAST(ans.stuffy_date as varchar(10)) as stuffy_date,
 			replace(sih.goods_name,'  ','<br/>&nbsp;&nbsp;&nbsp;')  as description, --panjang_pallet, lebar_pallet, 
 			zsi.carton, zsi.pallet, zsi.qty, 
 			zsi.gw, 30 as gross_uom, un2.unit_pl as uom_gw, zsi.nw, 30 as net_uom, un1.unit_pl as uom_nw, zsi.msm 
@@ -131,7 +133,7 @@ if($si_sts == 'final_si'){
 			left join unit un1 on 30 = un1.unit_code
 			left join unit un2 on 30 = un2.unit_code
 			where ans.crs_remark='$do'
-			)
+			) a
 		group by do_no, eta, etd, port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
 		uom_nw, uom_gw";
 
@@ -183,12 +185,14 @@ for ($ii=0; $ii < count($Arrcontainer) ; $ii++) {
 	$container .=  ''.$Arrcontainer[$ii].' <br> &nbsp;&nbsp; ';
 }
 
+$palletNya = '';
+
 if($si_sts == 'final_si'){
 	while($data_pallet = sqlsrv_fetch_object($row_pallet)){
 		array_push($ArrPallet,$data_pallet->PALLET);
 	}
 
-	$palletNya = '';
+	
 	for ($ii=0; $ii < count($ArrPallet) ; $ii++) { 
 		$palletNya .= "&nbsp;&nbsp;&nbsp;<span style='font-size:9px'>".$ArrPallet[$ii]."</span>";
 	}
@@ -257,7 +261,7 @@ if($si_sts == 'final_si'){
 				  &nbsp;&nbsp;&nbsp;CONTAINER GRADE A<br/>
 				  &nbsp;&nbsp;&nbsp;SEAL BOTTLE<br/>
 				  &nbsp;&nbsp;&nbsp;HAVE VENTILATION<br/><br/>";
-		$ket_z = "<tdstyle='font-size:9px;border:0px solid #ffffff;' align='center'><b>CONTAINER GRADE A</b></td>";
+		$ket_z = "<td style='font-size:9px;border:0px solid #ffffff;' align='center'><b>CONTAINER GRADE A</b></td>";
 	}else{
 		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/><br/><br/>";
 		$ket_z = "<td style='font-size:9px;border:0px solid #ffffff;' align='center'></td>";
