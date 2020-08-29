@@ -1,11 +1,9 @@
 
-<HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=x-sjis"><TITLE>Item Entry</TITLE></HEAD><BODY BGCOLOR=White><IMG SRC=/pglosas/images/logo.gif><HR NOSHADE>
-<!-- add 2015/04/21 Start -->
-
+<HTML>
+  <HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=x-sjis"><TITLE>Item Entry</TITLE></HEAD>
+    <BODY BGCOLOR=White>
 
 <SCRIPT>
-<!--
-// BACKボタン押下処理
 function go_back(){
 	var URL;
 	// var type = "NEW";
@@ -44,59 +42,43 @@ function get_pack_info(){
 <!-- add 2015/04/21 End -->
 
 <Div Align="center">
-
 <Form Method="post" Action="Item_Confirm.asp?KEYWORD=FI0122" Name="data_send" Target="_self">
+  <Input Type="hidden" Name="type" Value="NEW">
+  <Input Type="hidden" Name="GRP_FLG" Value=" ">
 
-<!-- type(new,change,delete get start -->
-<Input Type="hidden" Name="type" Value="NEW">
-<Input Type="hidden" Name="GRP_FLG" Value=" ">
+  <Input Type="hidden" Name="no_type"            Value="GROUP">
+  <Input Type="hidden" Name="key"                Value="">
+  <Input Type="hidden" Name="seek_key"           Value="">
 
-<Input Type="hidden" Name="no_type"            Value="GROUP">
-<Input Type="hidden" Name="key"                Value="">
-<Input Type="hidden" Name="seek_key"           Value="">
+  <Input Type="hidden" Name="customer_code" Value="">
+  <Input Type="hidden" Name="customer_po_no" Value="">
 
-    <Input Type="hidden" Name="customer_code" Value="">
-    <Input Type="hidden" Name="customer_po_no" Value="">
-
-<!-- type(new,change,delete get end -->
-
-
- <Input Type="submit" Name="confirm_button" Value="Confirm">
- <!--<Input Type="Button" Value="BACK" onClick='history.back()'><BR>-->
- <Input Type="Button" Value="BACK" onClick='go_back()'><BR><!-- mod 2015/04/21 -->
+  <!-- type(new,change,delete get end -->
+  <Input Type="submit" Name="confirm_button" Value="Confirm">
+  <!--<Input Type="Button" Value="BACK" onClick='history.back()'><BR>-->
+  <Input Type="Button" Value="BACK" onClick='go_back()'><BR><!-- mod 2015/04/21 -->
 
 
 
 
-Mode:NEW
 <Table Border Align="center" Width="100%" Height="100%" CellSpacing="1" BgColor="#ffffff" BorderColor="black">
-<!-- NEW(FROM ITEM ENTRY MAIN) -->
-
-
- <Br>
  If text color is <Font Color="#0000ff">Blue</Font>, Input Number only.   If background color is Yellow, need input.
  <Tr>
- <Td BgColor="#00FF00"><Font Color="#0000ff">Item No</Font></Td>
- <Td ColSpan="2">
- 
-  <!--<Input Type="text" Name="item_no" Size="8" Maxlength="8">-->
-  <Input Type="text" Name="item_no" Size="8" Maxlength="8" value='' style="background-color:#FFFF00"><!-- mod 2015/04/21 -->
- 
-  Make an NG Materials <Input Type="checkbox" Name="ngmc" value="on" checked> 
- 
- </Td>
- <Td BgColor="#00ff00">Item Code</Td>
- <!--<Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24"></Td>-->
- <Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24" value=''></Td><!-- mod 2015/04/21 -->
- </Tr>
- <Tr>
+  <Td BgColor="#00FF00"><Font Color="#0000ff">Item No</Font></Td>
+  <Td ColSpan="2">
+    <Input Type="text" Name="item_no" Size="8" Maxlength="8" value='' style="background-color:#FFFF00">
+    Make an NG Materials <Input Type="checkbox" Name="ngmc" value="on" checked> 
+  </Td>
+  <Td BgColor="#00ff00">Item Code</Td>
+  <!--<Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24"></Td>-->
+  <Td ColSpan="2"><Input Type="text" Name="item_code" Size="24" Maxlength="24" value=''></Td><!-- mod 2015/04/21 -->
+</Tr>
+<Tr>
  <Td BgColor="#00ff00">Item Name</Td>
- <!--<Td ColSpan="2"><Input Type="text" Name="item" Size="40" Maxlength="40"></Td>-->
- <Td ColSpan="2"><Input Type="text" Name="item" Size="40" Maxlength="40" value='' style="background-color:#FFFF00"></Td><!-- mod 2015/04/21 -->
+ <Td ColSpan="2"><Input Type="text" Name="item" Size="40" Maxlength="40" value='' style="background-color:#FFFF00"></Td>
  <Td BgColor="#00ff00">Item Flag</Td>
  <Td ColSpan="2">
- <Select Name="item_flag" Size="1">
- 
+ <Select Name="item_flag" Size="1"> 
      <Option Value="1" SELECTED>1.Finished Good or WIP
      <Option Value="2">2.Material
  </Select></Td>
@@ -106,8 +88,9 @@ Mode:NEW
  <!--<Td ColSpan="2"><Input Type="text" Name="description" Size="30" Maxlength="30"></Td>-->
  <Td ColSpan="2"><Input Type="text" Name="description" Size="30" Maxlength="30" value=''></Td><!-- mod 2015/04/21 -->
  <Td BgColor="#00ff00">Class Code</Td>
- <Td ColSpan="2"><Select Name="class_code" Size="1" style="background-color:#FFFF00">
-  <Option Value="">
+ <Td ColSpan="2">
+   <Select Name="class_code" Size="1" style="background-color:#FFFF00">
+    <Option Value="">
  
     <!--<Option Value="222000">CR---->
     <Option Value="222000" >CR--<!-- mod 2015/04/21 -->
@@ -183,7 +166,6 @@ Mode:NEW
     
     <!--<Option Value="111911">LR-COMMON--->
     <Option Value="111911" >LR-COMMON-<!-- mod 2015/04/21 -->
-    
  </Select></Td>
  </Tr>
  <Tr>
