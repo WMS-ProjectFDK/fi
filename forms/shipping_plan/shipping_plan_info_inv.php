@@ -5,7 +5,7 @@
 	$work_order = isset($_REQUEST['work_order']) ? strval($_REQUEST['work_order']) : '';
 
 	include("../../connect/conn.php");
-	$cek = "select do_so.customer_po_no, ETD, ETA, cr_date, do_no, line_no, answer.item_no, answer.qty 
+	$cek = "select do_so.customer_po_no, cast(ETD as nvarchar(10)) as ETD,cast(ETA as nvarchar(10)) as ETA, cast(cr_date as nvarchar(10)) as cr_date, do_no, line_no, answer.item_no, answer.qty 
 		from answer 
 		inner join do_so on do_so.answer_no = answer.answer_no 
 		where work_no = '$work_order'" ;

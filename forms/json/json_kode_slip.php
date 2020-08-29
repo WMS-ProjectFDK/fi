@@ -8,6 +8,8 @@ if($slip=='21' || $slip=='25'){
 	$kode='MT-'.date('y')."-";
 }elseif ($slip=='20' || $slip=='05') {
 	$kode="RMT-".date('y')."-";
+}elseif ($slip=='80' ) {
+	$kode="FG-".date('y')."-";	
 }else{
 	$kode='';
 }

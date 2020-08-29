@@ -6,5 +6,6 @@
 {"id": "41", "name": "[41] PURCHASE RETURN (PAY)"},
 {"id": "95", "name": "[95] ISSUE CHANGING STATUS"},
 {"id": "96", "name": "[96] RECEIVE CHANGING STATUS"},
-{"id": "98", "name": "[98] DISPOSAL"}
+{"id": "98", "name": "[98] DISPOSAL"},
+{"id": "80", "name": "[80] KURAIRE"}
 ]

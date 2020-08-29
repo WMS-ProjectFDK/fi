@@ -14,7 +14,7 @@
 	$flag = isset($_REQUEST['flag']) ? strval($_REQUEST['flag']) : '';
 
 	if ($ck_cr_date != "true"){
-		$date = "to_char(cr_date,'yyyy-mm-dd') between '$date_awal' and '$date_akhir' AND ";
+		$date = "cr_Date between '$date_awal' and '$date_akhir' AND ";
 	}else{
 		$date = "";
 	}
@@ -46,23 +46,21 @@
 		$supp = "";
 	}
 
-	if  ($flag == 5){
-		$filter = " rownum <= 150 and ";
-	}
 	
-	$where ="where $date $prf $item_no $supp $filter $item status = 'FM'";
+	
+	$where ="where $date $prf $item_no $supp $item status = 'FM'";
 	
 	include("../../connect/conn.php");
 
-	$sql = "select '1' SHIPPING ,work_order,po_no,po_line_no,cr_date,batery_type,cell_grade,item_no,item_name,nvl(qty,0) Qty_order,
-			nvl(qty_prod,0) Qty_Produksi, nvl(qty_invoiced,0) qty_invoiced,si_no, ans.crdate_ship_plan
+	$sql = "select top 150 '1' SHIPPING ,work_order,po_no,po_line_no,cast(cr_date as varchar(10)) as cr_date,batery_type,cell_grade,item_no,item_name,isnull(qty,0) Qty_order,
+			isnull(qty_prod,0) Qty_Produksi, isnull(qty_invoiced,0) qty_invoiced,si_no, ans.crdate_ship_plan
 			from mps_header mh 
 			left outer join (select wo_no,sum(case when slip_type = 80 then slip_quantity else slip_quantity*-1 end) qty_prod 
 			from production_income group by wo_no) pi on mh.work_order = pi.wo_no 
-			left outer join (select sum(nvl(do_so.qty,0)) qty_invoiced,work_no from answer inner join do_so on do_so.answer_no = answer.answer_no group by work_no)inv on mh.work_order = inv.work_no 
+			left outer join (select sum(isnull(do_so.qty,0)) qty_invoiced,work_no from answer inner join do_so on do_so.answer_no = answer.answer_no group by work_no)inv on mh.work_order = inv.work_no 
 			left outer join (select max(si_no) si_no,cust_si_no from  si_header group by cust_si_no) sh on sh.cust_si_no = mh.po_no 
-			left join (select distinct work_no, cr_date as crdate_ship_plan from answer) ans on mh.work_order=ans.work_no
-			$where 
+			left join (select distinct work_no, cast(cr_date as varchar(10)) as crdate_ship_plan from answer) ans on mh.work_order=ans.work_no
+			$where
 			order by cr_date";
 	
 	$data = sqlsrv_query($connect, strtoupper($sql));
@@ -77,13 +75,13 @@
 		$items[$rowno]->QTY_ORDER = number_format($q);
 
 		$e = $items[$rowno]->QTY_PRODUKSI;
-		$items[$rowno]->QTY_PRODUKSI = '<a href="javascript:void(0)" title="'.$e.'" onclick="info_kuraire('.$w.')"  style="text-decoration: none; color: black;">'.number_format($e).'</a>';
+		$items[$rowno]->QTY_PRODUKSI = '<a href="javascript:void(0)" title="'.$e.'" onclick="info_kuraire('.$w.')"  style="text-decoration: none; ">'.number_format($e).'</a>';
 
 		$f = $items[$rowno]->QTY_INVOICED;
-		$items[$rowno]->QTY_INVOICED = '<a href="javascript:void(0)" title="'.$f.'" onclick="info_invoiced('.$w.')"  style="text-decoration: none; color: black;">'.number_format($f).'</a>';
+		$items[$rowno]->QTY_INVOICED = '<a href="javascript:void(0)" title="'.$f.'" onclick="info_invoiced('.$w.')"  style="text-decoration: none; ">'.number_format($f).'</a>';
 		
 		$h = $items[$rowno]->ITEM_NO;
-		$items[$rowno]->ITEM_NO = '<a href="javascript:void(0)" title="'.$h.'" onclick="info_item('.$h.')"  style="text-decoration: none; color: black;">'.$h.'</a>';
+		$items[$rowno]->ITEM_NO = '<a href="javascript:void(0)" title="'.$h.'" onclick="info_item('.$h.')"  style="text-decoration: none; ">'.$h.'</a>';
 		
 		$rowno++;
 	}
