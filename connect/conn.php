@@ -17,7 +17,7 @@
     // $connect = sqlsrv_connect($serverName, $connectionInfo);
 
 	if($connect) {
-		echo $varConn;
+		$varConn = "Y";
 	}else{
 		$varConn = "N";
 		die(print_r(sqlsrv_errors(),true));

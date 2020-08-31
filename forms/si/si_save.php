@@ -258,7 +258,7 @@ if (isset($_SESSION['id_wms'])){
             if($exp_po[$i] != ''){
                 $sql2 = "INSERT INTO si_po  (create_date,operation_date, si_no, line_no,po_no)
                 VALUES (GETDATE(), SYSDATETIME(), '$SI_NO', $rowno , '$exp_po[$i]') ";
-                echo $sql2.'<br/>';
+                // echo $sql2.'<br/>';
                 $data_sql2 = sqlsrv_query($connect, strtoupper($sql2));
                 if($data_sql2 === false ) {
                     if(($errors = sqlsrv_errors() ) != null) {  

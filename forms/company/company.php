@@ -759,8 +759,8 @@ h2 {
 		function editBOM(){
 			var row = $('#dg').datagrid('getSelected');	
 			if (row){
-				var lvl = row.LEVEL_NO.toString();
-				var item = row.UPPER_ITEM_NO.toString();
+				var lvl = row.LEVEL_NO;
+				var item = row.UPPER_ITEM_NO;
 				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT BOM');
 				$('#item_no_edit').textbox('setValue',item);
 				$('#level_no_edit').textbox('setValue',lvl);

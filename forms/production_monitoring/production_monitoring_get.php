@@ -1,4 +1,5 @@
 <?php
+	error_reporting(0);
 	session_start();
 	$date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
 	$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';

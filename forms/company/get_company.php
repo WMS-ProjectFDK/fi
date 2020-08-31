@@ -7,9 +7,13 @@ $company_no = isset($_REQUEST['company_no']) ? strval($_REQUEST['company_no']) :
 $company_type = isset($_REQUEST['company_type']) ? strval($_REQUEST['company_type']) : '';
 $company_name = isset($_REQUEST['company_name']) ? strval($_REQUEST['company_name']) : '';
 
+$sqlCompanyCode = '';
+$company_type = '';
+
 if ($company_no != ''){
     $sqlCompanyCode = "and company_code = '$company_no' "; 
 }
+
 if ($company_type != 'None'){
     $sqlCompanyType = "and company_type like '%$company_type%' ";
 }
@@ -37,8 +41,6 @@ $sql  = " select    COMPANY_CODE COMPANY_NO,
 
 $data_cek = sqlsrv_query($connect, strtoupper($sql));
 
-
-
 $items = array();
 $rowno=0;
 
@@ -49,5 +51,4 @@ while($row = sqlsrv_fetch_object($data_cek)){
 
 $result["rows"] = $items;
 echo json_encode($result);
-
 ?>

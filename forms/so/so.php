@@ -125,7 +125,7 @@ $menu_id = $_GET['id'];
 				<input style="width:150px; height: 18px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src"type="text" placeholder="Sales Order No."/>
 	    		<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2"  onclick="filterData();"><i class="fa fa-filter" aria-hidden="true"></i> FILTER DATA</a>
 				<a href="javascript:void(0)" style="width: 120px;" id="add" class="easyui-linkbutton c2" onclick="add_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO</a>
-				<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2" onclick="add_group_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO FROM FDK</a>
+				<a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2" onclick="add_group_so()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SO FROM FDK</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="edit" class="easyui-linkbutton c2" onclick="edit_so()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT SO</a>
 	    		<a href="javascript:void(0)" style="width: 120px;" id="delete" class="easyui-linkbutton c2" onclick="delete_so()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE SO</a>
 	    	</div></div>
@@ -421,6 +421,7 @@ $menu_id = $_GET['id'];
 			var pdf_url='';
 
 			$(function(){
+				access_log();
 				$('#date_awal').datebox('disable');
 				$('#date_akhir').datebox('disable');
 				$('#ck_date').change(function(){
@@ -471,6 +472,41 @@ $menu_id = $_GET['id'];
 
 				document.getElementById('src').focus();
 			});
+
+			function access_log(){
+				//ADD//UPDATE/T
+				//DELETE/T
+				//PRINT/T
+
+				var add = "<?=$exp[0]?>";
+				var upd = "<?=$exp[1]?>";
+				var del = "<?=$exp[2]?>";
+				var prn = "<?=$exp[4]?>";
+
+				if (add == 'ADD/T'){
+					$('#add').linkbutton('enable');
+				}else{
+					$('#add').linkbutton('disable');
+				}
+
+				if (upd == 'UPDATE/T'){
+					$('#edit').linkbutton('enable');
+				}else{
+					$('#edit').linkbutton('disable');
+				}
+
+				if (del == 'DELETE/T'){
+					$('#delete').linkbutton('enable');
+				}else{
+					$('#delete').linkbutton('disable');
+				}
+
+				if (prn == 'PRINT/T'){
+					$('#print').linkbutton('enable');
+				}else{
+					$('#print').linkbutton('disable');
+				}			
+			}
 
 			var src ='';
 

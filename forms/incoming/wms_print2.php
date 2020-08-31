@@ -19,11 +19,19 @@ session_start();
 
     $sql = "select a.item_no, b.description, b.class_code, a.qty, e.unit_pl, a.pallet, d.company, 
         CAST(c.gr_date as varchar(10)) as gr_date,
-        cast(a.item_no as varchar)+'('+b.description+'),'+cast(a.qty as varchar)+','+cast(a.pallet as varchar)+','+cast(a.id as varchar)+','+CAST(c.gr_date as varchar(10)) as qr,
-        b.stock_subject_code
-        from ztb_wh_in_det a  left join item b on a.item_no=b.item_no
-        left join gr_header c on a.gr_no=c.gr_no left join company d on c.supplier_code=d.company_code and d.company_type=3
-        left join unit e on b.uom_q=e.unit_code 
+        cast(a.item_no as varchar)+'('+b.description+'),'+
+		cast(cast(a.qty as int) as varchar)+','+
+		cast(a.pallet as varchar)+','+
+		cast(a.id as varchar)+','+
+		CAST(c.gr_date as varchar(10)) as qr,
+        b.stock_subject_code,cl.class
+        from ztb_wh_in_det a  
+		left join item b on a.item_no=b.item_no
+        left join gr_header c on a.gr_no=c.gr_no 
+		left join company d on c.supplier_code=d.company_code and d.company_type=3
+        left join unit e on b.uom_q=e.unit_code
+		left join (select class_code, class_1+'-'+class_2+'-'+class_3 as class from class where class_code=111213) cl 
+		on b.class_code=cl.class_code
         where a.gr_no='$grn' and a.item_no='$item' and line_no='$line' 
         order by a.pallet asc";
 	$result = sqlsrv_query($connect, strtoupper($sql));
@@ -85,7 +93,7 @@ $cls_item = array('111000' => 'LR',
 				  '111212' => 'LR6(P.P)',
 				  '111214' => 'LR6COMMON',
 				  '111911' => 'LRCOMMON',
-				  '' => ''
+				  '111213' => ''
 );
 
 while ($data=sqlsrv_fetch_array($result)){
@@ -106,7 +114,7 @@ $content .= "
 			<tr>
 				<td style='width:110px;'>TYPE</td>
 				<td>:</td>
-				<td style='width:242px;'>".$cls_item[$data[2]]."</td>
+				<td style='width:242px;'>".$data[10]."</td>
 			</tr>
 			<tr>
 				<td style='width:110px;'>QUANTITY</td>
