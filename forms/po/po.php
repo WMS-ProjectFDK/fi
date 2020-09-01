@@ -19,16 +19,6 @@ if ($varConn=='Y'){
 			return is_confirmed;
 		}
 	</script> 
-	<!-- <link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
-	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
-	<link rel="stylesheet" type="text/css" href="../../css/style.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/color.css" />
-	<script type="text/javascript" src="../../js/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="../../js/datagrid-filter.js"></script>
-	<script type="text/javascript" src="../../js/datagrid-detailview.js"></script>
-	<script type="text/javascript" src="../../js/jquery.edatagrid.js"></script> -->
 	<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css" />
 	<link rel="stylesheet" type="text/css" href="../../themes/icon.css" />
@@ -1791,7 +1781,7 @@ if ($varConn=='Y'){
 				var myJSON_e=JSON.stringify(dataRows_Edit);
 				var str_unescape_e=unescape(myJSON_e);
 
-				console.log('po_edit.php?data='+str_unescape_e);
+				console.log(dataRows_Edit);
 				$.post('po_edit.php',{
 					data: unescape(str_unescape_e)
 				}).done(function(res){

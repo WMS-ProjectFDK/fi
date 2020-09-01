@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include('../class/phpqrcode/phpqrcode.php'); 
 $string = isset($_REQUEST['string']) ? strval($_REQUEST['string']) : '';     
 ob_start("callback"); 

@@ -4,7 +4,7 @@ ini_set('max_execution_time', -1);
 include("../../connect/conn.php");
 
 $ex_factory = isset($_REQUEST['ex_factory']) ? strval($_REQUEST['ex_factory']) : '';
-
+$ex_factory_z = isset($_REQUEST['ex_factory_z']) ? strval($_REQUEST['ex_factory_z']) : '';
 
 $sql  = " select" ;
 $sql .= "  dos.do_no," ;
@@ -39,7 +39,8 @@ $sql .= "   and sod.so_no = soh.so_no  " ;
 $sql .= "   and sod.item_no = i.item_no  " ;
 $sql .= "   and i.uom_q = un.unit_code  " ;
 $sql .= "   and soh.customer_code = c.company_code  " ;
-$sql .= "   and ind.ex_factory = '$ex_factory'";
+// $sql .= "   and ind.ex_factory = '$ex_factory'";
+$sql .= "   and ind.ex_factory BETWEEN '$ex_factory' AND '$ex_factory_z' ";
 #$sql .= " order by c.company,dos.do_no" ;
 $sql .= " order by c.company,dos.do_no,ind.answer_no" ; #(mod Ver1.0)
 

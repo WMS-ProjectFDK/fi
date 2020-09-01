@@ -30,15 +30,15 @@ if($si_sts == 'final_si'){
 	$sql_h = "select distinct a.*,b.*,c.*, cs.description as desc_size, cm.description as desc_method
 		, --LIST_COLLECT(ans.SI_NO, ', ') 
 		b.cust_si_no as si_no_fix,
-		replace(sdoc_bl.doc_detail,char(10),'<br>') doc_detail_bl,
-		replace(sdoc_co.doc_detail,char(10),'<br>') doc_detail_co,
-		replace(sdoc_iv.doc_detail,char(10),'<br>') doc_detail_iv,
-		replace(sdoc_bl.doc_name,char(10),'<br>') doc_name_bl,
-		replace(sdoc_co.doc_name,char(10),'<br>') doc_name_co,
-		replace(sdoc_iv.doc_name,char(10),'<br>') doc_name_iv,
-		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(10),'<br>') end as special_info,
+		replace(sdoc_bl.doc_detail,char(13),'<br>') doc_detail_bl,
+		replace(sdoc_co.doc_detail,char(13),'<br>') doc_detail_co,
+		replace(sdoc_iv.doc_detail,char(13),'<br>') doc_detail_iv,
+		replace(sdoc_bl.doc_name,char(13),'<br>') doc_name_bl,
+		replace(sdoc_co.doc_name,char(13),'<br>') doc_name_co,
+		replace(sdoc_iv.doc_name,char(13),'<br>') doc_name_iv,
+		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(13),'<br>') end as special_info,
 		b.notify_name_2 + '<br/>  '+ b.notify_addr1_2+'<br/>'+ b.notify_addr2_2+'<br/>'+ b.notify_addr3_2+'<br/>'+b.notify_tel_2+'<br/>'+ b.notify_fax_2+'<br/>'+b.notify_attn_2 NOTIFY_NAME_2, 
-		replace(a.ship_name,char(10),'<br>') as ship_name, ans.crs_remark,
+		replace(a.ship_name,char(13),'<br>') as ship_name, ans.crs_remark,
 		CONVERT(varchar, a.do_date,103) as do_date
 		from do_header a
 		inner join si_header b on a.si_no=b.si_no
@@ -84,7 +84,7 @@ if($si_sts == 'final_si'){
 		from ztb_item 
 		where item_no in (select distinct  item_no from do_details where do_no='$do')";
 
-	$qry_remark = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as remark from do_marks where do_no='$do' order by mark_no asc";
+	$qry_remark = "select replace(CAST(marks as varchar(500)),char(13),'<br/>') as remark from do_marks where do_no='$do' order by mark_no asc";
 
 	$sts_doc = 'F I N A L&nbsp;&nbsp;&nbsp;&nbsp;S I';
 	$inv_no = $do;
@@ -94,16 +94,16 @@ if($si_sts == 'final_si'){
 		sih.consignee_name, sih.consignee_addr1, sih.consignee_addr2, sih.consignee_addr3+'<br />'+sih.consignee_tel+'<br />'+sih.consignee_FAX consignee_addr3, sih.consignee_tel, '' as booking_no, '' as si_no_fix,
 		sih.notify_name, sih.notify_addr1, sih.notify_addr2, sih.notify_addr3, sih.notify_tel, sih.notify_fax, notify_attn,
 		sih.forwarder_name, sih.forwarder_tel, sih.forwarder_fax, sih.forwarder_attn, 
-		replace(ans.vessel,char(10),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, CAST(getdate() as varchar(10)) as do_date,
+		replace(ans.vessel,char(13),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, CAST(getdate() as varchar(13)) as do_date,
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
-		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(10),'<br>') end as special_info,
+		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(13),'<br>') end as special_info,
 		sih.notify_name_2+'<br />  '+sih.notify_addr1_2+'<br />'+sih.notify_addr2_2+'<br />'+sih.notify_addr3_2+'<br />'+sih.notify_tel_2+'<br />'+sih.notify_fax_2+'<br/>'+sih.notify_attn_2 NOTIFY_NAME_2,
-		'<br />&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_bl.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_name,char(10),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
+		'<br />&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_bl.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
+		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
 		from answer ans
 		inner join si_header sih on ans.si_no = sih.si_no
 		left outer join (select si_no,doc_detail,doc_name from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = sih.si_no
@@ -113,7 +113,7 @@ if($si_sts == 'final_si'){
 		on ans.crs_remark = zsd.ppbe_no
 		where ans.crs_remark='$do' ";
 
-	$qry = "select do_no, CAST(etd as varchar(10)) as etd, CAST(eta as varchar(10)) as eta, max(stuffy_date) stuffy_date, 
+	$qry = "select do_no, CAST(etd as varchar(13)) as etd, CAST(eta as varchar(13)) as eta, max(stuffy_date) stuffy_date, 
 		port_loading, final_destination, description, --panjang_pallet, lebar_pallet,
 		sum(ceiling(carton)) as carton,
 		sum(ceiling(pallet)) as pallet,
@@ -121,8 +121,8 @@ if($si_sts == 'final_si'){
 		sum(round(gw,2)) as gw, uom_gw,
 		sum(round(nw,2)) as nw, uom_nw,
 		sum(msm) as msm from (
-			select '-' as do_no, CAST(ans.ETD as varchar(10)) as etd, CAST(ans.ETA as varchar(10)) as eta, sih.load_port as port_loading, sih.final_dest as final_destination, 
-			CAST(ans.stuffy_date as varchar(10)) as stuffy_date,
+			select '-' as do_no, CAST(ans.ETD as varchar(13)) as etd, CAST(ans.ETA as varchar(13)) as eta, sih.load_port as port_loading, sih.final_dest as final_destination, 
+			CAST(ans.stuffy_date as varchar(13)) as stuffy_date,
 			replace(sih.goods_name,'  ','<br/>&nbsp;&nbsp;&nbsp;')  as description, --panjang_pallet, lebar_pallet, 
 			zsi.carton, zsi.pallet, zsi.qty, 
 			zsi.gw, 30 as gross_uom, un2.unit_pl as uom_gw, zsi.nw, 30 as net_uom, un1.unit_pl as uom_nw, zsi.msm 

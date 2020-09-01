@@ -68,7 +68,8 @@ h2 {
 			<div style="width:470px; float:left;">
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">EX Factory Date</span>
-					<input style="width:100px;" name="ex_factory_date" id="ex_factory_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+					<input style="width:100px;" name="ex_factory_date" id="ex_factory_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> TO
+					<input style="width:100px;" name="ex_factory_date_z" id="ex_factory_date_z" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
 					
 				</div>
 				<div class="fitem">
@@ -184,7 +185,8 @@ h2 {
 
         function filterDataUpdate(){
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue')
+				ex_factory: $('#ex_factory_date').datebox('getValue'),
+				ex_factory_z: $('#ex_factory_date_z').datebox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_delivery_update.php'
@@ -195,7 +197,8 @@ h2 {
 
         function filterDataRestore(){
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue')
+				ex_factory: $('#ex_factory_date').datebox('getValue'),
+				ex_factory_z: $('#ex_factory_date_z').datebox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_delivery_restore.php'

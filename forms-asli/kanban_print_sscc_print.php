@@ -139,7 +139,7 @@ $content = "
 								<tr>
 									<td colspan=2 align='center' style='height:70px;border-right:0px solid #ffffff;border-left:0px solid #ffffff;border-bottom:0px solid #ffffff;'>
 										";
-									if($value['SSCC'] != ''){
+									if($value['STS_SSCC'] != '0'){
 										$content .= "
 										<span style='font-size: 11px;'>SERIAL SHIPPING CONTAINER CODE (SSCC)</span>
 										<br/><br/>

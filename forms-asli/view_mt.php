@@ -10,7 +10,7 @@ $user_name = $_SESSION['id_wms'];
 <head>
 <meta charset="UTF-8">
 <title>MATERIALS TRANSACTION VIEW</title>
-<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="icon" type="image/png" href="../../favicon.png">
 <script language="javascript">
 		function confirmLogOut(){
 		var is_confirmed;
@@ -62,7 +62,7 @@ h2 {
 </style>
 </head>
 <body>
-<?php include ('../ico_logout.php'); ?>
+<?php include ('../../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
 	<fieldset style="float:left;width:450px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>Materials Transaction Filter</strong></span></legend>
@@ -75,12 +75,12 @@ h2 {
 			</div>
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;">Slip No.</span>
-				<select style="width:250px;" name="cmb_slip_no" id="cmb_slip_no" class="easyui-combobox" data-options=" url:'json/json_slip_no.php', method:'get', valueField:'slip_no', textField:'slip_no', panelHeight:'75px'"></select>
+				<select style="width:250px;" name="cmb_slip_no" id="cmb_slip_no" class="easyui-combobox" data-options=" url:'../json/json_slip_no.php', method:'get', valueField:'slip_no', textField:'slip_no', panelHeight:'75px'"></select>
 				<label><input type="checkbox" name="ck_slip_no" id="ck_slip_no" checked="true">All</input></label>
 			</div>
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;">WO No.</span>
-				<select style="width:250px;" name="cmb_wo" id="cmb_wo" class="easyui-combobox" data-options=" url:'json/json_wo_no.php', method:'get', valueField:'wo_no', textField:'wo_no', panelHeight:'100px'"></select>
+				<select style="width:250px;" name="cmb_wo" id="cmb_wo" class="easyui-combobox" data-options=" url:'../json/json_wo_no.php', method:'get', valueField:'wo_no', textField:'wo_no', panelHeight:'100px'"></select>
 				<label><input type="checkbox" name="ck_wo" id="ck_wo" checked="true">All</input></label>
 			</div>
 		</div>
@@ -88,7 +88,7 @@ h2 {
 	<fieldset style="position:absolute;margin-left:475px;border-radius:4px;width: 500px;height: 100px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>
 		<div class="fitem">
 			<span style="width:110px;display:inline-block;">Item No.</span>
-			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
 			onSelect:function(rec){
 				//alert(rec.id_name_item);
 				var spl = rec.id_name_item;

@@ -73,7 +73,7 @@ $dt_q = sqlsrv_fetch_object($data_q);
 		?>
 		
 		<div id="toolbar" style="padding:3px 3px;">
-			<fieldset style="float:left;width:540px;border-radius:4px;"><legend><span class="style3"><strong>Goods Receive Filter</strong></span></legend>
+			<fieldset style="float:left;width:540px;height:105px;border-radius:4px;"><legend><span class="style3"><strong>Goods Receive Filter</strong></span></legend>
 				<div style="width:540px;float:left">
 	    			<div class="fitem">
 	    				<span style="width:110px;display:inline-block;">GR Date</span>
@@ -94,7 +94,7 @@ $dt_q = sqlsrv_fetch_object($data_q);
 	    			</div>
 	    		</div>
 			</fieldset>
-			<fieldset style="position:absolute;margin-left:565px;border-radius:4px;width: 500px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>
+			<fieldset style="position:absolute;margin-left:565px;border-radius:4px;width: 500px;height:105px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>
 				<div class="fitem">
 					<span style="width:110px;display:inline-block;">PO No.</span>
 					<select style="width:190px;" name="cmb_po" id="cmb_po" class="easyui-combobox" data-options=" url:'../json/json_pono.php', method:'get', valueField:'po_no', textField:'po_no', panelHeight:'100px'"></select>
@@ -116,12 +116,15 @@ $dt_q = sqlsrv_fetch_object($data_q);
 					<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox" disabled=""/>
 				</div>
 			</fieldset>
-			<fieldset style="margin-left: 1090px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>Print Select</strong></span></legend>
+			<fieldset style="margin-left: 1090px;border-radius:4px;height: 105px;"><legend><span class="style3"><strong>Print Select</strong></span></legend>
 				<div class="fitem" align="center">
-					<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2" disabled="true" onclick="print_bc_no()"><i class="fa fa-print" aria-hidden="true"></i> Print BC NO. View</a>
+					<a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2" disabled="true" onclick="print_bc_no()"><i class="fa fa-print" aria-hidden="true"></i> Print BC NO. View</a>
 				</div>
 				<div class="fitem" align="center">
-					<a href="javascript:void(0)" style="width: 150px;" id="add" class="easyui-linkbutton c2"  onclick="print_bc_no_sp()"><i class="fa fa-print" aria-hidden="true"></i> Spart BC NO. View</a>
+					<a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2"  onclick="print_bc_no_sp()"><i class="fa fa-print" aria-hidden="true"></i> Spart BC NO. View</a>
+				</div>
+				<div class="fitem" align="center">
+					<a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2"  onclick="download_report()"><i class="fa fa-print" aria-hidden="true"></i> Download Report</a>
 				</div>
 			</fieldset>
 			<div style="padding:5px 6px;">
@@ -479,7 +482,8 @@ $dt_q = sqlsrv_fetch_object($data_q);
 		                {field:'CURR_CODE',title:'CURRENCY<br>CODE',width:40,halign:'center', hidden: true},
 		                {field:'CURR_SHORT',title:'CURRENCY',width:50,halign:'center', align:'center'},
 		                {field:'EX_RATE',title:'RATE',width:50,halign:'center', align:'center'},
-		                {field:'AMT_L',title:'AMOUNT',width:80,halign:'center', align:'right'},
+		                {field:'AMT_O',title:'AMOUNT (O)',width:80,halign:'center', align:'right'},
+						{field:'AMT_L',title:'AMOUNT (L)',width:80,halign:'center', align:'right'},
 		                {field:'REMARK',title:'REMARK',width:60,halign:'center'},
 		                {field:'PAYTERMS',title:'Payment<br>Terms',width:150,halign:'center'},
 		                {field:'BC_DOC',title:'BC Doc',width:80,halign:'center'},
@@ -634,6 +638,44 @@ $dt_q = sqlsrv_fetch_object($data_q);
 						  "&ck_item="+ck_item;
 
 				$('#dg').datagrid('enableFilter');
+			}
+
+			function download_report(){
+				if (get_url != ''){
+					console.log('gr_download_proses.php'+get_url);
+					$.post('gr_download_proses.php'+get_url,{}).done(function(res){
+						// console.log(res);
+
+						// if(res == '"success"'){
+							download_excel();
+						// }else{
+						// 	$.messager.alert('ERROR',res,'warning');
+						// }
+
+
+						// if (res == '"success"'){
+						// 	$.messager.confirm('Confirm','Do you want to download file to excel?',function(r){
+						// 		if(r){
+						// 			download_excel();
+						// 		}
+						// 	})
+						// }else{
+						// 	$.messager.show({
+						// 		title: 'Error',
+						// 		msg: res
+						// 	});
+						// }
+					});
+				}
+				// else{
+				// 	$.messager.show({title: 'Goods Receive',msg: 'Data Not filter'});
+				// }
+			}
+
+			function download_excel(){
+				// console.log('gr_download_xls.php');//+get_url);
+				url_download = 'gr_download_xls.php';//+get_url;
+				window.open(url_download);
 			}
 
 			function add_gr(){

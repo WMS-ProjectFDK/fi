@@ -51,15 +51,15 @@
 	
 	include("../../connect/conn.php");
 
-	$sql = "select h.customer_code, c.company customer, h.do_no,cast(do_date as varchar(10)) do_date, cu.curr_mark, h.ship_end_flg, cast(h.bl_date as varchar(10)) bl_Date, 
-	replace(h.remark,char(10),'<br>') as remark1, h.remark, h.person_code, pe.person,
+	$sql = "select h.customer_code, c.company customer, h.do_no,cast(do_date as varchar(13)) do_date, cu.curr_mark, h.ship_end_flg, cast(h.bl_date as varchar(13)) bl_Date, 
+	replace(h.remark,char(13),'<br>') as remark1, h.remark, h.person_code, pe.person,
 	h.ex_rate  ex_rate, h.amt_o amt_o, h.amt_o * h.ex_rate amt_l,
 	h.curr_code, h.trade_term, h.attn, h.pby, h.pdays, h.pdesc, h.gst_rate, c.country_code, co.country, h.si_no, h.contract_seq, substring(h.trade_term, 0, 3) term,
-	replace(h.ship_name,char(10),'<br>') as ship_name, 
+	replace(h.ship_name,char(13),'<br>') as ship_name, 
 	si.load_port_code, si.load_port, si.disch_port_code, h.port_discharge, si.final_dest_code, h.final_destination, 
-	replace(h.notify,char(10),'<br>')as notify,
-	cast(h.eta as varchar(10)) as eta, cast(h.etd as varchar(10))as etd, f.transport_type, f.forwarder_code, f.domestic_truck_code, f.booking_no,
-	f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, cast(h.do_date as varchar(10)) as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
+	replace(h.notify,char(13),'<br>')as notify,
+	cast(h.eta as varchar(13)) as eta, cast(h.etd as varchar(13))as etd, f.transport_type, f.forwarder_code, f.domestic_truck_code, f.booking_no,
+	f.cargo_type1, f.cargo_size1, f.cargo_qty1, f.cargo_type2, f.cargo_size2, f.cargo_qty2, cast(h.do_date as varchar(13)) as TANGGAL_DO, si.goods_name, ppbe.ppbe_no, idc.sts as delivery_update, idc.rmk
 	from do_header h
 	inner join company c on h.customer_code = c.company_code
 	inner join country co on c.country_code = co.country_code
@@ -68,7 +68,7 @@
 	inner join FORWARDER_LETTER f on h.do_no = f.do_no
 	left join person pe on h.person_code = pe.person_code
 	left join (select distinct si_no, crs_remark as ppbe_no from answer) ppbe on h.si_no = ppbe.si_no and h.description = ppbe.ppbe_no
-	left join (select distinct inv_no, case when commit_date is null then 'NOT DELIVERY' else cast(commit_date as varchar(10)) end sts, max(remark) as rmk
+	left join (select distinct inv_no, case when commit_date is null then 'NOT DELIVERY' else cast(commit_date as varchar(13)) end sts, max(remark) as rmk
 		from indication group by inv_no, commit_date) idc on h.do_no = idc.inv_no
 		$where
 		order by h.customer_code,h.do_date desc";

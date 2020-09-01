@@ -64,7 +64,7 @@ if ($ck_po != "true"){
 }   
 
 if ($ck_eta != "true"){
-    $eta = "CAST(d.eta as varchar(10) between '$date_eta' and '$date_eta_akhir' and ";
+    $eta = "CAST(d.eta as varchar(10)) between '$date_eta' and '$date_eta_akhir' and ";
 }else{
     $eta = "";
 }
@@ -90,7 +90,7 @@ $qry = "select curr_mark,gg.gr_no,h.supplier_code,company, d.po_no, CONVERT(varc
     left join item itm on d.item_no= itm.item_no
     $where
     order by h.po_Date,h.po_no asc, line_no asc";
-//ECHO $qry;
+// echo $qry;
 $result = sqlsrv_query($connect, strtoupper($qry));
 
 function cellColor($cells,$color){

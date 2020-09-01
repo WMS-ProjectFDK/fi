@@ -142,8 +142,7 @@ for($i=11;$i<=$hasildata;$i++){
 
 //UPDATE STATUS IN MPS TO 1
 $qry = "update SO_DETAILS set IN_MPS = 1
-where so_no in (select so_no from so_header inner join MPS_HEADER on SO_HEADER.CUSTOMER_PO_NO = MPS_HEADER.PO_NO
-                             and exists(select * from MPS_DETAILS where po_no = MPS_HEADER.PO_NO))";
+where so_no in (select so_no from so_header inner join MPS_HEADER on SO_HEADER.CUSTOMER_PO_NO = MPS_HEADER.PO_NO)";
 sqlsrv_query($connect, $qry);
 
 $sql = "{call zsp_mps_remain}";

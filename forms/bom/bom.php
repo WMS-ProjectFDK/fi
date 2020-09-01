@@ -166,42 +166,52 @@ h2 {
 	<!-- END EDIT -->
 	 
 	<div id="toolbar">
-		<fieldset style="border-radius:4px; border-radius:4px; width:98%; height:45px; float:left;"><legend><span class="style3"><strong>BILL OF MATERIAL</strong></span></legend>
-			<div class="fitem">
-				<span style="width:110px;display:inline-block;">Item No.</span>
-				<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
-				onSelect:function(rec){
-					//alert(rec.id_name_item);
-					var spl = rec.id_name_item;
-					var sp = spl.split(' - ');
-					$('#txt_item_name').textbox('setValue', sp[1]);
-					$('#cmb_item_no').combobox('setValue', sp[0]);
-				}"></select>
-			</div>
+		<fieldset style="border-radius:4px; border-radius:4px; width:1370px; height:45px; float:left;"><legend><span class="style3"><strong>BILL OF MATERIAL</strong></span></legend>
+		<div class="fitem">
+			<span style="width:110px;display:inline-block;">Item No.</span>
+			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+			onSelect:function(rec){
+				//alert(rec.id_name_item);
+				var spl = rec.id_name_item;
+				var sp = spl.split(' - ');
+				$('#txt_item_name').textbox('setValue', sp[1]);
+				$('#cmb_item_no').combobox('setValue', sp[0]);
+			}"></select>
+			
+		</div>
+		<!-- <div class="fitem">
+			<span style="width:110px;display:inline-block;">Item Name</span>
+			<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox"></input>
+		</div> -->
 		</fieldset>
-		<div style="clear:both;"></div>
+		
+	
 		<div style="margin-top: 5px;margin: 5px;">
 			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
 			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="add" onclick="addBOM()"><i class="fa fa-plus" aria-hidden="true"></i> Add BOM</a>
 			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="edit" onclick="editBOM()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit BOM</a>
 			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="delete" onclick="deleteBOM()"><i class="fa fa-trash" aria-hidden="true"></i> Delete BOM</a>
-			<a href="javascript:void(0)" style="width: 130px;" class="easyui-linkbutton c2" id="delete" onclick="downloadBOM()"><i class="fa fa-download" aria-hidden="true"></i> Download BOM</a>
 		</div>
+		<div style="clear:both;"></div>
 	</div>
 
-	<table id="dg" title="MASTER BOM" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
+    <div id="dlg_input" class="easyui-dialog" style="width: 300px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
+			
+			<div class="fitem">
+				<span style="width:75px;display:inline-block;">BL DATE</span>
+				<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
+			</div>
+			
 
-	<div id="dlg_download" class="easyui-dialog" style="width: 700px;height: 400px;" closed="true" buttons="#dlg-buttons-download" data-options="modal:true" align="center">		
-		<table id="dg_download" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true"></table>
-	</div>
-	<div id="dlg-buttons-download">
-		<a href="javascript:void(0)" class="easyui-linkbutton c6" onClick="downloadBOM_select()" style="width:100px"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_download').dialog('close')" style="width:90px">Cancel</a>
-	</div>
+
+          
+			
+		</div>
+
+	<table id="dg" title="SALES UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
 		var flagTipe = "";
-
         function myformatter(date){
 			var y = date.getFullYear();
 			var m = date.getMonth()+1;
@@ -223,6 +233,9 @@ h2 {
 		}
 
 		function access_log(){
+			//ADD//UPDATE/T
+			//DELETE/T
+			//PRINT/T
 			var add = "<?=$exp[0]?>";
 			if (add == 'ADD/T'){
 				$('#add').linkbutton('enable');
@@ -248,7 +261,7 @@ h2 {
 					var listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
 					listbrg.datagrid({
 	                	title: 'BOM Detail (No: '+row.UPPER_ITEM_NO+')',
-	                	url:'get_bom_detail.php?item_no='+row.UPPER_ITEM_NO+'&level_no='+row.LEVEL_NO+'&sts=get',
+	                	url:'get_bom_detail.php?item_no='+row.UPPER_ITEM_NO+'&level_no='+row.LEVEL_NO,
 						toolbar: '#ddv'+index,
 						singleSelect:true,
 						loadMsg:'load data ...',
@@ -284,6 +297,7 @@ h2 {
 				url:'get_bom.php'
 			})
 		   	$('#dg').datagrid('enableFilter');
+			
 		}
 
 		function deleteBOM(){
@@ -408,7 +422,6 @@ h2 {
 				   	var idxfield=0;
 				   	var i = 0;
 				   	var count = 0;
-
 					if (parseInt(total) == 0) {
 						idxfield=0;
 					}else{
@@ -417,7 +430,7 @@ h2 {
 							if (row.ITEM_NO==t[j].ITEM_NO ){
 								count++;
 							};
-						};
+					};
 					}
 					
 					if (count>0) {
@@ -456,6 +469,7 @@ h2 {
 					quantity_base: $('#dg_edit').datagrid('getData').rows[i].QUANTITY_BASE,
 					failure_rate: $('#dg_edit').datagrid('getData').rows[i].FAILURE_RATE
 				});
+				
 			}
 
 			var myJSON=JSON.stringify(dataRows);
@@ -540,21 +554,26 @@ h2 {
 						{field:'QUANTITY_BASE',title:'QTY BASE',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
 						{field:'QUANTITY',title:'QTY',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
 						{field:'FAILURE_RATE',title:'FAILURE RATE',width:100,halign:'center', align: 'right'	,editor:{type:'numberbox',options:{precision:2}}}
+
 				    ]],
 				    onClickRow:function(row){
 				    	$(this).datagrid('beginEdit', row);
 				    }
 				});
+		
 			}
 		}
 
 		function search_item_add(){
+		
 			var s_item = document.getElementById('s_item_add').value;
 		
 			if(s_item != ''){
 				$('#dg_addItem').datagrid('load',{item_no: s_item});
 				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
+
 				document.getElementById('s_item_add').value = '';
+	
 			}
 		}
 
@@ -569,24 +588,27 @@ h2 {
 		}
 
 		function search_item_edit(){
-			var s_item = document.getElementById('s_item_edit').value;
+		
+		var s_item = document.getElementById('s_item_edit').value;
 	
-			if(s_item != ''){
-				$('#dg_addItem').datagrid('load',{item_no: s_item});
-				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
-				document.getElementById('s_item_edit').value = '';
-			}
-		}
+		if(s_item != ''){
+			$('#dg_addItem').datagrid('load',{item_no: s_item});
+			$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
 
-		function sch_item_edit(event){
-			var sch_a = document.getElementById('s_item_edit').value;
-			var search = sch_a.toUpperCase();
-			document.getElementById('s_item_edit').value = search;
-			
-			if(event.keyCode == 13 || event.which == 13){
-				search_item_add();
-			}
+			document.getElementById('s_item_edit').value = '';
+
 		}
+	}
+
+	function sch_item_edit(event){
+		var sch_a = document.getElementById('s_item_edit').value;
+		var search = sch_a.toUpperCase();
+		document.getElementById('s_item_edit').value = search;
+		
+		if(event.keyCode == 13 || event.which == 13){
+			search_item_add();
+		}
+	}
 
 		function remove_bom_item(){
 			var row = $('#dg_add').datagrid('getSelected');	
@@ -612,61 +634,11 @@ h2 {
 			}
 		}
 
-		function downloadBOM(){
-			$('#dlg_download').dialog('open').dialog('setTitle','SELECT TO DOWNLOAD');
-			$('#dg_download').datagrid({
-				url:'get_bom.php?sts=all',
-				fitColumns: true,
-				rownumbers: true,
-				columns:[[
-                    {field:'UPPER_ITEM_NO',title:'ITEM NO.',width:55, halign: 'center', align: 'center'},
-				    {field:'DESCRIPTION',title:'DESCRIPTION',width:220, halign: 'center'},
-					{field:'LEVEL_NO',title:'LEVEL_NO', width:60, halign: 'center'}
-			    ]],
-				onClickRow:function(row){
-					$(this).datagrid('beginEdit', row);
-				}
-			});
+       
 
-			$('#dg_download').datagrid('enableFilter');
-		}
+       
 
-		function downloadBOM_select(){
-			var dataRows_dowload = [];
-			var t = $('#dg_download').datagrid('getSelections');
-			var total = t.length;
-			var jmrow=0;
-			for(i=0;i<total;i++){
-				jmrow = i+1;
-				$('#dg_download').datagrid('endEdit',i);
-				dataRows_dowload.push({
-					upper_item_no: $('#dg_download').datagrid('getData').rows[i].UPPER_ITEM_NO,
-					quantity: $('#dg_download').datagrid('getData').rows[i].LEVEL_NO
-				});
-			}
-
-			var myJSON_download=JSON.stringify(dataRows_dowload);
-			var str_unescape_download=unescape(myJSON_download);
-			
-			console.log('bom_download.php?data='+str_unescape_download);
-
-			// var fs = '';//require('fs');
-			// fs.writeFile("bom_download.json", myJSON_download, function(err, result) {
-			// 	if(err) console.log('error', err);
-			// });
-
-			if(dataRows_dowload == '') {
-				$.messager.show({
-					title: 'BOM Download',
-					msg: 'Data Not Select'
-				});
-			}else{
-				window.open('bom_download.php?data='+str_unescape_download, '_blank');
-				$('#dlg_download').dialog('close');
-				$('#dg_download').datagrid('loadData', []); 
-				dataRows_dowload = [];
-			}
-		}
+       
 	</script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include('../class/phpqrcode/phpqrcode.php'); 
 ini_set('memory_limit','-1');
 include("../connect/conn.php");

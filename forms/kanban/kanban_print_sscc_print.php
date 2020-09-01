@@ -162,5 +162,5 @@ $content.="
 require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('L','A4','en');
 $html2pdf->WriteHTML($content);
-$html2pdf->Output('SSCC_PRINT.pdf');
+$html2pdf->Output('KanbanAssembling.pdf');
 ?>

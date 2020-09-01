@@ -8,7 +8,7 @@ $user_name = $_SESSION['id_wms'];
     <head>
     <meta charset="UTF-8">
     <title>PURCHASE ORDER REPORT</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="icon" type="image/png" href="../../favicon.png">
 	<script language="javascript">
 		function confirmLogOut(){
 			var is_confirmed;
@@ -1747,6 +1747,7 @@ $user_name = $_SESSION['id_wms'];
 					msg: 'Data Not Defined'
 				});
 			} else {
+				console.log('po_sts_xls.php'+url_pdf);
 				window.open('po_sts_xls.php'+url_pdf, '_blank');
 			}
 		}

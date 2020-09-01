@@ -96,14 +96,13 @@ $user_name = $_SESSION['id_wms'];
 
 		function uploadmps(){
 			$('#upd').form('submit',{
-			url: 'inventory_slide_proses.php',
+			url: 'inventory_slide_process.php',
 			onSubmit: function(){
 				return $(this).form('validate');
 			},
 			success: function(result){
-				$.messager.alert('MPS UPLOAD',result,'info');
+				$.messager.alert('INVENTORY SLIDE',result,'info');
 				console.log(result);
-				// $('#dg').datagrid('reload');
 				}
 			});
 		}

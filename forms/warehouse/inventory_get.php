@@ -36,7 +36,10 @@
 	
 	include("../../connect/conn.php");
 
-	$sql = "select distinct max(this_month) as this_month, max(last_month) as last_month from whinventory";
+	$sql = "select TOP 1
+		this_month,
+		last_month 
+		from whinventory";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 	$dt_result = sqlsrv_fetch_object($data);
 

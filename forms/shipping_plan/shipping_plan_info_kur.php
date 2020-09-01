@@ -1,5 +1,4 @@
 <?php
-	error_reporting(0);
 	ini_set('max_execution_time', -1);
 	session_start();
 	//item_no=1170117&tgl_plan=2017-11-26
@@ -9,7 +8,7 @@
 	include("../../connect/conn.php");
 
 	$cek = "select pi.wo_no,plt_no,pi.Item_no, item_description, remark2 Scan_Date,
-		case cast(slip_type as varchar(10)) when '80' then 'KURAIRE' else 'KURADASHI' end Slip_Type,slip_quantity , cast(approval_date as nvarchar(10)) as approval_date 
+		case cast(slip_type as varchar(10)) when '80' then 'KURAIRE' else 'KURADASHI' end Slip_Type,slip_quantity , approval_date 
 		from  production_income pi 
 		left outer join ztb_p_plan on cast(id as varchar(10)) = slip_no where pi.wo_no = '$work_order'
 		order by plt_no" ;

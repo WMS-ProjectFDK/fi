@@ -28,31 +28,15 @@ $mail->Username = "do.not.reply.fdkindonesia";
 $mail->Password = "fidonot";
 //Set who the message is to be sent from
 $mail->setFrom('do.not.reply.fdkindonesia@fdk.co.jp', 'FDK INDONESIA');
-$mail->addAddress('reza@fdk.co.jp', 'reza@fdk.co.jp');
 $mail->addAddress('ueng.hernama@fdk.co.jp', 'ueng.hernama@fdk.co.jp');
 
-$mail->addAddress('fifin2@fdk.co.jp', 'fifin2@fdk.co.jp');
-//$mail->addAddress('fifin1@fdk.co.jp', 'fifin2@fdk.co.jp');
 $mail->addAddress('lukman@fdk.co.jp', 'lukman@fdk.co.jp');
 $mail->addAddress('toto.ari@fdk.co.jp', 'toto.ari@fdk.co.jp');
 $mail->addAddress('labellr@fdk.co.jp', 'labellr@fdk.co.jp');
 $mail->Subject = 'KURAIRE TIDAK DI SCAN';
 
-
-
-
-
 $var1 = $_GET['var1'];
 $TOTAL=0;
-
-// $qry = "select * from production_income where slip_no = '$var1' ";
-// $data_qry = sqlsrv_query($connect, $qry);
-// sqlsrv_execute($data_qry);
-
-// while ($dt_qry = sqlsrv_fetch_object($data_qry)) {
-// 	$TOTAL=$TOTAL + 1;
-// 	echo  "SILAHKAN DI PROSES, PALLET " .  $var1 . " SUDAH DI SCAN."; //would output "some-string"
-// }
 
 if($TOTAL==0) {
 	$qry = "select wo_no,plt_no,ID from ztb_p_plan where id = '$var1' ";
@@ -68,8 +52,7 @@ if($TOTAL==0) {
 			echo  "SILAHKAN DI PROSES, PALLET " .  $var1 . " SUDAH DI SCAN."; //would output "some-string"
 			$var2 = '';
 			exit();
-	    }						
-	// echo  "SILAHKAN DI PROSES, PALLET " .  $var2 . " nomor pallet ". $var3 ." SUDAH DI SCAN."; //would output "some-string"
+	    }	
     }
 }
 			
@@ -104,22 +87,6 @@ if ($TOTAL==0 & $var2 != '') {
 				</body>
 			    </html>';
 				$mail->msgHTML($message);
-				//echo $sql;
-				//echo $message;
-
-				//Replace the plain text body with one created manually
-				//$mail->AltBody = 'This is a plain-text message body';
-				// $mail->AddAttachment($dataXLS);
-				//send the message, check for errors
-
-
-				//echo $message;
-				// if (!$mail->send()) {
-				// 		    echo "Mailer Error: " . $mail->ErrorInfo;
-				// }else{
-				// 	    echo "Message sent!";
-				// 	    echo "<script>window.onload = self.close();</script>";
-				// 	}
 }else{
 	echo "PALLET TIDAK TERDAFTAR, MOHON DI SCAN SEKALI LAGI. ";
 } 

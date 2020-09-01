@@ -85,11 +85,7 @@ include("../../connect/conn.php");
 			left join whinventory whi on it.item_no=whi.item_no
 			left join mte_header mth on it.slip_no=mth.slip_no
 	        where it.slip_no=a.slip_no and 
-<<<<<<< HEAD
-	        	  mth.slip_type not in ('20','80') and
-=======
 	        	  mth.slip_type NOT IN ('20','80') and
->>>>>>> ad2703d92aa020c8cd76a042ca4c2994a1df9d8f
 	        	  it.qty > whi.this_inventory)
 	    ,0) as sts
 		from mte_header a 

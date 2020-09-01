@@ -50,7 +50,7 @@ if (isset($_SESSION['id_wms'])){
 
 		$ins_plt = "insert into ztb_amz_container ($plt_field) select $plt_value";
 		$data_plt = sqlsrv_query($connect, $ins_plt);
-		// echo $ins_plt;
+
 		if($data_plt === false ) {
 			if(($errors = sqlsrv_errors() ) != null) {  
 		         foreach( $errors as $error){  

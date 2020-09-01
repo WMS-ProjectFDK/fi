@@ -363,7 +363,7 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('B'.$noRow, $value['ITEM_NAME'])
                 ->setCellValue('C'.$noRow, $value['BATERY_TYPE'])
                 ->setCellValue('D'.$noRow, $value['CELL_GRADE'])
-                ->setCellValue('E'.$noRow, "'".$value['PO_NO'])
+                ->setCellValue('E'.$noRow, $value['PO_NO'])
                 ->setCellValue('F'.$noRow, $value['PO_LINE_NO'])
                 ->setCellValue('G'.$noRow, $value['WORK_ORDER'])
                 ->setCellValue('H'.$noRow, $value['CONSIGNEE'])
@@ -394,11 +394,6 @@ foreach ($someArray as $key => $value) {
             }
         }
     }
-
-    // menghilangkan single quotes 
-    $sheet->setCellValueExplicit('E'.$noRow, $value['PO_NO'], PHPExcel_Cell_DataType::TYPE_STRING);
-    // merubah format cell menjadi text
-    $sheet->getStyle('E'.$noRow)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
     if ($value['FLG'] != 'MPS') {
         $sheet->getStyle('A'.$noRow.':U'.$noRow)->applyFromArray(
