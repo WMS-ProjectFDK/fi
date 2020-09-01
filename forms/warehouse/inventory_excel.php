@@ -246,7 +246,7 @@ while ($data=sqlsrv_fetch_object($result)){
 			where t.item_no = i.item_no  and i.delete_type  is null and t.section_code = sc.section_code  and t.unit_stock = u.unit_code 
 			and t.section_code = sc.section_code  and t.slip_type = sl.slip_type  and t.company_code = c.company_code  
 			and t.stock_subject_code = st.stock_subject_code  and t.curr_code = cu.curr_code  
-			and t.section_code = '100' and t.item_no = ".$data->ITEM_NO." and  t.accounting_month = '".$data->THIS_MONTH."' 
+			and t.section_code = '100' and t.item_no = ".$data->ITEM_NO." and  t.accounting_month = '".$cmbBln."' 
 			order by t.slip_date,t.slip_type,t.SLIP_NO ";
     $detail = sqlsrv_query($connect, strtoupper($sql));
    

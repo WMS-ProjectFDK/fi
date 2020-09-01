@@ -115,10 +115,10 @@ h2 {
 			<a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="filterData()"><i class="fa fa-filter" aria-hidden="true"></i> Filter Data</a>
 		</div>
 		<div class="fitem" align="center" style="margin-top: -3px;">
-			<a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_pdf()" disabled="true"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To PDF</a>
+			<a href="javascript:void(0)" id="print_pdf" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_pdf()" disabled="true"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To PDF</a>
 		</div>
 		<div class="fitem" align="center" style="margin-top: -3px;">
-			<a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_xls()" disabled="true"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel</a>
+			<a href="javascript:void(0)" id="print_xls" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_xls()" disabled="true"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel</a>
 		</div>
 		</div>
 	</fieldset>
@@ -208,6 +208,8 @@ h2 {
 		});
 	})
 
+	var get_url ='';
+
 	function filterData(){
 		var ck_slip_date = 'false';
 		var ck_scan_date = 'false';
@@ -272,6 +274,30 @@ h2 {
 		})
 		var dg = $('#dg').datagrid();
 		dg.datagrid('enableFilter');
+
+		get_url = '?date_awal_slip='+$('#date_awal_slip').datebox('getValue')+
+			'&date_akhir_slip='+$('#date_akhir_slip').datebox('getValue')+
+			'&ck_slip_date='+ck_slip_date+
+			'&date_awal_scan='+$('#date_awal_scan').datebox('getValue')+
+			'&date_akhir_scan='+$('#date_akhir_scan').datebox('getValue')+
+			'&ck_scan_date='+ck_scan_date+
+			'&slip_no='+$('#cmb_slip_no').combobox('getValue')+
+			'&ck_slip='+ck_slip_no+
+			'&item_no='+$('#cmb_item_no').combobox('getValue')+
+			'&ck_item='+ck_item_no+
+			'&wo_no='+$('#cmb_wo_no').combobox('getValue')+
+			'&ck_wo='+ck_wo_no;
+		
+		// $('#print_pdf').linkbutton('enable');
+		$('#print_xls').linkbutton('enable');
+	}
+
+	function print_xls(){
+		console.log('view_fg_print_process.php'+get_url);
+		$.post('view_fg_print_process.php'+get_url,{}).done(function(res){
+			url_download = 'view_fg_print_xls.php';
+			window.open(url_download);
+		})
 	}
 
 </script>
