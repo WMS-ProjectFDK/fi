@@ -10,7 +10,7 @@
 	$ck_item = isset($_REQUEST['ck_item']) ? strval($_REQUEST['ck_item']) : '';
 
 	if ($ck_slip != "true"){
-		$slip = "a.slip_no='$slip_no' and ";
+		$slip = "'MT-'+a.slip_no='$slip_no' and ";
 	}else{
 		$slip = "";
 	}

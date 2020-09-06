@@ -52,10 +52,13 @@
 	// $date $prf $item_no $supp $ppbe
 	$where =" where $date  $prf $item_no $supp $ppbe
 		status = 'FM' 
-		and case when ds.customer_po_no is not null then substring(po_line_no, 1, len(po_line_no)-1) else po_line_no end = line_no";
+		--and case when ds.customer_po_no is not null then substring(po_line_no, 1, len(po_line_no)-1) else po_line_no end = line_no
+		and (isnull(substring(po_line_no, 1, len(po_line_no)-1), PO_LINE_NO) = LINE_NO OR po_line_no = line_no)";
 	
 	include("../../connect/conn.php");
 	$s=0;
+
+	// echo $ck_si;
 	if ($ck_si != "true"){
 		$sql = "select top 150 isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,cr_date,batery_type,cell_grade,mh.item_no,item_name,
 				isnull(qty,0) Qty_order,isnull(qty_prod,0) Qty_Produksi,isnull(qty_plan,0) qty_plan, isnull(qty_invoiced,0) qty_invoiced,

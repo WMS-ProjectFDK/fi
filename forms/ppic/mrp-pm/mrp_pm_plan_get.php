@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	// error_reporting(0);
+	error_reporting(0);
 	set_time_limit(0);
 	include("../../../connect/conn.php");
 	$cmb_item_no = isset($_REQUEST['cmb_item_no']) ? strval($_REQUEST['cmb_item_no']) : '';
@@ -42,7 +42,10 @@
 	// end item to DI
 
 	//cek balance
-	$cek = "select isnull(sum(bal_qty),0) as balance from po_details where item_no=$cmb_item_no and eta <= cast(getdate() as date)
+	$cek = "select isnull(sum(bal_qty),0) as balance 
+		from po_details 
+		where item_no=$cmb_item_no 
+		and eta <= cast(getdate() as date)
 		and bal_qty != 0";
 	$data_cek = sqlsrv_query($connect, strtoupper($cek));
 	
@@ -52,20 +55,112 @@
 	$where = "where $it a.item_no is not null";
 	$where2 = "where $it2 item_no is not null";
 
-	$qry =  "select NO_ID,DESCRIPTION,N_1,N_2,N_3,N_4,N_5,N_6,N_7,N_8,N_9,N_10,N_11,N_12,N_13,N_14,N_15,N_16,N_17,N_18,N_19,N_20,N_21,N_22,N_23,N_24,N_25,N_26,N_27,N_28,N_29,N_30,N_31,N_32,N_33,N_34,N_35,N_36,N_37,N_38,N_39,N_40,N_41,N_42,N_43,N_44,N_45,N_46,N_47,N_48,N_49,N_50,N_51,N_52,N_53,N_54,N_55,N_56,N_57,N_58,N_59,N_60,N_61,N_62,N_63,N_64,N_65,N_66,N_67,N_68,N_69,N_70,N_71,N_72,N_73,N_74,N_75,N_76,N_77,N_78,N_79,N_80,N_81,N_82,N_83,N_84,N_85,N_86,N_87,N_88,N_89,N_90,aa.ITEM_NO,ITEM_DESC,item,item_description,unit_pl,purchase_leadtime from (
-				select a.*, c.item, c.description as item_description,unit_pl from ztb_mrp_data_pck a 
-				inner join item c on a.item_no=c.item_no
-			    inner join unit u on c.uom_q = u.unit_code
-				$where
-			)aa
-			left outer join (
-	      		select ax.item_no, bx.purchase_leadtime from (
-	        		select max(line_no) as line_no, item_no from itemmaker $where2
-	          		group by item_no)ax
-	        	inner join
-	          	(select line_no,item_no, purchase_leadtime from itemmaker)bx on ax.item_no=bx.item_no AND ax.line_no=bx.line_no
-	    	)ab on aa.item_no = ab.item_no
-			order by aa.item_no, aa.no_id";
+	$qry =  "select NO_ID,DESCRIPTION,
+		ceiling(N_1) as N_1,
+		ceiling(N_2) as N_2,
+		ceiling(N_3) as N_3,
+		ceiling(N_4) as N_4,
+		ceiling(N_5) as N_5,
+		ceiling(N_6) as N_6,
+		ceiling(N_7) as N_7,
+		ceiling(N_8) as N_8,
+		ceiling(N_9) as N_9,
+		ceiling(N_10) as N_10,
+		ceiling(N_11) as N_11,
+		ceiling(N_12) as N_12,
+		ceiling(N_13) as N_13,
+		ceiling(N_14) as N_14,
+		ceiling(N_15) as N_15,
+		ceiling(N_16) as N_16,
+		ceiling(N_17) as N_17,
+		ceiling(N_18) as N_18,
+		ceiling(N_19) as N_19,
+		ceiling(N_20) as N_20,
+		ceiling(N_21) as N_21,
+		ceiling(N_22) as N_22,
+		ceiling(N_23) as N_23,
+		ceiling(N_24) as N_24,
+		ceiling(N_25) as N_25,
+		ceiling(N_26) as N_26,
+		ceiling(N_27) as N_27,
+		ceiling(N_28) as N_28,
+		ceiling(N_29) as N_29,
+		ceiling(N_30) as N_30,
+		ceiling(N_31) as N_31,
+		ceiling(N_32) as N_32,
+		ceiling(N_33) as N_33,
+		ceiling(N_34) as N_34,
+		ceiling(N_35) as N_35,
+		ceiling(N_36) as N_36,
+		ceiling(N_37) as N_37,
+		ceiling(N_38) as N_38,
+		ceiling(N_39) as N_39,
+		ceiling(N_40) as N_40,
+		ceiling(N_41) as N_41,
+		ceiling(N_42) as N_42,
+		ceiling(N_43) as N_43,
+		ceiling(N_44) as N_44,
+		ceiling(N_45) as N_45,
+		ceiling(N_46) as N_46,
+		ceiling(N_47) as N_47,
+		ceiling(N_48) as N_48,
+		ceiling(N_49) as N_49,
+		ceiling(N_50) as N_50,
+		ceiling(N_51) as N_51,
+		ceiling(N_52) as N_52,
+		ceiling(N_53) as N_53,
+		ceiling(N_54) as N_54,
+		ceiling(N_55) as N_55,
+		ceiling(N_56) as N_56,
+		ceiling(N_57) as N_57,
+		ceiling(N_58) as N_58,
+		ceiling(N_59) as N_59,
+		ceiling(N_60) as N_60,
+		ceiling(N_61) as N_61,
+		ceiling(N_62) as N_62,
+		ceiling(N_63) as N_63,
+		ceiling(N_64) as N_64,
+		ceiling(N_65) as N_65,
+		ceiling(N_66) as N_66,
+		ceiling(N_67) as N_67,
+		ceiling(N_68) as N_68,
+		ceiling(N_69) as N_69,
+		ceiling(N_70) as N_70,
+		ceiling(N_71) as N_71,
+		ceiling(N_72) as N_72,
+		ceiling(N_73) as N_73,
+		ceiling(N_74) as N_74,
+		ceiling(N_75) as N_75,
+		ceiling(N_76) as N_76,
+		ceiling(N_77) as N_77,
+		ceiling(N_78) as N_78,
+		ceiling(N_79) as N_79,
+		ceiling(N_80) as N_80,
+		ceiling(N_81) as N_81,
+		ceiling(N_82) as N_82,
+		ceiling(N_83) as N_83,
+		ceiling(N_84) as N_84,
+		ceiling(N_85) as N_85,
+		ceiling(N_86) as N_86,
+		ceiling(N_87) as N_87,
+		ceiling(N_88) as N_88,
+		ceiling(N_89) as N_89,
+		ceiling(N_90) as N_90,
+		
+		aa.ITEM_NO,ITEM_DESC,item,item_description,unit_pl,purchase_leadtime from (
+						select a.*, c.item, c.description as item_description,unit_pl from ztb_mrp_data_pck a 
+						inner join item c on a.item_no=c.item_no
+						inner join unit u on c.uom_q = u.unit_code
+						$where
+					)aa
+					left outer join (
+						select ax.item_no, bx.purchase_leadtime from (
+							select max(line_no) as line_no, item_no from itemmaker $where2
+							group by item_no)ax
+						inner join
+						(select line_no,item_no, purchase_leadtime from itemmaker)bx on ax.item_no=bx.item_no AND ax.line_no=bx.line_no
+					)ab on aa.item_no = ab.item_no
+					order by aa.item_no, aa.no_id";
 	$data_qry = sqlsrv_query($connect, strtoupper($qry));
 	// echo $qry;
 

@@ -102,11 +102,11 @@ h2 {
 	   </div>
 	</fieldset>
 	<fieldset style="margin-left: 1098px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>PRINT DATA</strong></span></legend>
-		<div class="fitem" align="center" style="margin-top: 13px;">
-			<a href="javascript:void(0)" id="printpdf" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_pdf()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To PDF</a>
-		</div>
 		<div class="fitem" align="center" style="margin-top: -3px;">
-			<a href="javascript:void(0)" id="printxls" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_xls()"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel</a>
+			<a href="javascript:void(0)" id="printxls" style="width: 200px;" class="easyui-linkbutton c2" onclick="print_xls()"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel (+DETAIL)</a>
+		</div>
+		<div class="fitem" align="center" style="margin-top: 13px;">
+			<a href="javascript:void(0)" id="printxls_header" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_header()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To Excel </a>
 		</div>
 		</div>
 	</fieldset>
@@ -151,7 +151,7 @@ h2 {
 			    {field:'UNIT',title:'UNIT',width:50, halign: 'center', align: 'center'},
 			    {field:'PRD',title:'MONTH',width:65, halign: 'center', align: 'center'},
 			    {field:'THIS_MONTH',hidden: true},
-			    {field:'THIS_INVENTORY',title:'INVENTORY',width:100, halign: 'center', align: 'right'},
+			    {field:'THIS_INVENTORY',title:'THIS INVENTORY',width:100, halign: 'center', align: 'right'},
 			    {field:'RECEIVE1',title:'RECEIVE',width:100, halign: 'center',align: 'right'},
 			    {field:'OTHER_RECEIVE1',title:'OTHER RECEIVE', width:100, halign: 'center', align: 'right'},
 			    {field:'ISSUE1',title:'ISSUE', width:100, halign: 'center', align: 'right'},
@@ -260,11 +260,11 @@ h2 {
 		}
 	}
 
-	function print_pdf(){
+	function print_header(){
 		if(pdf_url=='') {
 			$.messager.alert('Warning','Data not Found, please click filter data','warning');
 		}else{
-			window.open('inventory_pdf.php'+pdf_url, '_blank');
+			window.open('inventory_excel_header.php'+pdf_url, '_blank');
 		}	
 	}
 </script>

@@ -837,6 +837,7 @@ if ($sts == 'lower'){
 	}
 
 	function info_plan(a){
+		console.log('mrp_pm_plan_get_wo.php?cmb_item_no='+a);
 		$('#dlg_viewPLANWO').dialog('open').dialog('setTitle','VIEW INFO WO DETAILS');
 		$('#dg_viewPLANWO').datagrid({
 			url:'mrp_pm_plan_get_wo.php?cmb_item_no='+a,
@@ -1323,11 +1324,13 @@ if ($sts == 'lower'){
 				msg:'Save data...'
 			});
 
+			console.log('mrp_pm_run_item.php?item='+a);
+
 			$.post('mrp_pm_run_item.php?item=',{
 				item_no: a
 			}).done(function(res){
 				if(res == '"success"'){
-					// console.log('mrp_pm_run_item.php?item='+a);
+					
 					// console.log(res);
 					$.messager.alert('INFORMATION','Running MRP Success..!!','info');
 					$('#dg').datagrid('reload');
@@ -1341,7 +1344,7 @@ if ($sts == 'lower'){
 		}
 	}
 
-	// console.log('mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>');
+	console.log('mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>');
 	$('#dg_plan').datagrid({
 		url:'mrp_pm_plan_get.php?cmb_item_no=<?php echo $cmb_item_no;?>&sts=<?php echo $sts;?>',
 		singleSelect: true,

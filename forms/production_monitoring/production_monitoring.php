@@ -274,6 +274,8 @@ h2 {
 			url: '../shipping_plan/shipping_plan_info_kur.php?work_order='+a+'',
 			singleSelect: true,
 			rownumbers: true,
+			fitColumns: true,
+			showFooter: true,
 		    columns:[[
 			    {field:'WO_NO', title:'Work Order.', width:130, halign: 'center', align: 'center'},
 			    {field:'PLT_NO', title:'Plt No', width: 60, halign: 'center'},

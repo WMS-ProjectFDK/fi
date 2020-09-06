@@ -19,8 +19,8 @@ if ($ck_week != "true"){
 	$n = 'N_';
 	$jumN = $cmb_week * 7 ;
 	for ($i=1; $i <= $jumN ; $i++) { 
-		$value .= $n.$i.',';
-		$vBal .= $n.$i.$nBal.$i.',';
+		$value .= 'CAST('.$n.$i.' as int) as '.$n.$i.',';
+		$vBal .= 'CAST('.$n.$i.' as int)'.$nBal.$i.',';
 		if ($i == $jumN){
 			$r .= $n.$i.'< 0) and ';
 		}else{
@@ -32,8 +32,8 @@ if ($ck_week != "true"){
 	$vBal = '';
 	$n = 'N_';		$nBal = '+BALANCE as NBAL_';
 	for ($i=1; $i <= 90 ; $i++) { 
-		$value .= $n.$i.',';
-		$vBal .= $n.$i.$nBal.$i.',';
+		$value .= 'CAST('.$n.$i.' as int) as '.$n.$i.',';
+		$vBal .= 'CAST('.$n.$i.' as int)'.$nBal.$i.',';
 	}
 	$r = '';
 }
@@ -57,7 +57,7 @@ $where = "where $fg $item $r
 			   ) and no_id = 4 ";
 
 $cek = "select no_id, description, $value aaa.item_no, item_desc, $vBal balance from (
-		select no_id, cc.description + ' ( ' + cast(bb.this_inventory as nvarchar(20)) + ' )' description, $value  
+		select no_id, cc.description + ' ( ' + cast(cast(bb.this_inventory as int) as nvarchar(20)) + ' )' description, $value  
 			   aa.item_no, 
 			   item_desc, 
 			   (select isnull(sum(bal_qty),0) as balance from po_details where item_no= aa.item_no and eta <= cast(getdate() as date) and bal_qty != 0) as balance 
@@ -69,7 +69,7 @@ $cek = "select no_id, description, $value aaa.item_no, item_desc, $vBal balance 
 			$where)aaa order by aaa.item_no, description" ;
 $data_cek = sqlsrv_query($connect, strtoupper($cek));
 
-// echo $cek;
+// echo $cek.'<br/>';
 
 $items = array();
 $rowno=0;
@@ -91,11 +91,11 @@ while($row = sqlsrv_fetch_object($data_cek)){
 			$b_valNya = $b_val;
 
 			if($n_valNya <= 0 && $b_valNya<= 0){
-				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($n_valNya,2).')</span>';
-				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($b_valNya,2).')</span>';
+				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($n_valNya).')</span>';
+				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($b_valNya).')</span>';
 			}elseif($n_valNya <= 0 && $b_valNya > 0){
-				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($n_valNya,2).')</span>';
-				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($b_valNya,2).')</span>';
+				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($n_valNya).')</span>';
+				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($b_valNya).')</span>';
 			}else{
 				$items[$rowno]->$n0 = number_format($n_valNya,2);
 				$items[$rowno]->$b0 = number_format($b_valNya,2);
@@ -113,11 +113,11 @@ while($row = sqlsrv_fetch_object($data_cek)){
 			$b_valNya = $b_val;
 
 			if($n_valNya <= 0 && $b_valNya<= 0){
-				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($n_valNya,2).')</span>';
-				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($b_valNya,2).')</span>';
+				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($n_valNya).')</span>';
+				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FF0000;">('.number_format($b_valNya).')</span>';
 			}elseif($n_valNya <= 0 && $b_valNya > 0){
-				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($n_valNya,2).')</span>';
-				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($b_valNya,2).')</span>';
+				$items[$rowno]->$n0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($n_valNya).')</span>';
+				$items[$rowno]->$b0 = '<span style="text-decoration: none; color: #FFC000;">('.number_format($b_valNya).')</span>';
 			}else{
 				$items[$rowno]->$n0 = number_format($n_valNya,2);
 				$items[$rowno]->$b0 = number_format($b_valNya,2);

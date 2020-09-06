@@ -35,7 +35,8 @@
 	}elseif ($rdJn == 'check_xfact'){
 		$dt = "ex_fact between '$dt_A' and '$dt_Z' and ";
 	}elseif ($rdJn == 'check_sales'){
-		$dt = "case when trade_term like '%LOCAL%' or trade_term like '%FCA%' then ex_fact else etd end between '$dt_A' and '$dt_Z' or bl_date between '$dt_A' and '$dt_Z') and ";
+		$dt = "(case when trade_term like '%LOCAL%' or trade_term like '%FCA%' then ex_fact else etd end 
+		between '$dt_A' and '$dt_Z' or bl_date between '$dt_A' and '$dt_Z') and ";
 	}
 	
 	if ($cmbR == 1){

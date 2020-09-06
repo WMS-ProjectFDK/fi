@@ -179,6 +179,7 @@ h2 {
 	function RunMRP(){
 		if (confirm("This process will takes time around 20-25 minutes, also MRP data now will be erased. if you agree please confirm ?")) {
 			alert("Please do not close browser while MRP running.");
+			// $.messager.alert('MRP-Packing','Please do not close browser while MRP running.','info');
 		    // window.open('http://172.23.225.85/wms/schedule/execute_sp.php');
 			$.messager.progress({
 				title:'Please waiting',
@@ -275,7 +276,7 @@ h2 {
 				return '<div style="padding:2px"><table id="dregbrg'+rowIndex+'" class="listbrg"></table></div>';
 			},
 			onExpandRow: function(index,row){
-				// console.log('mrp_pm_get_detail.php'+pdf_url+'&item='+row.ITEM_NO+'&level='+row.LEVEL_NO);
+				console.log('mrp_pm_get_detail.php'+pdf_url+'&item='+row.ITEM_NO+'&level='+row.LEVEL_NO);
 				listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
 				listbrg.datagrid({
                 	title: 'Finish Goods Detail ('+row.ITEM_NAME+')',

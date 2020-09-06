@@ -34,7 +34,7 @@ $sql = "select a.id, a.wo_no, a.item_no, i.description as brand, a.date_code, a.
 	 where bz.upper_item_no= a.item_no and bz.lower_item_no like '12%') inkjet_code,
 	rpad(cast(a.id as varchar(10)),10,' ') ||
   	rpad(cast(i.item as varchar(23)),23,' ') ||
-  	rpad(cast(a.wo_no||' '||a.plt_no||' '||a.plt_tot||' ' as varchar(32)),32,' ') ||
+  	rpad(cast(a.wo_no||' '||a.plt_no||' '||a.plt_tot||' ' as varchar(31)),31,' ') ||
   	lpad(cast(a.qty_prod as varchar(10)),10,'0') ||
   	rpad(cast(a.date_code as varchar(10)),10,' ') || '     ' ||
   	rpad(cast(a.item_no as varchar(10)),10,' ') ||

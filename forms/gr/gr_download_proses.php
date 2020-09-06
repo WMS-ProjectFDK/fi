@@ -48,25 +48,7 @@ if ($ck_item != "true"){
     $item = "";
 }
 
-$where ="where grd.gr_no = grh.gr_no
-    and grh.supplier_code = c.company_code
-    and c.country_code = cou2.country_code
-    and grh.curr_code = cu.curr_code
-    and grd.item_no = i.item_no
-    and grd.origin_code = i.origin_code
-    and grd.origin_code = cou.country_code
-    and i.curr_code = cu2.curr_code
-    and i.uom_q = un.unit_code
-    and grh.slip_type = x.slip_type
-    and grd.po_no = poh.po_no
-    and i.class_code = cls.class_code
-    and i.cost_subject_code = cs.cost_subject_code
-    and $gr_date 
-    $gr 
-    $supp 
-    $po 
-    $item 
-    grh.gr_no is not null";
+$where ="where $gr_date $gr $supp $po $item grh.gr_no is not null";
 
 $response = array();        $response2 = array();
 $rowno=0;
@@ -121,21 +103,22 @@ if (isset($_SESSION['id_wms'])){
         grh.tax_inv_no,
         CONVERT(varchar,grh.tax_inv_date, 103) tax_inv_date
         
-        from gr_details grd,
-            gr_header  grh,
-            item i,
-            currency cu,
-            currency cu2,
-            country cou,
-            unit un,
-            company c,
-            sliptype x,
-            po_header poh,
-            class cls,
-            costsubject cs,
-            country cou2
-            $where 
-            order by c.company,grh.gr_no,grd.line_no";
+        from gr_details grd
+        inner join gr_header grh on grd.gr_no = grh.gr_no
+        left outer join item i on grd.item_no = i.item_no --and grd.origin_code = i.origin_code
+        left outer join currency cu on grh.curr_code = cu.curr_code
+        left outer join currency cu2 on i.curr_code = cu2.curr_code
+        left outer join country cou on grd.origin_code = cou.country_code
+        left outer join unit un on i.uom_q = un.unit_code
+        left outer join company c on grh.supplier_code = c.company_code
+        left outer join sliptype x on grh.slip_type = x.slip_type
+        left outer join po_header poh on grd.po_no = poh.po_no
+        left outer join class cls on i.class_code = cls.class_code
+        left outer join costsubject cs on i.cost_subject_code = cs.cost_subject_code
+        left outer join country cou2 on c.country_code = cou2.country_code
+        
+        $where 
+        order by c.company,grh.gr_no,grd.line_no";
 
     // echo $sql;
     $data = sqlsrv_query($connect, strtoupper($sql));

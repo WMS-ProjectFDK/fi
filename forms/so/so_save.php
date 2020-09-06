@@ -100,7 +100,7 @@ if (isset($_SESSION['id_wms'])){
 
             #INSERT SO_DETAILS
             $field_sod  = "so_no,"                  ; $value_sod  = "'$so_so_no'," ;
-            $field_sod .= "line_no,"                ; $value_sod .= "'$so_line_no'," ;
+            $field_sod .= "line_no,"                ; $value_sod .= "CAST($so_po_line_no as int)," ;
             $field_sod .= "customer_part_no,"       ; $value_sod .= "'$so_item'," ;
             $field_sod .= "item_no,"                ; $value_sod .= "i.item_no," ;
             $field_sod .= "origin_code,"            ; $value_sod .= "i.origin_code," ;

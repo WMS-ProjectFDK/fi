@@ -63,7 +63,7 @@ h2 {
 <body>
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name));?>
     <!-- ADD -->
-	<div id='dlg_add' class="easyui-dialog" style="width:1100px;height:750px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-add" data-options="modal:true">
+	<div id='dlg_add' class="easyui-dialog" style="width:1100px;height:550px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-add" data-options="modal:true">
 	   <form id="ff" method="post" novalidate>	
 	   
        <fieldset style="border-radius:4px; border-radius:4px; width:98%; height:190px; float:left;"><legend><span class="style3"><strong>Company Add</strong></span></legend>
@@ -247,7 +247,7 @@ h2 {
 	<!-- END ADD -->
 
      <!-- EDIT -->
-     <div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:750px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
+     <div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:550px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
 	   <form id="ff1" method="post" novalidate>	
 	   
 	 <fieldset style="border-radius:4px; border-radius:4px; width:98%; height:190px; float:left;"><legend><span class="style3"><strong>Company Add</strong></span></legend>
@@ -761,7 +761,7 @@ h2 {
 			if (row){
 				var lvl = row.LEVEL_NO;
 				var item = row.UPPER_ITEM_NO;
-				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT BOM');
+				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT COMPANY');
 				$('#item_no_edit').textbox('setValue',item);
 				$('#level_no_edit').textbox('setValue',lvl);
 

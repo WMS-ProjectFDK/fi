@@ -26,13 +26,13 @@ $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4)
 $noRow = 1;
 $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$noRow, 'GOODS RECEIVE INVOICE REPORT');
-$objPHPExcel->setActiveSheetIndex()->mergeCells('A'.$noRow.':T'.$noRow);
+$objPHPExcel->setActiveSheetIndex()->mergeCells('A'.$noRow.':AB'.$noRow);
 
 // --------------------------------------------------------------------
 $noRow++;
 $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$noRow, '(DOWNLOAD DATE : '.date("Y-m-d H:i:s").')');
-$objPHPExcel->setActiveSheetIndex()->mergeCells('A'.$noRow.':T'.$noRow);
+$objPHPExcel->setActiveSheetIndex()->mergeCells('A'.$noRow.':AB'.$noRow);
 
 // --------------------------------------------------------------------
 $noRow++;
@@ -55,13 +55,21 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('N'.$noRow, 'COUNTRY')
             ->setCellValue('O'.$noRow, 'QTY')
             ->setCellValue('P'.$noRow, 'UNIT')
-            ->setCellValue('Q'.$noRow, 'SLIP TYPE')
-            ->setCellValue('R'.$noRow, 'SLIP NAME')
-            ->setCellValue('S'.$noRow, 'UPTO DATE')
-            ->setCellValue('T'.$noRow, 'REG DATE');
+            ->setCellValue('Q'.$noRow, 'CURR MARK')
+            ->setCellValue('R'.$noRow, 'UNIT PRICE')
+            ->setCellValue('S'.$noRow, 'AMOUNT (0RG)')
+            ->setCellValue('T'.$noRow, 'EX RATE')
+            ->setCellValue('U'.$noRow, 'CURR MARK SP')
+            ->setCellValue('V'.$noRow, 'STANDARD PRICE')
+            ->setCellValue('W'.$noRow, 'CLASS')
+            ->setCellValue('X'.$noRow, 'SUBJECT NAME')
+            ->setCellValue('Y'.$noRow, 'SLIP TYPE')
+            ->setCellValue('Z'.$noRow, 'SLIP NAME')
+            ->setCellValue('AA'.$noRow, 'UPTO DATE')
+            ->setCellValue('AB'.$noRow, 'REG DATE');
 
 $sheet = $objPHPExcel->getActiveSheet();
-$sheet->getStyle('A'.$noRow.':T'.$noRow)->applyFromArray(
+$sheet->getStyle('A'.$noRow.':AB'.$noRow)->applyFromArray(
     array(
         'fill' => array(
             'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -94,12 +102,20 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('N'.$noRow, $value['COUNTRY'])
                 ->setCellValue('O'.$noRow, $value['QTY'])
                 ->setCellValue('P'.$noRow, $value['UNIT'])
-                ->setCellValue('Q'.$noRow, $value['SLIP_TYPE'])
-                ->setCellValue('R'.$noRow, $value['SLIP_NAME'])
-                ->setCellValue('S'.$noRow, $value['UPTO_DATE'])
-                ->setCellValue('T'.$noRow, $value['REG_DATE']);
+                ->setCellValue('Q'.$noRow, $value['CURR_MARK'])
+                ->setCellValue('R'.$noRow, $value['U_PRICE'])
+                ->setCellValue('S'.$noRow, number_format($value['AMT_O'],2))
+                ->setCellValue('T'.$noRow, $value['EX_RATE'])
+                ->setCellValue('U'.$noRow, $value['CURR_MARK_SP'])
+                ->setCellValue('V'.$noRow, $value['STANDARD_PRICE'])
+                ->setCellValue('W'.$noRow, $value['CLASS'])
+                ->setCellValue('X'.$noRow, $value['COST_SUBJECT_NAME'])
+                ->setCellValue('Y'.$noRow, $value['SLIP_TYPE'])
+                ->setCellValue('Z'.$noRow, $value['SLIP_NAME'])
+                ->setCellValue('AA'.$noRow, $value['UPTO_DATE'])
+                ->setCellValue('AB'.$noRow, $value['REG_DATE']);
     
-    $sheet->getStyle('A'.$noRow.':T'.$noRow)->applyFromArray(
+    $sheet->getStyle('A'.$noRow.':AB'.$noRow)->applyFromArray(
         array(
             'borders' => array(
                 'allborders' => array(

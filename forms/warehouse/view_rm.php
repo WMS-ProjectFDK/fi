@@ -78,17 +78,6 @@ h2 {
 				<select style="width:250px;" name="cmb_slip_no" id="cmb_slip_no" class="easyui-combobox" data-options=" url:'../json/json_slip_rm.php', method:'get', valueField:'slip_no', textField:'slip_no', panelHeight:'75px'"></select>
 				<label><input type="checkbox" name="ck_slip_no" id="ck_slip_no" checked="true">All</input></label>
 			</div>
-			<!-- <div class="fitem">
-				<span style="width:110px;display:inline-block;">STATUS</span>
-				<select style="width:250px;" name="cmb_sts" id="cmb_sts" class="easyui-combobox" data-options="panelHeight:'100px'">
-					<option selected="" value=""></option>
-					<option value="BK">BELUM DI KIRIM</option>
-					<option value="SK">SUDAH DI KIRIM</option>
-					<option value="BA">BELUM DI APPROVE</option>
-					<option value="SA">SUDAH DI APPROVE</option>
-				</select>
-				<label><input type="checkbox" name="ck_sts" id="ck_sts" checked="true">All</input></label>
-			</div> -->
 		</div>
 	</fieldset>
 	<fieldset style="position:absolute;margin-left:475px;border-radius:4px;width: 500px;height: 100px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>

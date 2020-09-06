@@ -70,7 +70,8 @@ include("../../connect/conn.php");
 	
 	$where ="where $slip_no $slip_type $item_no $date
 		a.approval_date is null and a.approval_person_code is null
-		and LEFT(CONVERT(varchar, a.slip_date,112),6) = (select top 1 THIS_MONTH from WHINVENTORY) ";
+		and (LEFT(CONVERT(varchar, a.slip_date,112),6) = (select top 1 THIS_MONTH from WHINVENTORY) OR
+			 LEFT(CONVERT(varchar, a.slip_date,112),6) = (select top 1 LAST_MONTH from WHINVENTORY)) ";
 	
 	
 

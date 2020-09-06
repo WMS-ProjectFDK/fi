@@ -67,7 +67,7 @@
 	    from mte_header a 
 		left join company b on a.company_code= b.company_code
 		left join person p on a.person_code = p.person_code
-		--$where 
+		$where 
 		order by a.slip_date DESC";
 	$data = sqlsrv_query($connect, strtoupper($sql));
 

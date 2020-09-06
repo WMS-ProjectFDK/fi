@@ -79,8 +79,8 @@ if ($row_count > 0){
                     $col_a=0;
                 }
             }
-
-            if($rowNo == $row_count AND $rowNo == 1){
+            
+            if($rowNo == $row_count AND intval($col_a) < 2){
                 if($col_a < 2){
                     $marks .= "</tr>";
                 }
@@ -96,7 +96,6 @@ if ($row_count > 0){
 }else{
     $marks = '';
 }
-// echo $marks;
 
 // TOTAL GW,NW,MSM
 $sql_gw = "select case when d1.total_net = NULL then '0' else LTrim(CAST(d1.total_net as varchar)) end as total_net,
@@ -672,5 +671,5 @@ require_once('../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('INVOICE-'.$do.'.pdf');
-echo  $content;
+// echo  $content;
 ?>

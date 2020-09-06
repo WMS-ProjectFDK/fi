@@ -314,8 +314,8 @@ $menu_id = $_GET['id'];
 		<!-- EDIT END -->
 
 		<!-- ADD ITEM START -->
-		<div id="dlg_item" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addPO" data-options="modal:true">
-			<table id="dg_item" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		<div id="dlg_item" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addSO" data-options="modal:true">
+			<table id="dg_item" class="easyui-datagrid" toolbar="#toolbar_addItem" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
 		</div>
 		<!-- ADD ITEM END -->
 
@@ -765,7 +765,8 @@ $menu_id = $_GET['id'];
 				}else{
 					$('#dlg_item').dialog('open').dialog('setTitle','SEARCH ITEM');
 					$('#dg_item').datagrid({
-						url: 'so_getItem.php?cust='+cust_id,
+						url: '
+						.php?cust='+cust_id,
 						columns:[[
 			                {field:'ITEM_NO',title:'ITEM',width:60,halign:'center', align:'center'},
 							{field:'ITEM',title:'ITEM',width:80,halign:'center'},
@@ -1068,9 +1069,10 @@ $menu_id = $_GET['id'];
 						if(value=='add'){
 							$('#consignee_code_add').textbox('setValue', rows.CONSIGNEE_CODE);
 							$('#consignee_name_add').textbox('setValue', rows.CONSIGNEE_NAME);
-						}//else if(value == 'edit'){
-						// 	$('#notify_edit').textbox('setValue', rows.NOTIFY);
-						// }
+						}else if(value == 'edit'){
+							$('#consignee_code_edit').textbox('setValue', rows.CONSIGNEE_CODE);
+							$('#consignee_name_edit').textbox('setValue', rows.CONSIGNEE_NAME);
+						}
 						$('#dlg_Notify').dialog('close');
 					}
 				});

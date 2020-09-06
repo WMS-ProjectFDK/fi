@@ -33,16 +33,16 @@ cast(a.date_prod as varchar(10)) date_prod, a.qty_prod, a.plt_no, a.plt_tot, cas
 					  ) ss on s.upper_item_no = ss.upper and s.level_no = ss.level_nos
 		  ) bz on az.item_no= bz.lower_item_no
  where bz.upper_item_no= a.item_no and bz.lower_item_no like '12%') inkjet_code,
-left(cast(a.id as varchar(10))+'          ',10) +
-  left(cast(i.item as varchar(23))+'                       ',23) +
-  left(cast(a.wo_no+' '+cast(a.plt_no as varchar(5))+' '+cast(a.plt_tot as varchar(5))+' ' as varchar(32))+'                                ',32) +
-  right('0000000000'+cast(a.qty_prod as varchar(10)),10) +
-  left(cast(a.date_code as varchar(10))+'          ',10) + '     ' +
-  left(cast(a.item_no as varchar(10))+'          ',10) +
-  left(cast(a.brand as varchar(20))+'                    ',20) +
-  right('0000000000'+cast(a.qty_prod as varchar(10)),10) +
-left(cast(a.type_item+a.grade as varchar(14))+'              ',14) +
-  (select cast(inkjet_code as varchar(5)) inkjet_code  
+	left(cast(a.id as varchar(10))+'          ',10) +
+ 	left(cast(i.item as varchar(23))+'                       ',23) +
+  	left(cast(a.wo_no+' '+cast(a.plt_no as varchar(5))+' '+cast(a.plt_tot as varchar(5))+' ' as varchar(31))+'                                ',31) +
+  	right('0000000000'+cast(a.qty_prod as varchar(10)),10) +
+  	left(cast(a.date_code as varchar(10))+'          ',10) + '     ' +
+  	left(cast(a.item_no as varchar(10))+'          ',10) +
+  	left(cast(a.brand as varchar(20))+'                    ',20) +
+  	right('0000000000'+cast(a.qty_prod as varchar(10)),10) +
+	left(cast(a.type_item+a.grade as varchar(14))+'              ',14) +
+(select cast(inkjet_code as varchar(5)) inkjet_code  
   from ztb_item_label_inkjet_code az
   inner join (select * from structure s
 			  inner join (select max(level_no) level_nos, upper_item_no upper 
