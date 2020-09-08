@@ -65,19 +65,17 @@ h2 {
     <!-- ADD -->
 	<div id='dlg_add' class="easyui-dialog" style="width:1100px;height:350px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-add" data-options="modal:true">
 	   <form id="ff" method="post" novalidate>	
-	   <div class="fitem">
-			<span style="width:110px;display:inline-block;">Item No.</span>
-			<select style="width:330px;" name="cmb_item_no_edit" id="cmb_item_no_add" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
-				onSelect:function(rec){
-					var integer = parseInt(rec.level_no, 10);
-					$('#level_no_add').textbox('setValue', integer + 1);
-			}"></select>
-		
-			<span style="width:100px;display:inline-block;">Level No.</span>
-			<input style="width:50px;" name="po_no_edit" id="level_no_add" class="easyui-textbox" disabled=""/>
-		</div>
+		<div class="fitem">
+				<span style="width:110px;display:inline-block;">Item No.</span>
+				<select style="width:330px;" name="cmb_item_no_edit" id="cmb_item_no_add" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+					onSelect:function(rec){
+						var integer = parseInt(rec.level_no, 10);
+						$('#level_no_add').textbox('setValue', integer + 1);
+				}"></select>
 			
-		
+				<span style="width:100px;display:inline-block;">Level No.</span>
+				<input style="width:50px;" name="po_no_edit" id="level_no_add" class="easyui-textbox" disabled=""/>
+		</div>
 		<div style="clear:both;margin-bottom:10px;"></div>
 		<table align="center" id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:1075px;height:235px;padding:10px 10px; margin:5px;"></table>
 		<div id="toolbar_add" style="padding: 5px 5px;">
@@ -108,7 +106,6 @@ h2 {
 
 		<div id="dlg-buttons-add">
 			<input class="easyui-linkbutton c6" iconCls="icon-ok" type="submit" value="Save" onclick="saveBOM()" style="width:90px; height: 30px;">
-			<!-- <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePo()" style="width:90px">Save</a> -->
 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
 		</div>
 	  </form>
@@ -116,33 +113,23 @@ h2 {
 	<!-- END ADD -->
 
 	 <!-- EDIT -->
-	 <div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:350px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
+	 <div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:380px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
 	   <form id="ffe" method="post" novalidate>	
-	   <div class="fitem">
+	   <div class="fitem" hidden="true">
 			<span style="width:110px;display:inline-block;">Item No.</span>
 			<input style="width:100px;" name="po_no_edit" id="item_no_edit" class="easyui-textbox" disabled=""/>
-		
-		
 			<span style="width:100px;display:inline-block;">Level No.</span>
 			<input style="width:50px;" name="po_no_edit" id="level_no_edit" class="easyui-textbox" disabled=""/>
-		</div>
-			
+		</div>	
 		
 		<div style="clear:both;margin-bottom:10px;"></div>
-		<table align="center" id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:1075px;height:235px;padding:10px 10px; margin:5px;"></table>
+		<table align="center" id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:1075px;height:auto;padding:10px 10px; margin:5px;"></table>
 		<div id="toolbar_edit" style="padding: 5px 5px;">
 			<a href="javascript:void(0)" id="add_po_add" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item_edit()">ADD MATERIAL</a>
 			<a href="javascript:void(0)" id="remove_po_add" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_bom_item_edit()">REMOVE MATERIAL</a>
 		</div>
 		<div id="dlg_addItem" class="easyui-dialog" style="width: 880px;height: 270px;" closed="true" buttons="#dlg-buttons-addItem" data-options="modal:true">
 			<table id="dg_addItem" class="easyui-datagrid" toolbar="#toolbar_addItem" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
-		</div>
-
-		<div id="toolbar_addItem" style="padding: 5px 5px;">
-			<span style="width:80px;display:inline-block;">Item No</span>
-		
-			<input style="width:200px;height: 20px;border-radius: 4px;" name="s_item_edit" id="s_item_edit" onkeypress="sch_item_edit(event)"/>
-			<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_item_edit()">SEARCH ITEM</a>
 		</div>
 		<div id="dlg_prf_add" class="easyui-dialog" style="width: 880px;height: 300px;" closed="true" buttons="#dlg-buttons-prf_add" data-options="modal:true">
 			<table id="dg_prf_add" class="easyui-datagrid" style="width:100%;height:200px;border-radius: 10px;" rownumbers="true" ></table>
@@ -158,7 +145,6 @@ h2 {
 
 		<div id="dlg-buttons-edit">
 			<input class="easyui-linkbutton c6" iconCls="icon-ok" type="submit" value="Save" onclick="saveEditBOM()" style="width:90px; height: 30px;">
-			<!-- <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePo()" style="width:90px">Save</a> -->
 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
 		</div>
 	  </form>
@@ -166,26 +152,21 @@ h2 {
 	<!-- END EDIT -->
 	 
 	<div id="toolbar">
-		<fieldset style="border-radius:4px; border-radius:4px; width:1370px; height:45px; float:left;"><legend><span class="style3"><strong>BILL OF MATERIAL</strong></span></legend>
-		<div class="fitem">
-			<span style="width:110px;display:inline-block;">Item No.</span>
-			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
-			onSelect:function(rec){
-				//alert(rec.id_name_item);
-				var spl = rec.id_name_item;
-				var sp = spl.split(' - ');
-				$('#txt_item_name').textbox('setValue', sp[1]);
-				$('#cmb_item_no').combobox('setValue', sp[0]);
-			}"></select>
-			
-		</div>
-		<!-- <div class="fitem">
-			<span style="width:110px;display:inline-block;">Item Name</span>
-			<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox"></input>
-		</div> -->
+		<fieldset style="border-radius:4px; border-radius:4px; width:auto; height:45px; float:left;"><legend><span class="style3"><strong>BILL OF MATERIAL</strong></span></legend>
+			<div class="fitem">
+				<span style="width:110px;display:inline-block;">Item No.</span>
+				<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
+				onSelect:function(rec){
+					//alert(rec.id_name_item);
+					var spl = rec.id_name_item;
+					var sp = spl.split(' - ');
+					$('#txt_item_name').textbox('setValue', sp[1]);
+					$('#cmb_item_no').combobox('setValue', sp[0]);
+				}"></select>
+				
+			</div>
 		</fieldset>
-		
-	
+		<div style="clear:both;margin-bottom:10px;"></div>
 		<div style="margin-top: 5px;margin: 5px;">
 			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
 			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="add" onclick="addBOM()"><i class="fa fa-plus" aria-hidden="true"></i> Add BOM</a>
@@ -195,18 +176,12 @@ h2 {
 		<div style="clear:both;"></div>
 	</div>
 
-    <div id="dlg_input" class="easyui-dialog" style="width: 300px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
-			
-			<div class="fitem">
-				<span style="width:75px;display:inline-block;">BL DATE</span>
-				<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
-			</div>
-			
-
-
-          
-			
+    <div id="dlg_input" class="easyui-dialog" style="width: 300px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">	
+		<div class="fitem">
+			<span style="width:75px;display:inline-block;">BL DATE</span>
+			<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
 		</div>
+	</div>
 
 	<table id="dg" title="SALES UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
@@ -233,9 +208,6 @@ h2 {
 		}
 
 		function access_log(){
-			//ADD//UPDATE/T
-			//DELETE/T
-			//PRINT/T
 			var add = "<?=$exp[0]?>";
 			if (add == 'ADD/T'){
 				$('#add').linkbutton('enable');
@@ -268,11 +240,14 @@ h2 {
 						height:'auto',
 						fitColumns: true,
 						columns:[[
-							{field:'LINE_NO',title:'LINE NO.',width:5,halign:'center', align:'center'},
-			                {field:'LOWER_ITEM_NO',title:'Material No.', halign:'center', align:'center', width:60, sortable: true},
-			                {field:'DESCRIPTION', title:'Material Name', halign:'center', width:200},
-			                {field:'QUANTITY_BASE', title:'QUANTITY BASE', halign:'center', align:'center', width:40},
-			                {field:'QUANTITY', title:'QUANTITY', halign:'center', align:'center', width:60},
+							{field:'LINE_NO', hidden: true},
+			                {field:'LOWER_ITEM_NO',title:'MATERIAL<br/>NO.', halign:'center', align:'center', width:60, sortable: true},
+			                {field:'DESCRIPTION', title:'MATERIAL<br/>NAME', halign:'center', width:150},
+							{field:'LW_DRAWING_NO', title:'DRAWING<br/>NO.', width:80, halign: 'center'},
+							{field:'MAK', title:'MAKER', width:80, halign: 'center'},
+							{field:'QTY', title:'QUANTITY<br/>BASE', halign:'center', align:'right', width:40},
+			                {field:'QUANTITY_BASE', hidden: true},
+			                {field:'QUANTITY', hidden: true},
 			                {field:'FAILURE_RATE', title:'FAILURE<br/>RATE', halign:'center', align:'right', width:70}
 						]],
 						onResize:function(){
@@ -382,7 +357,7 @@ h2 {
 							if (row.ITEM_NO==t[j].ITEM_NO ){
 								count++;
 							};
-					};
+						};
 					}
 					
 					if (count>0) {
@@ -430,7 +405,7 @@ h2 {
 							if (row.ITEM_NO==t[j].ITEM_NO ){
 								count++;
 							};
-					};
+						};
 					}
 					
 					if (count>0) {
@@ -448,7 +423,6 @@ h2 {
 					}
 				}
 			});
-
 			$('#dg_addItem').datagrid('loadData',[]);
 		}
 
@@ -469,7 +443,6 @@ h2 {
 					quantity_base: $('#dg_edit').datagrid('getData').rows[i].QUANTITY_BASE,
 					failure_rate: $('#dg_edit').datagrid('getData').rows[i].FAILURE_RATE
 				});
-				
 			}
 
 			var myJSON=JSON.stringify(dataRows);
@@ -509,7 +482,6 @@ h2 {
 					quantity_base: $('#dg_add').datagrid('getData').rows[i].QUANTITY_BASE,
 					failure_rate: $('#dg_add').datagrid('getData').rows[i].FAILURE_RATE
 				});
-				
 			}
 
 			var myJSON=JSON.stringify(dataRows);
@@ -537,7 +509,7 @@ h2 {
 			if (row){
 				var lvl = row.LEVEL_NO.toString();
 				var item = row.UPPER_ITEM_NO.toString();
-				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT BOM');
+				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT BOM ('+item+' - '+row.DESCRIPTION+' [LEVEL-'+lvl+'])');
 				$('#item_no_edit').textbox('setValue',item);
 				$('#level_no_edit').textbox('setValue',lvl);
 
@@ -551,6 +523,7 @@ h2 {
 						{field:'ITEM', title:'ITEM NAME', width:100, halign: 'center'},//, hidden: true},
 						{field:'DESCRIPTION', title:'DESCRIPTION', width: 150, halign: 'center'},
 						{field:'UOM_Q', title:'UNIT', width: 50, halign: 'center'},
+						{field:'MAK', title:'MAKER', width:100, halign: 'center'},
 						{field:'QUANTITY_BASE',title:'QTY BASE',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
 						{field:'QUANTITY',title:'QTY',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
 						{field:'FAILURE_RATE',title:'FAILURE RATE',width:100,halign:'center', align: 'right'	,editor:{type:'numberbox',options:{precision:2}}}
@@ -560,20 +533,16 @@ h2 {
 				    	$(this).datagrid('beginEdit', row);
 				    }
 				});
-		
 			}
 		}
 
 		function search_item_add(){
-		
 			var s_item = document.getElementById('s_item_add').value;
 		
 			if(s_item != ''){
 				$('#dg_addItem').datagrid('load',{item_no: s_item});
 				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
-
 				document.getElementById('s_item_add').value = '';
-	
 			}
 		}
 
@@ -588,27 +557,24 @@ h2 {
 		}
 
 		function search_item_edit(){
-		
-		var s_item = document.getElementById('s_item_edit').value;
+			var s_item = document.getElementById('s_item_edit').value;
 	
-		if(s_item != ''){
-			$('#dg_addItem').datagrid('load',{item_no: s_item});
-			$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
-
-			document.getElementById('s_item_edit').value = '';
-
+			if(s_item != ''){
+				$('#dg_addItem').datagrid('load',{item_no: s_item});
+				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
+				document.getElementById('s_item_edit').value = '';
+			}
 		}
-	}
 
-	function sch_item_edit(event){
-		var sch_a = document.getElementById('s_item_edit').value;
-		var search = sch_a.toUpperCase();
-		document.getElementById('s_item_edit').value = search;
-		
-		if(event.keyCode == 13 || event.which == 13){
-			search_item_add();
+		function sch_item_edit(event){
+			var sch_a = document.getElementById('s_item_edit').value;
+			var search = sch_a.toUpperCase();
+			document.getElementById('s_item_edit').value = search;
+			
+			if(event.keyCode == 13 || event.which == 13){
+				search_item_add();
+			}
 		}
-	}
 
 		function remove_bom_item(){
 			var row = $('#dg_add').datagrid('getSelected');	
@@ -633,12 +599,6 @@ h2 {
 				});
 			}
 		}
-
-       
-
-       
-
-       
 	</script>
 </body>
 </html>

@@ -98,15 +98,16 @@ $user_name = $_SESSION['id_wms'];
 
 		function uploadmps(){
 			$('#upd').form('submit',{
-			url: 'mps_upload_proses.php',
-			onSubmit: function(){
-				return $(this).form('validate');
-			},
-			success: function(result){
-				$.messager.alert('MPS UPLOAD',result,'info');
-				console.log(result);
-		 		$('#fileexcel').filebox('clear');
-				// $('#dg').datagrid('reload');
+				url: 'mps_upload_proses.php',
+				onSubmit: function(){
+					return $(this).form('validate');
+				},success: function(result){
+					$.messager.alert('MPS UPLOAD',result,'info');
+					console.log(result);
+					$('#fileexcel').filebox('clear');
+					// $.post('mps_list_excel.php')
+					$.post('safety_stock_xls.php')
+					window.open('mps_list_excel.php');
 				}
 			});
 		}
