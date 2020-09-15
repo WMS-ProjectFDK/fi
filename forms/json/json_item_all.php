@@ -1,7 +1,9 @@
 <?php
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
-	$sql = "select distinct item_no,description from item order by description asc";
+	$sql = "select distinct item_no,description from item 
+		where delete_type is null
+		order by description asc";
 	$result = sqlsrv_query($connect, $sql);
 	$arrData = array();
 	$arrNo = 0;

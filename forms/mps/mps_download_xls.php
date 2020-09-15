@@ -382,6 +382,14 @@ foreach ($someArray as $key => $value) {
                 ->setCellValue('U'.$noRow, $value['REMARK'])
             ;
 
+    // $objPHPExcel->getActiveSheet(0)
+    //     ->getStyle('K'.$noRow.':L'.$noRow)
+    //     ->getNumberFormat()
+    //     ->setFormatCode('dd/mm/yyyy')
+    // ;
+
+    $objPHPExcel->getActiveSheet()->getStyle('K'.$noRow.':L'.$noRow)->getNumberFormat()->setFormatCode('dd/mm/yyyy');
+
     foreach ($someArray2 as $key => $value2) {
         if($value['PO_NO'] == $value2['PO_NO'] AND $value['PO_LINE_NO'] == $value2['PO_LINE_NO']){
             $mps_d = $value2['MPS_DATE_FORMAT'];

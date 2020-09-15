@@ -69,29 +69,7 @@ h2 {
 ?>
 
 <div id="toolbar" style="padding:3px 3px;">
-	<fieldset style="float:left;width:470px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>Materials Transaction Filter</strong></span></legend>
-		<div style="width:470px;float:left">
-			<div class="fitem">
-				<span style="width:110px;display:inline-block;">Slip Date</span>
-				<input style="width:85px;" name="date_awal" id="date_awal" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-				to 
-				<input style="width:85px;" name="date_akhir" id="date_akhir" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-				<label><input type="checkbox" name="ck_date" id="ck_date" checked="true">All</input></label>
-			</div>
-			<div class="fitem">
-				<span style="width:110px;display:inline-block;">Slip No.</span>
-				<select style="width:190px;" name="cmb_slip_no" id="cmb_slip_no" class="easyui-combobox" data-options=" url:'../json/json_slip_no.php', method:'get', valueField:'slip_no', textField:'SLIP_NO', panelHeight:'75px'"></select>
-				<label><input type="checkbox" name="ck_slip_no" id="ck_slip_no" checked="true">All</input></label>
-			</div>
-			<div class="fitem">
-				<span style="width:110px;display:inline-block;">Slip Type</span>
-				<select style="width:300px;" name="cmb_slip_type" id="cmb_slip_type" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'auto'"></select>
-				<label><input type="checkbox" name="ck_slip_type" id="ck_slip_type" checked="true">All</input></label>
-			</div>
-		</div>
-	</fieldset>
-
-	<fieldset style="position:absolute;margin-left:495px;border-radius:4px;width: 500px;height: 100px;"><legend><span class="style3"><strong>Item Filter</strong></span></legend>
+	<fieldset style="float:left;width:500px;border-radius:4px;height: 70px;"><legend><span class="style3"><strong>ITEM FILTER</strong></span></legend>
 		<div class="fitem">
 			<span style="width:110px;display:inline-block;">Item No.</span>
 			<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_all.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
@@ -107,21 +85,12 @@ h2 {
 			<span style="width:110px;display:inline-block;">Item Name</span>
 			<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox"></input>
 		</div>
-		<div class="fitem">
-			<span style="width:110px;display:inline-block;">Approval</span>
-			<select style="width:190px;" name="cmb_sts_approval" id="cmb_sts_approval" class="easyui-combobox" data-options="panelHeight:'50px'">
-				<option selected=""></option>
-				<option value=0> BELUM APPROVE</option>
-				<option value=1> SUDAH APPROVE</option>
-			</select>
-			<label><input type="checkbox" name="ck_sts_approval" id="ck_sts_approval" checked="true">All</input></label>
-		</div>
 	</fieldset>
 
-	<fieldset style="margin-left: 1020px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>Print Select</strong></span></legend>
+	<fieldset style="position:absolute;margin-left:530px;border-radius:4px;width: 750px;height: 70px;"><legend><span class="style3"><strong>OTHER FILTER & PRINT</strong></span></legend>
 		
 	</fieldset>
-
+	<div style="clear:both;margin-bottom:0px;"></div>
 	<div style="padding:5px 6px;">
        <span style="width:50px;display:inline-block;">search</span>
 	   <input style="width:180px; height: 18px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" />
@@ -161,7 +130,6 @@ h2 {
 		
 	    if(event.keyCode == 13 || event.which == 13){
 			var src = document.getElementById('src').value;
-			//alert(src);
 			$('#dg').datagrid('load', {
 				src: search
 			});
@@ -171,7 +139,6 @@ h2 {
 			if (src == '') {
 				filterData();
 			};
-			//document.getElementById('src').value = '';
 	    }
 	}
 
@@ -266,43 +233,22 @@ h2 {
 		$('#dg').datagrid( {
 			url: 'item_get.php',
 		    columns:[[
-			    {field:'item_no',title:'SLIP NO.', halign:'center', width:50, sortable: true},
-                {field:'ITEM', title:'ITEM', halign:'center', width:50}, 
-                {field:'DESCRIPTION',title:'DESCRIPTION', halign:'center', width:200, sortable: true}
+			    {field:'ITEM_NO',title:'ITEM NO.', halign:'center', width:50, sortable: true},
+                {field:'ITEM', title:'ITEM', halign:'center', width:100}, 
+				{field:'DESCRIPTION',title:'DESCRIPTION', halign:'center', width:200, sortable: true},
+				{field:'STOCK_SUBJECT', title:'SUBJECT', halign:'center', width:100},
+				{field:'MAK', title:'MAKER', halign:'center', width:100},
+				{field:'CLASS', title:'CLASS', halign:'center', width:100}
 			]]
 		});
 	});
 
 	function filterData(){
-		var ck_date = "false";
-		var ck_slip_no = "false";
-		var ck_slip_type = "false";
 		var ck_item_no = "false";
-		var ck_sts_approval = "false";
 		var flag = 0;
-
-		if ($('#ck_date').attr("checked")) {
-			ck_date = "true";
-			flag += 1;
-		};
-
-		if ($('#ck_slip_no').attr("checked")) {
-			ck_slip_no = "true";
-			flag += 1;
-		};
-
-		if ($('#ck_slip_type').attr("checked")) {
-			ck_slip_type = "true";
-			flag += 1;
-		};
 
 		if ($('#ck_item_no').attr("checked")) {
 			ck_item_no = "true";
-			flag += 1;
-		};
-
-		if ($('#ck_sts_approval').attr("checked")) {
-			ck_sts_approval = "true";
 			flag += 1;
 		};
 
@@ -311,18 +257,9 @@ h2 {
 		}
 
 		$('#dg').datagrid('load', {
-			date_awal: $('#date_awal').datebox('getValue'),
-			date_akhir: $('#date_akhir').datebox('getValue'),
-			ck_date: ck_date,
-			cmb_slip_no : $('#cmb_slip_no').combobox('getValue'),
-			ck_slip_no: ck_slip_no,
-			cmb_slip_type: $('#cmb_slip_type').combobox('getValue'),
-			ck_slip_type: ck_slip_type,
 			cmb_item_no: $('#cmb_item_no').combobox('getValue'),
 			ck_item_no: ck_item_no,
 			txt_item_name: $('#txt_item_name').textbox('getValue'),
-			ck_sts_approval: ck_sts_approval,
-			cmb_sts_approval: $('#cmb_sts_approval').combobox('getValue'),
 			src: ''
 		});
 		
@@ -330,7 +267,7 @@ h2 {
 	}
 
 	function add_item(){
-        location.href = 'item_add.php?sts=new&item_no=&item_desc=';
+        location.href = 'item_add.php?sts=new&item_no=&item_desc=&data=';
 	}
 
 	function edit_item(){
@@ -338,114 +275,109 @@ h2 {
 		var row = $('#dg').datagrid('getSelected');
         if(row){
             dataRows.push({
-                item_no: row.item_no,
-                item_code: row.item_code,
-                item: row.item,
-                item_flag: row.item_flag,
-                description: row.description,
-                class_code: row.class_code,
-                origin_code: row.origin_code,
-                curr_code: row.curr_code,
-                external_unit_number: row.external_unit_number,
-                safety_stock: row.safety_stock,
-                uom_q: row.uom_q,
-                unit_engineering: row.unit_engineering,
-                unit_stock_rate: row.unit_stock_rate,
-                unit_engineer_rate: row.unit_engineer_rate,
-                weight: row.weight,
-                uom_w: row.uom_w,
-                uom_l: row.uom_l,
-                drawing_no: row.drawing_no,
-                drawing_rev: row.drawing_rev,
-                applicable_model: row.applicable_model,
-                catalog_no: row.catalog_no,
-                standard_price: row.standard_price,
-                next_term_price: row.next_term_price,
-                suppliers_price: row.suppliers_price,
-                manufact_leadtime: row.manufact_leadtime,
-                purchase_leadtime: row.purchase_leadtime,
-                adjustment_leadtime: row.adjustment_leadtime,
-                labeling_to_pack_day: row.labeling_to_pack_day,
-                assembling_to_lab_day: row.assembling_to_lab_day,
-                issue_policy: row.issue_policy,
-                issue_lot: row.issue_lot,
-                manufact_fail_rate: row.manufact_fail_rate,
-                section_code: row.section_code,
-                stock_subject_code: row.stock_subject_code,
-                cost_process_code: row.cost_process_code,
-                cost_subject_code: row.cost_subject_code,
-                customer_item_no: row.customer_item_no,
-                customer_item_name: row.customer_item_name,
-                order_policy: row.order_policy,
-                maker_flag: row.maker_flag,
-                mak: row.mak,
-                item_type1: row.item_type1,
-                item_type2: row.item_type2,
-                package_unit_number: row.package_unit_number,
-                unit_price_o: row.unit_price_o,
-                unit_price_rate: row.unit_price_rate,
-                unit_curr_code: row.unit_curr_code,
-                customer_type: row.customer_type,
-                package_type: row.package_type,
-                capacity: row.capacity,
-                date_code_type: row.date_code_type,
-                date_code_month: row.date_code_month,
-                label_type: row.label_type,
-                measurement: row.measurement,
-                inner_box_height: row.inner_box_height,
-                inner_box_width: row.inner_box_width,
-                inner_box_depth           : row.inner_box_depth           ,
-                inner_box_unit_number: row.inner_box_unit_number,
-                medium_box_unit_height: row.medium_box_unit_height,
-                edium_box_unit_width: row.edium_box_unit_width,
-                edium_box_unit_depth: row.edium_box_unit_depth,
-                medium_box_unit_number: row.medium_box_unit_number,
-                outer_box_unit_height: row.outer_box_unit_height,
-                outer_box_unit_width: row.outer_box_unit_width,
-                outer_box_unit_depth: row.outer_box_unit_depth,
-                ctn_gross_weight: row.ctn_gross_weight,
-                pi_no: row.pi_no,
-                opertation_time: row.opertation_time,
-                man_power: row.man_power,
-                aging_day: row.aging_day
+				item_no: row.ITEM_NO,
+				item_code: row.ITEM_CODE,
+				item: row.ITEM,
+				item_flag: row.ITEM_FLAG,
+				description: row.DESCRIPTION,
+				class_code: row.CLASS_CODE,
+				origin_code: row.ORIGIN_CODE,
+				curr_code: row.CURR_CODE,
+				external_unit_number: row.EXTERNAL_UNIT_NUMBER,
+				safety_stock: row.SAFETY_STOCK,
+				uom_q: row.UOM_Q,
+				unit_engineering: row.UNIT_ENGINEERING,
+				unit_stock_rate: row.UNIT_STOCK_RATE,
+				unit_engineer_rate: row.UNIT_ENGINEER_RATE,
+				weight: row.WEIGHT,
+				uom_w: row.UOM_W,
+				uom_l: row.UOM_L,
+				drawing_no: row.DRAWING_NO,
+				drawing_rev: row.DRAWING_REV,
+				applicable_model: row.APPLICABLE_MODEL,
+				catalog_no: row.CATALOG_NO,
+				standard_price: row.STANDARD_PRICE,
+				next_term_price: row.NEXT_TERM_PRICE,
+				suppliers_price: row.SUPPLIERS_PRICE,
+				manufact_leadtime: row.MANUFACT_LEADTIME,
+				purchase_leadtime: row.PURCHASE_LEADTIME,
+				adjustment_leadtime: row.ADJUSTMENT_LEADTIME,
+				labeling_to_pack_day: row.LABELING_TO_PACK_DAY,
+				assembling_to_lab_day: row.ASSEMBLING_TO_LAB_DAY,
+				issue_policy: row.ISSUE_POLICY,
+				issue_lot: row.ISSUE_LOT,
+				manufact_fail_rate: row.MANUFACT_FAIL_RATE,
+				section_code: row.SECTION_CODE,
+				stock_subject_code: row.STOCK_SUBJECT_CODE,
+				cost_process_code: row.COST_PROCESS_CODE,
+				cost_subject_code: row.COST_SUBJECT_CODE,
+				customer_item_no: row.CUSTOMER_ITEM_NO,
+				customer_item_name: row.CUSTOMER_ITEM_NAME,
+				order_policy: row.ORDER_POLICY,
+				maker_flag: row.MAKER_FLAG,
+				mak: row.MAK,
+				item_type1: row.ITEM_TYPE1,
+				item_type2: row.ITEM_TYPE2,
+				package_unit_number: row.PACKAGE_UNIT_NUMBER,
+				unit_package: row.UNIT_PACKAGE,
+				unit_price_o: row.UNIT_PRICE_O,
+				unit_price_rate: row.UNIT_PRICE_RATE,
+				unit_curr_code: row.UNIT_CURR_CODE,
+				customer_type: row.CUSTOMER_TYPE,
+				package_type: row.PACKAGE_TYPE,
+				capacity: row.CAPACITY,
+				date_code_type: row.DATE_CODE_TYPE,
+				date_code_month: row.DATE_CODE_MONTH,
+				label_type: row.LABEL_TYPE,
+				measurement: row.MEASUREMENT,
+				inner_box_height: row.INNER_BOX_HEIGHT,
+				inner_box_width: row.INNER_BOX_WIDTH,
+				inner_box_depth: row.INNER_BOX_DEPTH,
+				inner_box_unit_number: row.INNER_BOX_UNIT_NUMBER,
+				medium_box_height: row.MEDIUM_BOX_HEIGHT,
+				medium_box_width: row.MEDIUM_BOX_WIDTH,
+				medium_box_depth: row.MEDIUM_BOX_DEPTH,
+				medium_box_unit_number: row.MEDIUM_BOX_UNIT_NUMBER,
+				outer_box_height: row.OUTER_BOX_HEIGHT,
+				outer_box_width: row.OUTER_BOX_WIDTH,
+				outer_box_depth: row.OUTER_BOX_DEPTH,
+				ctn_gross_weight: row.CTN_GROSS_WEIGHT,
+				pi_no: row.PI_NO,
+				operation_time: row.OPERATION_TIME,
+				man_power: row.MAN_POWER,
+				aging_day: row.AGING_DAY,
           });
             var myJSON=JSON.stringify(dataRows);
             var str_unescape=unescape(myJSON);
 
-            console.log(str_unescape);
+            console.log('item_add.php?sts=edit&item_no='+row.ITEM_NO+'&item_desc='+row.DESCRIPTION+'&data='+str_unescape);
 
-            // location.href = 'item_add.php?sts=edit&item_no='+row.ITEM_NO+
-            //     '&item_desc='+row.DESCRIPTION+
-            //     '&data='+str_unescape;
+            location.href = 'item_add.php?sts=edit&item_no='+row.ITEM_NO+'&item_desc='+row.DESCRIPTION+'&data='+unescape(str_unescape);
         }
 	}
 
 	function delete_item(){
 		var row = $('#dg').datagrid('getSelected');
-        if (row.STS == '0'){
-            $.messager.confirm('Confirm','Are you sure you want to destroy this Materials Transaction?',function(r){
-if (r){
-	$.messager.progress({
-					    title:'Please waiting',
-					    msg:'removing data...'
-					});
-
-  // $.post('do_destroy.php',{id:row.SLIP_NO},function(result){
-  //     if (result.success){
-  //     	$.messager.progress('close');
-  //         $('#dg').datagrid('reload');    // reload the user data
-  //     }else{
-  //         $.messager.show({    // show error message
-  //             title: 'Error',
-  //             msg: result.errorMsg
-  //         });
-  //         $.messager.progress('close');
-  //     }
-  // },'json');
-}
+        if (row){
+            $.messager.confirm('Confirm','Are you sure you want to destroy this Item?',function(r){
+				if (r){
+					$.messager.progress({title:'Please waiting', msg:'removing data...'});
+					$.post('item_destroy.php',{id:row.ITEM_NO},function(result){
+					    if (result.success){
+					    	$.messager.progress('close');
+					        $('#dg').datagrid('reload');
+					    }else{
+					        $.messager.show({
+					            title: 'Error',
+					            msg: result.errorMsg
+					        });
+					        $.messager.progress('close');
+					    }
+					},'json');
+				}
             });
         }else{
-        	$.messager.show({title: 'Materials Transaction',msg: 'Data is Approved'});
+        	$.messager.show({title: 'MASTER ITEM',msg: 'Data not Selected'});
         }
 	}
 </script>

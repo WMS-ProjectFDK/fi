@@ -3,7 +3,9 @@
 	$result = array();
 	$items = array();
 	$rowno=0;
+
 	$cust = isset($_REQUEST['cust']) ? strval($_REQUEST['cust']) : '';
+	$src = isset($_REQUEST['src']) ? strval($_REQUEST['src']) : '';
 
 	include("../../connect/conn.php");
 
@@ -18,6 +20,7 @@
 		where i.delete_type is null 
 		and i.item_no is not null 
 		and u.customer_code = '$cust'
+		and u.item_no like '%$src%'
 		order by i.description ";
 		
 	$data = sqlsrv_query($connect, strtoupper($rs));

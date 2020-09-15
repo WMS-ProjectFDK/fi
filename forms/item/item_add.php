@@ -1,20 +1,133 @@
 <?php
+error_reporting(0);
 include("../../connect/conn.php");
 session_start();
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
+
+// item_add.php?sts=edit&item_no=1170051&item_desc=GRAPHITE MK-25&data=[{"item_no":"1170051","item_code":null,"item":"GRAPHITE","item_flag":"2","description":"GRAPHITE MK-25","class_code":111911,"origin_code":118,"curr_code":1,"external_unit_number":0,"safety_stock":"0","uom_q":35,"unit_engineering":35,"unit_stock_rate":1,"unit_engineer_rate":1,"weight":".000000","uom_w":30,"uom_l":40,"drawing_no":null,"drawing_rev":null,"applicable_model":null,"catalog_no":null,"standard_price":"3.97730000","next_term_price":"3.97730000","suppliers_price":".00000000","manufact_leadtime":0,"purchase_leadtime":30,"adjustment_leadtime":2,"labeling_to_pack_day":null,"assembling_to_lab_day":null,"issue_policy":null,"issue_lot":null,"manufact_fail_rate":2,"section_code":100,"stock_subject_code":"1","cost_process_code":"212110","cost_subject_code":"136010","customer_item_no":null,"customer_item_name":null,"order_policy":null,"maker_flag":"1","mak":"SARCHEM","item_type1":null,"item_type2":null,"package_unit_number":null,"unit_price_o":null,"unit_price_rate":null,"unit_curr_code":null,"customer_type":null,"package_type":null,"capacity":null,"date_code_type":null,"date_code_month":null,"label_type":null,"measurement":null,"inner_box_height":null,"inner_box_width":null,"inner_box_depth":null,"inner_box_unit_number":null,"medium_box_height":null,"medium_box_width":null,"medium_box_depth":null,"medium_box_unit_number":null,"outer_box_height":null,"outer_box_width":null,"outer_box_depth":null,"ctn_gross_weight":null,"pi_no":null,"operation_time":null,"man_power":null,"aging_day":null}]
+
 $sts = $_GET['sts'];//=edit
 $item_no = $_GET['item_no'];//=22396
 $item_desc = $_GET['item_desc'];
+$data = $_GET['data'];
 
 if($sts == 'new'){
 	$s = 'ITEM ENTRY';
+	$TITLE = $s;
+	$post = 'save_item.php';
 }else{
 	$s = 'ITEM EDIT';
+	$TITLE = $s.' ('.$item_no.' - '.$item_desc.')';
+	$post = 'save_item_edit.php';
+
+	$data = isset($_REQUEST['data']) ? strval($_REQUEST['data']) : '';
+	$dt = json_decode(json_encode($data));
+	$str = preg_replace('/\\\\\"/',"\"", $dt);
+	$queries = json_decode($str);
+
+	foreach($queries as $query){
+		$item_no = $query->item_no;
+		$item_code = $query->item_code;
+		$item = $query->item;
+		$item_flag = $query->item_flag;
+		$description = $query->description;
+		$class_code = $query->class_code;
+		$origin_code = $query->origin_code;
+		$curr_code = $query->curr_code;
+		$external_unit_number = $query->external_unit_number;
+		$safety_stock = $query->safety_stock;
+		$uom_q = $query->uom_q;
+		$unit_engineering = $query->unit_engineering;
+		$unit_stock_rate = $query->unit_stock_rate;
+		$unit_engineer_rate = $query->unit_engineer_rate;
+		$weight = $query->weight;
+		$uom_w = $query->uom_w;
+		$uom_l = $query->uom_l;
+		$drawing_no = $query->drawing_no;
+		$drawing_rev = $query->drawing_rev;
+		$applicable_model = $query->applicable_model;
+		$catalog_no = $query->catalog_no;
+		$standard_price = $query->standard_price;
+		$next_term_price = $query->next_term_price;
+		$suppliers_price = $query->suppliers_price;
+		$manufact_leadtime = $query->manufact_leadtime;
+		$purchase_leadtime = $query->purchase_leadtime;
+		$adjustment_leadtime = $query->adjustment_leadtime;
+		$labeling_to_pack_day = $query->labeling_to_pack_day;
+		$assembling_to_lab_day = $query->assembling_to_lab_day;
+		$issue_policy = $query->issue_policy;
+		$issue_lot = $query->issue_lot;
+		$manufact_fail_rate = $query->manufact_fail_rate;
+		$section_code = $query->section_code;
+		$stock_subject_code = $query->stock_subject_code;
+		$cost_process_code = $query->cost_process_code;
+		$cost_subject_code = $query->cost_subject_code;
+		$customer_item_no = $query->customer_item_no;
+		$customer_item_name = $query->customer_item_name;
+		$order_policy = $query->order_policy;
+		$maker_flag = $query->maker_flag;
+		$mak = $query->mak;
+		$item_type1 = $query->item_type1;
+		$item_type2 = $query->item_type2;
+		$package_unit_number = $query->package_unit_number;
+		$unit_package = $query->unit_package;
+		$unit_price_o = $query->unit_price_o;
+		$unit_price_rate = $query->unit_price_rate;
+		$unit_curr_code = $query->unit_curr_code;
+		$customer_type = $query->customer_type;
+		$package_type = $query->package_type;
+		$capacity = $query->capacity;
+		$date_code_type = $query->date_code_type;
+		$date_code_month = $query->date_code_month;
+		$label_type = $query->label_type;
+		$measurement = $query->measurement;
+		$inner_box_height = $query->inner_box_height;
+		$inner_box_width = $query->inner_box_width;
+		$inner_box_depth = $query->inner_box_depth;
+		$inner_box_unit_number = $query->inner_box_unit_number;
+		$medium_box_height = $query->medium_box_height;
+		$medium_box_width = $query->medium_box_width;
+		$medium_box_depth = $query->medium_box_depth;
+		$medium_box_unit_number = $query->medium_box_unit_number;
+		$outer_box_height = $query->outer_box_height;
+		$outer_box_width = $query->outer_box_width;
+		$outer_box_depth = $query->outer_box_depth;
+		$ctn_gross_weight = $query->ctn_gross_weight;
+		$pi_no = $query->pi_no;
+		$operation_time = $query->operation_time;
+		$man_power = $query->man_power;
+		$aging_day = $query->aging_day;
+	}
+
+	if ($pi_no != '' AND ! is_null($pi_no)) {
+		$cek_pi = "select PI_NO, PLT_SPEC_NO, PALLET_SIZE_TYPE,
+			CAST(PALLET_CTN_NUMBER as int) as PALLET_CTN_NUMBER,
+			CAST(PALLET_STEP_CTN_NUMBER as int) as PALLET_STEP_CTN_NUMBER, 
+			CAST(PALLET_HEIGHT as decimal(18,2)) as PALLET_HEIGHT, 
+			CAST(PALLET_WIDTH as decimal(18,2)) as PALLET_WIDTH, 
+			CAST(PALLET_DEPTH as decimal(18,2)) as PALLET_DEPTH, 
+			CAST(PALLET_UNIT_NUMBER as int) as PALLET_UNIT_NUMBER 
+			from PACKING_INFORMATION 
+			where PI_NO='$pi_no'";
+
+		// echo $cek_pi;
+		$data_pi = sqlsrv_query($connect, strtoupper($cek_pi));
+		$dt_pi = sqlsrv_fetch_object($data_pi);
+
+		$plt_spec_no = $dt_pi->PLT_SPEC_NO;
+		$pallet_size_type = $dt_pi->PALLET_SIZE_TYPE;
+		$pallet_ctn_number = $dt_pi->PALLET_CTN_NUMBER;
+		$pallet_step_ctn_number = $dt_pi->PALLET_STEP_CTN_NUMBER;
+		$pallet_height = $dt_pi->PALLET_HEIGHT;
+		$pallet_width = $dt_pi->PALLET_WIDTH;
+		$pallet_depth = $dt_pi->PALLET_DEPTH;
+		$pallet_unit_number = $dt_pi->PALLET_UNIT_NUMBER;
+	}
+	
 }
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,19 +190,50 @@ h2 {
 	}
 
 	function backForm(){
-		location.href = 'item.php';
+		location.href = 'http://localhost:8088/fi/forms/item/item.php?id=1190';
 	}
 
 	function save(){
-		$('#add').form('submit',{
-			onSubmit: function () {
-				return $ (this) .form ('validate');
-			},
-			success:function(data){
-				$.messager.alert('Info', data, 'info');
-				console.log(data);
+		if('<?=$sts?>' == 'new'){
+			var itm = $('#item_no').numberbox('getValue');
+			// alert(itm);
+			if (itm != ''){
+				$.ajax({
+					type: 'GET',
+					url: '../json/json_cek_master_item_no.php?item='+ $('#item_no').numberbox('getValue'),
+					data: {kode:'kode'},
+					success: function(data){
+						if((data[0].kode)=='0'){
+							$('#add').form('submit',{
+								onSubmit: function(){
+									return $(this).form ('validate');
+								},
+								success:function(data){
+									$.messager.alert('Info', data, 'info');
+									console.log(data);
+									location.href = 'item.php?id=1190';
+								}
+							});
+						}else{
+							$.messager.alert("WARNING","ITEM NO. Already Exist..!!","warning");	
+						}
+					}
+				});
+			}else{
+				$.messager.alert("WARNING","ITEM NO. not found..!!","warning");	
 			}
-		});
+		}else{
+			$('#add').form('submit',{
+				onSubmit: function(){
+					return $(this).form ('validate');
+				},
+				success:function(data){
+					$.messager.alert('Info', data, 'info');
+					console.log(data);
+					location.href = 'item.php?id=1190';
+				}
+			});
+		}
 	}
 
 	function pi_sett(){
@@ -121,6 +265,101 @@ h2 {
 
 		$('#dg_pi').datagrid('enableFilter');
 	}
+
+	$(function(){
+		var sts = '<?=$sts?>';
+		if(sts == 'edit'){
+			$('#item_no').numberbox('setValue','<?=$item_no?>');
+			$('#item_code').textbox('setValue', '<?=$item_code?>');
+			$('#item').textbox('setValue', '<?=$item?>');
+			$('#item_flag').combobox('setValue', '<?=$item_flag?>');
+			$('#description').textbox('setValue', '<?=$description?>');
+			$('#class_code').combobox('setValue', '<?=$class_code?>');
+			$('#origin_code').textbox('setValue', '<?=$origin_code?>');
+			$('#curr_code').combobox('setValue', '<?=$curr_code?>');
+			$('#external_unit_number').numberbox('setValue', '<?=$external_unit_number?>');
+			$('#safety_stock').numberbox('setValue', '<?=$safety_stock?>');
+			$('#uom_q').combobox('setValue', '<?=$uom_q?>');
+			$('#unit_engineering').combobox('setValue', '<?=$unit_engineering?>');
+			$('#unit_stock_rate').textbox('setValue', '<?=$unit_stock_rate?>');
+			$('#unit_engineer_rate').textbox('setValue', '<?=$unit_engineer_rate?>');
+
+			$('#weight').textbox('setValue', '<?=$weight?>');
+			$('#uom_w').combobox('setValue', '<?=$uom_w?>');
+			$('#uom_l').combobox('setValue', '<?=$uom_l?>');
+			$('#drawing_no').textbox('setValue', '<?=$drawing_no?>');
+			$('#drawing_rev').textbox('setValue', '<?=$drawing_rev?>');
+			$('#applicable_model').textbox('setValue', '<?=$applicable_model?>');
+			$('#catalog_no').textbox('setValue', '<?=$catalog_no?>');
+
+			$('#standard_price').numberbox('setValue', '<?=$standard_price?>');
+			$('#next_term_price').numberbox('setValue', '<?=$next_term_price?>');
+			$('#suppliers_price').numberbox('setValue', '<?=$suppliers_price?>');
+			$('#manufact_leadtime').numberbox('setValue', '<?=$manufact_leadtime?>');
+			$('#purchase_leadtime').numberbox('setValue', '<?=$purchase_leadtime?>');
+			$('#adjustment_leadtime').numberbox('setValue', '<?=$adjustment_leadtime?>');
+			$('#labeling_to_pack_day').numberbox('setValue', '<?=$labeling_to_pack_day?>');
+			$('#assembling_to_lab_day').numberbox('setValue', '<?=$assembling_to_lab_day?>');
+			$('#issue_policy').combobox('setValue', '<?=$issue_policy?>');
+			$('#issue_lot').numberbox('setValue', '<?=$issue_lot?>');
+			$('#manufact_fail_rate').numberbox('setValue', '<?=$manufact_fail_rate?>');
+
+			$('#section_code').combobox('setValue', '<?=$section_code?>');
+			$('#stock_subject_code').combobox('setValue', '<?=$stock_subject_code?>');
+			$('#cost_process_code').combobox('setValue', '<?=$cost_process_code?>');
+			$('#cost_subject_code').combobox('setValue', '<?=$cost_subject_code?>');
+			$('#customer_item_no').textbox('setValue', '<?=$customer_item_no?>');
+			$('#customer_item_name').textbox('setValue', '<?=$customer_item_name?>');
+			$('#order_policy').combobox('setValue', '<?=$order_policy?>');
+			$('#maker_flag').combobox('setValue', '<?=$maker_flag?>');
+			$('#mak').textbox('setValue', '<?=$mak?>');
+			$('#item_type1').textbox('setValue', '<?=$item_type1?>');
+			$('#item_type2').textbox('setValue', '<?=$item_type2?>');
+			$('#package_unit_number').numberbox('setValue', '<?=$package_unit_number?>');
+			$('#unit_package').combobox('setValue', '<?=$unit_package?>');
+
+			$('#unit_price_o').numberbox('setValue', '<?=$unit_price_o?>');
+			$('#unit_price_rate').numberbox('setValue', '<?=$unit_price_rate?>');
+			$('#unit_curr_code').combobox('setValue', '<?=$unit_curr_code?>');
+			$('#customer_type').textbox('setValue', '<?=$customer_type?>');
+			$('#package_type').combobox('setValue', '<?=$package_type?>');
+			$('#capacity').numberbox('setValue', '<?=$capacity?>');
+			$('#date_code_type').textbox('setValue', '<?=$date_code_type?>');
+			$('#date_code_month').numberbox('setValue', '<?=$date_code_month?>');
+			$('#label_type').combobox('setValue', '<?=$label_type?>');
+			$('#measurement').numberbox('setValue', '<?=$measurement?>');
+
+			$('#inner_box_height').numberbox('setValue', '<?=$inner_box_height?>');
+			$('#inner_box_width').numberbox('setValue', '<?=$inner_box_width?>');
+			$('#inner_box_depth').numberbox('setValue', '<?=$inner_box_depth?>');
+			$('#inner_box_unit_number').numberbox('setValue', '<?=$inner_box_unit_number?>');
+			$('#medium_box_height').numberbox('setValue', '<?=$medium_box_height?>');
+			$('#medium_box_width').numberbox('setValue', '<?=$medium_box_width?>');
+			$('#medium_box_depth').numberbox('setValue', '<?=$medium_box_depth?>');
+			$('#medium_box_unit_number').numberbox('setValue', '<?=$medium_box_unit_number?>');
+			$('#outer_box_height').numberbox('setValue', '<?=$outer_box_height?>');
+			$('#outer_box_width').numberbox('setValue', '<?=$outer_box_width?>');
+			$('#outer_box_depth').numberbox('setValue', '<?=$outer_box_depth?>');
+			$('#ctn_gross_weight').numberbox('setValue', '<?=$ctn_gross_weight?>');
+
+			$('#pi_no').textbox('setValue', '<?=$pi_no?>');
+			$('#plt_spec_no').textbox('setValue', '<?=$plt_spec_no?>');
+			$('#pallet_size_type').textbox('setValue', '<?=$pallet_size_type?>');
+			$('#pallet_ctn_number').textbox('setValue', '<?=$pallet_ctn_number?>');
+			$('#pallet_step_ctn_number').textbox('setValue', '<?=$pallet_step_ctn_number?>');
+			$('#pallet_height').textbox('setValue', '<?=$pallet_height?>');
+			$('#pallet_width').textbox('setValue', '<?=$pallet_width?>');
+			$('#pallet_depth').textbox('setValue', '<?=$pallet_depth?>');
+			$('#pallet_unit_number').textbox('setValue', '<?=$pallet_unit_number?>');
+
+			$('#operation_time').numberbox('setValue', '<?=$operation_time?>');
+			$('#man_power').textbox('setValue', '<?=$man_power?>');
+			$('#aging_day').textbox('setValue', '<?=$aging_day?>');
+
+			// $('#item_no').numberbox('disable');
+			$('#item_no').numberbox({editable:false})
+		}
+	});
 </script>
 </head>
 <body>
@@ -131,7 +370,7 @@ h2 {
 	<a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="clearForm()">CLEAR</a>
 	<a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="backForm()">BACK</a>
 </div>
-<div class="easyui-panel" title="<?php echo $s.' ('.$item_no.' - '.$item_desc.')'; ?>" style="width:100%;max-width:100%;padding:10px 10px;">
+<div class="easyui-panel" title="<?php echo $TITLE; ?>" style="width:100%;max-width:100%;padding:10px 10px;">
 <div id="dlg_pi" class="easyui-dialog" style="width:920px;height:500px;" closed="true" buttons="#dlg-buttons-pi" data-options="modal:true">
 	<table id="dg_pi" class="easyui-datagrid"></table>
 </div>
@@ -141,7 +380,8 @@ h2 {
 	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_pi').dialog('close');" style="width:90px">Cancel</a>
 </div>
 
-<form id="add" method="post" action="save_item.php" data-options="novalidate:true">
+<form id="add" method="post" action="<?=$post;?>" data-options="novalidate:true">
+
 	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
 		<legend><span class="style3"><strong>ITEM NAME</strong></span></legend>
 		<div class="fitem">
@@ -281,7 +521,7 @@ h2 {
 				<option Value="120" >GM</option>
 				<option Value="30" >KG</option>
 			</select>
-			<span style="width:50px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">UNIT of MEASUREMENT</span>
 			<select style="width:100px;" name="uom_l" id="uom_l" class="easyui-combobox" data-options="panelHeight:'auto'" required>
 				<option Value=""></option>
@@ -354,7 +594,7 @@ h2 {
 			<span style="width:150px;display:inline-block;">SECTION CODE</span>
 			<select style="width:200px;" name="section_code" id="section_code" class="easyui-combobox" data-options="panelHeight:'auto'" required>
 				<option Value=""></option>
-				<option Value="100" >FI</option>
+				<option Value="100" selected="true">FI</option>
 				<option Value="200" >YUSEN</option>
 			</select>
 			<span style="width:20px;display:inline-block;"></span>
@@ -423,8 +663,8 @@ h2 {
 			<span style="width:150px;display:inline-block;">ITEM TYPE-2</span>
 			<input style="width:200px;" name="item_type2" id="item_type2" class="easyui-textbox"/>
 			<span style="width:50px;display:inline-block;"></span>
-			<span style="width:150px;display:inline-block;">PACKAGE UNIT NO.</span>
-			<input style="width:95px;" name="package_unit_number" id="package_unit_number" class="easyui-textbox" required/>
+			<span style="width:150px;display:inline-block;color:blue;">PACKAGE UNIT NO.</span>
+			<input style="width:95px;" name="package_unit_number" id="package_unit_number" class="easyui-numberbox" required/>
 			<select style="width:100px;" name="unit_package" id="unit_package" class="easyui-combobox" data-options="panelHeight:'75px'" required>
 				<option value=""></option>
 				<option value='130' >BTL</option>
@@ -466,7 +706,7 @@ h2 {
 			<input style="width:200px;" name="customer_type" id="customer_type" class="easyui-textbox"/>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">PACKAGE TYPE</span>
-			<select style="width:100px;" name="package_type" id="package_type" class="easyui-combobox" data-options="panelHeight:'75px'">
+			<select style="width:200px;" name="package_type" id="package_type" class="easyui-combobox" data-options="panelHeight:'75px'">
 				<option value=''></option>
 				<option value='A'>AUTO SHRINK LR6</option>
 				<option value='A3'>AUTO SHRINK LR03</option>
@@ -491,8 +731,8 @@ h2 {
 			</select>
 		</div>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">CAPACITY</span>
-			<input style="width:200px;" name="capacity" id="capacity" class="easyui-textbox" required/>
+			<span style="width:150px;display:inline-block;color:blue;">CAPACITY</span>
+			<input style="width:200px;" name="capacity" id="capacity" class="easyui-numberbox" required/>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">DATE CODE TYPE</span>
 			<input style="width:200px;" name="date_code_type" id="date_code_type" class="easyui-textbox"/>
@@ -532,21 +772,21 @@ h2 {
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">MEDIUM BOX</span>
-			<input style="width:177px;" name="medium_box_unit_height" id="medium_box_unit_height" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_height" id="medium_box_height" class="easyui-numberbox"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="medium_box_unit_width" id="medium_box_unit_width" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_width" id="medium_box_width" class="easyui-numberbox"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="medium_box_unit_depth" id="medium_box_unit_depth" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_depth" id="medium_box_depth" class="easyui-numberbox"/>mm
 			<span style="width:20px;display:inline-block;"></span>
 			<input style="width:177px;" name="medium_box_unit_number" id="medium_box_unit_number" class="easyui-numberbox"/>PC
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">OUTER BOX</span>
-			<input style="width:177px;" name="outer_box_unit_height" id="outer_box_unit_height" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_height" id="outer_box_height" class="easyui-numberbox"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="outer_box_unit_width" id="outer_box_unit_width" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_width" id="outer_box_width" class="easyui-numberbox"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="outer_box_unit_depth" id="outer_box_unit_depth" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_depth" id="outer_box_depth" class="easyui-numberbox"/>mm
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">CTN GROSS WEIGHT</span>
@@ -599,7 +839,7 @@ h2 {
 		<legend><span class="style3"><strong>ITEM SET AGING</strong></span></legend>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">OPERATION TIME</span>
-			<input style="width:200px;" name="opertation_time" id="opertation_time" class="easyui-numberbox" required/>
+			<input style="width:200px;" name="operation_time" id="operation_time" class="easyui-numberbox" required/>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">MAN POWER</span>
 			<input style="width:200px;" name="man_power" id="man_power" class="easyui-numberbox"/>
@@ -608,6 +848,7 @@ h2 {
 			<input style="width:200px;" name="aging_day" id="aging_day" class="easyui-numberbox" required/>
 		</div>
 	</fieldset>	
+
 </form>
 </div>
 </body>

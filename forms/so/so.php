@@ -134,9 +134,9 @@ $menu_id = $_GET['id'];
 		<table id="dg" title="SALES ORDER" class="easyui-datagrid" toolbar="#toolbar	" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
 
 		<!-- ADD START -->
-		<div id='win_add' class="easyui-window" style="width:auto;height:565px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+		<div id='win_add' class="easyui-window" style="width:1300px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		  <form id="f_add" method="post" novalidate>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CUSTOMER</span>
 					<input required="true" style="width:100px;" name="cust_no_add" id="cust_no_add" class="easyui-textbox" disabled="disabled" data-options="" />
@@ -156,28 +156,7 @@ $menu_id = $_GET['id'];
 					}
 					" required="">
 					</select>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SO DATE</span>
-					<input style="width:100px;" name="so_date_add" id="so_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-					<span style="width:55px;display:inline-block;"></span>
-					<label><input type="checkbox" name="ck_in_mps" id="ck_in_mps" checked="true">IN MPS</input></label>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SO NO.</span>
-					<input required="true" style="width:100px;" name="so_no_add" id="so_no_add" class="easyui-textbox" disabled=true/>
-					<span style="display:inline-block;">CUST P/O</span>
-					<input required="true" style="width:211px;" name="so_cust_po_no_add" id="so_cust_po_no_add" class="easyui-textbox"/>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
-					<input style="width:100px;" name="consignee_code_add" id="consignee_code_add" class="easyui-textbox" disabled=true/>
-					<input style="width:275px;" name="consignee_name_add" id="consignee_name_add" class="easyui-textbox" disabled=true/>
-					<span><a href="javascript:void(0)" onclick="consignee_data('add')">SET</a></span>
-				</div>
-			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:740px;margin-left: 510px;">
-				<div class="fitem">
+					<span style="width:18px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CURR</span>
 					<!-- <input required="true" style="width:100px;" name="curr_add" id="curr_add" class="easyui-textbox" disabled=true/>	 -->
 					<input style="width:100px;" id="curr_add" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
@@ -194,21 +173,50 @@ $menu_id = $_GET['id'];
 					<span style="display:inline-block;">EX RATE</span>
 					<input required="true" style="width:100px;" name="rate_add" id="rate_add" class="easyui-textbox" disabled=true/>
 					<span style="display:inline-block;">COUNTRY</span>
-					<input required="true" style="width:325px;" name="country_add" id="country_add" class="easyui-textbox" disabled=true/>
+					<input required="true" style="width:275px;" name="country_add" id="country_add" class="easyui-textbox" disabled=true/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO DATE</span>
+					<input style="width:100px;" name="so_date_add" id="so_date_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+					<span style="width:55px;display:inline-block;"></span>
+					<label><input type="checkbox" name="ck_in_mps" id="ck_in_mps" checked="true">IN MPS</input></label>
+					<span style="width:195px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">REMARKS</span>
-					<input style="width:650px;" name="so_remark_add" id="so_remark_add" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_remark_add" id="so_remark_add" class="easyui-textbox"/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO NO.</span>
+					<input required="true" style="width:100px;" name="so_no_add" id="so_no_add" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">CUST P/O</span>
+					<input required="true" style="width:211px;" name="so_cust_po_no_add" id="so_cust_po_no_add" class="easyui-textbox"/>
+					<span style="width:45px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CASE MARK</span>
-					<input style="width:650px;" name="so_casemark_add" id="so_casemark_add" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_casemark_add" id="so_casemark_add" class="easyui-textbox"/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
+					<input style="width:100px;" name="consignee_code_add" id="consignee_code_add" class="easyui-textbox" disabled=true/>
+					<input style="width:275px;" name="consignee_name_add" id="consignee_name_add" class="easyui-textbox" disabled=true/>
+					<span><a href="javascript:void(0)" onclick="consignee_data('add')">SET</a></span>
+					<span style="width:17px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CATEGORY</span>
-					<input style="width:650px;" name="so_category_add" id="so_category_add" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_category_add" id="so_category_add" class="easyui-textbox"/>
 				</div>
 			</fieldset>
+			<!-- <fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:700px;margin-left: 510px;">
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+			</fieldset> -->
 			<div style="clear:both;margin-bottom:10px;"></div>
 			<table id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_add" style="padding: 5px 5px;">
@@ -224,9 +232,9 @@ $menu_id = $_GET['id'];
 		<!-- ADD END -->
 
 		<!-- EDIT START -->
-		<div id='win_edit' class="easyui-window" style="width:auto;height:565px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
+		<div id='win_edit' class="easyui-window" style="width:1300px;height:500px;padding:5px 5px;" closed="true" closable="false" minimizable="false" maximizable="true" collapsible="false" data-options="modal:true">
 		  <form id="f_edit" method="post" novalidate>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:500px; float:left;">
+			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CUSTOMER</span>
 					<input required="true" style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" disabled="disabled" data-options="" />
@@ -246,28 +254,7 @@ $menu_id = $_GET['id'];
 					}
 					" disabled="disabled">
 					</select>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SO DATE</span>
-					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
-					<span style="width:55px;display:inline-block;"></span>
-					<label><input type="checkbox" name="ck_in_mps_edit" id="ck_in_mps_edit" checked="true">IN MPS</input></label>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">SO NO.</span>
-					<input required="true" style="width:100px;" name="so_no_edit" id="so_no_edit" class="easyui-textbox" disabled=true/>
-					<span style="display:inline-block;">CUST P/O</span>
-					<input required="true" style="width:211px;" name="so_cust_po_no_edit" id="so_cust_po_no_edit" class="easyui-textbox"/>
-				</div>
-				<div class="fitem">
-					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
-					<input style="width:100px;" name="consignee_code_edit" id="consignee_code_edit" class="easyui-textbox" disabled=true/>
-					<input style="width:275px;" name="consignee_name_edit" id="consignee_name_edit" class="easyui-textbox" disabled=true/>
-					<span><a href="javascript:void(0)" onclick="consignee_data('edit')">SET</a></span>
-				</div>
-			</fieldset>
-			<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:750px;margin-left: 510px;">
-				<div class="fitem">
+					<span style="width:18px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CURR</span>
 					<!-- <input required="true" style="width:100px;" name="curr_edit" id="curr_edit" class="easyui-textbox" disabled=true/>	 -->
 					<input style="width:100px;" id="curr_edit" class="easyui-combobox" data-options=" url:'../json/json_currency.php', method:'get', valueField:'idcrc', textField:'nmcrc', panelHeight:'100px',
@@ -284,21 +271,50 @@ $menu_id = $_GET['id'];
 					<span style="display:inline-block;">EX RATE</span>
 					<input required="true" style="width:100px;" name="rate_edit" id="rate_edit" class="easyui-textbox" disabled=true/>
 					<span style="display:inline-block;">COUNTRY</span>
-					<input required="true" style="width:325px;" name="country_edit" id="country_edit" class="easyui-textbox" disabled=true/>
+					<input required="true" style="width:275px;" name="country_edit" id="country_edit" class="easyui-textbox" disabled=true/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO DATE</span>
+					<input style="width:100px;" name="so_date_edit" id="so_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/>
+					<span style="width:55px;display:inline-block;"></span>
+					<label><input type="checkbox" name="ck_in_mps_edit" id="ck_in_mps_edit" checked="true">IN MPS</input></label>
+					<span style="width:195px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">REMARKS</span>
-					<input style="width:650px;" name="so_remark_edit" id="so_remark_edit" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_remark_edit" id="so_remark_edit" class="easyui-textbox"/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">SO NO.</span>
+					<input required="true" style="width:100px;" name="so_no_edit" id="so_no_edit" class="easyui-textbox" disabled=true/>
+					<span style="display:inline-block;">CUST P/O</span>
+					<input required="true" style="width:211px;" name="so_cust_po_no_edit" id="so_cust_po_no_edit" class="easyui-textbox"/>
+					<span style="width:45px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CASE MARK</span>
-					<input style="width:650px;" name="so_casemark_edit" id="so_casemark_edit" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_casemark_edit" id="so_casemark_edit" class="easyui-textbox"/>
 				</div>
 				<div class="fitem">
+					<span style="width:80px;display:inline-block;">CONSIGNEE</span>
+					<input style="width:100px;" name="consignee_code_edit" id="consignee_code_edit" class="easyui-textbox" disabled=true/>
+					<input style="width:275px;" name="consignee_name_edit" id="consignee_name_edit" class="easyui-textbox" disabled=true/>
+					<span><a href="javascript:void(0)" onclick="consignee_data('edit')">SET</a></span>
+					<span style="width:17px;display:inline-block;"></span>
 					<span style="width:80px;display:inline-block;">CATEGORY</span>
-					<input style="width:650px;" name="so_category_edit" id="so_category_edit" class="easyui-textbox"/>
+					<input style="width:600px;" name="so_category_edit" id="so_category_edit" class="easyui-textbox"/>
 				</div>
 			</fieldset>
+			<!-- <fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:750px;margin-left: 510px;">
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+				<div class="fitem">
+					
+				</div>
+			</fieldset> -->
 			<div style="clear:both;margin-bottom:10px;"></div>
 			<table id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:100%;height:auto;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns= "true"></table>
 			<div id="toolbar_edit" style="padding: 5px 5px;">
@@ -314,8 +330,13 @@ $menu_id = $_GET['id'];
 		<!-- EDIT END -->
 
 		<!-- ADD ITEM START -->
-		<div id="dlg_item" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addSO" data-options="modal:true">
-			<table id="dg_item" class="easyui-datagrid" toolbar="#toolbar_addItem" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		<div id="dlg_item" class="easyui-dialog" style="width: 950px;height: 270px;" closed="true" buttons="#dlg-buttons_addPO" data-options="modal:true">
+			<table id="dg_item" toolbar="#toolbarItem" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true" fitColumns="true"></table>
+		</div>
+
+		<div id="toolbarItem" style="padding: 5px 5px;">
+			<input style="width:200px;height: 20px;border-radius: 4px;" name="s_item" id="s_item" onkeypress="sch_item(event)" autofocus/>
+			<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_item()">SEARCH ITEM</a>
 		</div>
 		<!-- ADD ITEM END -->
 
@@ -419,6 +440,28 @@ $menu_id = $_GET['id'];
 			}
 
 			var pdf_url='';
+
+			function sch_item(event){
+				var sch = document.getElementById('s_item').value;
+				var search = sch.toUpperCase();
+				document.getElementById('s_item').value = search;
+				
+				if(event.keyCode == 13 || event.which == 13){
+					search_item();
+				}
+			}
+
+			function search_item(){
+				var cust_id = $('#cust_no_add').textbox('getValue');
+				var s_item = document.getElementById('s_item').value;
+
+				if(s_item != ''){
+					$('#dg_item').datagrid('load',{cust: cust_id, src: s_item});
+					$('#dg_item').datagrid({url: 'so_getItem.php',});	
+					$('#dg_item').datagrid('enableFilter');	
+					document.getElementById('s_item').value = '';
+				}
+			}
 
 			$(function(){
 				access_log();
@@ -764,9 +807,8 @@ $menu_id = $_GET['id'];
 					$.messager.alert('Warning','Please select customer','warning');
 				}else{
 					$('#dlg_item').dialog('open').dialog('setTitle','SEARCH ITEM');
+
 					$('#dg_item').datagrid({
-						url: '
-						.php?cust='+cust_id,
 						columns:[[
 			                {field:'ITEM_NO',title:'ITEM',width:60,halign:'center', align:'center'},
 							{field:'ITEM',title:'ITEM',width:80,halign:'center'},
@@ -802,65 +844,62 @@ $menu_id = $_GET['id'];
 								};
 							}
 
-							if (count > 0) {
-								$.messager.alert('Warning','Item present','warning');
+							if (val == 'add'){
+								$('#dg_add').datagrid('insertRow',{
+									index: idxfield,	// index start with 0
+									row: {
+										ITEM_NO: row.ITEM_NO,
+										ITEM: row.ITEM,
+										DESCRIPTION: row.DESCRIPTION,
+										U_PRICE: row.U_PRICE,
+										UNIT: row.UNIT,
+										CURR_MARK: row.CURR_MARK,
+										UOM_Q: row.UOM_Q,
+										STK_QTY: row.STK_QTY,
+										ORIGIN_CODE: row.ORIGIN_CODE,
+										CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
+										ORIGIN: row.ORIGIN,
+										CLASS_CODE: row.CLASS_CODE,
+										SUPPLIER_CODE: row.SUPPLIER_CODE,
+										TBL: row.TBL,
+										ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
+										P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										P_MARK_RESULT: row.P_MARK_RESULT,
+										C_MARK_RESULT: row.C_MARK_RESULT
+									}
+								});
 							}else{
-								if (val == 'add'){
-									$('#dg_add').datagrid('insertRow',{
-										index: idxfield,	// index start with 0
-										row: {
-											ITEM_NO: row.ITEM_NO,
-											ITEM: row.ITEM,
-											DESCRIPTION: row.DESCRIPTION,
-											U_PRICE: row.U_PRICE,
-											UNIT: row.UNIT,
-											CURR_MARK: row.CURR_MARK,
-											UOM_Q: row.UOM_Q,
-											STK_QTY: row.STK_QTY,
-											ORIGIN_CODE: row.ORIGIN_CODE,
-											CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
-											ORIGIN: row.ORIGIN,
-											CLASS_CODE: row.CLASS_CODE,
-											SUPPLIER_CODE: row.SUPPLIER_CODE,
-											TBL: row.TBL,
-											ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
-											P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-											C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-											P_MARK_RESULT: row.P_MARK_RESULT,
-											C_MARK_RESULT: row.C_MARK_RESULT
-										}
-									});
-								}else{
-									$('#dg_edit').datagrid('insertRow',{
-										index: idxfield,	// index start with 0
-										row: {
-											ITEM_NO: row.ITEM_NO,
-											ITEM: row.ITEM,
-											DESCRIPTION: row.DESCRIPTION,
-											U_PRICE: row.U_PRICE,
-											UNIT: row.UNIT,
-											CURR_MARK: row.CURR_MARK,
-											UOM_Q: row.UOM_Q,
-											STK_QTY: row.STK_QTY,
-											ORIGIN_CODE: row.ORIGIN_CODE,
-											CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
-											ORIGIN: row.ORIGIN,
-											CLASS_CODE: row.CLASS_CODE,
-											SUPPLIER_CODE: row.SUPPLIER_CODE,
-											TBL: row.TBL,
-											ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
-											P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-											C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
-											P_MARK_RESULT: row.P_MARK_RESULT,
-											C_MARK_RESULT: row.C_MARK_RESULT
-										}
-									});
-								}
+								$('#dg_edit').datagrid('insertRow',{
+									index: idxfield,	// index start with 0
+									row: {
+										ITEM_NO: row.ITEM_NO,
+										ITEM: row.ITEM,
+										DESCRIPTION: row.DESCRIPTION,
+										U_PRICE: row.U_PRICE,
+										UNIT: row.UNIT,
+										CURR_MARK: row.CURR_MARK,
+										UOM_Q: row.UOM_Q,
+										STK_QTY: row.STK_QTY,
+										ORIGIN_CODE: row.ORIGIN_CODE,
+										CUSTOMER_PART_NO: row.CUSTOMER_PART_NO,
+										ORIGIN: row.ORIGIN,
+										CLASS_CODE: row.CLASS_CODE,
+										SUPPLIER_CODE: row.SUPPLIER_CODE,
+										TBL: row.TBL,
+										ACT_QTY: '<a href="javascript:void(0)" onclick="input_qty('+row.ITEM_NO+','+idxfield+','+row.U_PRICE+','+sts+')">SET</a>', 
+										P_MARK:'<a href="javascript:void(0)" onclick="input_pallet('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										C_MARK:'<a href="javascript:void(0)" onclick="input_case('+sts+','+row.ITEM_NO+','+idxfield+')">SET</a>',
+										P_MARK_RESULT: row.P_MARK_RESULT,
+										C_MARK_RESULT: row.C_MARK_RESULT
+									}
+								});
 							}
 						}
 					});
 
-					$('#dg_item').datagrid('enableFilter');
+					// $('#dg_item').datagrid('loadData',[]);
+					$('#dg_item').datagrid('load',{cust: '', src: ''});
 				}
 			}
 

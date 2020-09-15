@@ -55,13 +55,13 @@ for($i=11;$i<=$hasildata;$i++){
     $u = trim($data->val($i,21));
     
     if($k != ""){
-        $kfix = "convert(date,'$k')";
+        $kfix = "convert(varchar(10),'$k',103)";
     } else{
         $kfix = "''";
     }
 
     if($l != ""){
-        $lfix = "convert(date,'$l')";
+        $lfix = "convert(varchar(10),'$l',103)";
     } else{
         $lfix = "''";
     }

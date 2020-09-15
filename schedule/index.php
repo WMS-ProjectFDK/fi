@@ -21,185 +21,185 @@
 
 <script type="text/javascript">
 	var myVar = setInterval(function(){myTimer()},1000);
-	var myVar2 = setInterval(function(){myTimer2()},1000*60*5);
+	// var myVar2 = setInterval(function(){myTimer2()},1000*60*5);
 
-	function myTimer2(){
+	function myTimer(){
 		$.ajax({
 			type: 'GET',
-			url: 'stock_semi_battery_execute.php'
+			url: 'migration_spareparts.php'
 		});
 	}
 	
-	function myTimer(){
-	    var d = new Date();
-	    var n = parseInt(d.getDate());
+	// function myTimer(){
+	//     var d = new Date();
+	//     var n = parseInt(d.getDate());
 	    
-	    document.getElementById("demo").innerHTML = d.toLocaleTimeString().replace('.',':').replace('.',':');
+	//     document.getElementById("demo").innerHTML = d.toLocaleTimeString().replace('.',':').replace('.',':');
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '2:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'BomMpsInventory.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '2:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'BomMpsInventory.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'proses_delivery_update.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'proses_delivery_update.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '4:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'execute_sp.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '4:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'execute_sp.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'finishing_report_excel.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'finishing_report_excel.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:05:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'label_mail_update.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:05:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'label_mail_update.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:10:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'finishing_report_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:10:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'finishing_report_mail.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:13:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'label_mail_excel.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:13:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'label_mail_excel.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:15:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'label_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:15:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'label_mail.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:30:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'mrp_run_get.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '7:30:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'mrp_run_get.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'shipping_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'shipping_mail.php'
+	// 		});
+	// 	}
 		
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '9:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'send_mail_Inventory.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '9:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'send_mail_Inventory.php'
+	// 		});
+	// 	}
 		
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '9:15:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'send_mail_excel.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '9:15:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'send_mail_excel.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '10:00:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'send_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '10:00:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'send_mail.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '10:15:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'semi_batt_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '10:15:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'semi_batt_mail.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '11:30:00 AM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'execute_sp.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '11:30:00 AM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'execute_sp.php'
+	// 		});
+	// 	}
 
-		if(n == 1){
-			if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 AM'){
-			    $.ajax({
-					type: 'GET',
-					url: 'safety_stock_auto.php'
-				});
-			}
+	// 	if(n == 1){
+	// 		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 AM'){
+	// 		    $.ajax({
+	// 				type: 'GET',
+	// 				url: 'safety_stock_auto.php'
+	// 			});
+	// 		}
 
-			if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:30:00 AM'){
-			    $.ajax({
-					type: 'GET',
-					url: 'fg_execute.php'
-				});
-			}		
+	// 		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:30:00 AM'){
+	// 		    $.ajax({
+	// 				type: 'GET',
+	// 				url: 'fg_execute.php'
+	// 			});
+	// 		}		
 
-			if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:40:00 AM'){
-			    $.ajax({
-					type: 'GET',
-					url: 'send_mail_fg_new.php'
-				});
-			}
-		}else{
-			if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '2:00:00 PM'){
-			    $.ajax({
-					type: 'GET',
-					url: 'fg_execute.php'
-				});
-			}		
+	// 		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '8:40:00 AM'){
+	// 		    $.ajax({
+	// 				type: 'GET',
+	// 				url: 'send_mail_fg_new.php'
+	// 			});
+	// 		}
+	// 	}else{
+	// 		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '2:00:00 PM'){
+	// 		    $.ajax({
+	// 				type: 'GET',
+	// 				url: 'fg_execute.php'
+	// 			});
+	// 		}		
 
-			if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:20:00 PM'){
-			    $.ajax({
-					type: 'GET',
-					url: 'send_mail_fg_new.php'
-				});
-			}
-		}
+	// 		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:20:00 PM'){
+	// 		    $.ajax({
+	// 				type: 'GET',
+	// 				url: 'send_mail_fg_new.php'
+	// 			});
+	// 		}
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '1:00:00 PM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'spareparts_PO_mail_excel.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '1:00:00 PM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'spareparts_PO_mail_excel.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '1:05:00 PM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'spareparts_PO_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '1:05:00 PM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'spareparts_PO_mail.php'
+	// 		});
+	// 	}
 
-		if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 PM'){
-		    $.ajax({
-				type: 'GET',
-				url: 'shipping_mail.php'
-			});
-		}
+	// 	if (d.toLocaleTimeString().replace('.',':').replace('.',':') == '3:00:00 PM'){
+	// 	    $.ajax({
+	// 			type: 'GET',
+	// 			url: 'shipping_mail.php'
+	// 		});
+	// 	}
 
-	}
+	// }
 
 	window.onload = function(){
 	function draw(){
