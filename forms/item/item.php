@@ -86,9 +86,24 @@ h2 {
 			<input style="width:330px;" name="txt_item_name" id="txt_item_name" class="easyui-textbox"></input>
 		</div>
 	</fieldset>
-
-	<fieldset style="position:absolute;margin-left:530px;border-radius:4px;width: 750px;height: 70px;"><legend><span class="style3"><strong>OTHER FILTER & PRINT</strong></span></legend>
-		
+	<fieldset style="position:absolute;margin-left:530px;border-radius:4px;width: 700px;height: 70px;"><legend><span class="style3"><strong>OTHER FILTER & PRINT</strong></span></legend>
+		<div class="fitem">
+			<span style="width:150px;display:inline-block;">Stock Subject Code</span>
+			<select style="width:200px;" name="cmb_subject_code" id="cmb_subject_code" class="easyui-combobox" >
+				<option VALUE=''></option>
+				<option VALUE='0'>Wooden Pallet</option>
+				<option VALUE='1'>Raw Materials</option>
+				<option VALUE='2'>Packing Materials</option>
+				<option VALUE='3'>Work in Process</option>
+				<option VALUE='4'>Semi Finished Goods</option>
+				<option VALUE='5'>Finished Goods</option>
+				<option VALUE='6'>Customer Supply Products</option>
+				<option VALUE='7'>Materials 2</option>
+				<option VALUE='8'>LR6 Management</option>
+				<option VALUE='9'>LR03 Management</option>
+			</select>
+			<label><input type="checkbox" name="ck_subject_code" id="ck_subject_code" checked="true">All</input></label>
+		</div>
 	</fieldset>
 	<div style="clear:both;margin-bottom:0px;"></div>
 	<div style="padding:5px 6px;">
@@ -98,6 +113,7 @@ h2 {
 	   <a href="javascript:void(0)" style="width: 180px;" id="add" class="easyui-linkbutton c2" onclick="add_item()"><i class="fa fa-plus" aria-hidden="true"></i> ADD ITEM</a>
 	   <a href="javascript:void(0)" style="width: 180px;" id="edit" class="easyui-linkbutton c2" onclick="edit_item()"><i class="fa fa-pencil" aria-hidden="true"></i> EDIT ITEM</a>
 	   <a href="javascript:void(0)" style="width: 190px;" id="delete" class="easyui-linkbutton c2" onclick="delete_item()"><i class="fa fa-trash" aria-hidden="true"></i> REMOVE ITEM</a>
+	   <a href="javascript:void(0)" style="width: 190px;" id="delete" class="easyui-linkbutton c2" onclick="download_report()"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD ITEM</a>
 	</div>
 </div>
 
@@ -133,6 +149,10 @@ h2 {
 			$('#dg').datagrid('load', {
 				src: search
 			});
+
+			get_url='?src='+search;
+
+			console.log(get_url);
 			
 			$('#dg').datagrid('enableFilter');
 
@@ -179,36 +199,6 @@ h2 {
 
 	$(function(){
         access_log();
-		$('#date_awal').datebox('disable');
-		$('#date_akhir').datebox('disable');
-		$('#ck_date').change(function(){
-			if ($(this).is(':checked')) {
-				$('#date_awal').datebox('disable');
-				$('#date_akhir').datebox('disable');
-			}else{
-				$('#date_awal').datebox('enable');
-				$('#date_akhir').datebox('enable');
-			}
-		});
-
-		$('#cmb_slip_no').combobox('disable');
-		$('#ck_slip_no').change(function(){
-			if ($(this).is(':checked')) {
-				$('#cmb_slip_no').combobox('disable');
-			}else{
-				$('#cmb_slip_no').combobox('enable');
-			}
-		});
-
-		$('#cmb_slip_type').combobox('disable');
-		$('#ck_slip_type').change(function(){
-			if ($(this).is(':checked')) {
-				$('#cmb_slip_type').combobox('disable');
-			}else{
-				$('#cmb_slip_type').combobox('enable');
-			}
-		});
-
 		$('#cmb_item_no').combobox('disable');
 		$('#txt_item_name').textbox('disable');
 		$('#ck_item_no').change(function(){
@@ -221,12 +211,12 @@ h2 {
 			}
 		});
 
-		$('#cmb_sts_approval').combobox('disable');
-		$('#ck_sts_approval').change(function(){
+		$('#cmb_subject_code').combobox('disable');
+		$('#ck_subject_code').change(function(){
 			if ($(this).is(':checked')) {
-				$('#cmb_sts_approval').combobox('disable');
+				$('#cmb_subject_code').combobox('disable');
 			}else{
-				$('#cmb_sts_approval').combobox('enable');
+				$('#cmb_subject_code').combobox('enable');
 			}
 		});
 
@@ -243,8 +233,11 @@ h2 {
 		});
 	});
 
+	var get_url='';
+
 	function filterData(){
 		var ck_item_no = "false";
+		var ck_subject_code = "false";
 		var flag = 0;
 
 		if ($('#ck_item_no').attr("checked")) {
@@ -252,16 +245,31 @@ h2 {
 			flag += 1;
 		};
 
-		if(flag == 5) {
-			$.messager.alert('INFORMATION','No filter data, system only show 150 records','info');
+		if ($('#ck_subject_code').attr("checked")) {
+			ck_subject_code = "true";
+			flag += 1;
+		};
+
+		if(flag == 2) {
+			$.messager.alert('INFORMATION','No filter data, system only show 200 records','info');
 		}
 
 		$('#dg').datagrid('load', {
 			cmb_item_no: $('#cmb_item_no').combobox('getValue'),
 			ck_item_no: ck_item_no,
 			txt_item_name: $('#txt_item_name').textbox('getValue'),
+			cmb_subject_code: $('#cmb_subject_code').combobox('getValue'),
+			ck_subject_code: ck_subject_code,
 			src: ''
 		});
+
+		get_url='?cmb_item_no='+$('#cmb_item_no').combobox('getValue')+
+			'&ck_item_no='+ck_item_no+
+			'&txt_item_name='+$('#txt_item_name').textbox('getValue')+
+			'&cmb_subject_code='+$('#cmb_subject_code').combobox('getValue')+
+			'&ck_subject_code='+ck_subject_code;
+		
+		console.log(get_url);
 		
 		$('#dg').datagrid('enableFilter');
 	}
@@ -379,6 +387,20 @@ h2 {
         }else{
         	$.messager.show({title: 'MASTER ITEM',msg: 'Data not Selected'});
         }
+	}
+
+	function download_report(){
+		if (get_url != ''){
+			console.log('item_download_proses.php'+get_url);
+			$.post('item_download_proses.php'+get_url,{}).done(function(res){
+				download_excel();
+			});
+		}
+	}
+
+	function download_excel(){
+		url_download = 'item_download_xls.php';
+		window.open(url_download);
 	}
 </script>
 </body>

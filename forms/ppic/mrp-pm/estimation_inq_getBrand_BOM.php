@@ -36,8 +36,8 @@
 		$item_no = $items[$rowno]->ITEM_NO;
 
 		$dtl = "select item_fg, po_no, po_line_no, work_order, cr_date, status, mps_date, mps_qty, item_material,
-            DATEDIFF(day, getdate(), mps_date) as selisih,
-            'N_' + CAST(DATEDIFF(day,GETDATE(),mps_date) as varchar) as name_selisih, end_stock,
+            DATEDIFF(day, mps_date, getdate()) as selisih,
+            'N_' + CAST(DATEDIFF(day, mps_date, GETDATE()) as varchar) as name_selisih, end_stock,
             (select isnull(sum(remainder_qty),0) as qtyPRF
             from prf_details
             where item_no=item_material  and remainder_qty > 0 

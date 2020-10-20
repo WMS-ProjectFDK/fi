@@ -36,8 +36,8 @@
 		from SO_DETAILS a
 		inner join so_header b on a.so_no = b.SO_NO
 		inner join item it on a.ITEM_NO=it.ITEM_NO
-		inner join unit un on a.UOM_Q = un.UNIT_CODE
-		inner join CURRENCY curr on b.CURR_CODE = curr.CURR_CODE 
+		left join unit un on a.UOM_Q = un.UNIT_CODE
+		left join CURRENCY curr on b.CURR_CODE = curr.CURR_CODE 
 		where a.so_no='$so_no'
 		order by line_no asc";
 	$data = sqlsrv_query($connect, strtoupper($rs));

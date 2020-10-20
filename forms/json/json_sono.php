@@ -5,7 +5,7 @@
 	$year = date('Y');
 	$yearplus = intval(date('Y')+1);
 	//echo $yearmin.$year.$yaerplus;
-	$sql = "select top 200 so_no, so_date from so_header 
+	$sql = "select so_no, so_date from so_header 
 		where CAST(so_date as char(4)) between '$yearmin' and '$yearplus' 
 		order by so_date desc, so_no asc";
 	$result = sqlsrv_query($connect, strtoupper($sql));

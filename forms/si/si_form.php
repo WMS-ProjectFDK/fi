@@ -279,65 +279,279 @@ h2 {
 	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
 		<legend><span class="style3"><strong>SI NO.</strong></span></legend>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">SI NO.</span>
-			<input style="width:200px;" name="si_no" id="si_no" class="easyui-numberbox" readonly/>
+			<span style="width:180px;display:inline-block;">SI NO.</span>
+			<input style="width:250px;" name="si_no" id="si_no" class="easyui-numberbox" readonly/>
 			<span style="width:180px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">CONTRACT NO.</span>
-            <input style="width:200px;" name="item_code" id="item_code" class="easyui-textbox"/>
+            <input style="width:419px;" name="item_code" id="item_code" class="easyui-textbox"/>
             <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
 		</div>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">CUSTOMER PO NO.</span>
-            <input style="width:742px;height: 80px;" name="item" id="item" class="easyui-textbox" multiline="true"/>
+			<span style="width:180px;display:inline-block;">CUSTOMER PO NO.</span>
+            <input style="width:1011px;height: 80px;" name="item" id="item" class="easyui-textbox" multiline="true"/>
             <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
 		</div>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">SI NO. FROM CUST</span>
-			<input style="width:360px;" name="description" id="description" class="easyui-textbox"/> 
+			<span style="width:180px;display:inline-block;">SI NO. FROM CUST</span>
+			<input style="width:462px;" name="description" id="description" class="easyui-textbox"/> 
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">PERSON IN CHARGE</span>
-			<input style="width:200px;" name="description" id="description" class="easyui-textbox"/> 
+			<input style="width:402px;" name="description" id="description" class="easyui-textbox"/> 
 		</div>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">DESCRIPTION OF GOODS</span>
-			<input style="width:742px;" name="description" id="description" class="easyui-textbox"/> 
+			<span style="width:180px;display:inline-block;">DESCRIPTION OF GOODS</span>
+			<input style="width:1046px;" name="description" id="description" class="easyui-textbox"/> 
 		</div>
 	</fieldset>
 	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
 		<legend><span class="style3"><strong>SHIPPER</strong></span></legend>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">SHIPPER</span>
+			<span style="width:180px;display:inline-block;">SHIPPER</span>
             <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
             <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
 		</div>
 		<div class="fitem">
-			<span style="width:150px;display:inline-block;">ADDRESS 1</span>
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
 			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
 			<span style="width:20px;display:inline-block;"></span>
-			<span style="width:130px;display:inline-block;">ADDRESS 2</span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
             <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
             <span style="width:20px;display:inline-block;"></span>
-			<span style="width:130px;display:inline-block;">ADDRESS 3</span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
 			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
 		</div>
 		<div class="fitem">
-            <span style="width:150px;display:inline-block;">TEL NO.</span>
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
 			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
 			<span style="width:20px;display:inline-block;"></span>
-			<span style="width:130px;display:inline-block;">FAX NO.</span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
             <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
             <span style="width:20px;display:inline-block;"></span>
-			<span style="width:130px;display:inline-block;">ATTN</span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
 			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
 		</div>
     </fieldset>
     <fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;"><legend><span class="style3"><strong>PORT</strong></span></legend>
         <div class="fitem">
-			<span style="width:150px;display:inline-block;">SHIPPER</span>
+			<span style="width:180px;display:inline-block;">SHIPPER</span>
             <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
             <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
 		</div>
+	</fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>FORWARDER</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">FORWARDER</span>
+            <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+	</fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>CONSIGNEE</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">CONSIGNEE</span>
+            <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+	</fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>NOTIFY 1</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">NOTIFY 1</span>
+            <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
     </fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>NOTIFY 2</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">NOTIFY 2</span>
+            <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+	</fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>EMKL</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">EMKL</span>
+            <input style="width:250px;" name="weight" id="weight" class="easyui-numberbox"/>
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="pi_sett()">SET</a>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">ADDRESS 1</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 2</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ADDRESS 3</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+            <span style="width:180px;display:inline-block;">TEL NO.</span>
+			<input style="width:250px;" name="drawing_no" id="drawing_no" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">FAX NO.</span>
+            <input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+            <span style="width:20px;display:inline-block;"></span>
+			<span style="width:115px;display:inline-block;">ATTN</span>
+			<input style="width:250px;" name="drawing_rev" id="drawing_rev" class="easyui-textbox"/>
+		</div>
+	</fieldset>
+	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
+		<legend><span class="style3"><strong>DOCUMENT</strong></span></legend>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">SPECIAL INSTRUCTION</span>
+			<input style="width:1045px;" name="special_inst" id="special_inst" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">	
+			<span style="width:180px;display:inline-block;">SHIPPING METHOD</span>
+			<select style="width:120px;" name="cmb_payment_method" id="cmb_payment_method" class="easyui-combobox" >
+				<option value=""></option>
+				<option value="LCL" selected="true">LCL</option>
+				<option value="FCL">FCL</option>
+				<option value="BY AIR">BY AIR</option>
+				<option value="LOKAL">LOKAL</option>
+			</select>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">PAYMENT / FREIGHT</span>
+			<select style="width:120px;" name="cmb_payment_type" id="cmb_payment_type" class="easyui-combobox" >
+				<option value=""></option>
+				<option value="Prepaid" selected="true">Prepaid</option>
+				<option value="Colect">Colect</option>
+				<option value="Other">Other</option>
+			</select>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:140px;display:inline-block;">PAYMENT REMARK</span>
+			<input style="width:450px;" name="payment_remark" id="payment_remark" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">B/L DOC</span>
+			<input style="width:120px;" name="cmb_bl_doc" id="cmb_bl_doc" class="easyui-combobox" 
+				data-options=" url:'../json/json_bl_doc.php',method:'get',valueField:'doc_name',textField:'doc_name', panelHeight:'100px'"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:70px;display:inline-block;">SHEET</span>
+			<input style="width:50px;" name="sheet_bl_doc" id="sheet_bl_doc" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
+			<input style="width:590px;" name="detail_bl_doc" id="detail_bl_doc" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">CERTIFICATE OF ORIGIN</span>
+			<input style="width:120px;" name="cmb_certificate" id="cmb_certificate" class="easyui-combobox" 
+				data-options=" url:'../json/json_certificate.php',method:'get',valueField:'doc_name',textField:'doc_name', panelHeight:'100px'"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:70px;display:inline-block;">SHEET</span>
+			<input style="width:50px;" name="sheet_certificate" id="sheet_certificate" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
+			<input style="width:590px;" name="detail_certificate" id="detail_certificate" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;"></span>
+			<input style="width:120px;" name="inv_doc" id="inv_doc" class="easyui-textbox" disabled="" value="INVOICE"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:70px;display:inline-block;">SHEET</span>
+			<input style="width:50px;" name="shett_inv" id="shett_inv" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
+			<input style="width:590px;" name="detail_inv" id="detail_inv" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;"></span>
+			<input style="width:120px;" name="pack_doc" id="pack_doc" class="easyui-textbox"  disabled=""  value="PACKING LIST"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:70px;display:inline-block;">SHEET</span>
+			<input style="width:50px;" name="sheet_pack" id="sheet_pack" class="easyui-textbox"/>
+			<span style="width:20px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
+			<input style="width:590px;" name="detail_pack" id="detail_pack" class="easyui-textbox"/>
+		</div>
+		<div class="fitem">
+			<span style="width:180px;display:inline-block;">SPECIAL INFORMATION</span>
+			<input style="width:1045px;" name="special_inform" id="special_inform" class="easyui-textbox"/>
+		</div>
+	</fieldset>
 </form>
 </div>
 </body>

@@ -3,14 +3,14 @@
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
 
-	$sql = "select max(del_date) DEL_DATE from ztb_mrp_data_pck_delete";
+	$sql = "select cast(max(cast(del_date as datetime)) as varchar(25)) DEL_DATE from ztb_mrp_data_pck_delete";
 	
 	$result = sqlsrv_query($connect, $sql);
 	$arrData = array();
 	$arrNo = 0;
 	while ($row=sqlsrv_fetch_array($result)){
 		$arrData[$arrNo] = array(
-			"DEL_DATE"=>rtrim($row[0])
+			"DEL_DATE"=>$row[0]
 		);
 		$arrNo++;
 	}

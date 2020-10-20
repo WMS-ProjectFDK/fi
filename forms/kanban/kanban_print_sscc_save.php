@@ -28,7 +28,7 @@ if (isset($_SESSION['id_wms'])){
 		inner join so_header soh on a.po_no = soh.customer_po_no
 		inner join so_details sod on soh.so_no=sod.so_no and SUBSTRING(a.po_line_no,1,1)=sod.line_no
 		left outer join item i on a.item_no=i.item_no
-		left outer join company com on soh.consignee_code = cast(com.company as varchar(100))
+		left outer join company com on soh.consignee_code = com.COMPANY_CODE --cast(com.company as varchar(100))
 		where a.work_order='$wo_no'";
 	$dataH = sqlsrv_query($connect, strtoupper($qry));
 	$row = sqlsrv_fetch_object($dataH);

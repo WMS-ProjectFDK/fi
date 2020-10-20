@@ -12,10 +12,10 @@
 
 	$sql = "select a.work_order, a.item_no, c.description, so.asin, so.amazon_po_no, ceiling((a.Qty/d.pallet_unit_number ) ) as TotalPallet
 		from mps_header a
-		inner join (select ax.so_no, ax.customer_po_no, bx.line_no, bx.item_no, bx.qty, bx.asin, bx.amazon_po_no
+		inner join (select ax.so_no, ax.customer_po_no, cast(bx.line_no as varchar) as line_no, bx.item_no, bx.qty, bx.asin, bx.amazon_po_no
 		    from so_header ax
 		    inner join so_details bx on ax.so_no=bx.so_no
-		    ) so on a.po_no = so.customer_po_no and a.po_line_no = so.line_no
+		    ) so on a.po_no = so.customer_po_no and cast(a.po_line_no as char(1)) = substring(so.line_no,1,1)
 		inner join item c on a.item_no = c.item_no 
 		inner join packing_information d on c.pi_no = d.pi_no 
 		$where";

@@ -149,7 +149,7 @@ $user_name = $_SESSION['id_wms'];
     <?php } ?>
 </div>
 
-<table id="dg" title="KANBAN PRINT" class="easyui-datagrid" toolbar="#toolbar" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" selectOnCheck= "true"></table>
+<table id="dg" title="KANBAN PRINT" class="easyui-datagrid" toolbar="#toolbar" style="width:100%;height:490px;" rownumbers="true" fitColumns="true" singleSelect="true"></table>
 
 <div id='dlg_header' class="easyui-dialog" style="width:400px;height:520px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-si" data-options="modal:true">
 	<fieldset style="margin-left;border-radius:4px;height:425px;width:90%"><legend><span class="style3"><strong> MPS Header Edit </strong></span></legend>
@@ -338,6 +338,10 @@ $user_name = $_SESSION['id_wms'];
 	<table id="dg_viewKur" class="easyui-datagrid" style="width:100%;height:100%;"></table>
 </div>
 
+<div id='dlg_viewBook' class="easyui-dialog" style="width:500px;height:300px;padding:5px 5px;" closed="true" data-options="modal:true">
+	<table id="dg_viewBook" class="easyui-datagrid" style="width:100%;height:100%;"></table>
+</div>
+
 <script type="text/javascript">
 	function myformatter(date){
 		var y = date.getFullYear();
@@ -398,6 +402,11 @@ $user_name = $_SESSION['id_wms'];
 				$('#cmb_item_no').combobox('enable');
 			}
 		});
+
+		$('#dg').datagrid({
+			url: 'kanban_print_get.php',
+			fitColumns: true
+		});
 	});
 
 	function filterData(){
@@ -443,7 +452,7 @@ $user_name = $_SESSION['id_wms'];
 
 		$('#dg').datagrid({
 			url: 'kanban_print_get.php',
-			singleSelect:true,
+			fitColumns: true,
 			columns:[[
 	        	{field:'WORK_ORDER',title:'WORK ORDER', halign:'center', width:110},
 	            {field:'PO_NO', title:'CUST. PO NO.', halign:'center', width:70},
@@ -817,7 +826,7 @@ $user_name = $_SESSION['id_wms'];
 				success: function(data){
 					qty = qty - data[0].QTY;
 					url_print = 'kanban_print_material_get.php?wo_no='+rows1[0].WORK_ORDER+'&qty='+qty;
-						
+					console.log('kanban_print_material_get.php?wo_no='+rows1[0].WORK_ORDER+'&qty='+qty);	
 					if(qty == 0){
 						$.messager.alert('Warning','Pallet sudah di print semua','warning');
 						
@@ -885,7 +894,7 @@ $user_name = $_SESSION['id_wms'];
 		$('#dlg_viewKur').dialog('open').dialog('setTitle','VIEW INFO KURAIRE');
 
 		$('#dg_viewKur').datagrid({
-			url: 'shipping_plan_info_kur.php?work_order='+a+'',
+			url: '../shipping_plan/shipping_plan_info_kur.php?work_order='+a+'',
 			singleSelect: true,
 			rownumbers: true,
 		    columns:[[
@@ -1218,6 +1227,27 @@ $user_name = $_SESSION['id_wms'];
 				},'json');
 			}
 		});	
+	}
+
+	function info_qty_book(x){
+		$('#dlg_viewBook').dialog('open').dialog('setTitle','VIEW INFO DETAILS BOOKING MATERIAL');
+
+		$('#dg_viewBook').datagrid({
+			url: 'kanban_print_info_booking.php?item_no='+x+'',
+			singleSelect: true,
+			rownumbers: true,
+			showFooter: true,
+			fitColumns: true,
+		    columns:[[
+			    {field:'WO_NO', title:'WORK ORDER', width:200, halign: 'center'},
+			    {field:'QTY', title:'QTY BOOKING', width: 100, halign: 'center', align: 'right'}
+			]],
+			onLoadSuccess: function (data) {
+				for (i=0; i<data.rows.length; i++) {
+                    $(this).datagrid('beginEdit',i);
+                }
+			}
+		});
 	}
 </script>
 </body>

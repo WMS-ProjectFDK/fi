@@ -102,7 +102,9 @@ h2 {
 		</div>
 	</fieldset>
 <div style="padding:5px 6px;">
-	<a href="javascript:void(0)" id="fltbtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:200px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
+	<a href="javascript:void(0)" id="fltbtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:150PX;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER DATA</a>
+	<a href="javascript:void(0)" id="fltbtn" class="easyui-linkbutton c2" onClick="download_pack()" style="width:250PX;"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD PACKAGING REPORT</a>
+	<a href="javascript:void(0)" id="fltbtn" class="easyui-linkbutton c2" onClick="download_label()" style="width:250PX;"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD LABEL REPORT</a>
 </div>
 
 </div>
@@ -122,6 +124,8 @@ h2 {
 </div>
 
 <script type="text/javascript">
+	url_download = '';
+
 	function myformatter(date){
 		var y = date.getFullYear();
 		var m = date.getMonth()+1;
@@ -337,6 +341,16 @@ h2 {
                 }
 			}
 		});
+	}
+
+	function download_label(){
+		url_download = '../../schedule/label_mail_excel.php';
+		window.open(url_download);
+	}
+
+	function download_pack(){
+		url_download = '../../schedule/finishing_report_excel.php';
+		window.open(url_download);
 	}
 </script>
 </body>

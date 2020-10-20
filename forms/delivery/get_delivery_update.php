@@ -44,7 +44,7 @@ $sql .= "      so_details sod," ;
 $sql .= "      company  c, " ;
 $sql .= "      unit     un, " ;
 $sql .= "      item     i  " ;
-$sql .= " where ind.commit_date is null and (ind.remark <> 1 or ind.remark is null)" ;
+$sql .= " where ind.commit_date is null " ;
 $sql .= "   and ind.answer_no = dos.answer_no  " ;
 $sql .= "   and dos.do_no = doh.do_no  " ;
 $sql .= "   and ind.so_no = sod.so_no  " ;
@@ -55,7 +55,7 @@ $sql .= "   and i.uom_q = un.unit_code  " ;
 $sql .= "   and soh.customer_code = c.company_code  " ;
 $sql .= "   and ind.ex_factory BETWEEN '$ex_factory' AND '$ex_factory_z' ";
 $sql .= " order by c.company,dos.do_no,ind.answer_no" ; #(mod Ver1.0)
-// echo $sql;
+//echo $sql;
 
 $data_cek = sqlsrv_query($connect, strtoupper($sql));
 

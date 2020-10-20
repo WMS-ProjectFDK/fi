@@ -16,7 +16,7 @@
         from do_header a
         inner join (SELECT DO_NO,
                 CUSTOMER_PO_NO1 = STUFF(
-                    (SELECT ', ' + DO_NO FROM do_details t1
+                    (SELECT DISTINCT ', ' + CUSTOMER_PO_NO1 FROM do_details t1
                     WHERE t1.DO_NO = t2.DO_NO
                     FOR XML PATH ('')
                     ), 1, 1, '') 

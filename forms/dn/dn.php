@@ -8,7 +8,7 @@ $menu_id = $_GET['id'];
     <html>
     <head>
     <meta charset="UTF-8">
-    <title>DELIVERY NOTE</title>
+    <title>DEBIT NOTE</title>
 
     <link rel="icon" type="image/png" href="../../favicon.png">
 
@@ -68,10 +68,10 @@ $menu_id = $_GET['id'];
     <body>
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name)); ?>
 	
-	<table id="dg" title="DELIVERY NOTE" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
+	<table id="dg" title="DEBIT NOTE" toolbar="#toolbar" class="easyui-datagrid" style="width:100%;height:490px;"></table>
 
 	<div id="toolbar">
-		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:auto; float:left;"><legend>DELIVERY NOTE FILTER</legend>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:98%; height:auto; float:left;"><legend>DEBIT NOTE FILTER</legend>
             <div class="fitem">
                 <span style="width:80px;display:inline-block;">BL Date</span>
                 <input style="width:85px;" name="date_awal" id="date_awal" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
@@ -108,8 +108,8 @@ $menu_id = $_GET['id'];
                 <input required="true" style="width:200px;" name="dn_no_add" id="dn_no_add" class="easyui-textbox" data-options="" />
                 <span style="width:50px;display:inline-block;"></span>
                 <span style="width:80px;display:inline-block;">CUSTOMER</span>
-                <input required="true" style="width:100px;" name="cust_no_add" id="cust_no_add" class="easyui-textbox" disabled="disabled" data-options="" />
-                <select style="width:300px;" name="cmb_cust_add" id="cmb_cust_add" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
+                <input style="width:100px;" name="cust_no_add" id="cust_no_add" class="easyui-textbox" data-options="" readonly/>
+                <select style="width:505px;" name="cmb_cust_add" id="cmb_cust_add" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
                 onSelect:function(rec){
                     $('#cust_no_add').textbox('setValue', rec.company_code);
                 }"></select>
@@ -122,8 +122,7 @@ $menu_id = $_GET['id'];
                 <input style="width:200px;" name="attn_add" id="attn_add" class="easyui-textbox" data-options="" />
                 <span style="width:15px;display:inline-block;"></span>
                 <span style="width:80px;display:inline-block;">BANK</span>
-                <input style="width:200px;" name="bank_add" id="bank_add" class="easyui-textbox" data-options="" />
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="set_bank()" >SET</a>
+                <select style="width:300px;" name="bank_add" id="bank_add" class="easyui-combobox" data-options=" url:'../json/json_bank.php', method:'get', valueField:'bank_seq', textField:'bank', panelHeight:'100px'"></select>
             </div>
             <div class="fitem">
                 <span style="width:80px;display:inline-block;">Shipment</span>
@@ -133,75 +132,87 @@ $menu_id = $_GET['id'];
                 <input style="width:200px;" name="exfact_add" id="exfact_add" class="easyui-textbox" data-options="" />
                 <span style="width:15px;display:inline-block;"></span>
                 <span style="width:80px;display:inline-block;">SIGNATURE</span>
-                <input style="width:200px;" name="signature_add" id="signature_add" class="easyui-textbox"value="AGUSMAN SURYA"/>
+                <input style="width:300px;" name="signature_add" id="signature_add" class="easyui-textbox"value="AGUSMAN SURYA"/>
             </div>
 		</fieldset>
 		<div style="clear:both;margin-bottom:10px;"></div>
 		<table align="center" id="dg_add" class="easyui-datagrid" toolbar="#toolbar_add" style="width:1075px;height:220px;padding:10px 10px; margin:5px;"></table>
 		<div id="toolbar_add" style="padding: 5px 5px;">
-			<a href="javascript:void(0)" iconCls='icon-add' class="easyui-linkbutton" onclick="add_invoice_add()" >ADD INVOICE</a>
-			<a href="javascript:void(0)" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_invoice_add()">REMOVE INVOICE</a>
-		</div>
-		<div id="dlg_addItem" class="easyui-dialog" style="width: 1000px;height: 270px;" closed="true" buttons="#dlg-buttons-addItem" data-options="modal:true">
-			<table id="dg_addItem" class="easyui-datagrid" toolbar="#toolbar_addItem" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
-		</div>
-		<div id="toolbar_addItem" style="padding: 5px 5px;">
-            <span style="width:80px;display:inline-block;">BL Date</span>
-            <input style="width:85px;" name="bl_date_awal_add" id="bl_date_awal_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-            to 
-            <input style="width:85px;" name="bl_date_akhir_add" id="bl_date_akhir_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-			<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_item_add()">SEARCH</a>
+			<a href="javascript:void(0)" iconCls='icon-add' class="easyui-linkbutton" onclick="add_invoice('add')" >ADD INVOICE</a>
+			<a href="javascript:void(0)" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_invoice('add')">REMOVE INVOICE</a>
 		</div>
 	</div>
 
 	<div id="dlg-buttons-add">
-		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePRF()" style="width:90px">Save</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePRF('add')" style="width:90px">Save</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close');status_add_edit='';" style="width:90px">Cancel</a>
 	</div>
 	<!-- END ADD -->
 
 
-	<!-- EDIT -->
-	<div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:420px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
-		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1045px; float:left; margin:5px;"><legend>Update Purchase Requestion</legend>
-			<div style="width:100%; height: 60px; float:left;">	
-				<div class="fitem">
-					<span style="width:60px;display:inline-block;">PRF No.</span>
-					<input style="width:150px;" name="po_no_edit" id="prf_no_edit" class="easyui-textbox" disabled="" />
-					<span style="width:20px;display:inline-block;"></span>
-					<span style="width:60px;display:inline-block;">PRF Date</span>
-					<input style="width:85px;" name="prf_date_edit" id="prf_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" required=""/>
-					<span style="width:20px;display:inline-block;"></span>
-					<span style="width:80px;display:inline-block;">Cust. PO No.</span>
-					<input style="width:150px;" name="cust_pono_edit" id="cust_pono_edit" class="easyui-textbox" disabled="true"/>
-					<span style="width:5px;display:inline-block;"></span>
-					<label><input type="checkbox" name="ck_new_edit" id="ck_new_edit">New Design</input></label>
-					<span style="width:20px;display:inline-block;"></span>
-					<span style="width: 50px;display:inline-block;">Remark</span>
-					<input style="width: 200px; height: 56px;" name="remark_edit" id="remark_edit"  multiline="true" class="easyui-textbox" autofocus=""/>
-				</div>
-			</div>
+    <!-- EDIT -->
+    <div id='dlg_edit' class="easyui-dialog" style="width:1100px;height:450px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-edit" data-options="modal:true">
+		<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:1045px; float:left; margin:5px;"><legend>SELECT CUSTOMER</legend>
+            <div class="fitem">
+                <span style="width:80px;display:inline-block;">DN NO.</span>
+                <input required="true" style="width:200px;" name="dn_no_edit" id="dn_no_edit" class="easyui-textbox" data-options="" readonly/>
+                <span style="width:50px;display:inline-block;"></span>
+                <span style="width:80px;display:inline-block;">CUSTOMER</span>
+                <input style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" data-options="" readonly/>
+                <select style="width:505px;" name="cmb_cust_edit" id="cmb_cust_edit" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
+                onSelect:function(rec){
+                    $('#cust_no_edit').textbox('setValue', rec.company_code);
+                }"></select>
+            </div>
+            <div class="fitem">
+                <span style="width:80px;display:inline-block;">DN DATE</span>
+                <input style="width:85px;" name="dn_date_edit" id="dn_date_edit" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+                <span style="width:165px;display:inline-block;"></span>
+                <span style="width:80px;display:inline-block;">ATTN</span>
+                <input style="width:200px;" name="attn_edit" id="attn_edit" class="easyui-textbox" data-options="" />
+                <span style="width:15px;display:inline-block;"></span>
+                <span style="width:80px;display:inline-block;">BANK</span>
+                <select style="width:300px;" name="bank_edit" id="bank_edit" class="easyui-combobox" data-options=" url:'../json/json_bank.php', method:'get', valueField:'bank_seq', textField:'bank', panelHeight:'100px'"></select>
+            </div>
+            <div class="fitem">
+                <span style="width:80px;display:inline-block;">Shipment</span>
+                <input style="width:200px;" name="shipment_edit" id="shipment_edit" class="easyui-textbox" data-options="" />
+                <span style="width:50px;display:inline-block;"></span>
+                <span style="width:80px;display:inline-block;">Ex-Factory</span>
+                <input style="width:200px;" name="exfact_edit" id="exfact_edit" class="easyui-textbox" data-options="" />
+                <span style="width:15px;display:inline-block;"></span>
+                <span style="width:80px;display:inline-block;">SIGNATURE</span>
+                <input style="width:300px;" name="signature_edit" id="signature_edit" class="easyui-textbox"value="AGUSMAN SURYA"/>
+            </div>
 		</fieldset>
 		<div style="clear:both;margin-bottom:10px;"></div>
 		<table align="center" id="dg_edit" class="easyui-datagrid" toolbar="#toolbar_edit" style="width:1075px;height:220px;padding:10px 10px; margin:5px;"></table>
 		<div id="toolbar_edit" style="padding: 5px 5px;">
-			<a href="javascript:void(0)" iconCls='icon-add' class="easyui-linkbutton" onclick="add_item_edit()" >ADD ITEM</a>
-			<a href="javascript:void(0)" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_item_edit()">REMOVE ITEM</a>
-		</div>
-		<div id="dlg_addItem_edit" class="easyui-dialog" style="width: 880px;height: 270px;" closed="true" buttons="#dlg-buttons-addItem_edit" data-options="modal:true">
-			<table id="dg_addItem_edit" class="easyui-datagrid" toolbar="#toolbar_addItem_edit" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
-		</div>
-		<div id="toolbar_addItem_edit" style="padding: 5px 5px;">
-			<input style="width:200px;height: 20px;border-radius: 4px;" name="s_item_edit" id="s_item_edit" onkeypress="sch_item_edit(event)"/>
-			<a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_item_edit()">SEARCH ITEM</a>
+			<a href="javascript:void(0)" iconCls='icon-add' class="easyui-linkbutton" onclick="add_invoice('edit')">ADD INVOICE</a>
+			<a href="javascript:void(0)" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_invoice('edit')">REMOVE INVOICE</a>
 		</div>
 	</div>
 
 	<div id="dlg-buttons-edit">
-		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save_edit_PRF()" style="width:90px">Save</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
-	</div>
-	<!-- END EDIT -->
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePRF('edit')" style="width:90px">Save</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close');status_add_edit='';" style="width:90px">Cancel</a>
+    </div>
+    <!-- END EDIT -->
+    
+    <!-- ADD ITEM START -->
+    <div id="dlg_addItem" class="easyui-dialog" style="width: 1000px;height: 400px;" closed="true" buttons="#dlg-buttons-addItem" data-options="modal:true">
+        <table id="dg_addItem" class="easyui-datagrid" toolbar="#toolbar_addItem" style="width:100%;height:90%;border-radius: 10px;" rownumbers="true" singleSelect="true"></table>
+        <div style="clear:both;margin-bottom:10px;"></div>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="select_inv()" style="width:90px">SELECT</a>
+    </div>
+    <div id="toolbar_addItem" style="padding: 5px 5px;">
+        <span style="width:80px;display:inline-block;">BL Date</span>
+        <input style="width:85px;" name="bl_date_awal_add" id="bl_date_awal_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+        to 
+        <input style="width:85px;" name="bl_date_akhir_add" id="bl_date_akhir_add" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
+        <a href="javascript:void(0)" iconCls='icon-search' class="easyui-linkbutton" onclick="search_item_add()">SEARCH</a>
+    </div>
+    <!-- ADD ITEM END -->
 
 	<script type="text/javascript">
 		function myformatter(date){
@@ -313,8 +324,8 @@ $menu_id = $_GET['id'];
 				sortName: 'prf_date',
 				sortOrder: 'asc',
 			    columns:[[
-				    {field:'DN_NO',title:'DELIVERY NOTE<br>NO.',width:75, halign: 'center', align: 'center'},
-				    {field:'DN_DATE',title:'DELIVERY NOTE<br>DATE',width:60, halign: 'center', align: 'center', sortable:true},
+				    {field:'DN_NO',title:'DEBIT NOTE<br>NO.',width:75, halign: 'center'},
+				    {field:'DN_DATE',title:'DEBIT NOTE<br>DATE',width:60, halign: 'center', align: 'center', sortable:true},
 				    {field:'COMPANY',title:'CUSTOMER',width:150, halign: 'center'},
 				    {field:'AMT_O',title:'AMOUNT(ORG)', width:120, halign: 'center', align: 'right'},
 				    {field:'ITEM',title:'ITEM', width:70, halign: 'center', align: 'center'}
@@ -327,13 +338,12 @@ $menu_id = $_GET['id'];
 					var listbrg = $(this).datagrid('getRowDetail',index).find('table.listbrg');
 					
 					listbrg.datagrid({
-	                	title: 'Delivery Note Detail (No: '+row.DN_NO+')',
+	                	title: 'DEBIT NOTE DETAIL (NO: '+row.DN_NO+')',
 	                	url:'dn_get_detail.php?dn='+row.DN_NO,
 						toolbar: '#ddv'+index,
 						singleSelect:true,
 						loadMsg:'load data ...',
 						height:'auto',
-						rownumbers: true,
 						fitColumns: true,
 						columns:[[
 			                {field:'LINE_NO',title:'LINE NO.', halign:'center', align:'center', width:30, sortable: true},
@@ -361,7 +371,7 @@ $menu_id = $_GET['id'];
 			    fitColumns: true,
 				rownumbers: true,
 			    columns:[[
-                    {field:'DO_NO',title:'DO NO.',width:65,halign:'center', align:'center'},
+                    {field:'DO_NO',title:'INV. NO.',width:65,halign:'center', align:'center'},
 	                {field:'BL_DATE',title:'BL DATE',width:100,halign:'center'},
 	                {field:'SHIP_NAME',title:'SHIP NAME',width:250,halign:'center'},
 	                {field:'ETA',title:'ETA',width:75,halign:'center', align:'center'},
@@ -375,8 +385,86 @@ $menu_id = $_GET['id'];
 
 			$('#dg_addItem').datagrid({
 				fitColumns: true,
+                singleSelect: false,
+                checkOnSelect: true,
+                selectOnCheck: true,
 				columns:[[
-	                {field:'DO_NO',title:'DO NO.',width:65,halign:'center', align:'center'},
+	                {field:'ck', checkbox:true, width:30, halign: 'center'},
+                    {field:'DO_NO',title:'DO NO.',width:65,halign:'center', align:'center'},
+	                {field:'BL_DATE',title:'BL DATE',width:100,halign:'center'},
+	                {field:'SHIP_NAME',title:'SHIP NAME',width:250,halign:'center'},
+                    {field:'PO_NO_DESC',title:'PO NO.',width:250,halign:'center'},
+	                {field:'ETA',title:'ETA',width:75,halign:'center', align:'center'},
+                    {field:'ETD',title:'ETD',width:75,halign:'center', align:'center'},
+	                {field:'AMT_O',title:'AMOUNT(ORG)',width:80,halign:'center', align:'right'},
+                    {field:'CURR_CODE', hidden:true},
+                    {field:'AMT_L', hidden:true},
+                    {field:'PO_NO_DESC', hidden:true}
+	            ]]
+                // ,
+	            // onDblClickRow:function(id,row){
+                //     if (status_add_edit == 'add'){
+                //         var t = $('#dg_add').datagrid('getRows');
+                //         var total = t.length;
+                //         var idxfield=0;
+                //         var i = 0;
+                //         var count = 0;
+                //         if (parseInt(total) == 0) {
+                //             idxfield=0;
+                //         }else{
+                //             idxfield=total;
+                //         }
+
+                //         $('#dg_add').datagrid('insertRow',{
+                //             index: idxfield,
+                //             row: {
+                //                 DO_NO: row.DO_NO,
+                //                 BL_DATE: row.BL_DATE,
+                //                 SHIP_NAME: row.SHIP_NAME,
+                //                 ETA: row.ETA,
+                //                 ETD: row.ETD,
+                //                 AMT_O: row.AMT_O,
+                //                 CURR_CODE: row.CURR_CODE,
+                //                 AMT_L: row.AMT_L,
+                //                 PO_NO_DESC: row.PO_NO_DESC
+                //             }
+                //         });
+                //     }else{
+                //         var t = $('#dg_edit').datagrid('getRows');
+                //         var total = t.length;
+                //         var idxfield=0;
+                //         var i = 0;
+                //         var count = 0;
+                //         if (parseInt(total) == 0) {
+                //             idxfield=0;
+                //         }else{
+                //             idxfield=total;
+                //         }
+
+                //         $('#dg_edit').datagrid('insertRow',{
+                //             index: idxfield,
+                //             row: {
+                //                 DO_NO: row.DO_NO,
+                //                 BL_DATE: row.BL_DATE,
+                //                 SHIP_NAME: row.SHIP_NAME,
+                //                 ETA: row.ETA,
+                //                 ETD: row.ETD,
+                //                 AMT_O: row.AMT_O,
+                //                 CURR_CODE: row.CURR_CODE,
+                //                 AMT_L: row.AMT_L,
+                //                 PO_NO_DESC: row.PO_NO_DESC
+                //             }
+                //         });
+                //     }
+				// }
+			});
+
+			$('#dg_edit').datagrid({
+			    singleSelect: true,
+			    fitColumns: true,
+				rownumbers: true,
+                columns:[[
+                    {field:'DO_NO',title:'INV. NO.',width:65,halign:'center', align:'center'},
 	                {field:'BL_DATE',title:'BL DATE',width:100,halign:'center'},
 	                {field:'SHIP_NAME',title:'SHIP NAME',width:250,halign:'center'},
 	                {field:'ETA',title:'ETA',width:75,halign:'center', align:'center'},
@@ -385,138 +473,66 @@ $menu_id = $_GET['id'];
                     {field:'CURR_CODE', hidden:true},
                     {field:'AMT_L', hidden:true},
                     {field:'PO_NO_DESC', hidden:true}
-	            ]],
-	            onDblClickRow:function(id,row){
-					var t = $('#dg_add').datagrid('getRows');
-					var total = t.length;
-				   	var idxfield=0;
-				   	var i = 0;
-				   	var count = 0;
-					if (parseInt(total) == 0) {
-						idxfield=0;
-					}else{
-						idxfield=total;
-					}
-
-					$('#dg_add').datagrid('insertRow',{
-                        index: idxfield,
-                        row: {
-                            DO_NO: row.DO_NO,
-                            BL_DATE: row.BL_DATE,
-                            SHIP_NAME: row.SHIP_NAME,
-                            ETA: row.ETA,
-                            ETD: row.ETD,
-                            AMT_O: row.AMT_O,
-                            CURR_CODE: row.CURR_CODE,
-                            AMT_L: row.AMT_L,
-                            PO_NO_DESC: row.PO_NO_DESC
-                        }
-                    });
-				}
-			});
-
-			$('#dg_edit').datagrid({
-			    singleSelect: true,
-			    fitColumns: true,
-				rownumbers: true,
-			    columns:[[
-				    {field:'ITEM_NO', title:'ITEM NO.', width:65, halign: 'center', align: 'center'},
-				    {field:'LINE_NO', title:'LINE NO.', width:65, halign: 'center', align: 'center'}, //hidden: true},
-				    {field:'DESCRIPTION', title:'DESCRIPTION', width: 150, halign: 'center'},
-				    {field:'UNIT', title:'UoM', halign: 'center', width:45, align:'center'},
-				    {field:'ESTIMATE_PRICE', title:'STANDARD PRICE', halign: 'center', width:80, align:'right', editor:{
-				    																								type:'numberbox',
-				    																								options:{precision:8,groupSeparator:','}
-				    																							}
-				    },
-				    {field:'REQUIRE_DATE', title: 'REQUIRE DATE', halign: 'center', width: 80, editor:{
-				    																				type:'datebox',
-				    																				options:{formatter:myformatter,parser:myparser}
-				    																			}
-				    },
-				    {field:'QTY', title:'QTY', align:'right', halign: 'center', width:70, editor:{
-				    																			type:'numberbox',
-				    																			options:{precision:1,groupSeparator:','}
-				    																		}
-				    },
-				    {field:'AMT', title:'ESTIMATE PRICE', halign: 'center', width:80, align:'right', editor:{
-				    																					type:'numberbox',
-				    																					options:{precision:2,groupSeparator:','}
-				    																				}
-				    },
-				    {field:'OHSAS', title:'DATE CODE', halign: 'center', width:80, align:'right', editor:{
-				    																								type:'textbox'
-				    																							}
-				    },
-				    {field:'UOM_Q', hidden: true}
-			    ]],
-			    onClickRow:function(row){
-			    	$(this).datagrid('beginEdit', row);
-			    },
-			    onBeginEdit:function(rowIndex){
-			        var editors = $('#dg_edit').datagrid('getEditors', rowIndex);
-			        var n1 = $(editors[0].target);
-			        var n2 = $(editors[1].target);
-			        var n3 = $(editors[2].target);
-			        var n4 = $(editors[3].target);
-			        var n5 = $(editors[4].target);
-			        n1.add(n3).numberbox({
-			            onChange:function(){
-			                var amt = n1.numberbox('getValue')*n3.numberbox('getValue');
-			                n4.numberbox('setValue',amt);
-			            }
-			        })
-			    }
-			});
-
-			$('#dg_addItem_edit').datagrid({
-				fitColumns: true,
-				columns:[[
-	                {field:'ITEM_NO',title:'ITEM NO.',width:65,halign:'center', align:'center'},
-	                {field:'ITEM',title:'ITEM',width:100,halign:'center'},
-	                {field:'DESCRIPTION',title:'DESCRIPTION',width:250,halign:'center'},
-	                {field:'UNIT',title:'UoM',width:75,halign:'center', align:'center'},
-	                {field:'STANDARD_PRICE',title:'STANDARD PRICE',width:80,halign:'center', align:'right'}
-	            ]],
-	            onDblClickRow:function(id,row){
-					var t = $('#dg_edit').datagrid('getRows');
-					var total = t.length;
-				   	var idxfield=0;
-				   	var i = 0;
-				   	var count = 0;
-					if (parseInt(total) == 0) {
-						idxfield=0;
-					}else{
-						idxfield=total;
-					}
-					
-					/*CEK DULU UDAH ADA DI ITEMMMAKER TIDAK, JIKA SUDAH ADA BARU INSERT KE DG_aDD*/
-					$.ajax({
-						type: 'GET',
-						url: '../json/json_cek_itemmaker.php?item_no='+row.ITEM_NO,
-						data: { kode:'kode' },
-						success: function(data){
-							$.messager.confirm('INFORMATION', data[0].maker, function(x){
-								if(x){
-									$('#dg_edit').datagrid('insertRow',{
-										index: idxfield,
-										row: {
-											ITEM_NO: row.ITEM_NO,
-											DESCRIPTION: row.DESCRIPTION,
-											ITEM: row.ITEM,
-											UOM_Q: row.UOM_Q,
-											UNIT: row.UNIT,
-											ESTIMATE_PRICE: row.STANDARD_PRICE,
-											LINE_NO: 'NEW'
-										}
-									});
-								}
-							});
-						}
-					});
-				}
+			    ]]
 			});
 		})
+
+        function select_inv(){
+            $.messager.progress({
+                msg:'Get data...'
+            });
+
+            console.log(status_add_edit);
+
+            var rows = $('#dg_addItem').datagrid('getSelections');
+            var i = 0;
+            for(i=0;i<rows.length;i++){
+                if (status_add_edit == 'add'){
+                    $('#dg_add').datagrid('insertRow',{
+                        index: i,
+                        row: {
+                            DO_NO: rows[i].DO_NO,
+                            BL_DATE: rows[i].BL_DATE,
+                            SHIP_NAME: rows[i].SHIP_NAME,
+                            ETA: rows[i].ETA,
+                            ETD: rows[i].ETD,
+                            AMT_O: rows[i].AMT_O,
+                            CURR_CODE: rows[i].CURR_CODE,
+                            AMT_L: rows[i].AMT_L,
+                            PO_NO_DESC: rows[i].PO_NO_DESC
+                        }
+                    });
+                }else{
+                //     var t = $('#dg_edit').datagrid('getRows');
+                //     var total = t.length;
+                //     var idxfield=0;
+                //     var i = 0;
+                //     var count = 0;
+                //     if (parseInt(total) == 0) {
+                //         idxfield=0;
+                //     }else{
+                //         idxfield=total;
+                //     }
+
+                    $('#dg_edit').datagrid('insertRow',{
+                        index: idxfield,
+                        row: {
+                            DO_NO: rows[i].DO_NO,
+                            BL_DATE: rows[i].BL_DATE,
+                            SHIP_NAME: rows[i].SHIP_NAME,
+                            ETA: rows[i].ETA,
+                            ETD: rows[i].ETD,
+                            AMT_O: rows[i].AMT_O,
+                            CURR_CODE: rows[i].CURR_CODE,
+                            AMT_L: rows[i].AMT_L,
+                            PO_NO_DESC: rows[i].PO_NO_DESC
+                        }
+                    });
+                }
+            }
+            $.messager.progress('close');
+            $('#dlg_addItem').dialog('close');
+        }
 
 		function filterData(){
 			var ck_date = 'false';
@@ -557,40 +573,77 @@ $menu_id = $_GET['id'];
 			$('#dg_add').datagrid('loadData',[]);
 		}
 
-		function add_invoice_add(){
-            var cst = $('#cust_no_add').textbox('getValue');
-            if (cst != ''){
-                $('#dlg_addItem').dialog('open').dialog('setTitle','Search Item');
-                document.getElementById('s_item_add').value = '';
-                $('#dg_addItem').datagrid('loadData',[]);
-                var dg = $('#dg_addItem').datagrid();
-                dg.datagrid('enableFilter');
+        var status_add_edit = '';
+
+		function add_invoice(a){
+            status_add_edit = a;
+            if(a == 'add'){
+                var cst = $('#cust_no_add').textbox('getValue');
+                if (cst != ''){
+                    $('#dlg_addItem').dialog('open').dialog('setTitle','SEARCH INVOICE');
+                    $('#dg_addItem').datagrid('loadData',[]);
+                    var dg = $('#dg_addItem').datagrid();
+                    // dg.datagrid('enableFilter');
+                }else{
+                    $.messager.alert('WARNING','CUSTOMER NOT SELECTED','warning');
+                }
             }else{
-                $.messager.alert('WARNING','CUSTOMER NOT SELECTED','warning');
+                var cst = $('#cust_no_edit').textbox('getValue');
+                if (cst != ''){
+                    $('#dlg_addItem').dialog('open').dialog('setTitle','SEARCH INVOICE');
+                    $('#dg_addItem').datagrid('loadData',[]);
+                    var dg = $('#dg_addItem').datagrid();
+                    dg.datagrid('enableFilter');
+                }else{
+                    $.messager.alert('WARNING','CUSTOMER NOT SELECTED','warning');
+                }
             }
 		}
 
 		function search_item_add(){
-            var cust_no_add = $('#cust_no_add').textbox('getValue');
-            var bl_date_a = $('#bl_date_awal_add').datebox('getValue');
-            var bl_date_z = $('#bl_date_akhir_add').datebox('getValue');
+            if (status_add_edit == 'add') {
+                var cust_no_add = $('#cust_no_add').textbox('getValue');
+                var bl_date_a = $('#bl_date_awal_add').datebox('getValue');
+                var bl_date_z = $('#bl_date_akhir_add').datebox('getValue');
 
-			if(bl_date_a !='' && bl_date_a != ''){
-				$('#dg_addItem').datagrid('load', {
-					cust_no_add : cust_no_add,
-                    bl_date_a : bl_date_a,
-                    bl_date_z : bl_date_z,
-				});
-				$('#dg_addItem').datagrid({url:'dn_getInvoice.php'});
-			}
+                if(bl_date_a !='' && bl_date_a != ''){
+                    $('#dg_addItem').datagrid('load', {
+                        cust_no_add : cust_no_add,
+                        bl_date_a : bl_date_a,
+                        bl_date_z : bl_date_z,
+                    });
+                    $('#dg_addItem').datagrid({url:'dn_getInvoice.php'});
+                }
+            }else{
+                var cust_no_add = $('#cust_no_edit').textbox('getValue');
+                var bl_date_a = $('#bl_date_awal_add').datebox('getValue');
+                var bl_date_z = $('#bl_date_akhir_add').datebox('getValue');
+
+                if(bl_date_a !='' && bl_date_a != ''){
+                    $('#dg_addItem').datagrid('load', {
+                        cust_no_add : cust_no_add,
+                        bl_date_a : bl_date_a,
+                        bl_date_z : bl_date_z,
+                    });
+                    $('#dg_addItem').datagrid({url:'dn_getInvoice.php'});
+                }
+            }
 		}
 
-		function remove_invoice_add(){
-			var row = $('#dg_add').datagrid('getSelected');	
-			if (row){
-				var idx = $("#dg_add").datagrid("getRowIndex", row);
-				$('#dg_add').datagrid('deleteRow', idx);
-			}
+		function remove_invoice(a){
+            if (a == 'add'){
+                var row = $('#dg_add').datagrid('getSelected');	
+                if (row){
+                    var idx = $("#dg_add").datagrid("getRowIndex", row);
+                    $('#dg_add').datagrid('deleteRow', idx);
+                }
+            }else{
+                var row = $('#dg_edit').datagrid('getSelected');	
+                if (row){
+                    var idx = $("#dg_edit").datagrid("getRowIndex", row);
+                    $('#dg_edit').datagrid('deleteRow', idx);
+                }
+            }
 		}
 
 		function simpan(){
@@ -607,18 +660,40 @@ $menu_id = $_GET['id'];
                 amt_o = parseFloat($('#dg_add').datagrid('getData').rows[i].AMT_O).toFixed(2);
 				tot_amt_o += parseFloat(amt_o);
 				
+                rows.push({
+                    dn_sts: 'DETAILS',
+                    dn_no: $('#dn_no_add').textbox('getValue'),
+                    dn_line : jmrow,
+                    dn_cust : $('#cust_no_add').textbox('getValue'),
+                    dn_date : $('#dn_date_add').datebox('getValue'),
+                    dn_attn : $('#attn_add').textbox('getValue'),    
+                    dn_bank : $('#bank_add').combobox('getValue'),
+                    dn_ship : $('#shipment_add').textbox('getValue'),
+                    dn_exfa : $('#exfact_add').textbox('getValue'),
+                    dn_sign : $('#signature_add').textbox('getValue'),
+                    dn_DO_NO: $('#dg_add').datagrid('getData').rows[i].DO_NO,
+                    dn_BL_DATE: $('#dg_add').datagrid('getData').rows[i].BL_DATE,
+                    dn_SHIP_NAME: $('#dg_add').datagrid('getData').rows[i].SHIP_NAME,
+                    dn_ETA: $('#dg_add').datagrid('getData').rows[i].ETA,
+                    dn_ETD: $('#dg_add').datagrid('getData').rows[i].ETD,
+                    dn_AMT_O: $('#dg_add').datagrid('getData').rows[i].AMT_O.replace(/,/g,''),
+                    dn_CURR_CODE: $('#dg_add').datagrid('getData').rows[i].CURR_CODE,
+                    dn_AMT_L: $('#dg_add').datagrid('getData').rows[i].AMT_L.replace(/,/g,''),
+                    dn_PO_NO_DESC: $('#dg_add').datagrid('getData').rows[i].PO_NO_DESC
+                });
+
                 if(i==total-1){
                     rows.push({
                         dn_sts: 'HEADER',
                         dn_no: $('#dn_no_add').textbox('getValue'),
                         dn_line: jmrow,
                         dn_cust: $('#cust_no_add').textbox('getValue'),
-                        dn_dn_date_add: $('#dn_date_add').datebox('getValue'),
-                        dn_attn_add: $('#attn_add').textbox('getValue'),
-                        dn_bank_add: $('#bank_add').textbox('getValue'),
-                        dn_shipment_add: $('#shipment_add').textbox('getValue'),
-                        dn_exfact_add: $('#exfact_add').textbox('getValue'),
-                        dn_signature_add: $('#signature_add').textbox('getValue'),
+                        dn_date: $('#dn_date_add').datebox('getValue'),
+                        dn_attn: $('#attn_add').textbox('getValue'),
+                        dn_bank: $('#bank_add').combobox('getValue'),
+                        dn_ship: $('#shipment_add').textbox('getValue'),
+                        dn_exfa: $('#exfact_add').textbox('getValue'),
+                        dn_sign: $('#signature_add').textbox('getValue'),
                         dn_DO_NO: $('#dg_add').datagrid('getData').rows[i].DO_NO,
                         dn_BL_DATE: $('#dg_add').datagrid('getData').rows[i].BL_DATE,
                         dn_SHIP_NAME: $('#dg_add').datagrid('getData').rows[i].SHIP_NAME,
@@ -629,27 +704,89 @@ $menu_id = $_GET['id'];
                         dn_AMT_L: $('#dg_add').datagrid('getData').rows[i].AMT_L.replace(/,/g,''),
                         dn_PO_NO_DESC: $('#dg_add').datagrid('getData').rows[i].PO_NO_DESC
                     });
-                }else{
+                }
+			}
+			
+			var myJSON = JSON.stringify(rows);
+			var str_unescape=unescape(myJSON);
+			
+            console.log('dn_save.php?dn_no_h='+$('#dn_no_add').textbox('getValue')+'&dn_stage=ADD&data='+unescape(str_unescape));
+
+			$.post('dn_save.php',{
+                dn_no_h: $('#dn_no_add').textbox('getValue'),
+                dn_stage: 'ADD',
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Insert Data Success..!!<br/>DN No. : '+$('#dn_no_add').textbox('getValue'),'info');
+					$.messager.progress('close');
+				}else{
+					$.post('dn_destroy.php',{prf_no: $('#dn_no_add').textbox('getValue')},'json');
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
+			});
+		}
+
+        function simpan_edit(){
+            var rows = [];
+			var tot_amt_o = 0;
+			var t = $('#dg_edit').datagrid('getRows');
+			var total = t.length;
+			var jmrow=0;
+
+			for(i=0;i<total;i++){
+				jmrow = i+1;
+				$('#dg_edit').datagrid('endEdit',i);
+                var amt_o = 0;
+                amt_o = parseFloat($('#dg_edit').datagrid('getData').rows[i].AMT_O).toFixed(2);
+				tot_amt_o += parseFloat(amt_o);
+				
+                rows.push({
+                    dn_sts: 'DETAILS',
+                    dn_no: $('#dn_no_edit').textbox('getValue'),
+                    dn_line : jmrow,
+                    dn_cust : $('#cust_no_edit').textbox('getValue'),
+                    dn_date : $('#dn_date_edit').datebox('getValue'),
+                    dn_attn : $('#attn_edit').textbox('getValue'),    
+                    dn_bank : $('#bank_edit').combobox('getValue'),
+                    dn_ship : $('#shipment_edit').textbox('getValue'),
+                    dn_exfa : $('#exfact_edit').textbox('getValue'),
+                    dn_sign : $('#signature_edit').textbox('getValue'),
+                    dn_DO_NO: $('#dg_edit').datagrid('getData').rows[i].DO_NO,
+                    dn_BL_DATE: $('#dg_edit').datagrid('getData').rows[i].BL_DATE,
+                    dn_SHIP_NAME: $('#dg_edit').datagrid('getData').rows[i].SHIP_NAME,
+                    dn_ETA: $('#dg_edit').datagrid('getData').rows[i].ETA,
+                    dn_ETD: $('#dg_edit').datagrid('getData').rows[i].ETD,
+                    dn_AMT_O: $('#dg_edit').datagrid('getData').rows[i].AMT_O.replace(/,/g,''),
+                    dn_CURR_CODE: $('#dg_edit').datagrid('getData').rows[i].CURR_CODE,
+                    dn_AMT_L: $('#dg_edit').datagrid('getData').rows[i].AMT_L.replace(/,/g,''),
+                    dn_PO_NO_DESC: $('#dg_edit').datagrid('getData').rows[i].PO_NO_DESC
+                });
+
+                if(i==total-1){
                     rows.push({
-                        dn_sts: 'DETAILS',
-                        dn_no: $('#dn_no_add').textbox('getValue'),
+                        dn_sts: 'HEADER',
+                        dn_no: $('#dn_no_edit').textbox('getValue'),
                         dn_line: jmrow,
-                        dn_cust: $('#cust_no_add').textbox('getValue'),
-                        dn_dn_date_add: $('#dn_date_add').datebox('getValue'),
-                        dn_attn_add: $('#attn_add').textbox('getValue'),
-                        dn_bank_add: $('#bank_add').textbox('getValue'),
-                        dn_shipment_add: $('#shipment_add').textbox('getValue'),
-                        dn_exfact_add: $('#exfact_add').textbox('getValue'),
-                        dn_signature_add: $('#signature_add').textbox('getValue'),
-                        dn_DO_NO: $('#dg_add').datagrid('getData').rows[i].DO_NO,
-                        dn_BL_DATE: $('#dg_add').datagrid('getData').rows[i].BL_DATE,
-                        dn_SHIP_NAME: $('#dg_add').datagrid('getData').rows[i].SHIP_NAME,
-                        dn_ETA: $('#dg_add').datagrid('getData').rows[i].ETA,
-                        dn_ETD: $('#dg_add').datagrid('getData').rows[i].ETD,
-                        dn_AMT_O: $('#dg_add').datagrid('getData').rows[i].AMT_O.replace(/,/g,''),
-                        dn_CURR_CODE: $('#dg_add').datagrid('getData').rows[i].CURR_CODE,
-                        dn_AMT_L: $('#dg_add').datagrid('getData').rows[i].AMT_L.replace(/,/g,''),
-                        dn_PO_NO_DESC: $('#dg_add').datagrid('getData').rows[i].PO_NO_DESC
+                        dn_cust: $('#cust_no_edit').textbox('getValue'),
+                        dn_date: $('#dn_date_edit').datebox('getValue'),
+                        dn_attn: $('#attn_edit').textbox('getValue'),
+                        dn_bank: $('#bank_edit').combobox('getValue'),
+                        dn_ship: $('#shipment_edit').textbox('getValue'),
+                        dn_exfa: $('#exfact_edit').textbox('getValue'),
+                        dn_sign: $('#signature_edit').textbox('getValue'),
+                        dn_DO_NO: $('#dg_edit').datagrid('getData').rows[i].DO_NO,
+                        dn_BL_DATE: $('#dg_edit').datagrid('getData').rows[i].BL_DATE,
+                        dn_SHIP_NAME: $('#dg_edit').datagrid('getData').rows[i].SHIP_NAME,
+                        dn_ETA: $('#dg_edit').datagrid('getData').rows[i].ETA,
+                        dn_ETD: $('#dg_edit').datagrid('getData').rows[i].ETD,
+                        dn_AMT_O: tot_amt_o,
+                        dn_CURR_CODE: $('#dg_edit').datagrid('getData').rows[i].CURR_CODE,
+                        dn_AMT_L: $('#dg_edit').datagrid('getData').rows[i].AMT_L.replace(/,/g,''),
+                        dn_PO_NO_DESC: $('#dg_edit').datagrid('getData').rows[i].PO_NO_DESC
                     });
                 }
 			}
@@ -657,57 +794,68 @@ $menu_id = $_GET['id'];
 			var myJSON = JSON.stringify(rows);
 			var str_unescape=unescape(myJSON);
 			
-            console.log('dn_save.php?data='+unescape(str_unescape));
+            console.log('dn_save.php?dn_no_h='+$('#dn_no_edit').textbox('getValue')+'&dn_stage=EDIT&data='+unescape(str_unescape));
 
-			// $.post('dn_save.php',{
-			// 	data: unescape(str_unescape)
-			// }).done(function(res){
-			// 	if(res == '"success"'){
-			// 		$('#dlg_add').dialog('close');
-			// 		$('#dg').datagrid('reload');
-			// 		$.messager.alert('INFORMATION','Insert Data Success..!!<br/>DN No. : '+$('#dn_no_add').textbox('getValue'),'info');
-			// 		$.messager.progress('close');
-			// 		$.messager.confirm('Confirm','Are you sure you want to print Delivery Note?',function(r){
-			// 		if(r){
-			// 			window.open('dn_print.php?prf='+$('#prf_no_add').textbox('getValue'));
-			// 		}
-			// 	});
-			// 	}else{
-			// 		$.post('dn_destroy.php',{prf_no: $('#dn_no_add').textbox('getValue')},'json');
-			// 		$.messager.alert('ERROR',res,'warning');
-			// 		$.messager.progress('close');
-			// 	}
-			// });
-		}
+			$.post('dn_save.php',{
+                dn_no_h: $('#dn_no_edit').textbox('getValue'),
+                dn_stage: 'EDIT',
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_edit').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Update Data Success..!!<br/>DN No. : '+$('#dn_no_edit').textbox('getValue'),'info');
+					$.messager.progress('close');
+				}else{
+					$.post('dn_destroy.php',{prf_no: $('#dn_no_edit').textbox('getValue')},'json');
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
+			});
+        }
 
-		function savePRF(){
-			// $.messager.progress({
-			//     title:'Please waiting',
-			//     msg:'Saving data...'
-			// });
+		function savePRF(s){
+			if(s == 'add'){
+                $.messager.progress({
+                    title:'Please waiting',
+                    msg:'Saving data...'
+                });
 
-			// var url='';
-			// var dt = $('#prf_date_add').datebox('getValue');
-			
-			// if( dt == ''){
-			// 	$.messager.progress('close');
-			// 	$.messager.alert('WARNING','PRF date not found','warning');
-			// }else{
-			// 	$.ajax({
-			// 		type: 'GET',
-			// 		url: '../json/json_cek_kode_dn.php?dn_no='+$('#dn_no_add').textbox('getValue'),
-			// 		data: { kode:'kode' },
-			// 		success: function(data){
-			// 			if(parseInt(data[0].kode) > 0){
-			// 				$.messager.alert('INFORMATION','kode Already Exixst..!!','info');
-			// 				$.messager.progress('close');
-			// 			}else{
-			// 				$('#dn_no_add').textbox('setValue', data[0].kode);
-							simpan();
-			// 			}
-			// 		}
-			// 	});
-			// }
+                var url='';
+                var dt = $('#dn_no_add').textbox('getValue');
+                if( dt == ''){
+                    $.messager.progress('close');
+                    $.messager.alert('WARNING','DN no. not found','warning');
+                }else{
+                    $.ajax({
+                        type: 'GET',
+                        url: '../json/json_cek_kode_dn.php?dn_no='+$('#dn_no_add').textbox('getValue'),
+                        data: { kode:'kode' },
+                        success: function(data){
+                            if(parseInt(data[0].kode) > 0){
+                                $.messager.alert('INFORMATION','kode Already Exixst..!!','info');
+                                $.messager.progress('close');
+                            }else{
+                                simpan();
+                            }
+                        }
+                    });
+                }
+            }else{
+                $.messager.progress({
+                    title:'Please waiting',
+                    msg:'Saving data...'
+                });
+
+                var url='';
+                var dt = $('#dn_no_edit').textbox('getValue');
+                if( dt == ''){
+                    $.messager.progress('close');
+                    $.messager.alert('WARNING','DN no. not found','warning');
+                }else{
+                    simpan_edit();
+                }
+            }
 		}
 
 		var sts_approved = '';
@@ -716,180 +864,63 @@ $menu_id = $_GET['id'];
 		function editPRF(){
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
-				if(parseInt(row.STS)==1 && row.JUM_PO != 0){
-					$.messager.alert('INFORMATION','Already Approved..!!','info');
-				}else{
-					sts_approved = row.STS;
-					jumPO = row.JUM_PO;
-					$('#dlg_edit').dialog('open').dialog('setTitle','Update Purchase Requestion (No. '+row.PRF_NO+') STATUS : '+row.STATUS);
-					$('#prf_no_edit').textbox('setValue',row.PRF_NO);
-					$('#prf_date_edit').datebox('setValue',row.PRFDATE);
-					$('#cust_pono_edit').textbox('setValue',row.CUSTOMER_PO_NO);
+                $('#dlg_edit').dialog('open').dialog('setTitle','EDIT DEBIT NOTE (NO. '+row.DN_NO+')');
+                $('#dn_no_edit').textbox('setValue',row.DN_NO);
+                $('#dn_date_edit').datebox('setValue',row.DN_DATE);
+                $('#attn_edit').textbox('setValue',row.ATTN);
+                $('#bank_edit').combobox('setValue',row.BANK_SEQ);
+                $('#shipment_edit').textbox('setValue',row.DATE_SHIPMENT);
+                $('#exfact_edit').textbox('setValue',row.DATE_SHIPMENT);
+                $('#signature_edit').textbox('setValue',row.SIGNATURE_NAME);
+                $('#cust_no_edit').textbox('setValue',row.CUSTOMER_CODE);
+                $('#cmb_cust_edit').combobox('setValue',row.CUSTOMER_CODE);
 
-					if(parseInt(row.STS_DESIGN) == 1){
-						$('#ck_new_edit').attr("checked",true);
-					}else{
-						$('#ck_new_edit').attr("checked",false);
-					}
-
-					$('#remark_edit').textbox('setValue',row.REMARK.replace(/<br>/g,"\n"));
-					$('#dg_edit').datagrid({
-						url:'purchase_req_get_detail_edit.php?prf_no='+row.PRF_NO
-					});
-				}
-			}
-		}
-
-		function add_item_edit(){
-			$('#dlg_addItem_edit').dialog('open').dialog('setTitle','Search Item');
-			document.getElementById('s_item_edit').value = '';
-			var dg = $('#dg_addItem_edit').datagrid();
-			dg.datagrid('enableFilter');
-		}
-
-		function sch_item_edit(event){
-			var sch_e = document.getElementById('s_item_edit').value;
-			var search = sch_e.toUpperCase();
-			document.getElementById('s_item_edit').value = search;
-			
-		    if(event.keyCode == 13 || event.which == 13){
-				search_item_edit();
-		    }
-		}
-
-		function search_item_edit(){
-			var sch_e = document.getElementById('s_item_edit').value;
-			if(sch_e !=''){
-				$('#dg_addItem_edit').datagrid('load', {
-					s_item: document.getElementById('s_item_edit').value
-				});
-				$('#dg_addItem_edit').datagrid({url:'purchase_req_getItem.php'});
-				document.getElementById('s_item_edit').value = '';
+                $('#dg_edit').datagrid({
+                    url:'dn_get_detail_edit.php?dn_no='+row.DN_NO
+                });
 			}
 		}
 
 		function remove_item_edit(){
-			var row = $('#dg_edit').datagrid('getSelected');
+            var row = $('#dg_edit').datagrid('getSelected');	
 			if (row){
-				$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-					if(r){
-						$.post('purchase_req_destroy_dtl.php',{prf: $('#prf_no_edit').textbox('getValue'), item: row.ITEM_NO, line: row.LINE_NO},function(result){
-							if (result.success){
-								$('#dg_edit').datagrid('reload');
-	                        }else{
-	                            $.messager.show({
-	                                title: 'Error',
-	                                msg: result.errorMsg
-	                            });
-	                        }
-						},'json');
-					}	
-				});
-			}
-		}
-
-		function save_edit_PRF(){
-			//alert(sts_approved+'/'+jumPO);
-			/*$.messager.progress({
-			    title:'Please waiting',
-			    msg:'Editing data...'
-			});*/
-
-			var rows_edit = [];
-			var ck_dsign_e='false';
-			var dt_edit = $('#prf_date_edit').datebox('getValue');
-
-			if($('#ck_new_edit').attr("checked")){
-				ck_dsign_e='true';
-			}
-
-			if (dt_edit == ''){
-				$.messager.alert('WARNING','PRF date not found','warning');
-			}else{
-				var t = $('#dg_edit').datagrid('getRows');
-				var total = t.length;
-				var jmrow_edit=0;
-				for(i=0;i<total;i++){
-					jmrow_edit = i+1;
-					$('#dg_edit').datagrid('endEdit',i);
-					rows_edit.push({
-						pu_sts: sts_approved,
-						pu_jumPO: jumPO,
-						pu_prf: $('#prf_no_edit').textbox('getValue'),
-						pu_line: jmrow_edit,
-						pu_date: $('#prf_date_edit').datebox('getValue'),
-						pu_cust_po_no: $('#cust_pono_edit').textbox('getValue'),
-						pu_ck_new: ck_dsign_e,
-						pu_rmark: $('#remark_edit').textbox('getValue').replace(/\n/g,"<br>"),
-						pu_item: $('#dg_edit').datagrid('getData').rows[i].ITEM_NO,
-						pu_line_ada: $('#dg_edit').datagrid('getData').rows[i].LINE_NO,
-						pu_unit: $('#dg_edit').datagrid('getData').rows[i].UOM_Q,
-						pu_s_price: $('#dg_edit').datagrid('getData').rows[i].ESTIMATE_PRICE.replace(/,/g,''),
-						pu_require: $('#dg_edit').datagrid('getData').rows[i].REQUIRE_DATE,
-						pu_qty: $('#dg_edit').datagrid('getData').rows[i].QTY.replace(/,/g,''),
-						pu_amt: $('#dg_edit').datagrid('getData').rows[i].AMT,
-						pu_ohsas: $('#dg_edit').datagrid('getData').rows[i].OHSAS
-					});
-				}
-
-				var myJSON_e = JSON.stringify(rows_edit);
-				var str_unescape_edit=unescape(myJSON_e);
-				//console.log(str_unescape_edit);
-				
-				$.post('purchase_req_edit.php',{
-					data: unescape(str_unescape_edit)
-				}).done(function(res){
-					console.log(res);
-					if(res == '"success"'){
-						$('#dlg_edit').dialog('close');
-						$('#dg').datagrid('reload');
-						$.messager.alert('INFORMATION','Update Data Success..!!<br/>PRF No. : '+$('#prf_no_edit').textbox('getValue'),'info');
-						$.messager.progress('close');
-					}else{
-						console.log(res);
-						$.messager.alert('ERROR',res,'warning');
-						$.messager.progress('close');
-					}
-				});
+				var idx = $("#dg_edit").datagrid("getRowIndex", row);
+				$('#dg_edit').datagrid('deleteRow', idx);
 			}
 		}
 
 		function destroyPRF(){
 			var row = $('#dg').datagrid('getSelected');	
 			if (row){
-				if(row.STS == '1' && row.JUM_PO != 0){
-					$.messager.alert('INFORMATION',"Data can't to remove, because it has approved",'info');
-				}else{
-					$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-						if(r){
-							$.messager.progress({
-							    title:'Please waiting',
-							    msg:'removing data...'
-							});
+                $.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+                    if(r){
+                        $.messager.progress({
+                            title:'Please waiting',
+                            msg:'removing data...'
+                        });
 
-							$.post('purchase_req_destroy.php',{prf_no: row.PRF_NO},function(result){
-								if (result.success){
-		                            $('#dg').datagrid('reload');
-		                            $.messager.progress('close');
-		                        }else{
-		                            $.messager.show({
-		                                title: 'Error',
-		                                msg: result.errorMsg
-		                            });
-		                            $.messager.progress('close');
-		                        }
-							},'json');
-						}
-					});
-				}
+                        $.post('dn_destroy.php',{dn_no: row.DN_NO},function(result){
+                            if (result.success){
+                                $('#dg').datagrid('reload');
+                                $.messager.progress('close');
+                            }else{
+                                $.messager.show({
+                                    title: 'Error',
+                                    msg: result.errorMsg
+                                });
+                                $.messager.progress('close');
+                            }
+                        },'json');
+                    }
+                });
 			}
 		}
 
 		function printPRF(){
 			var row = $('#dg').datagrid('getSelected');
 			if(row){
-				pdf_url = "?prf="+row.PRF_NO
-				window.open('purchase_req_print.php'+pdf_url);
+				pdf_url = "?dn="+row.DN_NO
+				window.open('dn_print.php'+pdf_url);
 			}else{
 				$.messager.show({title: 'Purchase Requestion',msg: 'Data Not select'});
 			}

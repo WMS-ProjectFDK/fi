@@ -116,6 +116,8 @@ h2 {
 		<label><input type="checkbox" name="ck_mark" id="ck_mark" checked="true">Print SI Marking</input></label>
 		<a href="javascript:void(0)" id="print_si" class="easyui-linkbutton c2" onClick="link_to_beakdown()" style="width:200px;"><i class="fa fa-eye" aria-hidden="true"></i> View Breakdown Container</a>
 		<a href="javascript:void(0)" id="print_si" class="easyui-linkbutton c2" onClick="link_to_packinglist()" style="width:200px;"><i class="fa fa-eye" aria-hidden="true"></i> View Packing List</a>
+		<label><input type="checkbox" name="ck_sample" id="ck_sample" >Sample Item</input></label>
+	
 	</div>
 </div>
 
@@ -343,14 +345,19 @@ h2 {
 		});
 	}
 
-	function filterData(){
-		var ck_cr_date = "false";
-		var ck_po_no = "false";
-		var ck_wo_no = "false";
-		var ck_item_no = "false";
-		var ck_si = "false";
-		var ck_ppbe = "false";
-		var flag = 0;
+	var ck_sample = "false";
+	var ck_cr_date = "false";
+	var ck_po_no = "false";
+	var ck_wo_no = "false";
+	var ck_item_no = "false";
+	var ck_si = "false";
+	var ck_ppbe = "false";
+	var flag = 0;
+
+	function filterData(){			
+		if ($('#ck_sample').attr("checked")) {
+			ck_sample = "true";
+		};
 
 		if ($('#ck_cr_date').attr("checked")) {
 			ck_cr_date = "true";
@@ -400,7 +407,8 @@ h2 {
 			ck_ppbe: ck_ppbe,
 			flag: flag,
 			ck_si: ck_si,
-			cmb_si_no : $('#cmb_si_no').combobox('getValue')
+			cmb_si_no : $('#cmb_si_no').combobox('getValue'),
+			ck_sample: ck_sample
 		});
 		
 		console.log('shipping_plan_get.php?date_awal='+$('#date_awal').datebox('getValue')+
@@ -416,6 +424,7 @@ h2 {
 			'&ck_ppbe='+ck_ppbe+
 			'&flag='+flag+
 			'&ck_si='+ck_si+
+			'&ck_sample='+ck_sample+
 			'&cmb_si_no='+$('#cmb_si_no').combobox('getValue')
 		);
 
@@ -763,8 +772,9 @@ h2 {
 
 	function add_SI(){
 		$('#dlg_si').dialog('open').dialog('setTitle','SHIPPING INSTRUCTION ADD (CUST PO NO : '+cust_po_no+')');
+		console.log('shipping_plan_get_si.php?cust_po_no='+cust_po_no+'&ck_sample='+ck_sample);
 		$('#dg_si').datagrid({
-			url: 'shipping_plan_get_si.php?cust_po_no='+cust_po_no,
+			url: 'shipping_plan_get_si.php?cust_po_no='+cust_po_no+'&ck_sample='+ck_sample,
 		    singleSelect: true,
 			rownumbers: true,
 			fitColumns: true,

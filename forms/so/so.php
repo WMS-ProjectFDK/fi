@@ -85,7 +85,7 @@ $menu_id = $_GET['id'];
 	    			</div>
 	    			<div class="fitem">
 	    				<span style="width:110px;display:inline-block;">Customer</span>
-	    				<select style="width:370px;" name="cmb_cust" id="cmb_cust" class="easyui-combobox" data-options=" url:'../json/json_company.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px'"></select>
+	    				<select style="width:370px;" name="cmb_cust" id="cmb_cust" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px'"></select>
 						<label><input type="checkbox" name="ck_cust" id="ck_cust" checked="true">All</input></label>
 	    			</div>
 	    		</div>
@@ -237,7 +237,7 @@ $menu_id = $_GET['id'];
 			<fieldset style="border:1px solid #d0d0d0; border-radius:2px; width:98%; float:left;">
 				<div class="fitem">
 					<span style="width:80px;display:inline-block;">CUSTOMER</span>
-					<input required="true" style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" disabled="disabled" data-options="" />
+					<input required="true" style="width:100px;" name="cust_no_edit" id="cust_no_edit" class="easyui-textbox" readonly=""/>
 					<select style="width:300px;" name="cmb_cust_edit" id="cmb_cust_edit" class="easyui-combobox" data-options=" url:'../json/json_customer.php', method:'get', valueField:'company_code', textField:'company', panelHeight:'100px',
 					onSelect:function(rec){
 						$('#cust_no_edit').textbox('setValue', rec.company_code);
@@ -452,10 +452,10 @@ $menu_id = $_GET['id'];
 			}
 
 			function search_item(){
-				var cust_id = $('#cust_no_add').textbox('getValue');
 				var s_item = document.getElementById('s_item').value;
 
 				if(s_item != ''){
+					console.log('so_getItem.php?cust='+cust_id+'&src='+s_item);
 					$('#dg_item').datagrid('load',{cust: cust_id, src: s_item});
 					$('#dg_item').datagrid({url: 'so_getItem.php',});	
 					$('#dg_item').datagrid('enableFilter');	
@@ -788,18 +788,18 @@ $menu_id = $_GET['id'];
 				});
 			}
 
-			function add_item(val){
-				var cust_id = '';
-				var cust_name = '';
-				var sts = '';
+			var cust_id = '' ;
+			var cust_name = '';
+			var sts = '';
 
+			function add_item(val){
 				if (val == 'add'){
 					cust_id = $('#cust_no_add').textbox('getValue');
 					cust_name = $('#cmb_cust_add').textbox('getText');
 					sts = "'ADD'";
 				}else{
 					cust_id = $('#cust_no_edit').textbox('getValue');
-					cust_name = $('#cmb_cust_edit').textbox('getText');
+					cust_name = $('#cmb_cust_edit').combobox('getText');
 					sts = "'EDIT'";
 				}
 

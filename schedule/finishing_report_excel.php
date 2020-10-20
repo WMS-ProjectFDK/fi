@@ -1,9 +1,10 @@
 <?php
+// error_reporting(0);
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 require_once '../class/phpexcel/PHPExcel.php';
 include("../connect/conn.php");
-$s=0;       
+$s=0;
 
 $min_hari = mktime(0,0,0,date("n"),date("j")-1,date("Y"));
 $kemaren = intval(date("d", $min_hari));
@@ -19,7 +20,7 @@ if (intval(date('d')) == 1){
     $nob = intval(date('m'))-1;
     $bln = $arrBulan[$nob];
 }else{
-    $bln = strtoupper(date('F'));
+    $bln = strtoupper(date('m_checkstatus(conn, identifier)'));
 }
 
 $arrKolom = array('1' => 'E','2' => 'F','3' => 'G','4' => 'H','5' => 'I','6' => 'J','7' => 'K','8' => 'L','9' => 'M','10' => 'N',
@@ -34,7 +35,9 @@ $arrKolom2 = array('1' => 'N', '2' => 'O',  '3' => 'P',  '4' => 'Q',  '5' => 'R'
 
 $Arr_sheet = array('TOTAL ALL BATTERY','BATTERY TYPE','PACKAGING GROUP','COMPARATION','DELAY ORDER','SUMMARY','TODAY ORDER','MOVEUP ORDER');
 
- $qry1 = "select * from (select 'TOTAL' as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
+//$bln = 'case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end';
+
+ $qry1 = "select 'TOTAL' as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
         sum(satu) as tgl_1,sum(dua) as tgl_2, sum(tiga) as tgl_3, sum(empat) as tgl_4, sum(lima) as tgl_5, 
         sum(enam) as tgl_6, sum(tujuh) as tgl_7, sum(delapan) as tgl_8, sum(sembilan) as tgl_9, sum(sepuluh) as tgl_10,
         sum(sebelas) as tgl_11,sum(duabelas) as tgl_12, sum(tigabelas) as tgl_13, sum(empatbelas) as tgl_14, sum(limabelas) as tgl_15, 
@@ -42,11 +45,14 @@ $Arr_sheet = array('TOTAL ALL BATTERY','BATTERY TYPE','PACKAGING GROUP','COMPARA
         sum(duapuluhsatu) as tgl_21,sum(duapuluhdua) as tgl_22, sum(duapuluhtiga) as tgl_23, sum(duapuluhempat) as tgl_24, sum(duapuluhlima) as tgl_25, 
         sum(duapuluhenam) as tgl_26, sum(duapuluhtujuh) as tgl_27, sum(duapuluhdelapan) as tgl_28, sum(duapuluhsembilan) as tgl_29, sum(tigapuluh) as tgl_30,
         sum(tigapuluhsatu) as tgl_31, sum(total) as total
-        from zvw_comparison3 where trim(BULAN) = '".$bln."' and stat in ('A','C') and groupinglabel is not null   group by Stat) order by groupinglabel";
-$data1 = oci_parse($connect, $qry1);
-oci_execute($data1);
+        from zvw_comparison3 where BULAN = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end and stat in ('A','C') and groupinglabel is not null   group by Stat order by groupinglabel";
 
-$qry2 = "select * from (select batery_type as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
+        $data1 = sqlsrv_query($connect, strtoupper($qry1));
+        //echo $qry1;
+
+// //oci_execute($data1);
+
+$qry2 = "select batery_type as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
         sum(satu) as tgl_1,sum(dua) as tgl_2, sum(tiga) as tgl_3, sum(empat) as tgl_4, sum(lima) as tgl_5, 
         sum(enam) as tgl_6, sum(tujuh) as tgl_7, sum(delapan) as tgl_8, sum(sembilan) as tgl_9, sum(sepuluh) as tgl_10,
         sum(sebelas) as tgl_11,sum(duabelas) as tgl_12, sum(tigabelas) as tgl_13, sum(empatbelas) as tgl_14, sum(limabelas) as tgl_15, 
@@ -54,11 +60,12 @@ $qry2 = "select * from (select batery_type as groupinglabel,case when Stat = 'C'
         sum(duapuluhsatu) as tgl_21,sum(duapuluhdua) as tgl_22, sum(duapuluhtiga) as tgl_23, sum(duapuluhempat) as tgl_24, sum(duapuluhlima) as tgl_25, 
         sum(duapuluhenam) as tgl_26, sum(duapuluhtujuh) as tgl_27, sum(duapuluhdelapan) as tgl_28, sum(duapuluhsembilan) as tgl_29, sum(tigapuluh) as tgl_30,
         sum(tigapuluhsatu) as tgl_31, sum(total) as total
-        from zvw_comparison3 where trim(BULAN) = '".$bln."' and stat in ('A','C') and groupinglabel is not null group by Stat,batery_type order by groupinglabel)";
-$data2 = oci_parse($connect, $qry2);
-oci_execute($data2);
+        from zvw_comparison3 where BULAN = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end and stat in ('A','C') and groupinglabel is not null group by Stat,batery_type order by groupinglabel";
+$data2 = sqlsrv_query($connect, strtoupper($qry2));
 
-$qry3 = "select * from (select groupinglabel  as groupinglabel,
+//oci_execute($data2);
+
+$qry3 = "select groupinglabel  as groupinglabel,
                case groupinglabel 
                 when 'AUTO SHRINK LR03' then 1
                 when 'AUTO SHRINK LR6' then 2
@@ -73,55 +80,80 @@ $qry3 = "select * from (select groupinglabel  as groupinglabel,
         sum(duapuluhsatu) as tgl_21,sum(duapuluhdua) as tgl_22, sum(duapuluhtiga) as tgl_23, sum(duapuluhempat) as tgl_24, sum(duapuluhlima) as tgl_25, 
         sum(duapuluhenam) as tgl_26, sum(duapuluhtujuh) as tgl_27, sum(duapuluhdelapan) as tgl_28, sum(duapuluhsembilan) as tgl_29, sum(tigapuluh) as tgl_30,
         sum(tigapuluhsatu) as tgl_31, sum(total) as total
-        from zvw_comparison3 where trim(BULAN) = '".$bln."' and stat in ('A','C') and groupinglabel is not null group by Stat,groupinglabel) order by Urut,groupinglabel";
-$data3 = oci_parse($connect, $qry3);
-oci_execute($data3);
+        from zvw_comparison3 where BULAN = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end and stat in ('A','C') and groupinglabel is not null group by Stat,groupinglabel order by Urut,groupinglabel";
+$data3 = sqlsrv_query($connect, strtoupper($qry3));
+// echo $qry3;
+//oci_execute($data3);
 
-$qry4 = "select distinct * from zvw_comparison3
-        where stat in ('A','C') and trim(bulan) = '".$bln."'
-        order by label_type, cr_date, work_order";
-$data4 = oci_parse($connect, $qry4);
-oci_execute($data4);
+$qry4 = "
+declare @var varchar(5) = ''
+select @var = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end 
+select distinct LABEL_TYPE,GROUPINGLABEL,WORK_ORDER,ITEM_NO,ITEM_NAME,DATE_CODE,PACKAGING_TYPE,BATERY_TYPE,GRADE as GRADE_CODE,GRADE,cast(CR_DATE as varchar(10)) cr_date,OPERATEION_TIME ,QTY,BULAN,TOTAL,STAT,SATU,DUA,TIGA,EMPAT,LIMA,ENAM,TUJUH,DELAPAN,SEMBILAN,SEPULUH,SEBELAS,DUABELAS,TIGABELAS,EMPATBELAS,LIMABELAS,ENAMBELAS,TUJUHBELAS,DELAPANBELAS,SEMBILANBELAS,DUAPULUH,DUAPULUHSATU,DUAPULUHDUA,DUAPULUHTIGA,DUAPULUHEMPAT,DUAPULUHLIMA,DUAPULUHENAM,DUAPULUHTUJUH,DUAPULUHDELAPAN,DUAPULUHSEMBILAN,TIGAPULUH,TIGAPULUHSATU 
+from zvw_comparison3 where stat in ('A','C') and bulan = @var order by label_type, cr_date, work_order";
+$data4 = sqlsrv_query($connect, strtoupper($qry4));
 
-$qry5 = "select * from zvw_production_delay order by package_type,cr_Date";
-$data5 = oci_parse($connect, $qry5);
-oci_execute($data5);
+//oci_execute($data4);
 
-$qry51 = "select * from ZVW_PRODUCTION_MOVEUP order by package_type,cr_Date";
-$data51 = oci_parse($connect, $qry51);
-oci_execute($data51);
+$qry5 = "select package_type,work_order,cast(cr_date as varchar(10)) cr_date,item_no,item,description,label_type_name,batt_type,qty,plan_qty,actualQty,delayQty from zvw_production_delay order by package_type,cr_Date";
+$data5 = sqlsrv_query($connect, strtoupper($qry5));
+// echo $qry5;
+//oci_execute($data5);
 
-$qry61 = "select batery_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
-          from zvw_comparison_summary where bulan = '".$bln."' and hari <= $kemaren group by batery_type";
-$data61 = oci_parse($connect, $qry61);
-oci_execute($data61);
+$qry51 = "select package_type,work_order,cast(cr_date as varchar(10)) cr_date,item_no,item,description,label_type_name,batt_type,qty,plan_qty,actualQty,MoveUpQty from ZVW_PRODUCTION_MOVEUP order by package_type,cr_Date";
+$data51 = sqlsrv_query($connect, strtoupper($qry51));
+// echo $qry6;
+//oci_execute($data51);
 
-$qry62 = "select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
-          from zvw_comparison_summary where bulan = '".$bln."' and hari <= $kemaren group by label_type";
-$data62 = oci_parse($connect, $qry62);
-oci_execute($data62);
+$qry61 = "
 
-$qry63 = "select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
-          from zvw_comparison_summary where bulan = '".$bln."' and hari = $kemaren group by label_type";
-$data63 = oci_parse($connect, $qry63);
-oci_execute($data63);
+declare @var varchar(5) = ''
+select @var = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end 
+
+select batery_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
+          from zvw_comparison_summary where bulan = @var and hari <= day((getdate() -1)) group by batery_type";
+$data61 = sqlsrv_query($connect, strtoupper($qry61));
+// echo $qry61;
+//oci_execute($data61);
+
+$qry62 = "
+declare @var varchar(5) = ''
+select @var = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end 
+
+
+select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
+          from zvw_comparison_summary where bulan = @var and hari <= day((getdate() - 1)) group by label_type";
+$data62 = sqlsrv_query($connect, strtoupper($qry62));
+// echo $qry62;
+//oci_execute($data62);
+
+$qry63 = "
+declare @var varchar(5) = ''
+select @var = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end 
+
+
+select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
+          from zvw_comparison_summary where bulan = @var and hari = day((getdate() - 1))  group by label_type";
+$data63 = sqlsrv_query($connect, strtoupper($qry63));
+//oci_execute($data63);
 
 $qry7 = "select work_order, cr_date, hr.item_no, it.item, it.description, lt.label_type_name, 
-        cl.class_1 ||''|| cl.class_2 as batt_type, hr.qty, sum(mps_qty) as plan_qty
+        cl.class_1 +''+ cl.class_2 as batt_type, hr.qty, sum(mps_qty) as plan_qty
         from mps_header hr
         inner join mps_details dt on hr.po_line_no = dt.po_line_no and hr.po_no = dt.po_no
         inner join item it on hr.item_no = it.item_no
         inner join label_type lt on it.label_type = lt.label_type_code
         inner join class cl on it.class_code = cl.class_code
-        where dt.mps_date = trim((select sysdate from dual)) 
+        where dt.mps_date = getdate()
         group by hr.item_no,it.item,it.description, lt.label_type_name, cl.class_1, cl.class_2, work_order,hr.qty,cr_date";
-$data7 = oci_parse($connect, $qry7);
-oci_execute($data7);
+$data7 = sqlsrv_query($connect, strtoupper($qry7));
+//echo $qry7;
+
+//oci_execute($data7);
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->createSheet();
 /**/
-while ($s <= 8) {
+while ($s < 8) {
     if ($Arr_sheet[$s] == "TOTAL ALL BATTERY"){
 
         $tot_1_TGL_1 = 0;   $tot_1_TGL_10 = 0;      $tot_1_TGL_19 = 0;      $tot_1_TGL_28 = 0;
@@ -242,7 +274,7 @@ while ($s <= 8) {
 
         $no1=2;
 
-        while ($row1=oci_fetch_object($data1)){
+        while ($row1=sqlsrv_fetch_object($data1)){
 
             $TGL_1 = $row1->TGL_1;   $TGL_10 = $row1->TGL_10;      $TGL_19 = $row1->TGL_19;      $TGL_28 = $row1->TGL_28;
             $TGL_2 = $row1->TGL_2;   $TGL_11 = $row1->TGL_11;      $TGL_20 = $row1->TGL_20;      $TGL_29 = $row1->TGL_29;
@@ -934,7 +966,7 @@ while ($s <= 8) {
         $tot_2_TGL_8 = 0;   $tot_2_TGL_17 = 0;      $tot_2_TGL_26 = 0;      $tot_2_progress_p = 0;    $tot_2_progress_o = 0;
         $tot_2_TGL_9 = 0;   $tot_2_TGL_18 = 0;      $tot_2_TGL_27 = 0;
 
-        while ($row2=oci_fetch_object($data2)){
+        while ($row2=sqlsrv_fetch_object($data2)){
             $TGL_2_1 = $row2->TGL_1;   $TGL_2_10 = $row2->TGL_10;      $TGL_2_19 = $row2->TGL_19;      $TGL_2_28 = $row2->TGL_28;
             $TGL_2_2 = $row2->TGL_2;   $TGL_2_11 = $row2->TGL_11;      $TGL_2_20 = $row2->TGL_20;      $TGL_2_29 = $row2->TGL_29;
             $TGL_2_3 = $row2->TGL_3;   $TGL_2_12 = $row2->TGL_12;      $TGL_2_21 = $row2->TGL_21;      $TGL_2_30 = $row2->TGL_30;
@@ -1805,7 +1837,7 @@ while ($s <= 8) {
         $tot_3_TGL_8 = 0;   $tot_3_TGL_17 = 0;      $tot_3_TGL_26 = 0;      $tot_3_progress_p = 0;    $tot_3_progress_o = 0;
         $tot_3_TGL_9 = 0;   $tot_3_TGL_18 = 0;      $tot_3_TGL_27 = 0;
 
-        while ($row3=oci_fetch_object($data3)){
+        while ($row3=sqlsrv_fetch_object($data3)){
             $TGL_3_1 = $row3->TGL_1;   $TGL_3_10 = $row3->TGL_10;      $TGL_3_19 = $row3->TGL_19;      $TGL_3_28 = $row3->TGL_28;
             $TGL_3_2 = $row3->TGL_2;   $TGL_3_11 = $row3->TGL_11;      $TGL_3_20 = $row3->TGL_20;      $TGL_3_29 = $row3->TGL_29;
             $TGL_3_3 = $row3->TGL_3;   $TGL_3_12 = $row3->TGL_12;      $TGL_3_21 = $row3->TGL_21;      $TGL_3_30 = $row3->TGL_30;
@@ -2684,8 +2716,9 @@ while ($s <= 8) {
         $tot_4_TGL_8 = 0;   $tot_4_TGL_17 = 0;      $tot_4_TGL_26 = 0;
         $tot_4_TGL_9 = 0;   $tot_4_TGL_18 = 0;      $tot_4_TGL_27 = 0;
 
-        while ($row4=oci_fetch_object($data4)){
-            $TGL_4_1 = $row4->SATU;             $TGL_4_11 = $row4->SEBELAS;              $TGL_4_21 = $row4->DUAPULUHSATU;               $TGL_4_31 = $row4->TIGAPULUHSATU;
+        while ($row4=sqlsrv_fetch_object($data4)){
+            $TGL_4_1 = $row4->SATU;             $TGL_4_11 = $row4->SEBELAS;              $TGL_4_21 = $row4->DUAPULUHSATU;               
+            $TGL_4_31 = $row4->TIGAPULUHSATU;
             $TGL_4_2 = $row4->DUA;              $TGL_4_12 = $row4->DUABELAS;             $TGL_4_22 = $row4->DUAPULUHDUA;
             $TGL_4_3 = $row4->TIGA;             $TGL_4_13 = $row4->TIGABELAS;            $TGL_4_23 = $row4->DUAPULUHTIGA;
             $TGL_4_4 = $row4->EMPAT;            $TGL_4_14 = $row4->EMPATBELAS;           $TGL_4_24 = $row4->DUAPULUHEMPAT;
@@ -3738,7 +3771,7 @@ while ($s <= 8) {
         $tot_order = 0;         $tot_act = 0;
         $tot_plan = 0;          $tot_delay = 0;
 
-        while($row5 = oci_fetch_object($data5)){
+        while($row5 = sqlsrv_fetch_object($data5)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no5, $row5->BATT_TYPE)
                         ->setCellValue('B'.$no5, $row5->LABEL_TYPE_NAME)
@@ -3905,7 +3938,7 @@ while ($s <= 8) {
         );
         
         $no6 = 4;       $accum = 0;
-        while ($row61 = oci_fetch_object($data61)){
+        while ($row61 = sqlsrv_fetch_object($data61)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no6, $row61->BATERY_TYPE)
                         ->setCellValue('B'.$no6, $row61->ACCUMULATION);
@@ -4007,7 +4040,7 @@ while ($s <= 8) {
         );
         $no6++;
         $p = 0;     $o=0;       $g=0;
-        while ($row62 = oci_fetch_object($data62)){
+        while ($row62 = sqlsrv_fetch_object($data62)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no6, $row62->LABEL_TYPE)
                         ->setCellValue('B'.$no6, $row62->PLN)
@@ -4134,7 +4167,7 @@ while ($s <= 8) {
         );
         $no6++;
         $p63 = 0;     $o63=0;       $g63=0;
-        while ($row63 = oci_fetch_object($data63)){
+        while ($row63 = sqlsrv_fetch_object($data63)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no6, $row63->LABEL_TYPE)
                         ->setCellValue('B'.$no6, $row63->PLN)
@@ -4252,7 +4285,7 @@ while ($s <= 8) {
 
         $no7=2;     $tot_order7 = 0;    $tot_plan7 = 0; 
 
-        while($row7 = oci_fetch_object($data7)){
+        while($row7 = sqlsrv_fetch_object($data7)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no7, $row7->WORK_ORDER)
                         ->setCellValue('B'.$no7, $row7->CR_DATE)
@@ -4379,7 +4412,7 @@ while ($s <= 8) {
         $tot_order51 = 0;         $tot_act51 = 0;
         $tot_plan51 = 0;          $tot_delay51 = 0;
 
-        while($row51 = oci_fetch_object($data51)){
+        while($row51 = sqlsrv_fetch_object($data51)){
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no51, $row51->BATT_TYPE)
                         ->setCellValue('B'.$no51, $row51->LABEL_TYPE_NAME)
@@ -4456,19 +4489,21 @@ while ($s <= 8) {
     }
     $s++;
 }
-/*
+
 $objPHPExcel->setActiveSheetIndex(0);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 $objWriter->save(str_replace('.php', '.xls', __FILE__));
 header('Content-type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="finishing_report.xls"');
-$objWriter->save('php://output');*/
+$objWriter->save('php://output');
+
+
 
 // ini jika ingin save file to folder
-$objPHPExcel->setActiveSheetIndex(0);
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-$objWriter->save(str_replace( __FILE__,$_SERVER['DOCUMMENT_ROOT'].'D:\Program/FinishingReportCopy/FINISHING_REPORT.xls',__FILE__));
-
+// $objPHPExcel->setActiveSheetIndex(0);
+// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+// $objWriter->save(str_replace( __FILE__,$_SERVER['DOCUMMENT_ROOT'].'F:\apache/wms/schedule/FINISHING_REPORT.xls',__FILE__));
+//F:\apache\wms\schedule
 
 //$target_dir='D:\Program\FinishingReportCopy\FinishingReportCopy\bin\Debug';
 //chdir($target_dir);

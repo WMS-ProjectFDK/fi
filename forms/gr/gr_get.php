@@ -53,6 +53,7 @@
 
 	$sql = "select distinct top 150 a.gr_no, CAST(a.gr_date as varchar(10)) as gr_date, a.supplier_code, c.company, a.curr_code, CAST(a.ex_rate as decimal(18,5)) as ex_rate,
 		a.pdays, a.pdesc, b.curr_short, a.remark, CAST(a.amt_o  as decimal(18,2))  amt_o, CAST(a.amt_l  as decimal(18,2)) as amt_l, CAST(a.gr_date as varchar(10)) as gr_date_2, a.bc_doc, a.bc_no
+		,a.inv_no,cast(a.inv_date as varchar(10)) inv_date,0 EDIT
 		from gr_header a
 		inner join gr_details gd on a.gr_no=gd.gr_no
 		inner join currency b on a.curr_code = b.curr_code

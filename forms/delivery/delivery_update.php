@@ -64,21 +64,35 @@ h2 {
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name));?>
 
 	<div id="toolbar">
-		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong>Delivery Update / Restore</strong></span></legend>
+		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong> DELIVERY UUPDATE / RESTORE </strong></span></legend>
 			<div style="width:470px; float:left;">
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">EX Factory Date</span>
-					<input style="width:100px;" name="ex_factory_date" id="ex_factory_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> TO
-					<input style="width:100px;" name="ex_factory_date_z" id="ex_factory_date_z" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-					
+					<span style="width:150px;display:inline-block;">DELIVERY TYPE</span>
+					<select  style="width:200px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true" data-options="panelHeight:'auto', 
+						onSelect: function(rec){
+							$('#ex_fact_date').combobox('enable');
+							sts = '../json/json_ex_factory.php?stsNya='+ $('#cmb_delivery_type').combobox('getValue');
+							console.log(sts);
+							$('#ex_fact_date').combobox({
+								url: sts,
+								valueField:'ex_factory_date',
+								textField:'ex_factory_date_text'
+							})
+						}
+					">
+                        <option value="None" selected>-- SELECT --</option>
+                        <option value="UPDATE">DELIVERY UPDATE</option>
+                        <option value="RESTORE" >DELIVERY RESTORE</option>
+                    </select>
 				</div>
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">Delivery Type.</span>
-					<select  style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true" " >
-                        <option value="None" selected>-- Select --</option>
-                        <option value="UPDATE">Delivery Update</option>
-                        <option value="RESTORE" >Delivery Restore</option>
-                    </select>
+					<span style="width:150px;display:inline-block;">EX FACTORY DATE</span>
+					<select style="width:200px;" name="ex_fact_date" id="ex_fact_date" class="easyui-combobox" 
+						data-options=" panelHeight:'150px',
+							onChange: function(rec){	
+								console.log(rec.ex_factory_date);
+							}">
+					</select>
 				</div>
 			</div>
 		</fieldset>
@@ -97,25 +111,21 @@ h2 {
 	</div>
 
     <div id="dlg_input" class="easyui-dialog" style="width: 550px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
-			
-			<div class="fitem">
-				<span style="width:100px;display:inline-block;">CONTAINER NO</span>
-				<input style="width: 400px;" name="con_no" id="con_no" class="easyui-textbox"/>
-			</div>
-			
-			<div class="fitem" align="center">
-				<span style="width:100px;display:inline-block;">SEAL NO</span>
-				<input style="width:400px;" name="seal_no" id="seal_no" class="easyui-textbox"/>
-			</div>
-
-          
-			
+		<div class="fitem">
+			<span style="width:100px;display:inline-block;">CONTAINER NO</span>
+			<input style="width: 400px;" name="con_no" id="con_no" class="easyui-textbox"/>
 		</div>
+		<div class="fitem" align="center">
+			<span style="width:100px;display:inline-block;">SEAL NO</span>
+			<input style="width:400px;" name="seal_no" id="seal_no" class="easyui-textbox"/>
+		</div>
+	</div>
 
 	<table id="dg" title="DELIVERY UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
 		var flagTipe = "";
+		var sts = "";
         function myformatter(date){
 			var y = date.getFullYear();
 			var m = date.getMonth()+1;
@@ -149,6 +159,8 @@ h2 {
 		}
 
 		$(function(){
+			$('#ex_fact_date').combobox('disable');
+
 			$('#dg').datagrid({
 			    columns:[[
 				    {field:'CK', checkbox:true, width:30, halign: 'center'},
@@ -180,13 +192,13 @@ h2 {
             }else{
                 $.messager.alert('INFORMATION','Please Choose Type','info');
             }
-			
 		}
 
         function filterDataUpdate(){
+			console.log($('#ex_fact_date').combobox('getValue'));
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue'),
-				ex_factory_z: $('#ex_factory_date_z').datebox('getValue')
+				ex_factory: $('#ex_fact_date').combobox('getValue'),
+				ex_factory_z: $('#ex_fact_date').combobox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_delivery_update.php'
@@ -196,9 +208,10 @@ h2 {
 		}
 
         function filterDataRestore(){
+			console.log($('#ex_fact_date').combobox('getValue'));
 			$('#dg').datagrid('load', {
-				ex_factory: $('#ex_factory_date').datebox('getValue'),
-				ex_factory_z: $('#ex_factory_date_z').datebox('getValue')
+				ex_factory: $('#ex_fact_date').combobox('getValue'),
+				ex_factory_z: $('#ex_fact_date').combobox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_delivery_restore.php'
@@ -208,7 +221,7 @@ h2 {
 		}
 
         function deliveryUpdate(){
-           var dataRows = [];
+            var dataRows = [];
             var rows = $('#dg').datagrid('getSelections');
             for(i=0;i<rows.length;i++){
 				$('#dg').datagrid('endEdit',i);
@@ -222,19 +235,17 @@ h2 {
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
             $.post('post_delivery_update.php',{
-						data: unescape(str_unescape)
-					}).done(function(res){
-						if(res == '"success"'){
-							$('#dlg_add').dialog('close');
-							$('#dg').datagrid('reload');
-							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>GR No. : '+$('#gr_no_add').textbox('getValue'),'info');
-							$.messager.progress('close');
-						}else{
-							//$.post('gr_destroy.php',{gr_no: $('#gr_no_add').textbox('getValue')},'json');
-							$.messager.alert('ERROR',res,'warning');
-							$.messager.progress('close');
-						}
-					});
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Data Saved','info');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+				}
+				$.messager.progress('close');
+			});
         }
 
         function deliveryRestore(){
@@ -250,22 +261,25 @@ h2 {
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
             $.post('post_delivery_restore.php',{
-						data: unescape(str_unescape)
-					}).done(function(res){
-						if(res == '"success"'){
-							$('#dlg_add').dialog('close');
-							$('#dg').datagrid('reload');
-							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>GR No. : '+$('#gr_no_add').textbox('getValue'),'info');
-							$.messager.progress('close');
-						}else{
-							//$.post('gr_destroy.php',{gr_no: $('#gr_no_add').textbox('getValue')},'json');
-							$.messager.alert('ERROR',res,'warning');
-							$.messager.progress('close');
-						}
-					});
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Data Saved','info');
+				}else{
+					//$.post('gr_destroy.php',{gr_no: $('#gr_no_add').textbox('getValue')},'json');
+					$.messager.alert('ERROR',res,'warning');
+				}
+				$.messager.progress('close');
+			});
         }
 
 		function save_approve(){
+			$.messager.progress({
+				msg:'save data...'
+			});
+
             var tipe = $('#cmb_delivery_type').combobox('getValue');
 
             if(tipe=='UPDATE' && flagTipe == 'UPDATE'){
@@ -277,8 +291,10 @@ h2 {
                 $('#dg').datagrid('loadData', []); 
             }
 		}
+
         var ans = ''
-        function input_container(a){
+        
+		function input_container(a){
             var tipe = $('#cmb_delivery_type').combobox('getValue');
             if(tipe=='UPDATE'){
                 $('#dlg_input').dialog('open').dialog('setTitle', 'INPUT CONTAINER');	
@@ -300,11 +316,9 @@ h2 {
             }else{
                 $.messager.alert('INFORMATION','Please Choose Type','info');
             }
-			
 		}
         
         function saveCon(){
-            
             var sealNo = $('#seal_no').textbox('getValue');
             var conNo = $('#con_no').textbox('getValue');
             var rows = $('#dg').datagrid('getRows');
@@ -317,10 +331,7 @@ h2 {
                 }
 			}
             $('#dlg_input').dialog('close');
-           
         }
-
-       
 	</script>
 </body>
 </html>

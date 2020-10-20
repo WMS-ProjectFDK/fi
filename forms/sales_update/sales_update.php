@@ -64,20 +64,37 @@ h2 {
 	<?php include ('../../ico_logout.php'); $exp = explode('-', access_log($menu_id,$user_name));?>
 
 	<div id="toolbar">
-		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong>Sales Update / Restore</strong></span></legend>
+		<fieldset style="border-radius:4px; border-radius:4px; width:940px; height:90px; float:left;"><legend><span class="style3"><strong> Sales Update / Restore </strong></span></legend>
 			<div style="width:470px; float:left;">
 				<div class="fitem">
-					<span style="width:100px;display:inline-block;">Invoice Date</span>
-					<input style="width:100px;" name="do_date" id="do_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value="<?date();?>"/> 
-					
-				</div>
-				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Sales Type.</span>
-					<select  style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true" " >
-                        <option value="None" selected>-- Select --</option>
+					<select  style="width:300px;" name="cmb_delivery_type" id="cmb_delivery_type" class="easyui-combobox" require="true"
+					data-options="panelHeight:'auto', 
+						onSelect: function(rec){
+							$('#ex_fact_date').combobox('enable');
+							sts = '../json/json_inv_date.php?stsNya='+ $('#cmb_delivery_type').combobox('getValue');
+							console.log(sts);
+							$('#do_date').combobox({
+								url: sts,
+								valueField:'ex_factory_date',
+								textField:'ex_factory_date_text'
+							})
+						}
+					">
+						<option value="None" selected>-- Select --</option>
                         <option value="UPDATE">Sales Update</option>
                         <option value="RESTORE" >Sales Restore</option>
                     </select>
+				</div>	
+				<div class="fitem">
+					<span style="width:100px;display:inline-block;">Invoice Date</span>
+					<!-- <input style="width:100px;" name="do_date" id="do_date" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" value=""/> -->
+					<select style="width:200px;" name="do_date" id="do_date" class="easyui-combobox" 
+						data-options=" panelHeight:'150px',
+							onChange: function(rec){	
+								console.log(rec.ex_factory_date);
+							}">
+					</select>
 				</div>
 			</div>
 		</fieldset>
@@ -96,17 +113,11 @@ h2 {
 	</div>
 
     <div id="dlg_input" class="easyui-dialog" style="width: 300px;height: 40`0px;" closed="true" buttons="#dlg-buttons-qty" data-options="modal:true" align="center">
-			
-			<div class="fitem">
-				<span style="width:75px;display:inline-block;">BL DATE</span>
-				<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
-			</div>
-			
-
-
-          
-			
+		<div class="fitem">
+			<span style="width:75px;display:inline-block;">BL DATE</span>
+			<input style="width: 200px;" name="bl_date_datebox" id="bl_date_datebox" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser"/>
 		</div>
+	</div>
 
 	<table id="dg" title="SALES UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
@@ -172,12 +183,11 @@ h2 {
             }else{
                 $.messager.alert('INFORMATION','Please Choose Type','info');
             }
-			
 		}
 
         function filterDataUpdate(){
 			$('#dg').datagrid('load', {
-				do_date: $('#do_date').datebox('getValue')
+				do_date: $('#do_date').combobox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_sales_update.php'
@@ -188,7 +198,7 @@ h2 {
 
         function filterDataRestore(){
 			$('#dg').datagrid('load', {
-				do_date: $('#do_date').datebox('getValue')
+				do_date: $('#do_date').combobox('getValue')
 			});
 			$('#dg').datagrid({
 				url:'get_sales_restore.php'
@@ -198,9 +208,10 @@ h2 {
 		}
 
         function deliveryUpdate(){
-           var dataRows = [];
+            var dataRows = [];
             var rows = $('#dg').datagrid('getSelections');
-            for(i=0;i<rows.length;i++){
+            
+			for(i=0;i<rows.length;i++){
 				$('#dg').datagrid('endEdit',i);
 				dataRows.push({
                     do_no: rows[i].DO_NO,
@@ -211,19 +222,18 @@ h2 {
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
             $.post('post_sales_update.php',{
-						data: unescape(str_unescape)
-					}).done(function(res){
-						if(res == '"success"'){
-							$('#dlg_add').dialog('close');
-							$('#dg').datagrid('reload');
-							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>GR No. : '+$('#gr_no_add').textbox('getValue'),'info');
-							$.messager.progress('close');
-						}else{
-							//$.post('gr_destroy.php',{gr_no: $('#gr_no_add').textbox('getValue')},'json');
-							$.messager.alert('ERROR',res,'warning');
-							$.messager.progress('close');
-						}
-					});
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Data Saved','info');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+				}
+
+				$.messager.progress('close');
+			});
         }
 
         function deliveryRestore(){
@@ -240,22 +250,24 @@ h2 {
             var myJSON=JSON.stringify(dataRows);
 			var str_unescape=unescape(myJSON);
             $.post('post_sales_restore.php',{
-						data: unescape(str_unescape)
-					}).done(function(res){
-						if(res == '"success"'){
-							$('#dlg_add').dialog('close');
-							$('#dg').datagrid('reload');
-							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>GR No. : '+$('#gr_no_add').textbox('getValue'),'info');
-							$.messager.progress('close');
-						}else{
-							//$.post('gr_destroy.php',{gr_no: $('#gr_no_add').textbox('getValue')},'json');
-							$.messager.alert('ERROR',res,'warning');
-							$.messager.progress('close');
-						}
-					});
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dlg_add').dialog('close');
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Data Saved','info');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+				}
+				$.messager.progress('close');
+			});
         }
 
 		function save_approve(){
+			$.messager.progress({
+				msg:'save data...'
+			});
+
             var tipe = $('#cmb_delivery_type').combobox('getValue');
 
             if(tipe=='UPDATE' && flagTipe == 'UPDATE'){
@@ -267,8 +279,10 @@ h2 {
                 $('#dg').datagrid('loadData', []); 
             }
 		}
-        var ans = ''
-        function input_bl_date(a){
+
+        var ans = '';
+        
+		function input_bl_date(a){
             var tipe = $('#cmb_delivery_type').combobox('getValue');
             if(tipe=='UPDATE'){
                 $('#dlg_input').dialog('open').dialog('setTitle', 'INPUT BL DATE');	
@@ -291,7 +305,6 @@ h2 {
 		}
         
         function saveBL(){
-            
             var BL = $('#bl_date_datebox').datebox('getValue');
             var rows = $('#dg').datagrid('getRows');
             for(i=0;i<rows.length;i++){
@@ -303,10 +316,7 @@ h2 {
                 }
 			}
             $('#dlg_input').dialog('close');
-           
         }
-
-       
 	</script>
 </body>
 </html>

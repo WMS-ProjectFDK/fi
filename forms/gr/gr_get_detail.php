@@ -20,6 +20,10 @@
 		array_push($items, $row);
 		$q = $items[$rowno]->QTY;
 		$items[$rowno]->QTY = number_format($q,2);
+
+		$amt_o = $items[$rowno]->AMT_O;
+		$items[$rowno]->AMT_O = number_format($amt_o,2);
+		
 		$rowno++;
 	}
 	$result["rows"] = $items;

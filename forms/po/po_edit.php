@@ -73,9 +73,9 @@ if (isset($_SESSION['id_wms'])){
 
 		/*update : 13-03-2019 id:wnx*/
 		if ($po_line == 'NEW'){
-			$q_max = "select cast(max(line_no) as number)+1 as line_no from po_details where po_no='$po_no'";
+			$q_max = "select count(*)+2 as line_no from po_details where po_no='$po_no'";
 		}else{
-			$q_max = "select cast(max(line_no) as number)+2 as line_no from po_details where po_no='$po_no'";
+			$q_max = "select count(*)+2 as line_no from po_details where po_no='$po_no'";
 		}
 		
 		$data_max = sqlsrv_query($connect, strtoupper($q_max));

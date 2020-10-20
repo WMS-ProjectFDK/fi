@@ -2,6 +2,17 @@
 	if(!isset($_SESSION)) { 
 		session_start(); 
 	}
+
+	$uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$uri_segments = explode('/', $uri_path);
+
+	if (count($uri_segments) < 5){
+		$out = "../logout.php";
+	}elseif (count($uri_segments) == 5){
+		$out = "../../logout.php";
+	}elseif (count($uri_segments) > 5){
+		$out = "../../../logout.php";
+	}
 	
 	require_once('sessionvalidation.php');
 	include("connect/conn.php");
@@ -31,36 +42,34 @@
 ?>
 
 <script language="javascript">
- function confirmLogOut(){
-	var is_confirmed;
-	is_confirmed = window.confirm("End current session?");
-	return is_confirmed;
- }
- </script> 
+	var myVar = setInterval(function(){myTimer()},1000);
+	
+	function confirmLogOut(){
+		var is_confirmed;
+		is_confirmed = window.confirm("End current session?");
+		return is_confirmed;
+	}
+
+	function myTimer(){
+		var d = new Date();
+		document.getElementById("demo").innerHTML = d.toLocaleTimeString().replace('.',':').replace('.',':');
+	}
+</script>
+
 <style>
 	.style4 {
 	font-size: 11px;
 	color: #CC0000;
 	}
 </style>
-	<div style="margin: 0px 0px;">
+
+<div style="margin: 0px 0px;">
 	<table width="100%">
 		<tr>
 			<td align="left" width="92%" valign="middle"><marquee><span class="style4"><?php echo "Welcome ".$nama.", you are login as ".$ty." PT FDK INDONESIA";?></span></marquee></td>
 			<td align="right" width="8%"><span id='demo'></span></td>
 			<td align="right"><a href="../dashboard/dashboard.php" title="Home"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a></td>
-			<td align="right" width="2%" valign="middle"><a href="../logout.php" onClick="return confirmLogOut()" title="Sign-Out" target="_top"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a></td>
+			<td align="right" width="2%" valign="middle"><a href="<?php echo $out; ?>" onClick="return confirmLogOut()" title="Sign-Out" target="_top"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a></td>
 		</tr>
 	</table>
-	</div>
-
-<script type="text/javascript">
-	var myVar = setInterval(function(){
-					myTimer()
-				},1000);
-
-	function myTimer(){
-	    var d = new Date();
-	    document.getElementById("demo").innerHTML = d.toLocaleTimeString().replace('.',':').replace('.',':');
-	}
-</script>
+</div>

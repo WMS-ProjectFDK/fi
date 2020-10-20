@@ -79,7 +79,10 @@
 			$items[$rowno]->STS = '<a   style="text-decoration: none; color: green;">IGNORED</a>';
 			$items[$rowno]->RSTS = 'IGNORED';
 		}
-		
+
+		$e = $items[$rowno]->QTY_ON_BOOK;
+		$i = $items[$rowno]->ITEM_NO;
+		$items[$rowno]->QTY_ON_BOOK = '<a href="javascript:void(0)" title="'.$e.'" onclick="info_qty_book('.$i.')"  style="text-decoration: none; color: blue;">'.number_format($e).'</a>';
 		$rowno++;
 	}
 	$result["rows"] = $items;

@@ -253,7 +253,7 @@ h2 {
 			onClickRow:function(id,row){
 				$('#pi_no').textbox('setValue', row.PI_NO);
 				$('#plt_spec_no').textbox('setValue', row.PLT_SPEC_NO);
-				$('#pallet_size_type').textbox('setValue', row.PALLET_SIZE_TYPE);
+				$('#pallet_size_type').combobox('setValue', row.PALLET_SIZE_TYPE);
 				$('#pallet_ctn_number').textbox('setValue', row.PALLET_CTN_NUMBER);
 				$('#pallet_step_ctn_number').textbox('setValue', row.PALLET_STEP_CTN_NUMBER);
 				$('#pallet_height').textbox('setValue', row.PALLET_HEIGHT);
@@ -344,7 +344,7 @@ h2 {
 
 			$('#pi_no').textbox('setValue', '<?=$pi_no?>');
 			$('#plt_spec_no').textbox('setValue', '<?=$plt_spec_no?>');
-			$('#pallet_size_type').textbox('setValue', '<?=$pallet_size_type?>');
+			$('#pallet_size_type').combobox('setValue', '<?=$pallet_size_type?>');
 			$('#pallet_ctn_number').textbox('setValue', '<?=$pallet_ctn_number?>');
 			$('#pallet_step_ctn_number').textbox('setValue', '<?=$pallet_step_ctn_number?>');
 			$('#pallet_height').textbox('setValue', '<?=$pallet_height?>');
@@ -512,7 +512,7 @@ h2 {
 		<legend><span class="style3"><strong>ITEM DESIGN</strong></span></legend>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">WEIGHT</span>
-			<input style="width:200px;" name="weight" id="weight" class="easyui-numberbox"/> 
+			<input style="width:200px;" name="weight" id="weight" class="easyui-numberbox" data-options="min:0,precision:6"/> 
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">UNIT of WEIGHT</span>
 			<select style="width:100px;" name="uom_w" id="uom_w" class="easyui-combobox" data-options="
@@ -547,13 +547,13 @@ h2 {
 		<legend><span class="style3"><strong>ITEM PRICE & LEAD TIME</strong></span></legend>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">STANDARD PRICE</span>
-			<input style="width:200px;" name="standard_price" id="standard_price" class="easyui-numberbox"/> 
+			<input style="width:200px;" name="standard_price" id="standard_price" class="easyui-numberbox" data-options="min:0,precision:8"/> 
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">NEXT TERM PRICE</span>
-			<input style="width:200px;" name="next_term_price" id="next_term_price" class="easyui-numberbox"/> 
+			<input style="width:200px;" name="next_term_price" id="next_term_price" class="easyui-numberbox" data-options="min:0,precision:8"/> 
 			<span style="width:50px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">SUPPLIER PRICE</span>
-			<input style="width:200px;" name="suppliers_price" id="suppliers_price" class="easyui-numberbox"/> 
+			<input style="width:200px;" name="suppliers_price" id="suppliers_price" class="easyui-numberbox" data-options="min:0,precision:8"/> 
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">MANUFACT LEAD TIME</span>
@@ -686,10 +686,10 @@ h2 {
 		<legend><span class="style3"><strong>ITEM UNIT PRICE</strong></span></legend>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">UNIT PRICE (ORG)</span>
-			<input style="width:200px;" name="unit_price_o" id="unit_price_o" class="easyui-numberbox"/>
+			<input style="width:200px;" name="unit_price_o" id="unit_price_o" class="easyui-numberbox" data-options="min:0,precision:8"/>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">UNIT PRICE RATE</span>
-			<input style="width:200px;" name="unit_price_rate" id="unit_price_rate" class="easyui-numberbox"/>
+			<input style="width:200px;" name="unit_price_rate" id="unit_price_rate" class="easyui-numberbox" data-options="min:0,precision:6"/>
 			<span style="width:50px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">UNIT CURR CODE</span>
 			<select style="width:100px;" name="unit_curr_code" id="unit_curr_code" class="easyui-combobox" data-options="panelHeight:'75px'">
@@ -745,7 +745,7 @@ h2 {
 			<select style="width:200px;" name="label_type" id="label_type" class="easyui-combobox" data-options=" url:'../json/json_pack_grouping.php', method:'get', valueField:'LABEL_TYPE_CODE', textField:'LABEL_TYPE_NAME', panelHeight:'75px'" required></select>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">MEASUREMENT</span>
-			<input style="width:200px;" name="measurement" id="measurement" class="easyui-numberbox"/>
+			<input style="width:200px;" name="measurement" id="measurement" class="easyui-numberbox" data-options="min:0,precision:8"/>
 		</div>
 	</fieldset>
 	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
@@ -762,35 +762,35 @@ h2 {
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">INNER BOX</span>
-			<input style="width:177px;" name="inner_box_height" id="inner_box_height" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="inner_box_height" id="inner_box_height" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;color:blue;"></span>
-			<input style="width:177px;" name="inner_box_width" id="inner_box_width" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="inner_box_width" id="inner_box_width" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;color:blue;"></span>
-			<input style="width:177px;" name="inner_box_depth" id="inner_box_depth" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="inner_box_depth" id="inner_box_depth" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;color:blue;"></span>
-			<input style="width:177px;" name="inner_box_unit_number" id="inner_box_unit_number" class="easyui-numberbox"/>PC
+			<input style="width:177px;" name="inner_box_unit_number" id="inner_box_unit_number" class="easyui-numberbox" data-options="min:0,precision:8"/>PC
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">MEDIUM BOX</span>
-			<input style="width:177px;" name="medium_box_unit_height" id="medium_box_height" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_height" id="medium_box_height" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="medium_box_unit_width" id="medium_box_width" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_width" id="medium_box_width" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="medium_box_unit_depth" id="medium_box_depth" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="medium_box_unit_depth" id="medium_box_depth" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="medium_box_unit_number" id="medium_box_unit_number" class="easyui-numberbox"/>PC
+			<input style="width:177px;" name="medium_box_unit_number" id="medium_box_unit_number" class="easyui-numberbox" data-options="min:0,precision:8"/>PC
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">OUTER BOX</span>
-			<input style="width:177px;" name="outer_box_unit_height" id="outer_box_height" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_height" id="outer_box_height" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="outer_box_unit_width" id="outer_box_width" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_width" id="outer_box_width" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 			<span style="width:20px;display:inline-block;"></span>
-			<input style="width:177px;" name="outer_box_unit_depth" id="outer_box_depth" class="easyui-numberbox"/>mm
+			<input style="width:177px;" name="outer_box_unit_depth" id="outer_box_depth" class="easyui-numberbox" data-options="min:0,precision:8"/>mm
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">CTN GROSS WEIGHT</span>
-			<input style="width:200px;" name="ctn_gross_weight" id="ctn_gross_weight" class="easyui-numberbox"/>
+			<input style="width:200px;" name="ctn_gross_weight" id="ctn_gross_weight" class="easyui-numberbox" data-options="min:0,precision:8"/>
 		</div>
 	</fieldset>
 	<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
@@ -804,7 +804,21 @@ h2 {
 			<input style="width:200px;" name="plt_spec_no" id="plt_spec_no" class="easyui-textbox" required/>
 			<span style="width:50px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">PALLET SIZE TYPE</span>
-			<input style="width:200px;" name="pallet_size_type" id="pallet_size_type" class="easyui-numberbox" required/>
+			<select style="width:200px;" name="pallet_size_type" id="pallet_size_type" class="easyui-combobox" data-options="panelHeight:'75px'" required>
+				<option value=''></option>
+				<option VALUE='1' >1,100 x 1,100 -PLASTIC-</option>
+				<option VALUE='2' >1,100 x 1,100 -A-</option>
+				<option VALUE='3' >1,100 x 1,100 -G-</option>
+				<option VALUE='4' >1,130 x 800 -F-</option>
+				<option VALUE='7' >1,200 X 800 -C-</option>
+				<option VALUE='8' >1,200 X 800 -M-</option>
+				<option VALUE='9' >1,200 x 1,000 -B-</option>
+				<option VALUE='10' >1,200 x 1,000 -E-</option>
+				<option VALUE='11' >1,200 X 1,000 -M-</option>
+				<option VALUE='12' >1,200 x 1,000 -D-</option>
+				<option VALUE='13' >1,200 x 800 -E PAL-</option>
+				<option VALUE='14' >1,200 x 800 -N-</option>
+			</select>
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">CARTON NO.</span>
@@ -839,10 +853,10 @@ h2 {
 		<legend><span class="style3"><strong>ITEM SET AGING</strong></span></legend>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">OPERATION TIME</span>
-			<input style="width:200px;" name="operation_time" id="operation_time" class="easyui-numberbox" required/>
+			<input style="width:200px;" name="operation_time" id="operation_time" class="easyui-numberbox" data-options="min:0,precision:8" required/>
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">MAN POWER</span>
-			<input style="width:200px;" name="man_power" id="man_power" class="easyui-numberbox"/>
+			<input style="width:200px;" name="man_power" id="man_power" class="easyui-numberbox" data-options="min:0,precision:8"/>
 			<span style="width:50px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;color:blue;">AGING DAY</span>
 			<input style="width:200px;" name="aging_day" id="aging_day" class="easyui-numberbox" required/>

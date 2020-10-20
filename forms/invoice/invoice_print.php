@@ -44,9 +44,13 @@ $sql_marks = "select dm2.max_value  max_no, 'SHIPPING MARKS '+CAST(dm1.mark_no a
     where dm1.do_no = dm2.do_no
     and dm1.do_no = '$do'
     order by cast(mark_no as int) asc";
-// echo $sql_marks;
-$dt_marks = sqlsrv_query($connect, strtoupper($sql_marks),$params, $options);
+
+// echo $sql_marks."<br/>";
+
+$dt_marks = sqlsrv_query($connect, $sql_marks,$params, $options);
 $row_count = sqlsrv_num_rows($dt_marks);
+
+// echo $row_count;
 
 if ($row_count > 0){
     $ship_no=1;
@@ -56,22 +60,23 @@ if ($row_count > 0){
                 <table>";
     $row_a=0;	$col_a=0;       $rowNo=1;
     while($dt_m=sqlsrv_fetch_object($dt_marks)){
-        if($dt_m->MARKS != ''){ 
+        if($dt_m->marks != ''){ 
             if ($row_a==0) {
+                // echo $col_a."<br/>";
                 if($col_a==0){
                     $marks .= "
                         <tr>
-                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->mark_no."</b><br/>".$dt_m->marks."</td>
                             <td style='border:0px solid #fffffff;width:30px;'></td>";
                     $col_a++;
                 }elseif($col_a==1){
                     $marks .= "
-                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->mark_no."</b><br/>".$dt_m->marks."</td>
                             <td style='border:0px solid #fffffff;width:30px;'></td>";
                     $col_a++;
                 }elseif($col_a==2){
                     $marks .= "
-                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->MARK_NO."</b><br/>".$dt_m->MARKS."</td>
+                            <td style='border:0px solid #fffffff;width:200px;'><b>".$dt_m->mark_no."</b><br/>".$dt_m->marks."</td>
                             <td style='border:0px solid #fffffff;width:30px;'></td>
                         </tr>
                         <tr><td colspan=6 style='border:0px solid #fffffff;height:20px;'></td></tr>
@@ -79,10 +84,20 @@ if ($row_count > 0){
                     $col_a=0;
                 }
             }
+
+            // echo $col_a."<br/>";
             
-            if($rowNo == $row_count AND intval($col_a) < 2){
-                if($col_a < 2){
-                    $marks .= "</tr>";
+            if($rowNo == $row_count AND intval($col_a) < 3){
+                // if($col_a < 3){
+                //     $marks .= "</tr>";
+                // }
+
+
+
+
+                
+                if($col_a%3!=0){
+                    $marks .= "<tr/>"; 
                 }
             }
             $rowNo++;

@@ -31,12 +31,17 @@ $arrKolom2 = array('1' => 'N', '2' => 'O',  '3' => 'P',  '4' => 'Q',  '5' => 'R'
                    '21' => 'AH', '22' => 'AI', '23' => 'AJ', '24' => 'AK', '25' => 'AL', '26' => 'AM', '27' => 'AN', '28' => 'AO', '29' => 'AP', '30' => 'AQ',
                    '31' => 'AR', '32' => 'AS');
 
-$qry = "select i.grade_code,z.* from zvw_comparison_labelmps z
-        inner join (select item.grade_code,item_no from item )i on z.item_no = i.item_no
-        where stat in ('A','C') and trim(bulan) = '".$bln."'
-        order by label_type, cr_date, work_order";
-$data = oci_parse($connect, $qry);
-oci_execute($data);
+$qry = "select i.grade_code,label_type,GroupingLabel,work_order,z.item_no,item_name,
+date_code,packaging_type,batery_type,tot,grade,cast(cr_date as varchar(10)) as cr_date,operateion_time,qty,Bulan,Total,STAT,
+Satu,dua,Tiga,empat,lima,enam,tujuh,delapan,sembilan,sepuluh,sebelas,duabelas,tigabelas,empatbelas,limabelas,
+enambelas,tujuhbelas,delapanbelas,sembilanbelas,duapuluh,duapuluhsatu,DuaPuluhDua,DuaPuluhTiga,DuaPuluhEmpat,DuaPuluhLima,
+DuaPuluhEnam,DuaPuluhTujuh,DuaPuluhDelapan,DuaPuluhSembilan,TigaPuluh,TigaPuluhSatu
+from zvw_comparison_labelmps z
+inner join (select item.grade_code,item_no from item )i on z.item_no = i.item_no
+where stat in ('A','C') and bulan = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end
+order by label_type, cr_date, work_order";
+// echo $qry;
+$data = sqlsrv_query($connect, strtoupper($qry));
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->setActiveSheetIndex()
@@ -179,7 +184,7 @@ $tot_4_TGL_7 = 0;   $tot_4_TGL_16 = 0;      $tot_4_TGL_25 = 0;
 $tot_4_TGL_8 = 0;   $tot_4_TGL_17 = 0;      $tot_4_TGL_26 = 0;
 $tot_4_TGL_9 = 0;   $tot_4_TGL_18 = 0;      $tot_4_TGL_27 = 0;
 
-while ($row4=oci_fetch_object($data)){
+while($row4 = sqlsrv_fetch_object($data)){
     $TGL_4_1 = $row4->SATU;             $TGL_4_11 = $row4->SEBELAS;              $TGL_4_21 = $row4->DUAPULUHSATU;               
     $TGL_4_2 = $row4->DUA;              $TGL_4_12 = $row4->DUABELAS;             $TGL_4_22 = $row4->DUAPULUHDUA;
     $TGL_4_3 = $row4->TIGA;             $TGL_4_13 = $row4->TIGABELAS;            $TGL_4_23 = $row4->DUAPULUHTIGA;
@@ -191,7 +196,6 @@ while ($row4=oci_fetch_object($data)){
     $TGL_4_9 = $row4->SEMBILAN;         $TGL_4_19 = $row4->SEMBILANBELAS;        $TGL_4_29 = $row4->DUAPULUHSEMBILAN;
     $TGL_4_10 = $row4->SEPULUH;         $TGL_4_20 = $row4->DUAPULUH;             $TGL_4_30 = $row4->TIGAPULUH;
                                                                                  $TGL_4_31 = $row4->TIGAPULUHSATU;
-
     $sts = $row4->STAT;
 
     if ($sts == 'A'){
@@ -1180,7 +1184,14 @@ $objPHPExcel->getActiveSheet()->getStyle('I'.$no4)->getNumberFormat()->setFormat
 $objPHPExcel->getActiveSheet()->setTitle('COMPARATION');
 
 // ini jika ingin save file to folder
+// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+// $objWriter->save(str_replace(__FILE__,$_SERVER['DOCUMMENT_ROOT'].'C:\xampp/Kuraire/wms/schedule/label_mail_excel.xls',__FILE__));
+
+$objPHPExcel->setActiveSheetIndex(0);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-$objWriter->save(str_replace(__FILE__,$_SERVER['DOCUMMENT_ROOT'].'C:\xampp/Kuraire/wms/schedule/label_mail_excel.xls',__FILE__));
+$objWriter->save(str_replace('.php', '.xls', __FILE__));
+header('Content-type: application/vnd.ms-excel');
+header('Content-Disposition: attachment; filename="label_mail_excel.xls"');
+$objWriter->save('php://output');
 ?>
 

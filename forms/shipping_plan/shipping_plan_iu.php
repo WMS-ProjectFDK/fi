@@ -21,13 +21,11 @@ if (isset($_SESSION['id_wms'])){
 	
 	if($type == "DEL"){
 		//delete ztb_answer
-		$sql1  = " delete from answer " ;
-	    $sql1 .= " where answer_no = '$ANSWER_NO' " ;
+		$sql1  = "delete from answer where answer_no = '$ANSWER_NO' " ;
 	    $data_del1 = sqlsrv_query($connect, $sql1);
 
 		//delete ztb_shipping_plan
-		$sql  = " delete from  ztb_shipping_plan " ;
-		$sql .= " where row_id = '$id' ";
+		$sql  = "delete from ztb_shipping_plan where row_id = '$id' ";
 		$data_del = sqlsrv_query($connect, $sql);
 		
 		$sql2  = " delete from grpans_out " ;
@@ -64,7 +62,7 @@ if (isset($_SESSION['id_wms'])){
 		//update ztb_shipping_plan
 	    $sql .= "  update  ztb_shipping_plan set" ;
 	    $sql .= "  QTY =  $real_integer" ;
-	    $sql .= "  where rowid = '$id'" ;
+	    $sql .= "  where row_id = '$id'" ;
     	$data_upd = sqlsrv_query($connect, $sql);
 
 		//ini untuk edit keselurahan si dan ppbe_no.

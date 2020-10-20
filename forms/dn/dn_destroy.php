@@ -1,9 +1,9 @@
 <?php
-$prf_no = strval($_REQUEST['prf_no']);
+$dn_no = strval($_REQUEST['dn_no']);
 include("../../connect/conn.php");
 $msg = '';
 
-$del = "delete from prf_header where prf_no='".$prf_no."'";
+$del = "delete from dn_header where dn_no='".$dn_no."'";
 $data_del = sqlsrv_query($connect, $del);
 
 if( $data_del === false ) {
@@ -19,7 +19,7 @@ if($msg != ''){
 	//break;
 }
 
-$del2 = "delete from prf_details where prf_no='".$prf_no."'";
+$del2 = "delete from dn_details where dn_no='".$dn_no."'";
 $data_del2 = sqlsrv_query($connect, $del2);
 
 if( $data_del2 === false ) {
@@ -33,23 +33,6 @@ if( $data_del2 === false ) {
 if($msg != ''){
 	$msg .= " Delete-Details Process Error : $del2";
 	//break;
-}
-
-$del3 = "delete from ztb_prf_sts where prf_no='".$prf_no."'";
-$data_del3 = sqlsrv_query($connect, $del3);
-
-
-if( $data_del3 === false ) {
-	if( ($errors = sqlsrv_errors() ) != null) {
-         foreach($errors as $error){
-            $msg .= $error[ 'message']; 
-         }
-    }
-}
-
-if($msg != ''){
-	$msg .= " Delete-PRF Status Process Error : $del3";
-	// break;
 }
 
 if ($msg != ''){

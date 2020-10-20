@@ -12,9 +12,9 @@ $cacheSettings = array( ' memoryCacheSize ' => '8MB');
 PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
 $t_month = "select distinct to_char(substr(this_month,5,2)) this_month, to_char(substr(this_month,1,4)) this_year from whinventory";
-$r_month = oci_parse($connect, $t_month);
-oci_execute($r_month);
-$dt_month = oci_fetch_object($r_month);
+$r_month = sqlsrv_query($connect, strtoupper($t_month));
+//oci_execute($r_month);
+$dt_month = sqlsrv_fetch_object($r_month);
 
 $arrBln = array('01' => 'JAN', '02' => 'FEB', '03' => 'MAR', '04' => 'APR', '05' => 'MAY', '06' => 'JUN',
 				'07' => 'JUL', '08' => 'AUG', '09' => 'SEP', '10' => 'OCT', '11' => 'NOV', '12' => 'DEC');
@@ -23,8 +23,8 @@ $this_month = $arrBln[$th_mon];
 $this_year = $dt_month->THIS_YEAR;
 
 $qry = "select z.*,i.description from zvw_raw_material2 z inner join item i on i.item_no = z.item_no order by z.item, z.item_no ,keterangan";
-$result = oci_parse($connect, $qry);
-oci_execute($result);
+$result = sqlsrv_query($connect, strtoupper($qry));
+//oci_execute($result);
 
 function cellColor($cells,$color){
     global $objPHPExcel;
@@ -178,7 +178,7 @@ $tot_D_TANGGAL8 = 0;			$tot_D_TANGGAL18 = 0;				$tot_D_TANGGAL28 = 0;
 $tot_D_TANGGAL9 = 0;			$tot_D_TANGGAL19 = 0;				$tot_D_TANGGAL29 = 0;
 $tot_D_TANGGAL0 = 0;			$tot_D_TANGGAL20 = 0;				$tot_D_TANGGAL30 = 0;
 
-while ($data=oci_fetch_object($result)) {
+while ($data=sqlsrv_fetch_object($result)) {
 	if($no==4){
 		$it_type = $data->ITEM;
 	}else{
@@ -1012,10 +1012,10 @@ $message .='
 
 $sql3 = "select cell, workingdays, dailyproduction, total from zvw_Summary_Asy_Plan 
 	where bulan = ".intval($th_mon)." and tahun = ".$this_year;
-$result3 = oci_parse($connect, $sql3);
-oci_execute($result3);
+$result3 = sqlsrv_query($connect, strtoupper($sql3));
+//oci_execute($result3);
 $no2=1;
-while ($data_cek2=oci_fetch_array($result3)){
+while ($data_cek2=sqlsrv_fetch_array($result3)){
 	$print_gp ='
 			        <td style="background-color: #E2EFDA;" align="center">'.$data_cek2[0].'</td>
 			        <td style="background-color: #E2EFDA;" align="center">'.$data_cek2[1].'</td>
@@ -1112,10 +1112,10 @@ from (select  z.item, max(max_days) ito_days ,sum(LR1) LR1,sum(LR3) LR3,sum(LR6)
 on zz.item1 = z.item
 order by Max_TargetAmount desc,ITEM";
 
-$result2 = oci_parse($connect, $sql2);
-oci_execute($result2);
+$result2 = sqlsrv_query($connect, strtoupper($sql2));
+//oci_execute($result2);
 $no2=1;  $t_plan2 = 0;  $t_act2 = 0;   $t_gap2 = 0;
-while ($data_cek2=oci_fetch_array($result2)){
+while ($data_cek2=sqlsrv_fetch_array($result2)){
 	$gp2 = $data_cek2[5] ;
 	$Variance1 = intval(number_format($data_cek2[2]) / number_format($data_cek2[4])*100) -100;
 	// if ($variance1 < 0)
@@ -1278,10 +1278,10 @@ select max(ETA || '/' || qty) from po_details s where item_no = z.item_no and ET
           and revisi = (select max(revisi)  from ztb_assy_plan where tahun||case when bulan < 10 then '0'||bulan else bulan end = ( select distinct this_month  from whinventory))        
   group by z.item_no,this_inventory, min_days,z.description,
         max_days order by z.item_no";
- $resultz = oci_parse($connect, $sqlz);
- oci_execute($resultz);
+ $resultz = sqlsrv_query($connect, strtoupper($sqlz));
+ //oci_execute($resultz);
  $noz=1;
- while ($data_cekz=oci_fetch_object($resultz)){
+ while ($data_cekz=sqlsrv_fetch_object($resultz)){
  	$arrv = $data_cekz->NEXT_ARRIVAL;
 
  	if(! is_null($arrv)){

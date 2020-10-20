@@ -140,12 +140,12 @@ while ($data=sqlsrv_fetch_object($result)){
                 ->setCellValue('C'.$no, $data->ITEM.' - '.$data->DESCRIPTION)
                 ->setCellValue('E'.$no, $data->UNIT)
                 ->setCellValue('F'.$no, $cmbBln_txt)
-                ->setCellValue('G'.$no, number_format($data->THIS_INVENTORY))
-                ->setCellValue('H'.$no, number_format($data->RECEIVE1))
-                ->setCellValue('I'.$no, number_format($data->OTHER_RECEIVE1))
-                ->setCellValue('J'.$no, number_format($data->ISSUE1))
-                ->setCellValue('K'.$no, number_format($data->OTHER_ISSUE1))
-                ->setCellValue('L'.$no, number_format($data->LAST_INVENTORY));
+                ->setCellValue('G'.$no, $data->THIS_INVENTORY)
+                ->setCellValue('H'.$no, $data->RECEIVE1)
+                ->setCellValue('I'.$no, $data->OTHER_RECEIVE1)
+                ->setCellValue('J'.$no, $data->ISSUE1)
+                ->setCellValue('K'.$no, $data->OTHER_ISSUE1)
+                ->setCellValue('L'.$no, $data->LAST_INVENTORY);
     $sheet = $objPHPExcel->getActiveSheet();
 
     cellColor('A'.$no.':L'.$no, 'A5A5A5');
@@ -260,11 +260,11 @@ while ($data=sqlsrv_fetch_object($result)){
                     ->setCellValue('D'.$no, $dta->SLIP_NO)
                     ->setCellValue('E'.$no, wordwrap('['.$dta->SLIP_TYPE.'] '.$dta->SLIP_NAME,6))
                     ->setCellValue('G'.$no, wordwrap($dta->COMPANY_CODE.' - '.$dta->COMPANY,20))
-                    ->setCellValue('H'.$no, number_format($dta->RECEIVE))
-                    ->setCellValue('I'.$no, number_format($dta->OTHER_RECEIVE))
-                    ->setCellValue('J'.$no, number_format($dta->ISSUE))
-                    ->setCellValue('K'.$no, number_format($dta->OTHER_ISSUE))
-                    ->setCellValue('L'.$no, number_format($total));
+                    ->setCellValue('H'.$no, $dta->RECEIVE)
+                    ->setCellValue('I'.$no, $dta->OTHER_RECEIVE)
+                    ->setCellValue('J'.$no, $dta->ISSUE)
+                    ->setCellValue('K'.$no, $dta->OTHER_ISSUE)
+                    ->setCellValue('L'.$no, $total);
 
         $sheet->mergeCells('E'.$no.':F'.$no);
         $sheet = $objPHPExcel->getActiveSheet();

@@ -64,7 +64,7 @@ $user_name = $_SESSION['id_wms'];
 	include ('../../ico_logout.php'); 
 	//include ('sync_get2.php'); 
 	?>
-	<div id="toolbar" class="fitem"  style="width:auto;padding:5px 5px;">
+	<div id="toolbar" align="center" class="fitem"  style="width:auto;padding:5px 5px;">
         <p align="center">LAST UPLOAD : <span id ="LastUpload"></span></p>
         <form id="upd" method="post" enctype="multipart/form-data" novalidate>
             <div class="fitem" align="center">
@@ -76,7 +76,9 @@ $user_name = $_SESSION['id_wms'];
         </form>
         <br/>
         <hr>
-        <br/>
+		<br/>
+		<a href="javascript:void(0)" id="fltbtn" class="easyui-linkbutton c2" onClick="download_safety_stock()" style="width:250PX;"><i class="fa fa-download" aria-hidden="true"></i> DOWNLOAD SAFETY STOCK</a>
+		<hr>
     </div>
 	<table id="dg" title="UPLOAD MPS" class="easyui-datagrid" toolbar="#toolbar" style="width:100%;height:auto;"></table>
 	
@@ -106,10 +108,15 @@ $user_name = $_SESSION['id_wms'];
 					console.log(result);
 					$('#fileexcel').filebox('clear');
 					// $.post('mps_list_excel.php')
-					$.post('safety_stock_xls.php')
+					$.post('safety_stock_xls.php');
 					window.open('mps_list_excel.php');
 				}
 			});
+		}
+
+		function download_safety_stock(){
+			url_download = 'safety_stock_xls.php';
+			window.open(url_download);
 		}
 	</script>
 	</body>

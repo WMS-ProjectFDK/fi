@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 require_once '../class/phpexcel/PHPExcel.php';
@@ -47,133 +48,121 @@ if($nob<10){
     $nob2 = $nob;
 }
 
-$qry1 = "select * from
-        (
-        select --assy_line, 
-        case when assy_line = 'LR01#1' then 'LR1#1' 
-        when substr(assy_line,0,4) = 'LR06' then 'LR6'|| substr(assy_line,5,2)
-        else assy_line end as assy_line,
-        'PLAN' as keterangan,
-        sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
-        sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
-        sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
-        from zvw_plan_assy 
-        where  bulan = ".$nob." and tahun = ".$not."
-        group by assy_line
-        UNION ALL
-        --ACTUAL ASSY
-        select --b.assy_line, 
-        case when b.assy_line = 'LR01#1' then 'LR1#1' 
-        when substr(b.assy_line,0,4) = 'LR06' then 'LR6'|| substr(b.assy_line,5,2)
-        else b.assy_line end as assy_line,
-        'ACTUAL',
-        nvl(sum(b.date_1),0) as date_1, nvl(sum(b.date_2),0) as date_2, nvl(sum(b.date_3),0) as date_3, nvl(sum(b.date_4),0) as date_4, nvl(sum(b.date_5),0) as date_5,
-        nvl(sum(b.date_6),0) as date_6, nvl(sum(b.date_7),0) as date_7, nvl(sum(b.date_8),0) as date_8, nvl(sum(b.date_9),0) as date_9, nvl(sum(b.date_10),0) as date_10,
-        nvl(sum(b.date_11),0) as date_11, nvl(sum(b.date_12),0) as date_12, nvl(sum(b.date_13),0) as date_13, nvl(sum(b.date_14),0) as date_14, nvl(sum(b.date_15),0) as date_15,
-        nvl(sum(b.date_16),0) as date_16, nvl(sum(b.date_17),0) as date_17, nvl(sum(b.date_18),0) as date_18, nvl(sum(b.date_19),0) as date_19, nvl(sum(b.date_20),0) as date_20,
-        nvl(sum(b.date_21),0) as date_21, nvl(sum(b.date_22),0) as date_22, nvl(sum(b.date_23),0) as date_23, nvl(sum(b.date_24),0) as date_24, nvl(sum(b.date_25),0) as date_25,
-        nvl(sum(b.date_26),0) as date_26, nvl(sum(b.date_27),0) as date_27, nvl(sum(b.date_28),0) as date_28, nvl(sum(b.date_29),0) as date_29, nvl(sum(b.date_30),0) as date_30, nvl(sum(b.date_31),0) as date_31
-        from zvw_assy_actual b
-        where bulan=".$nob2." and tahun=".$not."
-        group by b.assy_line
-        )
-        order by assy_line";
-$data1 = oci_parse($connect, $qry1);
-oci_execute($data1);
+$qry1 = "select case when assy_line = 'LR01#1' then 'LR1#1' 
+    when substring(assy_line,0,4) = 'LR06' then 'LR6'+substring(assy_line,5,2)
+    else assy_line end as assy_line,
+    'PLAN' as keterangan,
+    sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
+    sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
+    sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
+    from zvw_plan_assy 
+    where  bulan = ".$nob." and tahun = ".$not."
+    group by assy_line
+    UNION ALL
+    --ACTUAL ASSY
+    select --b.assy_line, 
+    case when b.assy_line = 'LR01#1' then 'LR1#1' 
+    when substring(b.assy_line,0,4) = 'LR06' then 'LR6'+substring(b.assy_line,5,2)
+    else b.assy_line end as assy_line,
+    'ACTUAL',
+    isnull(sum(b.date_1),0) as date_1, isnull(sum(b.date_2),0) as date_2, isnull(sum(b.date_3),0) as date_3, isnull(sum(b.date_4),0) as date_4, isnull(sum(b.date_5),0) as date_5,
+    isnull(sum(b.date_6),0) as date_6, isnull(sum(b.date_7),0) as date_7, isnull(sum(b.date_8),0) as date_8, isnull(sum(b.date_9),0) as date_9, isnull(sum(b.date_10),0) as date_10,
+    isnull(sum(b.date_11),0) as date_11, isnull(sum(b.date_12),0) as date_12, isnull(sum(b.date_13),0) as date_13, isnull(sum(b.date_14),0) as date_14, isnull(sum(b.date_15),0) as date_15,
+    isnull(sum(b.date_16),0) as date_16, isnull(sum(b.date_17),0) as date_17, isnull(sum(b.date_18),0) as date_18, isnull(sum(b.date_19),0) as date_19, isnull(sum(b.date_20),0) as date_20,
+    isnull(sum(b.date_21),0) as date_21, isnull(sum(b.date_22),0) as date_22, isnull(sum(b.date_23),0) as date_23, isnull(sum(b.date_24),0) as date_24, isnull(sum(b.date_25),0) as date_25,
+    isnull(sum(b.date_26),0) as date_26, isnull(sum(b.date_27),0) as date_27, isnull(sum(b.date_28),0) as date_28, isnull(sum(b.date_29),0) as date_29, isnull(sum(b.date_30),0) as date_30, isnull(sum(b.date_31),0) as date_31
+    from zvw_assy_actual b
+    where bulan=".$nob2." and tahun=".$not."
+    group by b.assy_line
+    order by assy_line";
+$data1 = sqlsrv_query($connect, strtoupper($qry1));
+//oci_execute($data1);
 
-$qry2 = "select * from 
-        (
-        select cell_type, 'PLAN' as keterangan,
-        sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
-        sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
-        sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
-        from zvw_plan_assy 
-        where  bulan = ".$nob." and tahun = ".$not." and substr(assy_line, 1, 4)='LR06'
-        group by cell_type
-        UNION ALL
-        --ACTUAL ASSY
-        select b.cell_type, 'ACTUAL',
-        nvl(sum(b.date_1),0) as date_1, nvl(sum(b.date_2),0) as date_2, nvl(sum(b.date_3),0) as date_3, nvl(sum(b.date_4),0) as date_4, nvl(sum(b.date_5),0) as date_5,
-        nvl(sum(b.date_6),0) as date_6, nvl(sum(b.date_7),0) as date_7, nvl(sum(b.date_8),0) as date_8, nvl(sum(b.date_9),0) as date_9, nvl(sum(b.date_10),0) as date_10,
-        nvl(sum(b.date_11),0) as date_11, nvl(sum(b.date_12),0) as date_12, nvl(sum(b.date_13),0) as date_13, nvl(sum(b.date_14),0) as date_14, nvl(sum(b.date_15),0) as date_15,
-        nvl(sum(b.date_16),0) as date_16, nvl(sum(b.date_17),0) as date_17, nvl(sum(b.date_18),0) as date_18, nvl(sum(b.date_19),0) as date_19, nvl(sum(b.date_20),0) as date_20,
-        nvl(sum(b.date_21),0) as date_21, nvl(sum(b.date_22),0) as date_22, nvl(sum(b.date_23),0) as date_23, nvl(sum(b.date_24),0) as date_24, nvl(sum(b.date_25),0) as date_25,
-        nvl(sum(b.date_26),0) as date_26, nvl(sum(b.date_27),0) as date_27, nvl(sum(b.date_28),0) as date_28, nvl(sum(b.date_29),0) as date_29, nvl(sum(b.date_30),0) as date_30, nvl(sum(b.date_31),0) as date_31
-        from zvw_assy_actual b
-        where bulan=".$nob2." and tahun=".$not." AND substr(b.assy_line, 1, 4)='LR06'
-        group by b.cell_type
-        )
-        order by cell_type";
-$data2 = oci_parse($connect, $qry2);
-oci_execute($data2);
+$qry2 = "select cell_type, 'PLAN' as keterangan,
+    sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
+    sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
+    sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
+    from zvw_plan_assy 
+    where  bulan = ".$nob." and tahun = ".$not." and substring(assy_line, 1, 4)='LR06'
+    group by cell_type
+    UNION ALL
+    --ACTUAL ASSY
+    select b.cell_type, 'ACTUAL',
+    isnull(sum(b.date_1),0) as date_1, isnull(sum(b.date_2),0) as date_2, isnull(sum(b.date_3),0) as date_3, isnull(sum(b.date_4),0) as date_4, isnull(sum(b.date_5),0) as date_5,
+    isnull(sum(b.date_6),0) as date_6, isnull(sum(b.date_7),0) as date_7, isnull(sum(b.date_8),0) as date_8, isnull(sum(b.date_9),0) as date_9, isnull(sum(b.date_10),0) as date_10,
+    isnull(sum(b.date_11),0) as date_11, isnull(sum(b.date_12),0) as date_12, isnull(sum(b.date_13),0) as date_13, isnull(sum(b.date_14),0) as date_14, isnull(sum(b.date_15),0) as date_15,
+    isnull(sum(b.date_16),0) as date_16, isnull(sum(b.date_17),0) as date_17, isnull(sum(b.date_18),0) as date_18, isnull(sum(b.date_19),0) as date_19, isnull(sum(b.date_20),0) as date_20,
+    isnull(sum(b.date_21),0) as date_21, isnull(sum(b.date_22),0) as date_22, isnull(sum(b.date_23),0) as date_23, isnull(sum(b.date_24),0) as date_24, isnull(sum(b.date_25),0) as date_25,
+    isnull(sum(b.date_26),0) as date_26, isnull(sum(b.date_27),0) as date_27, isnull(sum(b.date_28),0) as date_28, isnull(sum(b.date_29),0) as date_29, isnull(sum(b.date_30),0) as date_30, isnull(sum(b.date_31),0) as date_31
+    from zvw_assy_actual b
+    where bulan = ".$nob2." and tahun = ".$not." AND substring(b.assy_line, 1, 4)='LR06'
+    group by b.cell_type
+    order by cell_type";
+$data2 = sqlsrv_query($connect, strtoupper($qry2));
+//////oci_execute($data2);
 
-$qry3 = "select * from 
-        (
-        select cell_type, 'PLAN' as keterangan,
-        sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
-        sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
-        sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
-        from zvw_plan_assy 
-        where  bulan = ".$nob." and tahun = ".$not." and substr(assy_line, 1, 4)='LR03'
-        group by cell_type
-        UNION ALL
-        --ACTUAL ASSY
-        select b.cell_type, 'ACTUAL',
-        nvl(sum(b.date_1),0) as date_1, nvl(sum(b.date_2),0) as date_2, nvl(sum(b.date_3),0) as date_3, nvl(sum(b.date_4),0) as date_4, nvl(sum(b.date_5),0) as date_5,
-        nvl(sum(b.date_6),0) as date_6, nvl(sum(b.date_7),0) as date_7, nvl(sum(b.date_8),0) as date_8, nvl(sum(b.date_9),0) as date_9, nvl(sum(b.date_10),0) as date_10,
-        nvl(sum(b.date_11),0) as date_11, nvl(sum(b.date_12),0) as date_12, nvl(sum(b.date_13),0) as date_13, nvl(sum(b.date_14),0) as date_14, nvl(sum(b.date_15),0) as date_15,
-        nvl(sum(b.date_16),0) as date_16, nvl(sum(b.date_17),0) as date_17, nvl(sum(b.date_18),0) as date_18, nvl(sum(b.date_19),0) as date_19, nvl(sum(b.date_20),0) as date_20,
-        nvl(sum(b.date_21),0) as date_21, nvl(sum(b.date_22),0) as date_22, nvl(sum(b.date_23),0) as date_23, nvl(sum(b.date_24),0) as date_24, nvl(sum(b.date_25),0) as date_25,
-        nvl(sum(b.date_26),0) as date_26, nvl(sum(b.date_27),0) as date_27, nvl(sum(b.date_28),0) as date_28, nvl(sum(b.date_29),0) as date_29, nvl(sum(b.date_30),0) as date_30, nvl(sum(b.date_31),0) as date_31
-        from zvw_assy_actual b
-        where bulan=".$nob2." and tahun=".$not." AND substr(b.assy_line, 1, 4)='LR03'
-        group by b.cell_type
-        )
-        order by cell_type";
-$data3 = oci_parse($connect, $qry3);
-oci_execute($data3);
+$qry3 = "select cell_type, 'PLAN' as keterangan,
+    sum(PLAN_1) as DATE_1, sum(PLAN_2) as DATE_2, sum(PLAN_3) as DATE_3, sum(PLAN_4) as DATE_4, sum(PLAN_5) as DATE_5, sum(PLAN_6) as DATE_6, sum(PLAN_7) as DATE_7, sum(PLAN_8) as DATE_8, sum(PLAN_9) as DATE_9, sum(PLAN_10) as DATE_10,
+    sum(PLAN_11) as DATE_11, sum(PLAN_12) as DATE_12, sum(PLAN_13) as DATE_13, sum(PLAN_14) as DATE_14, sum(PLAN_15) as DATE_15,sum(PLAN_16) as DATE_16, sum(PLAN_17) as DATE_17, sum(PLAN_18) as DATE_18, sum(PLAN_19) as DATE_19, sum(PLAN_20) as DATE_20,
+    sum(PLAN_21) as DATE_21, sum(PLAN_22) as DATE_22, sum(PLAN_23) as DATE_23, sum(PLAN_24) as DATE_24, sum(PLAN_25) as DATE_25,sum(PLAN_26) as DATE_26, sum(PLAN_27) as DATE_27, sum(PLAN_28) as DATE_28, sum(PLAN_29) as DATE_29, sum(PLAN_30) as DATE_30, sum(PLAN_31) as DATE_31
+    from zvw_plan_assy 
+    where  bulan = ".$nob." and tahun = ".$not." and substring(assy_line, 1, 4)='LR03'
+    group by cell_type
+    UNION ALL
+    --ACTUAL ASSY
+    select b.cell_type, 'ACTUAL',
+    isnull(sum(b.date_1),0) as date_1, isnull(sum(b.date_2),0) as date_2, isnull(sum(b.date_3),0) as date_3, isnull(sum(b.date_4),0) as date_4, isnull(sum(b.date_5),0) as date_5,
+    isnull(sum(b.date_6),0) as date_6, isnull(sum(b.date_7),0) as date_7, isnull(sum(b.date_8),0) as date_8, isnull(sum(b.date_9),0) as date_9, isnull(sum(b.date_10),0) as date_10,
+    isnull(sum(b.date_11),0) as date_11, isnull(sum(b.date_12),0) as date_12, isnull(sum(b.date_13),0) as date_13, isnull(sum(b.date_14),0) as date_14, isnull(sum(b.date_15),0) as date_15,
+    isnull(sum(b.date_16),0) as date_16, isnull(sum(b.date_17),0) as date_17, isnull(sum(b.date_18),0) as date_18, isnull(sum(b.date_19),0) as date_19, isnull(sum(b.date_20),0) as date_20,
+    isnull(sum(b.date_21),0) as date_21, isnull(sum(b.date_22),0) as date_22, isnull(sum(b.date_23),0) as date_23, isnull(sum(b.date_24),0) as date_24, isnull(sum(b.date_25),0) as date_25,
+    isnull(sum(b.date_26),0) as date_26, isnull(sum(b.date_27),0) as date_27, isnull(sum(b.date_28),0) as date_28, isnull(sum(b.date_29),0) as date_29, isnull(sum(b.date_30),0) as date_30, isnull(sum(b.date_31),0) as date_31
+    from zvw_assy_actual b
+    where bulan=".$nob2." and tahun=".$not." AND substring(b.assy_line, 1, 4)='LR03'
+    group by b.cell_type
+    order by cell_type";
+$data3 = sqlsrv_query($connect, strtoupper($qry3));
+//////oci_execute($data3);
 
-$qry40 = "select * from 
-        (
-        select --a.assy_line, 
-        case when a.assy_line = 'LR01#1' then 'LR1#1' 
-        when substr(a.assy_line,0,4) = 'LR06' then 'LR6'|| substr(a.assy_line,5,2)
-        else a.assy_line end as assy_line,
-        a.ng_id_proses, b.ng_name_proses, a.ng_id, b.ng_name, 
-        (
-        select sum(ng_qty) from ztb_assy_trans_ng 
-        where assy_line = a.assy_line and ng_id_proses = a.ng_id_proses 
-        and to_char(tanggal_produksi,'MM') = '".$nob2."'
-        and to_char(tanggal_produksi,'YYYY') = '".$not."'
-        ) as total_qty,
-        sum(a.ng_qty) as qty, count(a.ng_id_proses) as freq 
-        from ztb_assy_trans_ng a
-        inner join ztb_assy_ng b on a.ng_id_proses = b.ng_id_proses and a.ng_id = b.ng_id
-        where to_char(a.tanggal_produksi,'MM') = '".$nob2."' and to_char(a.tanggal_produksi,'YYYY') = '".$not."'
-        group by a.assy_line, a.ng_id_proses, b.ng_name_proses, a.ng_id, b.ng_name
-        )
-        order by assy_line, ng_id_proses, total_qty desc" ;
-$data40 = oci_parse($connect, $qry40);
-oci_execute($data40);
+$qry40 = "select
+    case when a.assy_line = 'LR01#1' then 'LR1#1' 
+    when substring(a.assy_line,0,4) = 'LR06' then 'LR6'+substring(a.assy_line,5,2)
+    else a.assy_line end as assy_line,
+    a.ng_id_proses, b.ng_name_proses, a.ng_id, b.ng_name, 
+    (
+    select sum(ng_qty) from ztb_assy_trans_ng 
+    where assy_line = a.assy_line and ng_id_proses = a.ng_id_proses 
+    and convert(varchar(2), tanggal_produksi, 101) = '".$nob2."'
+    and convert(varchar(4), tanggal_produksi, 111) = '".$not."'
+    ) as total_qty,
+    sum(a.ng_qty) as qty, count(a.ng_id_proses) as freq 
+    from ztb_assy_trans_ng a
+    inner join ztb_assy_ng b on a.ng_id_proses = b.ng_id_proses and a.ng_id = b.ng_id
+    where convert(varchar(2), tanggal_produksi, 101) = '".$nob2."' and convert(varchar(4), tanggal_produksi, 111) = '".$not."'
+    group by a.assy_line, a.ng_id_proses, b.ng_name_proses, a.ng_id, b.ng_name
+    order by assy_line, ng_id_proses, total_qty desc" ;
+$data40 = sqlsrv_query($connect, strtoupper($qry40));
+//////oci_execute($data40);
 
 $qry4 = "select a.tanggal_produksi, a.assy_line, a.ng_id_proses, b.ng_name_proses, a.ng_id, b.ng_name, a.ng_qty, a.perbaikan FROM ztb_assy_trans_ng a
-        INNER JOIN ztb_assy_ng b on a.ng_id_proses = b.ng_id_proses AND a.ng_id = b.ng_id
-        WHERE to_char(a.tanggal_produksi,'MM') = '".$nob2."' AND to_char(a.tanggal_produksi,'YYYY') = '".$not."'
-        ORDER BY a.tanggal_produksi, a.assy_line, a.cell_type" ;
-$data4 = oci_parse($connect, $qry4);
-oci_execute($data4);
+    INNER JOIN ztb_assy_ng b on a.ng_id_proses = b.ng_id_proses AND a.ng_id = b.ng_id
+    WHERE convert(varchar(2), tanggal_produksi, 101) = '".$nob2."' AND convert(varchar(4), tanggal_produksi, 111) = '".$not."'
+    ORDER BY a.tanggal_produksi, a.assy_line, a.cell_type" ;
+$data4 = sqlsrv_query($connect, strtoupper($qry4));
+//////oci_execute($data4);
 
 $qty5 = "select a.id_print, a.id_plan, a.assy_line, a.cell_type, a.pallet, sum(a.qty_act_perpallet) as qty,
-    c.id_pallet, b.position, c.upto_date, c.remark, a.tanggal_produksi
+    c.id_pallet, b.position, c.upto_date, c.remark, convert(varchar, a.tanggal_produksi,121) as tanggal_produksi
     from ztb_assy_kanban a
     left join (select id_print, max(position) as position from ztb_assy_heating group by id_print) b on a.id_print = b.id_print
     left join ztb_assy_heating c on a.id_print = c.id_print and b.position = c.position
     where (b.position in(1,2) or b.position is null) 
-    and to_char(a.tanggal_actual,'YYYYMM') = (select to_char(sysdate-1,'YYYYMM') from dual)
-    group by a.id_print, a.id_plan, a.assy_line, a.cell_type, a.pallet, c.id_pallet, b.position, c.upto_date, c.remark, a.tanggal_produksi
+    and convert(varchar(6), a.tanggal_actual,112) = (select convert(varchar(6), getdate()-1,112))
+    group by a.id_print, a.id_plan, a.assy_line, a.cell_type, a.pallet, c.id_pallet, b.position, c.upto_date, c.remark, 
+    convert(varchar, a.tanggal_produksi,121)
     order by b.position asc";
-$data5 = oci_parse($connect, $qty5);
-oci_execute($data5);
+$data5 = sqlsrv_query($connect, strtoupper($qty5));
+//////oci_execute($data5);
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->createSheet();
@@ -369,7 +358,7 @@ while ($s <= 5) {
 
         $ln='';     $total_plan = 0;
 
-        while ($row1=oci_fetch_object($data1)){
+        while ($row1=sqlsrv_fetch_object($data1)){
             $TGL_1 = $row1->DATE_1;   $TGL_10 = $row1->DATE_10;      $TGL_19 = $row1->DATE_19;      $TGL_28 = $row1->DATE_28;
             $TGL_2 = $row1->DATE_2;   $TGL_11 = $row1->DATE_11;      $TGL_20 = $row1->DATE_20;      $TGL_29 = $row1->DATE_29;
             $TGL_3 = $row1->DATE_3;   $TGL_12 = $row1->DATE_12;      $TGL_21 = $row1->DATE_21;      $TGL_30 = $row1->DATE_30;
@@ -1341,7 +1330,7 @@ while ($s <= 5) {
 
         $ln2='';        $total_plan2 = 0;
 
-        while ($row2=oci_fetch_object($data2)){
+        while ($row2=sqlsrv_fetch_object($data2)){
             $TGL_1 = $row2->DATE_1;   $TGL_10 = $row2->DATE_10;      $TGL_19 = $row2->DATE_19;      $TGL_28 = $row2->DATE_28;
             $TGL_2 = $row2->DATE_2;   $TGL_11 = $row2->DATE_11;      $TGL_20 = $row2->DATE_20;      $TGL_29 = $row2->DATE_29;
             $TGL_3 = $row2->DATE_3;   $TGL_12 = $row2->DATE_12;      $TGL_21 = $row2->DATE_21;      $TGL_30 = $row2->DATE_30;
@@ -2329,7 +2318,7 @@ while ($s <= 5) {
 
         $ln3='';        $total_plan3 = 0;
 
-        while ($row3=oci_fetch_object($data3)){
+        while ($row3=sqlsrv_fetch_object($data3)){
             $TGL_1 = $row3->DATE_1;   $TGL_10 = $row3->DATE_10;      $TGL_19 = $row3->DATE_19;      $TGL_28 = $row3->DATE_28;
             $TGL_2 = $row3->DATE_2;   $TGL_11 = $row3->DATE_11;      $TGL_20 = $row3->DATE_20;      $TGL_29 = $row3->DATE_29;
             $TGL_3 = $row3->DATE_3;   $TGL_12 = $row3->DATE_12;      $TGL_21 = $row3->DATE_21;      $TGL_30 = $row3->DATE_30;
@@ -3166,7 +3155,7 @@ while ($s <= 5) {
         $ng_pro = '';   $ng_proses = '';    $ng_time = '';
 
 
-        while ($row40=oci_fetch_object($data40)) {
+        while ($row40=sqlsrv_fetch_object($data40)) {
             if($ln40 == $row40->ASSY_LINE){
                 $line40 = '';
             }else{
@@ -3294,7 +3283,7 @@ while ($s <= 5) {
 
         $no4=3;
 
-        while ($row4=oci_fetch_object($data4)) {
+        while ($row4=sqlsrv_fetch_object($data4)) {
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no4, $row4->TANGGAL_PRODUKSI)
                         ->setCellValue('B'.$no4, $row4->ASSY_LINE)
@@ -3408,7 +3397,7 @@ while ($s <= 5) {
 
         $no5=3;
 
-        while ($row5=oci_fetch_object($data5)) {
+        while ($row5=sqlsrv_fetch_object($data5)) {
             $objPHPExcel->setActiveSheetIndex($s)
                         ->setCellValue('A'.$no5, $row5->ID_PRINT)
                         ->setCellValue('B'.$no5, $row5->ID_PLAN)
@@ -3471,5 +3460,14 @@ $objPHPExcel->setActiveSheetIndex(0);
 
 // Save Excel 2007 file
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-$objWriter->save(str_replace(__FILE__,$_SERVER['DOCUMMENT_ROOT'].'C:\xampp/Kuraire/wms/schedule/assembly_report.xls',__FILE__));
+$objWriter->save(str_replace(__FILE__,$_SERVER['DOCUMMENT_ROOT'].'E:\xampp/htdocs/fi/schedule/assembly_report.xls',__FILE__));
+//E:\xampp\htdocs\fi\schedule
+
+// $objPHPExcel->setActiveSheetIndex(0);
+// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+// $objWriter->save(str_replace('.php', '.xls', __FILE__));
+// header('Content-type: application/vnd.ms-excel');
+// header('Content-Disposition: attachment; filename="assembly_report.xls"');
+// $objWriter->save('php://output');
+
 ?>

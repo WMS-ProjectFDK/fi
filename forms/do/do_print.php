@@ -10,7 +10,7 @@ $result = array();
 
 $do = isset($_REQUEST['do']) ? strval($_REQUEST['do']) : '';
 
-$sql = "select SLIP_NO,SLIP_DATE,COMPANY_CODE,SLIP_TYPE,UPPER_ITEM_NO,UPPER_LEVEL_NO,UPPER_QTY,PERSON_CODE,DISPLAY_TYPE,APPROVAL_DATE,APPROVAL_PERSON_CODE,SECTION_CODE,WO_NO from mte_header where slip_no='$do'";
+$sql = "select SLIP_NO,cast(SLIP_DATE as varchar(10)) as SLIP_DATE,COMPANY_CODE,SLIP_TYPE,UPPER_ITEM_NO,UPPER_LEVEL_NO,UPPER_QTY,PERSON_CODE,DISPLAY_TYPE,APPROVAL_DATE,APPROVAL_PERSON_CODE,SECTION_CODE,WO_NO from mte_header where slip_no='$do'";
 $data_header = sqlsrv_query($connect, strtoupper($sql));
 $dt = sqlsrv_fetch_object($data_header);
 
@@ -44,7 +44,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:270px;height: 35px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:940px;font-size:9px'>

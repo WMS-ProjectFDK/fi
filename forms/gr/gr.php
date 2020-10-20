@@ -512,7 +512,7 @@ $dt_q = sqlsrv_fetch_object($data_q);
 				                {field:'UOM_Q', title:'UoM', halign:'center', align:'center', width:50, hidden: true},
 				                {field:'QTY', title:'QTY', halign:'center', align:'right', width:70},
 				                {field:'U_PRICE', title:'PRICE ('+row.CURR_SHORT+')', halign:'center', align:'center', width:70},
-				                {field:'AMT_L', title:'AMOUNT', halign:'center', align:'right', width:70},
+				                {field:'AMT_O', title:'AMOUNT (ORG)', halign:'center', align:'right', width:70},
 							]],
 							onResize:function(){
 								//alert(index);

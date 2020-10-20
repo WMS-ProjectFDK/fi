@@ -154,16 +154,13 @@ h2 {
 	<div id="toolbar">
 		<fieldset style="border-radius:4px; border-radius:4px; width:auto; height:45px; float:left;"><legend><span class="style3"><strong>BILL OF MATERIAL</strong></span></legend>
 			<div class="fitem">
-				<span style="width:110px;display:inline-block;">Item No.</span>
-				<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px',
-				onSelect:function(rec){
-					//alert(rec.id_name_item);
-					var spl = rec.id_name_item;
-					var sp = spl.split(' - ');
-					$('#txt_item_name').textbox('setValue', sp[1]);
-					$('#cmb_item_no').combobox('setValue', sp[0]);
-				}"></select>
-				
+				<span style="width:150px;display:inline-block;">Item NO. [UPPER]</span>
+				<select style="width:330px;" name="cmb_item_no" id="cmb_item_no" class="easyui-combobox" data-options=" url:'../json/json_item_fg.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px'"></select>
+				<label><input type="checkbox" name="ck_item_no" id="ck_item_no" checked="true">All</input></label>
+				<span style="width:100px;display:inline-block;"></span>
+				<span style="width:150px;display:inline-block;">Item NO. [LOWER]</span>
+				<select style="width:330px;" name="cmb_item_no" id="cmb_item_low" class="easyui-combobox" data-options=" url:'../json/json_item_material.php', method:'get', valueField:'id_item', textField:'id_name_item', panelHeight:'100px'"></select>
+				<label><input type="checkbox" name="ck_item_low" id="ck_item_low" checked="true">All</input></label>
 			</div>
 		</fieldset>
 		<div style="clear:both;margin-bottom:10px;"></div>
@@ -183,7 +180,7 @@ h2 {
 		</div>
 	</div>
 
-	<table id="dg" title="SALES UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
+	<table id="dg" title="BILL OF MATERIAL" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
 		var flagTipe = "";
@@ -217,11 +214,31 @@ h2 {
 		}
 
 		$(function(){
+			$('#cmb_item_no').combobox('disable');
+			$('#ck_item_no').change(function(){
+				if ($(this).is(':checked')) {
+					$('#cmb_item_no').combobox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#cmb_item_no').combobox('enable');
+				};
+			})
+
+			$('#cmb_item_low').combobox('disable');
+			$('#ck_item_low').change(function(){
+				if ($(this).is(':checked')) {
+					$('#cmb_item_low').combobox('disable');
+				}
+				if (!$(this).is(':checked')) {
+					$('#cmb_item_low').combobox('enable');
+				};
+			})
+
 			$('#dg').datagrid({
 				singleSelect:true,
 			    columns:[[
                     {field:'UPPER_ITEM_NO',title:'ITEM NO.',width:55, halign: 'center', align: 'center'},
-				    {field:'DESCRIPTION',title:'DESCRIPTION',width:60, halign: 'center', align: 'center'},
+				    {field:'DESCRIPTION',title:'DESCRIPTION',width:60, halign: 'center'},
 					{field:'LEVEL_NO',title:'LEVEL_NO', width:60, halign: 'center'},
 					{field:'INPUT_DATE',title:'INPUT_DATE', width:150, halign: 'center'}
 			    ]],
@@ -265,14 +282,42 @@ h2 {
 		})
         
 		function filterData(){
-			$('#dg').datagrid('load', {
-				item_no: $('#cmb_item_no').datebox('getValue'),
-			});
-			$('#dg').datagrid({
-				url:'get_bom.php'
-			})
-		   	$('#dg').datagrid('enableFilter');
-			
+			var ck_item_no='false';
+			var ck_item_low='false';
+			flag=0;
+
+			if($('#ck_item_no').attr("checked")){
+				ck_item_no='true';
+				flag+=1;
+			}
+
+			if($('#ck_item_low').attr("checked")){
+				ck_item_low='true';
+				flag+=1;
+			}
+
+			if (flag == 2){
+				$.messager.show({title: 'BOM FILTER',msg:'Data Not filter'});
+			}else{
+				$('#dg').datagrid('load', {
+					item_no: $('#cmb_item_no').combobox('getValue'),
+					ck_item_no: ck_item_no,
+					cmb_item_low: $('#cmb_item_low').combobox('getValue'),
+					ck_item_low: ck_item_low
+				});
+
+				console.log('get_bom.php?item_no='+$('#cmb_item_no').combobox('getValue')+
+					'&ck_item_no='+ck_item_no+
+					'&cmb_item_low='+$('#cmb_item_low').combobox('getValue')+
+					'&ck_item_low='+ck_item_low
+				)
+
+				$('#dg').datagrid({
+					url:'get_bom.php'
+				})
+
+				$('#dg').datagrid('enableFilter');
+			}
 		}
 
 		function deleteBOM(){
@@ -475,7 +520,7 @@ h2 {
 				$('#dg_add').datagrid('endEdit',i);
 				dataRows.push({
 					upper_item_no: $('#cmb_item_no_add').combobox('getValue'),
-					level_no: $('#level_no_add').textbox('getValue'),
+					level_no: isNaN($('#level_no_add').textbox('getValue')) ? 0 : $('#level_no_add').textbox('getValue'),
 					line_no: jmrow,
 					lower_item_no: $('#dg_add').datagrid('getData').rows[i].ITEM_NO,
 					quantity: $('#dg_add').datagrid('getData').rows[i].QUANTITY,

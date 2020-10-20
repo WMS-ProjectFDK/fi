@@ -32,7 +32,7 @@ for($i=4;$i<=$hasildata;$i++){
 	$ctn_gross_weight = trim($data->val($i,6)) ;
 	
 	if($net != ''){
-		$kode = "select pallet_size_type_code,panjang,lebar from pallet_size_type where upper(pallet_size_type_name) = trim('$pallet_size')";
+		$kode = "select pallet_size_type_code,panjang,lebar from pallet_size_type where upper(pallet_size_type_name) = '$pallet_size' ";
 		$data_kd = sqlsrv_query($connect, $kode);
 		$dt_kode = sqlsrv_fetch_object($data_kd);
 

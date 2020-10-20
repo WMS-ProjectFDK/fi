@@ -1,9 +1,14 @@
 <?php
 error_reporting(0);
 date_default_timezone_set("Asia/Bangkok");
-session_start();
-$user = $_SESSION['id_wms'];
+// session_start();
+// $user = $_SESSION['id_wms'];
+// $user_name = $_SESSION['id_wms'];
+$nom = 0;
+$result = array();
+$items = array();
 
+$hr = date('Y-m-d');
 include("../../connect/conn.php");
 
 $device = isset($_REQUEST['device']) ? strval($_REQUEST['device']) : '';
@@ -37,17 +42,12 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	$allDataInSheet = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 	$arrayCount = count($allDataInSheet);  // Here get total count of row in that Excel sheet
 
-	$user_name = $_SESSION['id_wms'];
-	$nom = 0;
-	$result = array();
-	$items = array();
-
-	$hr = date('Y-m-d');
-
 	for($i=1;$i<=$arrayCount;$i++){
 		$id = trim($allDataInSheet[$i]["A"]);
 		
-		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) select $id,'$hr',0 ";
+		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag)
+			select $id,'$hr',0 from ztb_wh_kanban_trans_fg 
+			where not exists (select slip_no from ztb_wh_kanban_trans_fg where slip_no = '$id') ";
 		$sqlNya = sqlsrv_query($connect, $sql);
 		if( $sqlNya === false ) {
 			if( ($errors = sqlsrv_errors() ) != null) {

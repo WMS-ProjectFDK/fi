@@ -32,12 +32,12 @@
 	include("../../connect/conn.php");
 
 	$sql  = "select TOP 150 dnh.dn_no, CAST(dnh.dn_date as varchar(10)) as dn_date, dnh.customer_code, com.COMPANY,
-        sum(dnd.AMT_O) as AMT_O, count(dnd.line_no) as ITEM
+        sum(dnd.AMT_O) as AMT_O, count(dnd.line_no) as ITEM, dnh.ATTN, dnh.DATE_SHIPMENT, dnh.DATE_EX_FACTORY, dnh.REMARK, dnh.BANK_SEQ, dnh.SIGNATURE_NAME
         from dn_header dnh
         inner join dn_details dnd on dnh.DN_NO=dnd.DN_NO
         left join company com on dnh.CUSTOMER_CODE=com.COMPANY_CODE
         $where
-        group by dnh.dn_no, dnh.dn_date, dnh.customer_code, com.COMPANY
+        group by dnh.dn_no, dnh.dn_date, dnh.customer_code, com.COMPANY, dnh.ATTN, dnh.DATE_SHIPMENT, dnh.DATE_EX_FACTORY, dnh.REMARK, dnh.BANK_SEQ, dnh.SIGNATURE_NAME
         ORDER BY dnh.dn_date desc"; 
 	$data = sqlsrv_query($connect, strtoupper($sql));
 	$items = array();

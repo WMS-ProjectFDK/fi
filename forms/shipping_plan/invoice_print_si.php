@@ -98,12 +98,12 @@ if($si_sts == 'final_si'){
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
 		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(13),'<br>') end as special_info,
 		sih.notify_name_2+'<br />  '+sih.notify_addr1_2+'<br />'+sih.notify_addr2_2+'<br />'+sih.notify_addr3_2+'<br />'+sih.notify_tel_2+'<br />'+sih.notify_fax_2+'<br/>'+sih.notify_attn_2 NOTIFY_NAME_2,
-		'<br />&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_bl.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
-		'<br />&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
+		'<br/>&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
+		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
+		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
+		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_bl.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_bl,
+		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_co,
+		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_name,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_name_iv
 		from answer ans
 		inner join si_header sih on ans.si_no = sih.si_no
 		left outer join (select si_no,doc_detail,doc_name from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = sih.si_no
@@ -526,11 +526,12 @@ $content .= "
 								".$data->PALLET."&nbsp;PALLET
 							</td>
 							<td valign='middle' style='border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:300px;padding: 0px 5px;'>
-								&nbsp;&nbsp;&nbsp;".number_format($data->QTY)."&nbsp;PIECES &nbsp;".$dt_h->DOC_DETAIL_CO."&nbsp; OF<br/>
-								&nbsp;&nbsp;&nbsp;".$data->DESCRIPTION."<br/>
-								&nbsp;&nbsp;&nbsp;".$dt_h->DOC_DETAIL_BL."<br/><br/><br/>
+								&nbsp;&nbsp;&nbsp;".number_format($data->QTY)."&nbsp;PIECES<br/>
+								&nbsp;&nbsp;&nbsp;".str_replace("&NBSP;", "&nbsp;", $dt_h->DOC_DETAIL_CO)."&nbsp; OF<br/>
+								&nbsp;&nbsp;&nbsp;".str_replace("&NBSP;", "&nbsp;", $data->DESCRIPTION)."<br/>
+								&nbsp;&nbsp;&nbsp;".str_replace("&NBSP;", "&nbsp;", $dt_h->DOC_DETAIL_BL)."<br/><br/><br/>
 								&nbsp;&nbsp;&nbsp;".$et."<br/>
-								&nbsp;&nbsp;&nbsp;<p style:'font-size: 9px;'><b>".$dt_h->DOC_DETAIL_IV."</b></p>
+								&nbsp;&nbsp;&nbsp;<p style:'font-size: 9px;'><b>".str_replace("&NBSP;", "&nbsp;", $dt_h->DOC_DETAIL_IV)."</b></p>
 							</td>
 							<td valign='middle' style='border-right:0px solid #ffffff;border-bottom:0px solid #ffffff;font-size:10px;height:25px;width:180px;'><br/><br/><br/>
 								&nbsp;&nbsp;&nbsp;GW&nbsp;&nbsp;:&nbsp;".number_format($data->GW,2)."&nbsp;&nbsp;&nbsp;".$data->UOM_GW."<br/>
@@ -586,7 +587,7 @@ $content .= "
 						<tr>
 							<td style='width:150px;font-size:10px;border:0px solid #ffffff;'> REQUIREMENT <br>OF SHIPPING DOCUMENT</td>
 							<td style='font-size:10px;border:0px solid #ffffff;' valign='middle'>:</td>
-							<td style='width:400px;font-size:10px;border:0px solid #ffffff;' valign='middle'>".$dt_h->DOC_NAME_BL."</td>
+							<td style='width:400px;font-size:10px;border:0px solid #ffffff;' valign='middle'>".str_replace("&NBSP;", "&nbsp;", $dt_h->DOC_NAME_BL)."</td>
 						</tr>
 					</table>
 				</td>
