@@ -20,7 +20,7 @@ if (isset($_SESSION['id_wms'])){
 		$dt = sqlsrv_fetch_object($data);
 
 		if(intval($dt->jum) == 0){
-			$ins  = "insert into ztb_safety_stock (select $item_no,0,'MSTR',0,1,'N',1 from dual)";
+			$ins  = "insert into ztb_safety_stock values($item_no,0,'MSTR',0,1,'N',1)";
 			$data_ins = sqlsrv_query($connect, $ins);
 			if($data_ins === false ) {
 				if(($errors = sqlsrv_errors()) != null) {  
@@ -37,7 +37,7 @@ if (isset($_SESSION['id_wms'])){
 		}
 	}
 
-	$sql = "BEGIN ZSP_SAFETY_STOCK_1(); END;";
+	$sql = "{call ZSP_SAFETY_STOCK_1}";
 	$stmt = sqlsrv_query($connect, $sql);
 
 	if($stmt === false ) {
@@ -50,7 +50,6 @@ if (isset($_SESSION['id_wms'])){
 
 	if($msg != ''){
 		$msg .= "Proses Create Safety_stock Error";
-		break;
 	}
 }else{
 	$msg .= 'Session Expired';
@@ -61,4 +60,5 @@ if($msg != ''){
 }else{
 	echo json_encode("success");
 }
+// <!-- Fatal error: 'break' not in the 'loop' or 'switch' context in E:\xampp\htdocs\fi\forms\master\safety_stock_save.php on line 53 -->
 ?>

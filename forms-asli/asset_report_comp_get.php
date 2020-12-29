@@ -1,8 +1,8 @@
 <?php
-	include("../connect/conn_accpac.php");
+	include("../../connect/conn_accpac.php");
 	// header("Content-type: application/json");
 	ini_set('memory_limit', '-1');
-	require_once '../class/phpexcel/PHPExcel.php';
+	require_once '../../class/phpexcel/PHPExcel.php';
 	$cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
 	$cacheSettings = array( ' memoryCacheSize ' => '8MB');
 	PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
@@ -367,7 +367,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 $objDrawing = new PHPExcel_Worksheet_Drawing();
 $objDrawing->setName('WMS-FDKI');
 $objDrawing->setDescription('FDKI');
-$objDrawing->setPath('../images/logo-print4.png');
+$objDrawing->setPath('../../images/logo-print4.png');
 $objDrawing->setWidth('400px');
 $objDrawing->setCoordinates('A1');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());

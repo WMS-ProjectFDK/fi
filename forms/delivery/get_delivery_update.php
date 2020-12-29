@@ -33,28 +33,22 @@ $sql .= "  ind.qty," ;
 $sql .= "  ind.container_no," ; #(add Ver1.0)
 $sql .= "  ind.seal_no," ;      #(add Ver1.0)
 $sql .= "  un.unit," ;
-
+$sql .= "  wh.this_inventory," ;
+$sql .= "  case when wh.this_inventory < ind.qty then 'BELUM BISA DI PROSES' else 'SUDAH BISA DIPROSES' END STS," ;
 $sql .= "  soh.customer_code," ;
 $sql .= "  c.company customer " ;
-$sql .= " from indication ind," ;
-$sql .= "      do_so      dos," ;
-$sql .= "      do_header  doh," ;
-$sql .= "      so_header  soh," ;
-$sql .= "      so_details sod," ;
-$sql .= "      company  c, " ;
-$sql .= "      unit     un, " ;
-$sql .= "      item     i  " ;
-$sql .= " where ind.commit_date is null " ;
-$sql .= "   and ind.answer_no = dos.answer_no  " ;
-$sql .= "   and dos.do_no = doh.do_no  " ;
-$sql .= "   and ind.so_no = sod.so_no  " ;
-$sql .= "   and ind.so_line_no = sod.line_no  " ;
-$sql .= "   and sod.so_no = soh.so_no  " ;
-$sql .= "   and sod.item_no = i.item_no  " ;
-$sql .= "   and i.uom_q = un.unit_code  " ;
-$sql .= "   and soh.customer_code = c.company_code  " ;
-$sql .= "   and ind.ex_factory BETWEEN '$ex_factory' AND '$ex_factory_z' ";
-$sql .= " order by c.company,dos.do_no,ind.answer_no" ; #(mod Ver1.0)
+$sql .= "  from indication ind " ;
+$sql .= "  left join     do_so      dos on ind.answer_no = dos.answer_no " ;
+$sql .= "  left join     do_header  doh on dos.do_no = doh.do_no " ;
+$sql .= "  left join     so_details sod on ind.so_no = sod.so_no and ind.so_line_no = sod.line_no " ;
+$sql .= "  left join     so_header  soh on sod.so_no = soh.so_no " ;
+$sql .= "  left join     company  c on soh.customer_code = c.company_code " ;
+$sql .= "  left join     item     i on sod.item_no = i.item_no " ;
+$sql .= "  left join     unit     un on i.uom_q = un.unit_code " ;
+$sql .= "  left join     whinventory     wh on wh.item_no = i.item_no " ;
+$sql .= "  where ind.commit_date is null " ;
+$sql .= "  and ind.ex_factory BETWEEN '$ex_factory' AND '$ex_factory_z' ";
+$sql .= "  order by c.company,dos.do_no,ind.answer_no" ; #(mod Ver1.0)
 //echo $sql;
 
 $data_cek = sqlsrv_query($connect, strtoupper($sql));
@@ -64,8 +58,21 @@ $rowno=0;
 
 while($row = sqlsrv_fetch_object($data_cek)){
 	array_push($items, $row);
+	$wh = $items[$rowno]->THIS_INVENTORY; 
+	$items[$rowno]->THIS_INVENTORY = number_format($wh);
+
+	$q = $items[$rowno]->QTY; 
+	$items[$rowno]->QTY = number_format($q);
+
 	$it = "'".$items[$rowno]->ANSWER_NO."'";
 	$items[$rowno]->INPUT = '<a href="javascript:void(0)" onclick="input_container('.$it.')">SET</a>';
+	$a = $items[$rowno]->STS;
+	if($a=='SUDAH BISA DIPROSES'){
+			$items[$rowno]->STS = '<span style="color:blue;font-size:11px;"><b>'.$a.'</b></span>';
+	}else{
+			$items[$rowno]->STS = '<span style="color:red;font-size:11px;"><b>'.$a.'</b></span>';
+	}
+	
 	$rowno++;
 }
 

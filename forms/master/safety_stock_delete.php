@@ -17,10 +17,9 @@ if($data_del === false ) {
 
 if($msg != ''){
 	$msg .= "Delete Process Error : $del";
-	break;
 }
 
-$sql = "BEGIN ZSP_SAFETY_STOCK_1(); END;";
+$sql = "{call ZSP_SAFETY_STOCK_1}";
 $stmt = sqlsrv_query($connect, $sql);
 
 if($stmt === false ) {
@@ -33,7 +32,7 @@ if($stmt === false ) {
 
 if($msg != ''){
 	$msg .= "Proses Create Safety_stock Error";
-	break;
+	// break;
 }
 
 if ($msg != ''){

@@ -12,7 +12,8 @@ if (isset($_SESSION['id_wms'])){
     $msg = '';
 
     foreach($queries as $query){
-		$answer_no = $query->answer_no;
+        $answer_no = $query->answer_no;
+        $do_no = $query->do_no;
         
         $sql = "{call DELIVERY_RESTORE(?)}";		
         $params = array(  
@@ -26,6 +27,16 @@ if (isset($_SESSION['id_wms'])){
                     $msg .= "message: ".$error[ 'message']."<br/>";  
                 }  
             }
+        }else{
+            $ins2 = "insert into ZTB_LOG_HISTORY_DTL 
+                VALUES ('".$_SESSION['id_wms']."', 
+                        '".$_SESSION['name_wms']."', 
+                        'DELIVERY RESTORE', 
+                        'RESTORE', 
+                        '".$do_no.' ('.$answer_no.")', 
+                        SYSDATETIME()
+                    )";
+            $insert2 = sqlsrv_query($connect, $ins2);
         }
 
 

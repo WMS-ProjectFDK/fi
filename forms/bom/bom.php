@@ -166,9 +166,10 @@ h2 {
 		<div style="clear:both;margin-bottom:10px;"></div>
 		<div style="margin-top: 5px;margin: 5px;">
 			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
-			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="add" onclick="addBOM()"><i class="fa fa-plus" aria-hidden="true"></i> Add BOM</a>
-			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="edit" onclick="editBOM()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit BOM</a>
-			<a href="javascript:void(0)" style="width: 100px;" class="easyui-linkbutton c2" id="delete" onclick="deleteBOM()"><i class="fa fa-trash" aria-hidden="true"></i> Delete BOM</a>
+			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="add" onclick="addBOM()"><i class="fa fa-plus" aria-hidden="true"></i> Add BOM</a>
+			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="edit" onclick="editBOM()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit BOM</a>
+			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="delete" onclick="deleteBOM()"><i class="fa fa-trash" aria-hidden="true"></i> Delete BOM</a>
+			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="delete" onclick="downloadBOM()"><i class="fa fa-download" aria-hidden="true"></i> Download BOM</a>
 		</div>
 		<div style="clear:both;"></div>
 	</div>
@@ -281,6 +282,8 @@ h2 {
 			})
 		})
         
+		var get_url='';
+
 		function filterData(){
 			var ck_item_no='false';
 			var ck_item_low='false';
@@ -297,27 +300,32 @@ h2 {
 			}
 
 			if (flag == 2){
-				$.messager.show({title: 'BOM FILTER',msg:'Data Not filter'});
-			}else{
-				$('#dg').datagrid('load', {
-					item_no: $('#cmb_item_no').combobox('getValue'),
-					ck_item_no: ck_item_no,
-					cmb_item_low: $('#cmb_item_low').combobox('getValue'),
-					ck_item_low: ck_item_low
-				});
-
-				console.log('get_bom.php?item_no='+$('#cmb_item_no').combobox('getValue')+
-					'&ck_item_no='+ck_item_no+
-					'&cmb_item_low='+$('#cmb_item_low').combobox('getValue')+
-					'&ck_item_low='+ck_item_low
-				)
-
-				$('#dg').datagrid({
-					url:'get_bom.php'
-				})
-
-				$('#dg').datagrid('enableFilter');
+				$.messager.alert('INFORMATION','No filter data, system only show 150 records','info');
 			}
+			
+			$('#dg').datagrid('load', {
+				item_no: $('#cmb_item_no').combobox('getValue'),
+				ck_item_no: ck_item_no,
+				cmb_item_low: $('#cmb_item_low').combobox('getValue'),
+				ck_item_low: ck_item_low
+			});
+
+			console.log('get_bom.php?item_no='+$('#cmb_item_no').combobox('getValue')+
+				'&ck_item_no='+ck_item_no+
+				'&cmb_item_low='+$('#cmb_item_low').combobox('getValue')+
+				'&ck_item_low='+ck_item_low
+			)
+
+			get_url = '?item_no='+$('#cmb_item_no').combobox('getValue')+
+						'&ck_item_no='+ck_item_no+
+						'&cmb_item_low='+$('#cmb_item_low').combobox('getValue')+
+						'&ck_item_low='+ck_item_low;
+
+			$('#dg').datagrid({
+				url:'get_bom.php'
+			})
+
+			$('#dg').datagrid('enableFilter');
 		}
 
 		function deleteBOM(){
@@ -347,6 +355,20 @@ h2 {
 			}else{
 				$.messager.show({title: 'BOM DELETE',msg:'Data Not select'});
 			}
+		}
+
+		function downloadBOM(){
+			if (get_url != ''){
+				console.log('bom_download_proses.php'+get_url);
+				$.post('bom_download_proses.php'+get_url,{}).done(function(res){
+					download_excel();
+				});
+			}
+		}
+
+		function download_excel(){
+			url_download = 'bom_download_xls.php';
+			window.open(url_download);
 		}
 
 		function addBOM(){

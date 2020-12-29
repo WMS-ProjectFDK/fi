@@ -115,7 +115,7 @@ h2 {
 	<table id="dg_viewKur" class="easyui-datagrid" style="width:100%;height:100%;"></table>
 </div>
 
-<div id='dlg_viewInv' class="easyui-dialog" style="width:900px;height:300px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true">
+<div id='dlg_viewInv' class="easyui-dialog" style="width:1000px;height:300px;padding:5px 5px;" closed="true" buttons="#dlg-buttons-view_po" data-options="modal:true">
 	<table id="dg_viewInv" class="easyui-datagrid" style="width:100%;height:100%;"></table>
 </div>
 
@@ -311,7 +311,9 @@ h2 {
 			    {field:'CR_DATE', title:'Cargo Ready.', width: 200, halign: 'center'},
 			    {field:'DO_NO', title:'Invoice No', width: 150, halign: 'center'},
 			    {field:'ITEM_NO', title:'Item No', width: 70, halign: 'center'},
-			    {field:'QTY', title:'Quantity', width: 100, halign: 'center', align: 'right'}]],
+			    {field:'QTY', title:'Quantity', width: 100, halign: 'center', align: 'right'},
+				{field:'STS_STOCK', title:'STATUS', width: 120, halign: 'center'}
+			]],
 			onLoadSuccess: function (data) {
 				for (i=0; i<data.rows.length; i++) {
                     $(this).datagrid('beginEdit',i);

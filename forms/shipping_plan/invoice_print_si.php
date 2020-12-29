@@ -37,7 +37,7 @@ if($si_sts == 'final_si'){
 		replace(sdoc_co.doc_name,char(13),'<br>') doc_name_co,
 		replace(sdoc_iv.doc_name,char(13),'<br>') doc_name_iv,
 		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(13),'<br>') end as special_info,
-		b.notify_name_2 + '<br/>  '+ b.notify_addr1_2+'<br/>'+ b.notify_addr2_2+'<br/>'+ b.notify_addr3_2+'<br/>'+b.notify_tel_2+'<br/>'+ b.notify_fax_2+'<br/>'+b.notify_attn_2 NOTIFY_NAME_2, 
+		b.notify_name_2, b.notify_addr1_2, b.notify_addr2_2, b.notify_addr3_2, b.notify_tel_2, b.notify_fax_2, b.notify_attn_2, 
 		replace(a.ship_name,char(13),'<br>') as ship_name, ans.crs_remark,
 		CONVERT(varchar, a.do_date,103) as do_date
 		from do_header a
@@ -97,7 +97,7 @@ if($si_sts == 'final_si'){
 		replace(ans.vessel,char(13),'<br>') as ship_name, sih.load_port, sih.emkl_name, sih.emkl_tel, sih.emkl_fax, sih.emkl_attn, CAST(getdate() as varchar(13)) as do_date,
 		sih.shipping_type as desc_method, sih.disch_port, sih.final_dest, sih.cust_si_no as SI_NO_FIX, 
 		payment_type, payment_remark, sih.shipping_type, zsd.containers, zsd.jum, case when shipping_type <> 'LCL' then '' else replace(sih.special_info,char(13),'<br>') end as special_info,
-		sih.notify_name_2+'<br />  '+sih.notify_addr1_2+'<br />'+sih.notify_addr2_2+'<br />'+sih.notify_addr3_2+'<br />'+sih.notify_tel_2+'<br />'+sih.notify_fax_2+'<br/>'+sih.notify_attn_2 NOTIFY_NAME_2,
+		sih.notify_name_2, sih.notify_addr1_2, sih.notify_addr2_2, sih.notify_addr3_2, sih.notify_tel_2, sih.notify_fax_2, sih.notify_attn_2,
 		'<br/>&nbsp;&nbsp;&nbsp;'+replace(sdoc_bl.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_bl,
 		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_co.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_co,
 		'<br/>&nbsp;&nbsp;&nbsp;'+ replace(sdoc_iv.doc_detail,char(13),'<br>&nbsp;&nbsp;&nbsp;') doc_detail_iv,
@@ -212,7 +212,7 @@ if($si_sts == 'final_si'){
 	$book_no = $dt_h->BOOKING_NO;
 	//$notify = $dt_h->PBY." ".$dt_h->PDAYS." ".$dt_h->PDESC;
 	$notify = $dt_h->NOTIFY_NAME.'<br>'.$dt_h->NOTIFY_ADDR1.'<br>'.$dt_h->NOTIFY_ADDR2.'<br>'.$dt_h->NOTIFY_ADDR3.'<br>'.$dt_h->NOTIFY_TEL.'<br>'.$dt_h->NOTIFY_FAX."<br>".$dt_h->NOTIFY_ATTN;
-	$notify2 = $dt_h->NOTIFY_NAME_2;
+	$notify2 = $dt_h->NOTIFY_NAME_2.'<br>'.$dt_h->NOTIFY_ADDR1_2.'<br>'.$dt_h->NOTIFY_ADDR2_2.'<br>'.$dt_h->NOTIFY_ADDR3_2.'<br>'.$dt_h->NOTIFY_TEL_2.' - '.$dt_h->NOTIFY_FAX_2."<br>".$dt_h->NOTIFY_ATTN_2;
 
 	if ($dt_h->DESC_METHOD == 'FCL'){
 		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>
@@ -253,7 +253,7 @@ if($si_sts == 'final_si'){
 	$book_no = 'TBA';
 
 	$notify = $dt_h->NOTIFY_NAME.'<br>'.$dt_h->NOTIFY_ADDR1.'<br>'.$dt_h->NOTIFY_ADDR2.'<br>'.$dt_h->NOTIFY_ADDR3.'<br>'.$dt_h->NOTIFY_TEL.' - '.$dt_h->NOTIFY_FAX."<br>".$dt_h->NOTIFY_ATTN;
-	$notify2 = $dt_h->NOTIFY_NAME_2;
+	$notify2 = $dt_h->NOTIFY_NAME_2.'<br>'.$dt_h->NOTIFY_ADDR1_2.'<br>'.$dt_h->NOTIFY_ADDR2_2.'<br>'.$dt_h->NOTIFY_ADDR3_2.'<br>'.$dt_h->NOTIFY_TEL_2.' - '.$dt_h->NOTIFY_FAX_2."<br>".$dt_h->NOTIFY_ATTN_2;
 
 	if ($dt_h->DESC_METHOD == 'FCL'){
 		$truck = "&nbsp;&nbsp;&nbsp;".$dt_h->DESC_METHOD."<br/>

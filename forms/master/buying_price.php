@@ -310,9 +310,9 @@ $menu_id = $_GET['id'];
 						leadtime : $('#lead_edit').numberbox('getValue')
 					}).done(function(res){
 					
-						if(res.length == 11){
+						if(res.length == 4){
 							$('#dlg_edit').dialog('close')
-							$('#dg').datagrid('loadData',[]);
+							$('#dg').datagrid('reload');
 							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>','info');
 							
 						}else{
@@ -337,9 +337,9 @@ $menu_id = $_GET['id'];
 						// alert($('#price_add').numberbox('getValue'));
 						// alert($('#lead_add').numberbox('getValue'));
 						
-						if(res.length == 11){
+						if(res.length == 4){
 							$('#dlg_add').dialog('close')
-							$('#dg').datagrid('loadData',[]);
+							$('#dg').datagrid('reload');
 							$.messager.alert('INFORMATION','Insert Data Success..!!<br/>','info');
 							
 						}else{
@@ -372,23 +372,40 @@ $menu_id = $_GET['id'];
 								title:'Please waiting',
 								msg:'removing data...'
 							});
-							// console.log('delete_bom.php?item_no='+row.UPPER_ITEM_NO+'&level_no='+row.LEVEL_NO)
+
 							$.post('del_buying_price.php',{
 									item_no: row.ITEM_NO,
 									supplier_code: row.SUPPLIER_CODE,
-									rank: row.ALTER_PROCEDURE},
-							function(result){
-								if (result.length == 7){
+									rank: row.ALTER_PROCEDURE
+							}).done(function(res){
+							
+								if(res.length == 4){
 									$('#dg').datagrid('reload');
+									$.messager.alert('INFORMATION','Delete Data Success..!!<br/>','info');
 									$.messager.progress('close');
 								}else{
-									$.messager.show({
-										title: 'Error',
-										msg: result.errorMsg
-									});
+									$.messager.alert('ERROR',res,'warning');
 									$.messager.progress('close');
+									
 								}
-							},'json');
+							});
+							// console.log('delete_bom.php?item_no='+row.UPPER_ITEM_NO+'&level_no='+row.LEVEL_NO)
+					// 		$.post('del_buying_price.php',{
+					// 				item_no: row.ITEM_NO,
+					// 				supplier_code: row.SUPPLIER_CODE,
+					// 				rank: row.ALTER_PROCEDURE},
+					// 		function(result){
+					// 			if (result.length == 7){
+					// 				$('#dg').datagrid('reload');
+					// 				$.messager.progress('close');
+					// 			}else{
+					// 				$.messager.show({
+					// 					title: 'Error',
+					// 					msg: result.errorMsg
+					// 				});
+					// 				$.messager.progress('close');
+					// 			}
+					// 		},'json');
 						}
 					});
 				}else{

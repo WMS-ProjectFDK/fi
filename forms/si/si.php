@@ -80,7 +80,7 @@ if ($varConn=='Y'){
 		</fieldset>
 		<div style="clear:both;margin-bottom:3px;"></div>
 		<div style="padding:5px 6px;">
-			<input style="width:310px; height: 20px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus="autofocus"/>
+			<!-- <input style="width:310px; height: 20px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" placeholder="search SI NO. or consignee or customer po no." autofocus="autofocus"/> -->
 			<a href="javascript:void(0)" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> FILTER</a>
 			<a href="javascript:void(0)" style="width: 100px;" id="add" class="easyui-linkbutton c2" onclick="addSI()"><i class="fa fa-plus" aria-hidden="true"></i> ADD SI</a>
 			<a href="javascript:void(0)" style="width: 200px;" id="edit" class="easyui-linkbutton c2" onclick="copySI()"><i class="fa fa-copy" aria-hidden="true"></i> COPY DATA FOR NEW SI</a>
@@ -163,7 +163,7 @@ if ($varConn=='Y'){
 			})
 
             $('#dg').datagrid({
-				url:'si_get.php',
+				// url:'si_get.php',
 		    	singleSelect: true,
 				rownumbers: true,
 				fitColumns: true,
@@ -198,11 +198,11 @@ if ($varConn=='Y'){
 			$('#dg').datagrid('load', {
 				date_awal: $('#date_awal').datebox('getValue'),
 				date_akhir: $('#date_akhir').datebox('getValue'),
-				ck_date: ck_date,
-				src: ''
+				ck_date: ck_date//,
+				// src: ''
 			});
 
-			console.log('si_get.php?date_awal='+$('#date_awal').datebox('getValue')+'&date_akhir='+$('#date_akhir').datebox('getValue')+'&ck_date='+ck_date+'&src='+document.getElementById('src').value);
+			// console.log('si_get.php?date_awal='+$('#date_awal').datebox('getValue')+'&date_akhir='+$('#date_akhir').datebox('getValue')+'&ck_date='+ck_date+'&src='+document.getElementById('src').value);
 
 			$('#dg').datagrid({
 				url:'si_get.php'
@@ -212,20 +212,49 @@ if ($varConn=='Y'){
         }
 
 		function addSI(){
-			location.href = 'si_form.php?sts=new&si_no=';
+			location.href = 'si_form.php?sts=new&si_no=new&data=new';
 		}
 
 		function copySI(){
+			var dataRowsCopy = [];
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
+				console.log('si_form.php?sts=copy&si_no='+row.SI_NO);
 				location.href = 'si_form.php?sts=copy&si_no='+row.SI_NO;
 			}
 		}
 
 		function editSI(){
+			var dataRows = [];
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
+				console.log('si_form.php?sts=edit&si_no='+row.SI_NO);
 				location.href = 'si_form.php?sts=edit&si_no='+row.SI_NO;
+			}
+		}
+
+		function destroySI(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.confirm('Confirm','Are you sure you want to destroy this Data?',function(r){
+					if (r){
+						$.messager.progress({title:'Please waiting', msg:'removing data...'});
+						$.post('si_destroy.php',{si_no:row.SI_NO},function(result){
+							if (result.success){
+								$.messager.progress('close');
+								$('#dg').datagrid('reload');
+							}else{
+								$.messager.show({
+									title: 'Error',
+									msg: result.errorMsg
+								});
+								$.messager.progress('close');
+							}
+						},'json');
+					}
+				});
+			}else{
+				$.messager.show({title: 'MASTER SI',msg: 'Data not Selected'});
 			}
 		}
 	</script>

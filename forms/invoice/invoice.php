@@ -102,7 +102,9 @@ if ($varConn=='Y'){
 				</div>
 			</div>
 		</fieldset>
-		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; height:100px; margin-left:965px;"><legend>Invoice Report</legend></fieldset>
+		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; height:100px; margin-left:965px;"><legend>Invoice Report</legend>
+			<a href="javascript:void(0)" id="filbtn" class="easyui-linkbutton c2" onClick="listReport()" style="width:208px;"><i class="fa fa-print" aria-hidden="true"></i> Invoice List Report</a>
+		</fieldset>
 		<div style="clear:both;"></div>
 		<div style="margin-top: 5px;margin: 5px;">
 			<span style="margin-left:10px;width:50px;display:inline-block;">search</span> 
@@ -770,7 +772,7 @@ if ($varConn=='Y'){
 		<!-- END TRANSPORT -->
 
 		<!-- SETT TRANSPORT -->
-		<div id="dlg_shipping_mark" class="easyui-dialog" style="width: 500px;height: 300px;" closed="true" data-options="modal:true">
+		<div id="dlg_shipping_mark" class="easyui-dialog" style="width: 500px;height: auto;" closed="true" data-options="modal:true">
 			<table id="dg_shipping_mark" class="easyui-datagrid" style="width:99%;height:auto;border-radius: 10px;" rownumbers="true"></table>
 			<div data-options="region:'south',border:false" style="text-align:center;padding:10px 0 0;">
 				<input style="width: 430px; height: 56px;" name="shipping_mark_result" id="shipping_mark_result"  multiline="true" class="easyui-textbox" />
@@ -2016,6 +2018,13 @@ if ($varConn=='Y'){
                 msg:'Loading data...'
             });
 
+			console.log('invoice_save_stsdel.php?stsdel_dono='+DO_UPD+
+            	'&stsdel_etd='+$('#etd_date_edit_stsdel').datebox('getValue')+
+				'&stsdel_eta='+$('#eta_date_edit_stsdel').datebox('getValue')+
+				'&stsdel_vsl='+$('#vessel_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>")+
+				'&stsdel_rmk='+$('#remark_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>")
+			)
+
             $.post('invoice_save_stsdel.php',{
             	stsdel_dono: DO_UPD,
             	stsdel_etd: $('#etd_date_edit_stsdel').datebox('getValue'),
@@ -2023,7 +2032,7 @@ if ($varConn=='Y'){
 			  	stsdel_vsl: $('#vessel_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>"),
 			  	stsdel_rmk: $('#remark_edit_stsdel').textbox('getValue').replace(/\n/gi,"<br>")
             },function(result){
-				console.log(res);
+				console.log(result);
 				if (result.successMsg){
 					$.messager.progress('close');
 					$('#dlg_edit_stsdel').dialog('close');
@@ -2725,12 +2734,14 @@ if ($varConn=='Y'){
 		}
 
 		function sett_shipping_mark(a,b,c){
+			console.log(a+','+b+','+c);
 			
 			$('#dlg_shipping_mark').dialog('open').dialog('setTitle','SHIPPING MARK SETTING');
 			$('#kode_shipping_mark').textbox('setValue',a+'/'+b+'/'+c);
 			
-			var v=$('#dg_add').datagrid('getRows')[c].REMARK_SHIPPING;
-			$('#shipping_mark_result').textbox('setValue',v);
+			var v = $('#dg_add').datagrid('getRows')[c].REMARK_SHIPPING;
+			var v2 = v.replace(/<br\s*\/?>/mg,"\n");
+			$('#shipping_mark_result').textbox('setValue',v2);
 			
 
 			$('#dg_shipping_mark').datagrid({
@@ -2852,6 +2863,10 @@ if ($varConn=='Y'){
 				$('#transport2_edit').textbox('setValue',ids[1]);
 			}
 			$('#dlg_transport').dialog('close');
+		}
+
+		function listReport(){
+			window.open('invoice_list_report.php?date_start='+$('#date_awal').datebox('getValue')+'&date_end='+$('#date_akhir').datebox('getValue')+'');
 		}
 
 	</script>

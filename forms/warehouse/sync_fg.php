@@ -67,7 +67,10 @@ $user_name = $_SESSION['id_wms'];
 		<div align="center" class="fitem" style="width: 100%;">
 			<a href="#" style="width:150px;height:60px;" class="easyui-linkbutton c2" onclick="select_device()" disabled="true"><i class="fa fa-tablet"></i><br/>SELECT DEVICE</a>
 			<a href="#" style="width:150px;height:60px;" class="easyui-linkbutton c2" onclick="sync()"><i class="fa fa-refresh fa-spin fa-2x fa-fw"></i><br/>SYNCRONIZED</a>
+			<span style="width:100px;display:inline-block;"></span>
+			<span style="text-align: center;color: red; font-size: 9px;">*): sync data to 10 data process</span>
 		</div>
+		
 		<br/>
 		<div id="progress" class="easyui-progressbar" style="margin-left: 20px; width: 96%;"></div><br/>
 	</div>
@@ -140,13 +143,47 @@ $user_name = $_SESSION['id_wms'];
 		}
 
 		function sync(){
+			$.messager.progress({
+            	title:'Please waiting',
+            	msg:'save data...'
+            });
+
+			var dataRows = [];
 			rows = $('#dg').datagrid('getRows');
-			$('#dg').datagrid('endEdit');
-			$.post("sync_fg_save.php").done(function(res){
-				//console.log(res);
+			total = rows.length;
+
+			for(i=0;i<total;i++){
+				$('#dg').datagrid('endEdit', i);
+				if (i<10){
+					dataRows.push({
+						SLIP_NO: $('#dg').datagrid('getData').rows[i].SLIP_NO
+					});
+				}
+            }
+
+			var myJSON=JSON.stringify(dataRows);
+			var str_unescape=unescape(myJSON);
+
+			$.post('sync_fg_save2.php',{
+				data: unescape(str_unescape)
+			}).done(function(res){
+				if(res == '"success"'){
+					$('#dg').datagrid('reload');
+					$.messager.alert('INFORMATION','Syncronized Data Success..!!','info');
+					$.messager.progress('close');
+				}else{
+					$.messager.alert('ERROR',res,'warning');
+					$.messager.progress('close');
+				}
 			});
-			$.messager.alert('SYNCRONIZED','Data Saved!','info');
-			$('#dg').datagrid('reload');
+
+			// rows = $('#dg').datagrid('getRows');
+			// $('#dg').datagrid('endEdit');
+			// $.post("sync_fg_save.php").done(function(res){
+			// 	//console.log(res);
+			// });
+			// $.messager.alert('SYNCRONIZED','Data Saved!','info');
+			// $('#dg').datagrid('reload');
 		}
 	</script>
     </body>

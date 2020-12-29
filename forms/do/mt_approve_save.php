@@ -43,8 +43,17 @@ if (isset($_SESSION['id_wms'])){
 					echo $ins1;
 				}
 			}
+		}else{
+			$ins2 = "insert into ZTB_LOG_HISTORY_DTL 
+				VALUES ('".$_SESSION['id_wms']."', 
+						'".$_SESSION['name_wms']."', 
+						'Material Transaction', 
+						'APPROVE', 
+						'".$data[$i]."', 
+						SYSDATETIME()
+					)";
+			$insert2 = sqlsrv_query($connect, $ins2);
 		}
-
 	}
 
 	if($msg == ''){

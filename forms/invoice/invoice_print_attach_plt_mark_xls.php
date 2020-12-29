@@ -16,7 +16,7 @@ $q_si = "select distinct customer_po_no as po_no from answer where crs_remark='$
 $data = sqlsrv_query($connect, strtoupper($q_si));
 $dt = sqlsrv_fetch_object($data);
 
-$qry = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as pallet_mark
+$qry = "select replace(CAST(marks as varchar(500)),char(13),'<br/>') as pallet_mark
     from do_marks where do_no='$do' 
     order by mark_no asc";
 $result = sqlsrv_query($connect, strtoupper($qry));
@@ -98,7 +98,7 @@ while ($data=sqlsrv_fetch_object($result)){
             $nobaris++;  
         }else{
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('K'.$noCell, $data->PALLET_MARK);
+                    ->setCellValue('K'.$noCell, str_replace("&NBSP;", "&nbsp;", $data->PALLET_MARK));
             $objPHPExcel->getActiveSheet()->getStyle('K'.$noCell)->getAlignment()->setWrapText(true);
             $mCell = $noCell+6;
             $objPHPExcel->setActiveSheetIndex()->mergeCells('K'.$noCell.':M'.$mCell);

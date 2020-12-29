@@ -228,7 +228,8 @@ h2 {
 				{field:'DESCRIPTION',title:'DESCRIPTION', halign:'center', width:200, sortable: true},
 				{field:'STOCK_SUBJECT', title:'SUBJECT', halign:'center', width:100},
 				{field:'MAK', title:'MAKER', halign:'center', width:100},
-				{field:'CLASS', title:'CLASS', halign:'center', width:100}
+				{field:'CLASS', title:'CLASS', halign:'center', width:100},
+				{field:'GRADE_CODE', title:'GRADE', halign:'center', width:100}
 			]]
 		});
 	});
@@ -331,6 +332,7 @@ h2 {
 				unit_price_o: row.UNIT_PRICE_O,
 				unit_price_rate: row.UNIT_PRICE_RATE,
 				unit_curr_code: row.UNIT_CURR_CODE,
+				grade_code: row.GRADE_CODE,
 				customer_type: row.CUSTOMER_TYPE,
 				package_type: row.PACKAGE_TYPE,
 				capacity: row.CAPACITY,
@@ -391,17 +393,18 @@ h2 {
 
 	function download_report(){
 		if (get_url != ''){
-			console.log('item_download_proses.php'+get_url);
-			$.post('item_download_proses.php'+get_url,{}).done(function(res){
-				download_excel();
-			});
+			window.open('item_download_proses.php'+get_url);
+			// console.log('item_download_proses.php'+get_url);
+			// $.post('item_download_proses.php'+get_url,{}).done(function(res){
+			// 	download_excel();
+			// });
 		}
 	}
 
-	function download_excel(){
-		url_download = 'item_download_xls.php';
-		window.open(url_download);
-	}
+	// function download_excel(){
+	// 	url_download = 'item_download_xls.php';
+	// 	window.open(url_download);
+	// }
 </script>
 </body>
 </html>

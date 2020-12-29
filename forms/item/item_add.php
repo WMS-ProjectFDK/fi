@@ -5,8 +5,6 @@ session_start();
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
 
-// item_add.php?sts=edit&item_no=1170051&item_desc=GRAPHITE MK-25&data=[{"item_no":"1170051","item_code":null,"item":"GRAPHITE","item_flag":"2","description":"GRAPHITE MK-25","class_code":111911,"origin_code":118,"curr_code":1,"external_unit_number":0,"safety_stock":"0","uom_q":35,"unit_engineering":35,"unit_stock_rate":1,"unit_engineer_rate":1,"weight":".000000","uom_w":30,"uom_l":40,"drawing_no":null,"drawing_rev":null,"applicable_model":null,"catalog_no":null,"standard_price":"3.97730000","next_term_price":"3.97730000","suppliers_price":".00000000","manufact_leadtime":0,"purchase_leadtime":30,"adjustment_leadtime":2,"labeling_to_pack_day":null,"assembling_to_lab_day":null,"issue_policy":null,"issue_lot":null,"manufact_fail_rate":2,"section_code":100,"stock_subject_code":"1","cost_process_code":"212110","cost_subject_code":"136010","customer_item_no":null,"customer_item_name":null,"order_policy":null,"maker_flag":"1","mak":"SARCHEM","item_type1":null,"item_type2":null,"package_unit_number":null,"unit_price_o":null,"unit_price_rate":null,"unit_curr_code":null,"customer_type":null,"package_type":null,"capacity":null,"date_code_type":null,"date_code_month":null,"label_type":null,"measurement":null,"inner_box_height":null,"inner_box_width":null,"inner_box_depth":null,"inner_box_unit_number":null,"medium_box_height":null,"medium_box_width":null,"medium_box_depth":null,"medium_box_unit_number":null,"outer_box_height":null,"outer_box_width":null,"outer_box_depth":null,"ctn_gross_weight":null,"pi_no":null,"operation_time":null,"man_power":null,"aging_day":null}]
-
 $sts = $_GET['sts'];//=edit
 $item_no = $_GET['item_no'];//=22396
 $item_desc = $_GET['item_desc'];
@@ -75,6 +73,7 @@ if($sts == 'new'){
 		$unit_price_o = $query->unit_price_o;
 		$unit_price_rate = $query->unit_price_rate;
 		$unit_curr_code = $query->unit_curr_code;
+		$grade_code =  $query->grade_code;
 		$customer_type = $query->customer_type;
 		$package_type = $query->package_type;
 		$capacity = $query->capacity;
@@ -190,7 +189,7 @@ h2 {
 	}
 
 	function backForm(){
-		location.href = 'http://localhost:8088/fi/forms/item/item.php?id=1190';
+		location.href = 'home.php';
 	}
 
 	function save(){
@@ -321,6 +320,7 @@ h2 {
 			$('#unit_price_o').numberbox('setValue', '<?=$unit_price_o?>');
 			$('#unit_price_rate').numberbox('setValue', '<?=$unit_price_rate?>');
 			$('#unit_curr_code').combobox('setValue', '<?=$unit_curr_code?>');
+			$('#grade_code').textbox('setValue', '<?=$grade_code?>');
 			$('#customer_type').textbox('setValue', '<?=$customer_type?>');
 			$('#package_type').combobox('setValue', '<?=$package_type?>');
 			$('#capacity').numberbox('setValue', '<?=$capacity?>');
@@ -408,7 +408,33 @@ h2 {
 			<input style="width:360px;" name="description" id="description" class="easyui-textbox"/> 
 			<span style="width:20px;display:inline-block;"></span>
 			<span style="width:150px;display:inline-block;">CLASS CODE</span>
-			<select style="width:200px;" name="class_code" id="class_code" class="easyui-combobox" data-options=" url:'../json/json_class.php', method:'get', valueField:'class_code', textField:'class', panelHeight:'75px'" required></select>
+			<select style="width:200px;" name="class_code" id="class_code" class="easyui-combobox" data-options="panelHeight:'75px'" required>
+				<option Value="222000" >CR</option>
+		        <option Value="222111" >CR2016</option>
+		        <option Value="222211" >CR2025</option>
+		        <option Value="222311" >CR2032</option>
+		        <option Value="222312" >CR2032200</option>
+		        <option Value="222313" >CR2032220</option>
+		        <option Value="222411" >CR2032LC</option>
+		        <option Value="222711" >CR2050</option>
+		        <option Value="222511" >CR2430</option>
+		        <option Value="222611" >CR2450</option>
+		        <option Value="222911" >CRCOMMON</option>
+		        <option Value="111000" >LR</option>
+		        <option Value="111311" SELECTED>LR03</option>
+		        <option Value="111312" >LR03(P.P)</option>
+		        <option Value="111314" >LR03COMMON</option>
+		        <option Value="111313" >LR03N</option>
+		        <option Value="111111" >LR1</option>
+		        <option Value="111411" >LR14</option>
+		        <option Value="111511" >LR20</option>
+		        <option Value="111211" >LR6</option>
+		        <option Value="111212" >LR6(P.P)</option>
+		        <option Value="111214" >LR6COMMON</option>
+		        <option Value="111213" >LR6N</option>
+		        <option Value="111215" >LR6T</option>
+		        <option Value="111911" >LRCOMMON</option>
+			</select>
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;">ORIGIN CODE</span>
@@ -729,6 +755,9 @@ h2 {
 				<option value='S2'>MANUAL SHRINK + BRCD</option>
 				<option value='RECL'>RECL</option>
 			</select>
+			<span style="width:50px;display:inline-block;"></span>
+			<span style="width:150px;display:inline-block;">GRADE CODE</span>
+			<input style="width:200px;" name="grade_code" id="grade_code" class="easyui-textbox"/>
 		</div>
 		<div class="fitem">
 			<span style="width:150px;display:inline-block;color:blue;">CAPACITY</span>

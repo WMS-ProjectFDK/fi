@@ -10,8 +10,8 @@ if(isset($_SESSION['id_wms'])){
 		<link rel="icon" type="image/png" href="favicon.png">
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	</head>
-	<frameset rows="80,*" cols="*" frameborder="no" border="0" framespacing="0">
-	  <frame src="HeaderPage.php" name="topFrame" scrolling="NO" noresize />
+	<frameset rows="5,*" cols="*" frameborder="no" border="0" framespacing="0">
+	  <frame src="HeaderPage.php" cols="5,*" name="topFrame" scrolling="NO"/>
 	  <frameset id="content" rows="*" cols="20,*" framespacing="0" frameborder="NO" border="0">
 	    <frame src="menus.php" name="left" scrolling="auto" frameborder="NO" style="border-right:1px solid #DDDDDD;" />
 	    <frame src="dashboard/dashboard.php" name="right" frameborder="NO" scrolling="Auto" />

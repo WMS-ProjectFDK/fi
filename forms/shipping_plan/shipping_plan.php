@@ -1092,7 +1092,21 @@ h2 {
 	                	msg:'Loading data...'
 		            });
 
-					var idx = $("#dg_viewPln").datagrid("getRowIndex", row);
+		            var idx = $("#dg_viewPln").datagrid("getRowIndex", row);
+
+		            console.log('shipping_plan_iu.php?type=IU&ID='+row.RD+
+						'&CR_DATE='+row.CR_DATE+
+						'&ETA='+row.ETA_FORMAT+
+						'&ETD='+row.ETD_FORMAT+
+						'&EX_FACT='+row.EX_FACT_FORMAT+
+						'&QTY='+row.QTY.replace(/,/g,'')+
+						'&SO_NO='+row.SO_NO+
+						'&LINE_NO='+row.LINE_NO+
+						'&ANSWER_NO='+row.ANSWER_NO+
+						'&CRS_REMARK='+row.CRS_REMARK+
+						'&VESSEL='+row.VESSEL+
+						'&SI_NO='+row.SI_NO);
+					
                     $.post('shipping_plan_iu.php',{
                     	type: 'IU',
 						ID: row.RD,
@@ -1131,6 +1145,7 @@ h2 {
 		if (row){
 			$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
 				if(r){
+					console.log(row.RD);
 					var idx = $("#dg_viewPln").datagrid("getRowIndex", row);
 					$('#dg_viewPln').datagrid('deleteRow', idx);
 					$.post('shipping_plan_iu.php',{

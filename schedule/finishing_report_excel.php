@@ -1,5 +1,5 @@
 <?php
-// error_reporting(0);
+error_reporting(0);
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 require_once '../class/phpexcel/PHPExcel.php';
@@ -35,9 +35,7 @@ $arrKolom2 = array('1' => 'N', '2' => 'O',  '3' => 'P',  '4' => 'Q',  '5' => 'R'
 
 $Arr_sheet = array('TOTAL ALL BATTERY','BATTERY TYPE','PACKAGING GROUP','COMPARATION','DELAY ORDER','SUMMARY','TODAY ORDER','MOVEUP ORDER');
 
-//$bln = 'case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end';
-
- $qry1 = "select 'TOTAL' as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
+$qry1 = "select 'TOTAL' as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
         sum(satu) as tgl_1,sum(dua) as tgl_2, sum(tiga) as tgl_3, sum(empat) as tgl_4, sum(lima) as tgl_5, 
         sum(enam) as tgl_6, sum(tujuh) as tgl_7, sum(delapan) as tgl_8, sum(sembilan) as tgl_9, sum(sepuluh) as tgl_10,
         sum(sebelas) as tgl_11,sum(duabelas) as tgl_12, sum(tigabelas) as tgl_13, sum(empatbelas) as tgl_14, sum(limabelas) as tgl_15, 
@@ -50,8 +48,6 @@ $Arr_sheet = array('TOTAL ALL BATTERY','BATTERY TYPE','PACKAGING GROUP','COMPARA
         $data1 = sqlsrv_query($connect, strtoupper($qry1));
         //echo $qry1;
 
-// //oci_execute($data1);
-
 $qry2 = "select batery_type as groupinglabel,case when Stat = 'C' Then 'OUTPUT' else 'PLAN' END as orders, 
         sum(satu) as tgl_1,sum(dua) as tgl_2, sum(tiga) as tgl_3, sum(empat) as tgl_4, sum(lima) as tgl_5, 
         sum(enam) as tgl_6, sum(tujuh) as tgl_7, sum(delapan) as tgl_8, sum(sembilan) as tgl_9, sum(sepuluh) as tgl_10,
@@ -62,8 +58,6 @@ $qry2 = "select batery_type as groupinglabel,case when Stat = 'C' Then 'OUTPUT' 
         sum(tigapuluhsatu) as tgl_31, sum(total) as total
         from zvw_comparison3 where BULAN = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end and stat in ('A','C') and groupinglabel is not null group by Stat,batery_type order by groupinglabel";
 $data2 = sqlsrv_query($connect, strtoupper($qry2));
-
-//oci_execute($data2);
 
 $qry3 = "select groupinglabel  as groupinglabel,
                case groupinglabel 
@@ -83,7 +77,6 @@ $qry3 = "select groupinglabel  as groupinglabel,
         from zvw_comparison3 where BULAN = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FORMAT(getdate(),'MM') end and stat in ('A','C') and groupinglabel is not null group by Stat,groupinglabel order by Urut,groupinglabel";
 $data3 = sqlsrv_query($connect, strtoupper($qry3));
 // echo $qry3;
-//oci_execute($data3);
 
 $qry4 = "
 declare @var varchar(5) = ''
@@ -92,17 +85,13 @@ select distinct LABEL_TYPE,GROUPINGLABEL,WORK_ORDER,ITEM_NO,ITEM_NAME,DATE_CODE,
 from zvw_comparison3 where stat in ('A','C') and bulan = @var order by label_type, cr_date, work_order";
 $data4 = sqlsrv_query($connect, strtoupper($qry4));
 
-//oci_execute($data4);
-
 $qry5 = "select package_type,work_order,cast(cr_date as varchar(10)) cr_date,item_no,item,description,label_type_name,batt_type,qty,plan_qty,actualQty,delayQty from zvw_production_delay order by package_type,cr_Date";
 $data5 = sqlsrv_query($connect, strtoupper($qry5));
 // echo $qry5;
-//oci_execute($data5);
 
 $qry51 = "select package_type,work_order,cast(cr_date as varchar(10)) cr_date,item_no,item,description,label_type_name,batt_type,qty,plan_qty,actualQty,MoveUpQty from ZVW_PRODUCTION_MOVEUP order by package_type,cr_Date";
 $data51 = sqlsrv_query($connect, strtoupper($qry51));
 // echo $qry6;
-//oci_execute($data51);
 
 $qry61 = "
 
@@ -113,7 +102,6 @@ select batery_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulat
           from zvw_comparison_summary where bulan = @var and hari <= day((getdate() -1)) group by batery_type";
 $data61 = sqlsrv_query($connect, strtoupper($qry61));
 // echo $qry61;
-//oci_execute($data61);
 
 $qry62 = "
 declare @var varchar(5) = ''
@@ -124,7 +112,6 @@ select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulati
           from zvw_comparison_summary where bulan = @var and hari <= day((getdate() - 1)) group by label_type";
 $data62 = sqlsrv_query($connect, strtoupper($qry62));
 // echo $qry62;
-//oci_execute($data62);
 
 $qry63 = "
 declare @var varchar(5) = ''
@@ -134,7 +121,6 @@ select @var = case when day(getdate()) = 1 then FORMAT(getdate()-1,'MM') else FO
 select label_type,sum(pln) as pln, sum(output)as output,sum(acumm) as accumulation  
           from zvw_comparison_summary where bulan = @var and hari = day((getdate() - 1))  group by label_type";
 $data63 = sqlsrv_query($connect, strtoupper($qry63));
-//oci_execute($data63);
 
 $qry7 = "select work_order, cr_date, hr.item_no, it.item, it.description, lt.label_type_name, 
         cl.class_1 +''+ cl.class_2 as batt_type, hr.qty, sum(mps_qty) as plan_qty
@@ -147,8 +133,6 @@ $qry7 = "select work_order, cr_date, hr.item_no, it.item, it.description, lt.lab
         group by hr.item_no,it.item,it.description, lt.label_type_name, cl.class_1, cl.class_2, work_order,hr.qty,cr_date";
 $data7 = sqlsrv_query($connect, strtoupper($qry7));
 //echo $qry7;
-
-//oci_execute($data7);
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->createSheet();
@@ -4496,18 +4480,5 @@ $objWriter->save(str_replace('.php', '.xls', __FILE__));
 header('Content-type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="finishing_report.xls"');
 $objWriter->save('php://output');
-
-
-
-// ini jika ingin save file to folder
-// $objPHPExcel->setActiveSheetIndex(0);
-// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-// $objWriter->save(str_replace( __FILE__,$_SERVER['DOCUMMENT_ROOT'].'F:\apache/wms/schedule/FINISHING_REPORT.xls',__FILE__));
-//F:\apache\wms\schedule
-
-//$target_dir='D:\Program\FinishingReportCopy\FinishingReportCopy\bin\Debug';
-//chdir($target_dir);
-//$target_file='FinishingReportCopy.exe';
-//exit( (shell_exec($target_file)!=NULL?'SUKSES':'GAGAL'));
 ?>
 

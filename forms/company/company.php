@@ -77,8 +77,8 @@ h2 {
                                 <option value="2" >CUSTOMER / VENDOR</option>
                                 <option value="3" >VENDOR</option>
                                 <option value="4" >SUB CONTRACTOR</option>
-                                <option value="7" >SHIP TO</option>
-                                <option value="5" >PLANT</option>
+                                <option value="5" >SHIP TO</option>
+                                <option value="7" >PLANT</option>
                 </select>
             </div>
             <div class="fitem">
@@ -178,9 +178,9 @@ h2 {
             <div class="fitem">
             <span style="width:100px;display:inline-block;">Bonded Type</span>
             <select style="width:300px;" name="cmb_bonded_add" id="cmb_bonded_add" class="easyui-combobox"  required="true">
-                <option value=A selected>OVERSEA BONDED </option>
-                <option value=B >LOCAL BONDED </option>
-                <option value=C >LOCAL NON BONDED</option>
+                <option value="A" selected>OVERSEA BONDED </option>
+                <option value="B" >LOCAL BONDED </option>
+                <option value="C" >LOCAL NON BONDED</option>
             </select>
             <span style="width:140px;display:inline-block;">Days Of Transport</span>
             <input style="width:150px;" name="days_trans_add" id="days_trans_add" class="easyui-numberbox" required="true"/>
@@ -300,7 +300,7 @@ h2 {
                   <span style="width:100px;display:inline-block;">Tel No.</span>
                     <input  style="width:150px;" name="telno_edit" id="telno_edit" class="easyui-textbox" />
                     <span style="width:100px;display:inline-block;">Fax No.</span>
-                    <input style="width:150px;" name="faxnoe_edit" id="faxnoe_edit" class="easyui-textbox" />
+                    <input style="width:150px;" name="faxno_edit" id="faxno_edit" class="easyui-textbox" />
                     <span style="width:100px;display:inline-block;">Zip Code.</span>
                     <input  style="width:150px;" name="zip_edit" id="zip_edit" class="easyui-textbox" />
                     <span style="width:100px;display:inline-block;">Email</span>
@@ -362,9 +362,9 @@ h2 {
             <div class="fitem">
             <span style="width:100px;display:inline-block;">Bonded Type</span>
             <select style="width:300px;" name="cmb_bonded_edit" id="cmb_bonded_edit" class="easyui-combobox"  required="true">
-                <option value=A selected>OVERSEA BONDED </option>
-                <option value=B >LOCAL BONDED </option>
-                <option value=C >LOCAL NON BONDED</option>
+                <option value="A" selected>OVERSEA BONDED </option>
+                <option value="B" >LOCAL BONDED </option>
+                <option value="C" >LOCAL NON BONDED</option>
             </select>
             <span style="width:140px;display:inline-block;">Days Of Transport</span>
             <input style="width:150px;" name="days_trans_edit" id="days_trans_edit" class="easyui-numberbox" required="true"/>
@@ -421,7 +421,7 @@ h2 {
        
         <div id="dlg-buttons-edit">
             <a href="javascript:void(0)" id="save_edit" class="easyui-linkbutton c6" iconCls="icon-ok" onClick="saveEdit()" style="width:90px">Save</a>
-            <a href="javascript:void(0)" id="cancel_edit" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
+            <a href="javascript:void(0)" id="cancel_edit" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_edit').dialog('close')" style="width:90px">Cancel</a>
         </div>
         </div>
     
@@ -441,13 +441,13 @@ h2 {
 			<div class="fitem">
 				<span style="width:100px;display:inline-block;">Company Type</span>
 				<select  style="width:300px;" name="cmb_company_type" id="cmb_company_type" class="easyui-combobox" require="true"  >
-                        <option value="None" selected></option>
+                        <option value="" selected></option>
                         <option value="1">CUSTOMER</option>
                         <option value="2" >CUSTOMER / VENDOR</option>
                         <option value="3" >VENDOR</option>
                         <option value="4" >SUB CONTRACTOR</option>
-                        <option value="5" >SHIP TO</option>
-                        <option value="7" >PLANT</option>
+                        <option value="5" >PLANT</option>
+                        <option value="7" >SHIP TO</option>
                     </select>
 			</div>
 			
@@ -457,7 +457,7 @@ h2 {
 			<a href="javascript:void(0)" id="savebtn" class="easyui-linkbutton c2" onClick="filterData()" style="width:100px;"><i class="fa fa-filter" aria-hidden="true"></i> Filter</a>
 			<a href="javascript:void(0)" style="width: 140px;" class="easyui-linkbutton c2" id="add" onclick="addBOM()"><i class="fa fa-plus" aria-hidden="true"></i> Add Company</a>
 			<a href="javascript:void(0)" style="width: 140px;" class="easyui-linkbutton c2" id="edit" onclick="editBOM()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Company</a>
-			<a href="javascript:void(0)" style="width: 140px;" class="easyui-linkbutton c2" id="delete" onclick="deleteBOM()"><i class="fa fa-trash" aria-hidden="true"></i> Delete Company</a>
+			<a href="javascript:void(0)" style="width: 140px;" class="easyui-linkbutton c2" id="delete" onclick="deleteCompany()"><i class="fa fa-trash" aria-hidden="true"></i> Delete Company</a>
 			<a href="javascript:void(0)" style="width: 170px;" class="easyui-linkbutton c2" id="delete" onclick="downloadBOM()"><i class="fa fa-download" aria-hidden="true"></i> Download Company</a>
 		</div>
 	</div>
@@ -512,13 +512,44 @@ h2 {
 				    {field:'COMPANY_NAME',title:'NAME',width:100, halign: 'center', align: 'left'},
 					{field:'COMPANY_TYPE',title:'TYPE', width:40, halign: 'center'},
 					{field:'ADDRESS1',title:'ADDRESS1', width:150, halign: 'center'},
-                    {field:'ADDRESS2',title:'ADDRESS2',width:55, halign: 'center', align: 'center'},
-				    {field:'ADDRESS3',title:'ADDRESS3',width:60, halign: 'center', align: 'center'},
+                    {field:'ADDRESS2',title:'ADDRESS2',width:55, halign: 'center', align: 'left'},
+				    {field:'ADDRESS3',title:'ADDRESS3',width:60, halign: 'center', align: 'left'},
 					{field:'ADDRESS4',title:'ADDRESS14', width:60, halign: 'center'},
-					{field:'TERMS',title:'TERMS', width:150, halign: 'center'}
+					{field:'TERMS',title:'TERMS', width:150, halign: 'center'},
+
+
+                    {field:'ATTN',title:'ATTN', width:150, halign: 'center',hidden: true},
+                    {field:'TEL_NO',title:'TEL_NO', width:150, halign: 'center',hidden: true},
+                    {field:'FAX_NO',title:'FAX_NO', width:150, halign: 'center',hidden: true},
+                    {field:'ZIP_CODE',title:'ZIP_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'COUNTRY_CODE',title:'COUNTRY_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'CURR_CODE',title:'CURR_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'TTERM',title:'TTERM', width:150, halign: 'center',hidden: true},
+                    {field:'PDAYS',title:'PDAYS', width:150, halign: 'center',hidden: true},
+                    {field:'PDESC',title:'PDESC', width:150, halign: 'center',hidden: true},
+                    {field:'CASE_MARK',title:'CASE_MARK', width:150, halign: 'center',hidden: true},
+                    {field:'EDI_CODE',title:'EDI_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'VAT',title:'VAT', width:150, halign: 'center',hidden: true},
+                    {field:'SUPPLY_TYPE',title:'SUPPLY_TYPE', width:150, halign: 'center',hidden: true},
+                    {field:'SUBC_CODE',title:'SUBC_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'TRANSPORT_DAYS',title:'TRANSPORT_DAYS', width:150, halign: 'center',hidden: true},
+                    {field:'CC',title:'CC', width:150, halign: 'center',hidden: true},
+                    {field:'COMPANY_SHORT',title:'COMPANY_SHORT', width:150, halign: 'center',hidden: true},
+                    {field:'TAXPAYER_NO',title:'TAXPAYER_NO', width:150, halign: 'center',hidden: true},
+
+                    {field:'E_MAIL',title:'E_MAIL', width:150, halign: 'center',hidden: true},
+                    {field:'QUOT_SALE_CODE',title:'QUOT_SALE_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'ACCPAC_COMPANY_CODE',title:'ACCPAC_COMPANY_CODE', width:150, halign: 'center',hidden: true},
+                    {field:'BONDED_TYPE',title:'BONDED_TYPE', width:150, halign: 'center',hidden: true},
+                    {field:'BC_DOC',title:'BC_DOC', width:150, halign: 'center',hidden: true},
+                    {field:'BC_DOC_REVERSE',title:'BC_DOC_REVERSE', width:150, halign: 'center',hidden: true}
+
+
 			    ]]
 			})
 		})
+
+        var get_url='';
         
 		function filterData(){
             var companyNo = $('#company_rec').combobox('getValue');
@@ -527,13 +558,18 @@ h2 {
 				company_no: companyNo,
                 company_type: companyType
 			});
+
 			$('#dg').datagrid({
 				url:'get_company.php'
 			})
+
 		   	$('#dg').datagrid('enableFilter');
+
+            get_url='?company_no='+companyNo+
+                    '&company_type='+companyType;
 		}
 
-		function deleteBOM(){
+		function deleteCompany(){
 			var row = $('#dg').datagrid('getSelected');	
 			if (row){
 				$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
@@ -542,23 +578,39 @@ h2 {
 						    title:'Please waiting',
 						    msg:'removing data...'
 						});
+
+                        $.post('del_company.php',{
+                            company_code: row.COMPANY_NO
+							}).done(function(res){
+							
+								if(res.length == 2){
+									$('#dg').datagrid('reload');
+									$.messager.alert('INFORMATION','Delete Data Success..!!<br/>','info');
+									$.messager.progress('close');
+								}else{
+									$.messager.alert('ERROR',res,'warning');
+									$.messager.progress('close');
+									
+								}
+							});
 						// console.log('delete_bom.php?item_no='+row.UPPER_ITEM_NO+'&level_no='+row.LEVEL_NO)
-						$.post('delete_bom.php',{item_no: row.UPPER_ITEM_NO,level_no: row.LEVEL_NO},function(result){
-							if (result.success){
-	                            $('#dg').datagrid('reload');
-	                            $.messager.progress('close');
-	                        }else{
-	                            $.messager.show({
-	                                title: 'Error',
-	                                msg: result.errorMsg
-	                            });
-	                            $.messager.progress('close');
-	                        }
-						},'json');
+						// $.post('del_company.php',{company_code: row.COMPANY_NO},function(res){
+							
+                        //     if (res.length == 2){
+                        //         $.messager.alert('INFORMATION','Delete Data Success..!!<br/>','info');
+	                    //         $('#dg').datagrid('reload');
+	                    //         $.messager.progress('close');
+	                    //     }else{
+                        //         $.messager.alert('ERROR',res,'warning');
+                        //         $.messager.progress('close');
+	                    //     }
+						// },'json');
+
+                        
 					}
 				});
 			}else{
-				$.messager.show({title: 'BOM DELETE',msg:'Data Not select'});
+				$.messager.show({title: 'COMPANY DELETE',msg:'Data Not select'});
 			}
 		}
 
@@ -611,6 +663,31 @@ h2 {
             $('#ship_mark_add').textbox('setValue','');
             $('#taxpayer_add').textbox('setValue','');
             $('#accpac_add').textbox('setValue','');
+
+            $('#company_no_edit').numberbox('setValue','');
+            $('#cmb_company_type_edit').combobox('setValue','');
+            $('#company_name_edit').textbox('setValue','');
+            $('#company_short_name_edit').textbox('setValue','');
+            $('#company_address1_edit').textbox('setValue','');
+            $('#company_address2_edit').textbox('setValue','');
+            $('#company_address3_edit').textbox('setValue','');
+            $('#company_address4_edit').textbox('setValue','');
+            $('#attn_edit').textbox('setValue','');
+            $('#telno_edit').textbox('setValue','');
+            $('#faxno_edit').textbox('setValue','');
+            $('#zip_edit').textbox('setValue','');
+            $('#email_edit').textbox('setValue','');
+            $('#cmb_country_edit').combobox('setValue','');
+            $('#cmb_supply_type_edit').combobox('setValue','');
+            $('#cmb_bonded_edit').combobox('setValue','');
+            $('#days_trans_edit').numberbox('setValue','0');
+            $('#cmb_currency_edit').combobox('setValue','1');
+            $('#ttrems_edit').textbox('setValue','');
+            $('#pday_edit').numberbox('setValue','0');
+            $('#pdesc_edit').textbox('setValue','');
+            $('#ship_mark_edit').textbox('setValue','');
+            $('#taxpayer_edit').textbox('setValue','');
+            $('#accpac_edit').textbox('setValue','');
         }
        
 		function addBOM(){
@@ -621,99 +698,147 @@ h2 {
 
         function saveAdd(){
             var country = $('#cmb_country_add').combobox('getValue');
+            var companyName = $('#company_name_add').textbox('getValue');
+            var address = $('#company_address1_add').textbox('getValue');
+            var currency = $('#cmb_currency_add').combobox('getValue');
+            var companyNo = $('#company_no_add').numberbox('getValue');
+            var companyType = $('#cmb_company_type_add').combobox('getValue');
+            var accpac = $('#accpac_add').textbox('getValue');
             var bonded = $('#cmb_bonded_add').combobox('getValue');
             var supply_type = $('#cmb_supply_type_add').combobox('getValue');
-            var currency = $('#cmb_currency_add').combobox('getValue');
-            var dataRows = [];
-			dataRows.push({
-					        company_no: $('#company_no_add').numberbox('getValue'),
-                            company_type: $('#cmb_company_type_add').combobox('getValue'),
-                            company_name: $('#company_name_add').textbox('getValue'),
-                            company_short_name: $('#company_short_name_add').textbox('getValue'),
-                            company_address1: $('#company_address1_add').textbox('getValue'),
-                            company_address2: $('#company_address2_add').textbox('getValue'),
-                            company_address3: $('#company_address3_add').textbox('getValue'),
-                            company_address4: $('#company_address4_add').textbox('getValue'),
-                            attn: $('#attn_add').textbox('getValue'),
-                            telno: $('#telno_add').textbox('getValue'),
-                            faxno: $('#faxno_add').textbox('getValue'),
-                            zip_code: $('#zip_add').textbox('getValue'),
-                            email: $('#email_add').textbox('getValue'),
-                            country: country,
-                            supply_type: supply_type,
-                            bonded: bonded,
-                            days_trans: $('#days_trans_add').numberbox('getValue'),
-                            currency: currency,
-                            ttrems: $('#ttrems_add').textbox('getValue'),
-                            pday: $('#pday_add').numberbox('getValue'),
-                            pdesc: $('#pdesc_add').textbox('getValue'),
-                            ship_mark: $('#ship_mark_add').textbox('getValue'),
-                            taxpayer: $('#taxpayer_add').textbox('getValue'),
-                            accpac: $('#accpac_add').textbox('getValue')
-			});
-			
 
-			var myJSON=JSON.stringify(dataRows);
-			var str_unescape=unescape(myJSON);
-			
-			console.log(unescape(str_unescape));
 
-			$.post('post_company.php',{
-				data: unescape(str_unescape)
-			}).done(function(res){
-				console.log(res);
-                if(res == '"OK"'){
-					$('#dlg_add').dialog('close');
-					$('#dg').datagrid('reload');
-					$.messager.alert('INFORMATION','Insert Data Success..!!<br/>','info');
-					$.messager.progress('close');
-				}else{
-					$.messager.alert('ERROR',res,'warning');
-					$.messager.progress('close');
-				}
-			});
+            if(country == "" || companyName == "" || address == "" || companyNo == "" || companyType == "" || accpac == ""){
+                $.messager.alert('ERROR',"Please Fill Required Field",'warning');
+            }else {
+                var dataRows = [];
+                    dataRows.push({
+                                    company_no: $('#company_no_add').numberbox('getValue'),
+                                    company_type: $('#cmb_company_type_add').combobox('getValue'),
+                                    company_name: $('#company_name_add').textbox('getValue'),
+                                    company_short_name: $('#company_short_name_add').textbox('getValue'),
+                                    company_address1: $('#company_address1_add').textbox('getValue'),
+                                    company_address2: $('#company_address2_add').textbox('getValue'),
+                                    company_address3: $('#company_address3_add').textbox('getValue'),
+                                    company_address4: $('#company_address4_add').textbox('getValue'),
+                                    attn: $('#attn_add').textbox('getValue'),
+                                    telno: $('#telno_add').textbox('getValue'),
+                                    faxno: $('#faxno_add').textbox('getValue'),
+                                    zip_code: $('#zip_add').textbox('getValue'),
+                                    email: $('#email_add').textbox('getValue'),
+                                    country: country,
+                                    supply_type: supply_type,
+                                    bonded: bonded,
+                                    days_trans: $('#days_trans_add').numberbox('getValue'),
+                                    currency: currency,
+                                    ttrems: $('#ttrems_add').textbox('getValue'),
+                                    pday: $('#pday_add').numberbox('getValue'),
+                                    pdesc: $('#pdesc_add').textbox('getValue'),
+                                    ship_mark: $('#ship_mark_add').textbox('getValue'),
+                                    taxpayer: $('#taxpayer_add').textbox('getValue'),
+                                    accpac: $('#accpac_add').textbox('getValue')
+                    });
+                    
+
+                    var myJSON=JSON.stringify(dataRows);
+                    var str_unescape=unescape(myJSON);
+                    
+                    console.log(unescape(str_unescape));
+
+                    $.post('post_company.php',{
+                        data: unescape(str_unescape)
+                    }).done(function(res){
+                        console.log(res);
+                        if(res.length == 2){
+                            $('#dlg_add').dialog('close');
+                            $('#dg').datagrid('reload');
+                            $.messager.alert('INFORMATION','Insert Data Success..!!<br/>','info');
+                            $.messager.progress('close');
+                        }else{
+                            $.messager.alert('ERROR',res,'warning');
+                            $.messager.progress('close');
+                        }
+                    });
+            }
+			
 
         }
 
 		
 
-		function saveEditBOM(){
-			var dataRows = [];
-			var t = $('#dg_edit').datagrid('getRows');
-			var total = t.length;
-			var jmrow=0;
-			for(i=0;i<total;i++){
-				jmrow = i+1;
-				$('#dg_edit').datagrid('endEdit',i);
-				dataRows.push({
-					upper_item_no: $('#item_no_edit').textbox('getValue'),
-					level_no: $('#level_no_edit').textbox('getValue'),
-					line_no: jmrow,
-					lower_item_no: $('#dg_edit').datagrid('getData').rows[i].ITEM_NO,
-					quantity: $('#dg_edit').datagrid('getData').rows[i].QUANTITY,
-					quantity_base: $('#dg_edit').datagrid('getData').rows[i].QUANTITY_BASE,
-					failure_rate: $('#dg_edit').datagrid('getData').rows[i].FAILURE_RATE
-				});
-			}
+		function saveEdit(){
+			var country = $('#cmb_country_edit').combobox('getValue');
+            var bonded = $('#cmb_bonded_edit').combobox('getValue');
+            var supply_type = $('#cmb_supply_type_edit').combobox('getValue');
+            var currency = $('#cmb_currency_edit').combobox('getValue');
 
-			var myJSON=JSON.stringify(dataRows);
-			var str_unescape=unescape(myJSON);
+           
+            var companyName = $('#company_name_edit').textbox('getValue');
+            var address = $('#company_address1_edit').textbox('getValue');
+            var companyNo = $('#company_no_edit').numberbox('getValue');
+            
+       
+
+            var companyType = $('#cmb_company_type_edit').combobox('getValue');
+            var accpac = $('#accpac_edit').textbox('getValue');
+
+
+            if(country == "" || companyName == "" || address == "" || companyNo == "" || companyType == "" || accpac == ""){
+                $.messager.alert('ERROR',"Please Fill Required Field",'warning');
+            }else {
+                var dataRows = [];
+                    dataRows.push({
+                                    company_no: $('#company_no_edit').numberbox('getValue'),
+                                    company_type: $('#cmb_company_type_edit').combobox('getValue'),
+                                    company_name: $('#company_name_edit').textbox('getValue'),
+                                    company_short_name: $('#company_short_name_edit').textbox('getValue'),
+                                    company_address1: $('#company_address1_edit').textbox('getValue'),
+                                    company_address2: $('#company_address2_edit').textbox('getValue'),
+                                    company_address3: $('#company_address3_edit').textbox('getValue'),
+                                    company_address4: $('#company_address4_edit').textbox('getValue'),
+                                    attn: $('#attn_edit').textbox('getValue'),
+                                    telno: $('#telno_edit').textbox('getValue'),
+                                    faxno: $('#faxno_edit').textbox('getValue'),
+                                    zip_code: $('#zip_edit').textbox('getValue'),
+                                    email: $('#email_edit').textbox('getValue'),
+                                    country: country,
+                                    supply_type: supply_type,
+                                    bonded: bonded,
+                                    days_trans: $('#days_trans_edit').numberbox('getValue'),
+                                    currency: currency,
+                                    tterms: $('#tterms_edit').textbox('getValue'),
+                                    pday: $('#pday_edit').numberbox('getValue'),
+                                    pdesc: $('#pdesc_edit').textbox('getValue'),
+                                    ship_mark: $('#ship_mark_edit').textbox('getValue'),
+                                    taxpayer: $('#taxpayer_edit').textbox('getValue'),
+                                    accpac: $('#accpac_edit').textbox('getValue')
+                    });
+                    
+
+                    var myJSON=JSON.stringify(dataRows);
+                    var str_unescape=unescape(myJSON);
+                    
+                    console.log(unescape(str_unescape));
+
+                    $.post('put_company.php',{
+                        data: unescape(str_unescape)
+                    }).done(function(res){
+                        console.log(res);
+                        if(res.length == 2){
+                            $('#dlg_edit').dialog('close');
+                            $('#dg').datagrid('reload');
+                            $.messager.alert('INFORMATION','Update Data Success..!!<br/>','info');
+                            $.messager.progress('close');
+                        }else{
+                            $.messager.alert('ERROR',res,'warning');
+                            $.messager.progress('close');
+                        }
+                    });
+            }
 			
-			console.log(unescape(str_unescape));
+			
 
-			$.post('post_bom.php',{
-				data: unescape(str_unescape)
-			}).done(function(res){
-				if(res == '"success"'){
-					$('#dlg_edit').dialog('close');
-					$('#dg').datagrid('reload');
-					$.messager.alert('INFORMATION','Insert Data Success..!!<br/>','info');
-					$.messager.progress('close');
-				}else{
-					$.messager.alert('ERROR',res,'warning');
-					$.messager.progress('close');
-				}
-			});
+			
 		}
 
 		function saveBOM(){
@@ -758,153 +883,203 @@ h2 {
 
 		function editBOM(){
 			var row = $('#dg').datagrid('getSelected');	
+            clearField();
+			$('#dlg_edit').dialog('open').dialog('setTitle','Edit Company');
 			if (row){
-				var lvl = row.LEVEL_NO;
-				var item = row.UPPER_ITEM_NO;
-				$('#dlg_edit').dialog('open').dialog('setTitle','EDIT COMPANY');
-				$('#item_no_edit').textbox('setValue',item);
-				$('#level_no_edit').textbox('setValue',lvl);
+                $('#company_no_edit').numberbox('setValue',row.COMPANY_NO);
+                $('#cmb_company_type_edit').combobox('setValue',row.COMPANY_TYPE);
+                $('#company_name_edit').textbox('setValue',row.COMPANY_NAME);
+                $('#company_short_name_edit').textbox('setValue',row.COMPANY_SHORT);
+                $('#company_address1_edit').textbox('setValue',row.ADDRESS1);
+                $('#company_address2_edit').textbox('setValue',row.ADDRESS2);
+                $('#company_address3_edit').textbox('setValue',row.ADDRESS3);
+                $('#company_address4_edit').textbox('setValue',row.ADDRESS4);
+                $('#attn_edit').textbox('setValue',row.ATTN);
+                $('#telno_edit').textbox('setValue',row.TEL_NO);
+                $('#faxno_edit').textbox('setValue',row.FAX_NO);
+                $('#zip_edit').textbox('setValue',row.ZIP_CODE);
+                $('#email_edit').textbox('setValue',row.E_MAIL);
+                $('#cmb_country_edit').combobox('setValue',row.COUNTRY_CODE);
+                $('#cmb_supply_type_edit').combobox('setValue',row.SUPPLY_TYPE);
+                $('#cmb_bonded_edit').combobox('setValue',row.BONDED_TYPE);
+                $('#days_trans_edit').numberbox('setValue',row.TRANSPORT_DAYS);
+                $('#cmb_currency_edit').combobox('setValue',row.CURR_CODE);
+                $('#tterms_edit').textbox('setValue',row.TTERMS);
+                $('#pday_edit').numberbox('setValue',row.PDAYS);
+                $('#pdesc_edit').textbox('setValue',row.PDESC);
+                // $('#ship_mark_edit').textbox('setValue',row.);
+                $('#taxpayer_edit').textbox('setValue',row.TAXPAYER_NO);
+                $('#accpac_edit').textbox('setValue',row.ACCPAC_COMPANY_CODE);
 
-				$('#dg_edit').datagrid({
-				    url:'get_bom_detail.php?item_no='+item+'&level_no='+lvl,
-				    singleSelect: true,
-				    fitColumns: true,
-					rownumbers: true,
-				    columns:[[
-						{field:'ITEM_NO', title:'ITEM NO.', width:65, halign: 'center', align: 'center'},
-						{field:'ITEM', title:'ITEM NAME', width:100, halign: 'center'},//, hidden: true},
-						{field:'DESCRIPTION', title:'DESCRIPTION', width: 150, halign: 'center'},
-						{field:'UOM_Q', title:'UNIT', width: 50, halign: 'center'},
-						{field:'QUANTITY_BASE',title:'QTY BASE',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
-						{field:'QUANTITY',title:'QTY',width:100,halign:'center', align: 'right',editor:{type:'numberbox',options:{precision:2}}},
-						{field:'FAILURE_RATE',title:'FAILURE RATE',width:100,halign:'center', align: 'right'	,editor:{type:'numberbox',options:{precision:2}}}
-				    ]],
-				    onClickRow:function(row){
-				    	$(this).datagrid('beginEdit', row);
-				    }
-				});
+                // {field:'COMPANY_NO',title:'COMPANY NO.',width:45, halign: 'center', align: 'center'},
+				//     {field:'COMPANY_NAME',title:'NAME',width:100, halign: 'center', align: 'left'},
+				// 	{field:'COMPANY_TYPE',title:'TYPE', width:40, halign: 'center'},
+				// 	{field:'ADDRESS1',title:'ADDRESS1', width:150, halign: 'center'},
+                //     {field:'ADDRESS2',title:'ADDRESS2',width:55, halign: 'center', align: 'center'},
+				//     {field:'ADDRESS3',title:'ADDRESS3',width:60, halign: 'center', align: 'center'},
+				// 	{field:'ADDRESS4',title:'ADDRESS14', width:60, halign: 'center'},
+				// 	{field:'TERMS',title:'TERMS', width:150, halign: 'center'},
+
+
+                //     {field:'ATTN',title:'ATTN', width:150, halign: 'center',hidden: true},
+                //     {field:'TEL_NO',title:'TEL_NO', width:150, halign: 'center',hidden: true},
+                //     {field:'FAX_NO',title:'FAX_NO', width:150, halign: 'center',hidden: true},
+                //     {field:'ZIP_CODE',title:'ZIP_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'COUNTRY_CODE',title:'COUNTRY_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'CURR_CODE',title:'CURR_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'TTERM',title:'TTERM', width:150, halign: 'center',hidden: true},
+                //     {field:'PDAYS',title:'PDAYS', width:150, halign: 'center',hidden: true},
+                //     {field:'PDESC',title:'PDESC', width:150, halign: 'center',hidden: true},
+                //     {field:'CASE_MARK',title:'CASE_MARK', width:150, halign: 'center',hidden: true},
+                //     {field:'EDI_CODE',title:'EDI_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'VAT',title:'VAT', width:150, halign: 'center',hidden: true},
+                //     {field:'SUPPLY_TYPE',title:'SUPPLY_TYPE', width:150, halign: 'center',hidden: true},
+                //     {field:'SUBC_CODE',title:'SUBC_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'TRANSPORT_DAYS',title:'TRANSPORT_DAYS', width:150, halign: 'center',hidden: true},
+                //     {field:'CC',title:'CC', width:150, halign: 'center',hidden: true},
+                //     {field:'COMPANY_SHORT',title:'COMPANY_SHORT', width:150, halign: 'center',hidden: true},
+                //     {field:'TAXPAYER_NO',title:'TAXPAYER_NO', width:150, halign: 'center',hidden: true},
+
+                //     {field:'E_MAIL',title:'E_MAIL', width:150, halign: 'center',hidden: true},
+                //     {field:'QUOT_SALE_CODE',title:'QUOT_SALE_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'ACCPAC_COMPANY_CODE',title:'ACCPAC_COMPANY_CODE', width:150, halign: 'center',hidden: true},
+                //     {field:'BONDED_TYPE',title:'BONDED_TYPE', width:150, halign: 'center',hidden: true},
+                //     {field:'BC_DOC',title:'BC_DOC', width:150, halign: 'center',hidden: true},
+                //     {field:'BC_DOC_REVERSE',title:'BC_DOC_REVERSE', width:150, halign: 'center',hidden: true}
+
 			}
 		}
 
-		function search_item_add(){
-			var s_item = document.getElementById('s_item_add').value;
+		// function search_item_add(){
+		// 	var s_item = document.getElementById('s_item_add').value;
 		
-			if(s_item != ''){
-				$('#dg_addItem').datagrid('load',{item_no: s_item});
-				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
-				document.getElementById('s_item_add').value = '';
-			}
-		}
+		// 	if(s_item != ''){
+		// 		$('#dg_addItem').datagrid('load',{item_no: s_item});
+		// 		$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
+		// 		document.getElementById('s_item_add').value = '';
+		// 	}
+		// }
 
-		function sch_item_add(event){
-			var sch_a = document.getElementById('s_item_add').value;
-			var search = sch_a.toUpperCase();
-			document.getElementById('s_item_add').value = search;
+		// function sch_item_add(event){
+		// 	var sch_a = document.getElementById('s_item_add').value;
+		// 	var search = sch_a.toUpperCase();
+		// 	document.getElementById('s_item_add').value = search;
 			
-		    if(event.keyCode == 13 || event.which == 13){
-				search_item_add();
-		    }
-		}
+		//     if(event.keyCode == 13 || event.which == 13){
+		// 		search_item_add();
+		//     }
+		// }
 
-		function search_item_edit(){
-			var s_item = document.getElementById('s_item_edit').value;
+		// function search_item_edit(){
+		// 	var s_item = document.getElementById('s_item_edit').value;
 	
-			if(s_item != ''){
-				$('#dg_addItem').datagrid('load',{item_no: s_item});
-				$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
-				document.getElementById('s_item_edit').value = '';
-			}
-		}
+		// 	if(s_item != ''){
+		// 		$('#dg_addItem').datagrid('load',{item_no: s_item});
+		// 		$('#dg_addItem').datagrid({url: 'get_bom_material.php',});
+		// 		document.getElementById('s_item_edit').value = '';
+		// 	}
+		// }
 
-		function sch_item_edit(event){
-			var sch_a = document.getElementById('s_item_edit').value;
-			var search = sch_a.toUpperCase();
-			document.getElementById('s_item_edit').value = search;
+		// function sch_item_edit(event){
+		// 	var sch_a = document.getElementById('s_item_edit').value;
+		// 	var search = sch_a.toUpperCase();
+		// 	document.getElementById('s_item_edit').value = search;
 			
-			if(event.keyCode == 13 || event.which == 13){
-				search_item_add();
-			}
-		}
+		// 	if(event.keyCode == 13 || event.which == 13){
+		// 		search_item_add();
+		// 	}
+		// }
 
-		function remove_bom_item(){
-			var row = $('#dg_add').datagrid('getSelected');	
-			if (row){
-				$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-					if(r){
-						var idx = $("#dg_add").datagrid("getRowIndex", row);
-						$('#dg_add').datagrid('deleteRow', idx);
-					}	
-				});
-			}
-		}
+		// function remove_bom_item(){
+		// 	var row = $('#dg_add').datagrid('getSelected');	
+		// 	if (row){
+		// 		$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+		// 			if(r){
+		// 				var idx = $("#dg_add").datagrid("getRowIndex", row);
+		// 				$('#dg_add').datagrid('deleteRow', idx);
+		// 			}	
+		// 		});
+		// 	}
+		// }
 
-		function remove_bom_item_edit(){
-			var row = $('#dg_edit').datagrid('getSelected');	
-			if (row){
-				$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
-					if(r){
-						var idx = $("#dg_edit").datagrid("getRowIndex", row);
-						$('#dg_edit').datagrid('deleteRow', idx);
-					}	
-				});
-			}
-		}
+		// function remove_bom_item_edit(){
+		// 	var row = $('#dg_edit').datagrid('getSelected');	
+		// 	if (row){
+		// 		$.messager.confirm('Confirm','Are you sure you want to remove?',function(r){
+		// 			if(r){
+		// 				var idx = $("#dg_edit").datagrid("getRowIndex", row);
+		// 				$('#dg_edit').datagrid('deleteRow', idx);
+		// 			}	
+		// 		});
+		// 	}
+		// }
 
 		function downloadBOM(){
-			$('#dlg_download').dialog('open').dialog('setTitle','SELECT TO DOWNLOAD');
-			$('#dg_download').datagrid({
-				url:'get_bom.php?sts=all',
-				fitColumns: true,
-				rownumbers: true,
-				columns:[[
-                    {field:'UPPER_ITEM_NO',title:'ITEM NO.',width:55, halign: 'center', align: 'center'},
-				    {field:'DESCRIPTION',title:'DESCRIPTION',width:220, halign: 'center'},
-					{field:'LEVEL_NO',title:'LEVEL_NO', width:60, halign: 'center'}
-			    ]],
-				onClickRow:function(row){
-					$(this).datagrid('beginEdit', row);
-				}
-			});
-
-			$('#dg_download').datagrid('enableFilter');
-		}
-
-		function downloadBOM_select(){
-			var dataRows_dowload = [];
-			var t = $('#dg_download').datagrid('getSelections');
-			var total = t.length;
-			var jmrow=0;
-			for(i=0;i<total;i++){
-				jmrow = i+1;
-				$('#dg_download').datagrid('endEdit',i);
-				dataRows_dowload.push({
-					upper_item_no: $('#dg_download').datagrid('getData').rows[i].UPPER_ITEM_NO,
-					quantity: $('#dg_download').datagrid('getData').rows[i].LEVEL_NO
-				});
-			}
-
-			var myJSON_download=JSON.stringify(dataRows_dowload);
-			var str_unescape_download=unescape(myJSON_download);
-			
-			console.log('bom_download.php?data='+str_unescape_download);
-
-			// var fs = '';//require('fs');
-			// fs.writeFile("bom_download.json", myJSON_download, function(err, result) {
-			// 	if(err) console.log('error', err);
+			if (get_url != ''){
+                console.log('company_download_proses.php'+get_url);
+                $.post('company_download_proses.php'+get_url,{}).done(function(res){
+                    download_excel();
+                });
+            }
+            // $('#dlg_download').dialog('open').dialog('setTitle','SELECT TO DOWNLOAD');
+			// $('#dg_download').datagrid({
+			// 	url:'get_bom.php?sts=all',
+			// 	fitColumns: true,
+			// 	rownumbers: true,
+			// 	columns:[[
+            //         {field:'UPPER_ITEM_NO',title:'ITEM NO.',width:55, halign: 'center', align: 'center'},
+			// 	    {field:'DESCRIPTION',title:'DESCRIPTION',width:220, halign: 'center'},
+			// 		{field:'LEVEL_NO',title:'LEVEL_NO', width:60, halign: 'center'}
+			//     ]],
+			// 	onClickRow:function(row){
+			// 		$(this).datagrid('beginEdit', row);
+			// 	}
 			// });
 
-			if(dataRows_dowload == '') {
-				$.messager.show({
-					title: 'BOM Download',
-					msg: 'Data Not Select'
-				});
-			}else{
-				window.open('bom_download.php?data='+str_unescape_download, '_blank');
-				$('#dlg_download').dialog('close');
-				$('#dg_download').datagrid('loadData', []); 
-				dataRows_dowload = [];
-			}
+			// $('#dg_download').datagrid('enableFilter');
 		}
+
+        function download_excel(){
+            url_download = 'company_download_xls.php';
+            window.open(url_download);
+        }
+
+		// function downloadBOM_select(){
+		// 	var dataRows_dowload = [];
+		// 	var t = $('#dg_download').datagrid('getSelections');
+		// 	var total = t.length;
+		// 	var jmrow=0;
+		// 	for(i=0;i<total;i++){
+		// 		jmrow = i+1;
+		// 		$('#dg_download').datagrid('endEdit',i);
+		// 		dataRows_dowload.push({
+		// 			upper_item_no: $('#dg_download').datagrid('getData').rows[i].UPPER_ITEM_NO,
+		// 			quantity: $('#dg_download').datagrid('getData').rows[i].LEVEL_NO
+		// 		});
+		// 	}
+
+		// 	var myJSON_download=JSON.stringify(dataRows_dowload);
+		// 	var str_unescape_download=unescape(myJSON_download);
+			
+		// 	console.log('bom_download.php?data='+str_unescape_download);
+
+		// 	// var fs = '';//require('fs');
+		// 	// fs.writeFile("bom_download.json", myJSON_download, function(err, result) {
+		// 	// 	if(err) console.log('error', err);
+		// 	// });
+
+		// 	if(dataRows_dowload == '') {
+		// 		$.messager.show({
+		// 			title: 'BOM Download',
+		// 			msg: 'Data Not Select'
+		// 		});
+		// 	}else{
+		// 		window.open('bom_download.php?data='+str_unescape_download, '_blank');
+		// 		$('#dlg_download').dialog('close');
+		// 		$('#dg_download').datagrid('loadData', []); 
+		// 		dataRows_dowload = [];
+		// 	}
+		// }
 	</script>
 </body>
 </html>

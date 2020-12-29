@@ -430,12 +430,12 @@ if($dt_sql->description == '' OR is_null($dt_sql->description)) {
     .style1 {color: #0000FF}
     .style3 {
         font-size: 13px;
-        color: #000000;
+        color: #FFFFFF;
         font-weight: bold;
     }
     .style4 {
         font-size: 11px;
-        color: #CC0000;
+        color: #02AEEF;
     }
     * { font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
         font-size: 11px; }
@@ -480,7 +480,11 @@ if($dt_sql->description == '' OR is_null($dt_sql->description)) {
         height: 200;
         border-style: solid;
         border-width: 0px;
-    }   
+    }
+    .myImg{
+        text-align:center;
+        margin: auto;
+    }
 </style>
 </head>
 <body> <!-- onload="changePass()" -->
@@ -529,49 +533,17 @@ if($dt_sql->description == '' OR is_null($dt_sql->description)) {
 <div style="margin: 0px 0px;">
     <table width="100%">
         <tr>
-           <td align="left" width="92%" valign="middle"><marquee><span class="style4"><?php echo "Welcome ".$nama.", you are login as ".$ty." PT. FDK INDONESIA";?></span></marquee></td>
+           <td align="left" width="92%" valign="middle"><marquee><span class="style4"><?php echo "Welcome ".$nama.", you are login as ".$ty." PT RAYOVAC BATTERY INDONESIA";?></span></marquee></td>
            <td align="right" width="8%"><span id='demo'></span></td>       
            <td style="width: 19px;height: 19px;" class="ico" nowrap="nowrap" align="right"><a href="javascript:void(0)" onclick="changePass()"><i class="fa fa-user fa-2x" aria-hidden="true"></i></a></td>
-            <?php
-                //$sql="select * from rfq where rfq_end_user='".$user_name."' and rfq_keterangan is null";
-                /*$sql="select * from rfq where rfq_keterangan is null";
-                $query=pg_query($sql);
-                $jml=pg_num_rows($query);
-                if($jml==0){*/
-                ?>
-                    <!-- <td class="ico" nowrap="nowrap" align="right"><a href="../forms/purchasing_notification.php"><img src="../images/message.png" alt="End current session" width="19" height="19" border="0" title="Notification" /></a></td>       -->
-            <?php
-                /*}
-                else{*/
-                    ?>
-                    <!-- <td class="ico" nowrap="nowrap" align="right"><a href="../forms/purchasing_notification.php"><img src="../images/message2.png" alt="End current session" width="19" height="19" border="0" title="Anda Memiliki Pemberitahuan" /></a></td> -->
-                    <?php
-                //}
-            
-            ?>
             <td align="right" width="2%" valign="middle"><a href="../logout.php" onClick="return confirmLogOut()" target="_top" title="Sign-Out"><i class="fa  fa-sign-out fa-2x" aria-hidden="true"></i></a></td>
         </tr>
     </table>
 </div>
-<fieldset style="width:auto;height:510px;"><legend><span class="style3">Dashboard</span></legend>
-    <div style="width:auto; height:510px; background:url('../images/fdki-3.png') no-repeat; background-size: 100% 97%;"></div>
-    <!-- <div style="both:clear;">
+    <div class="myImg">
+        <br/><br/><br/><br/><br/><br/>
+        <img src="../images/fdki-322.png">
     </div>
-    <div style="width:640px; height:250px; border:1px solid #d0d0d0; float:left;">
-        <div id="fccontainer" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
-    </div>
-    <div style="margin-left:10px;width:640px; height:250px; border:1px solid #d0d0d0; float:left;">
-        <div id="mscontainer" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
-    </div>
-    <div style="margin-top:10px; width:640px; height:250px; border:1px solid #d0d0d0; float:left;">
-        <div id="container" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
-    </div>
-    <div style="margin-top:10px; margin-left:10px;width:640px; height:250px; border:1px solid #d0d0d0; float:left;">
-        <div id="spcontainer" style="min-width: 310px; height: 250px; margin: 0 auto"></div>
-    </div>
-    <div style="both:clear;">
-    </div> -->
-</fieldset>
 </body>
 </html>
 <!--  -->

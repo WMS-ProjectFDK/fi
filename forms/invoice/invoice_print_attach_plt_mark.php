@@ -14,7 +14,7 @@ $q_si = "select distinct customer_po_no as po_no from answer where crs_remark='$
 $data = sqlsrv_query($connect, strtoupper($q_si));
 $dt = sqlsrv_fetch_object($data);
 
-$qry = "select replace(CAST(marks as varchar(500)),char(10),'<br/>') as pallet_mark 
+$qry = "select replace(CAST(marks as varchar(500)),char(13),'<br/>') as pallet_mark 
 	from do_marks where do_no='$do' 
 	order by mark_no asc";
 $result = sqlsrv_query($connect, strtoupper($qry));

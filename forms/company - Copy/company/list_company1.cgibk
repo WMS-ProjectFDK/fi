@@ -1,0 +1,53 @@
+# m_company.pl
+require '/pglosas/init.pl';
+#require 'init.pl';
+require '/pglosas/master/company/company_desc.pl';
+
+&html_header("Company Master Listing");
+&title();
+
+print<<ENDOFTEXT;
+<OL>
+<LI>Input KEY WORD and press "Search and List" button.
+<FORM METHOD=Post ACTION=list_company2.cgi?$KEYWORD>
+<input type=text name=keyword size=20><br>
+<input type=submit name=submit1 value="Search and List">
+<input type=reset name=submit value="Reset">
+<P>
+<LI>Or List
+<select name=company_type>
+ENDOFTEXT
+
+#
+# db open
+#
+$dbh = &db_open;
+
+$sql  = " select company_type,type_description";
+$sql .= "  from company_type ";
+$sql .= " where company_type > 0 ";
+$sql .= " order by company_type";
+
+&do_sql($sql);
+
+while(($type,$description) = $cur->fetchrow){
+
+   print "<option value=$type>$description \n";
+
+}
+print<<ENDOFTEXT;
+</select>
+All.<br>
+<input type=submit name=submit2 value="List">
+<P>
+<li>Or List ALL Companies.<br>
+<input type=submit name=submit3 value="List">
+</FORM>
+</OL>
+<HR>
+[<A HREF=/pglosas/main.asp?KEYWORD=$KEYWORD&menuType=master>Back to Main Menu</A>]
+</BODY>
+</HTML>
+ENDOFTEXT
+
+exit ;

@@ -361,7 +361,7 @@ h2 {
 			var dataPallet = [];
 			var t = $('#dg').datagrid('getRows');
 			var total = t.length;
-			var w = '';		var p = '';		var c = '';		var b = '';
+			var w = '';		var p = '';		var c = '';		var b = '';		var a = '';
 
 			// loop pallet
 			for(i=0;i<total;i++){
@@ -370,6 +370,7 @@ h2 {
 				p = $('#dg').datagrid('getData').rows[i].PALLET;
 				c = $('#dg').datagrid('getData').rows[i].CONTAINER.trim();
 				b = $('#dg').datagrid('getData').rows[i].BOOKING.trim();
+				a = $('#dg').datagrid('getData').rows[i].ASIN.trim();
 
 				dataCarton.push({
 			 		crt_wo: w,
@@ -421,13 +422,13 @@ h2 {
 			var myJSON2=JSON.stringify(dataCarton);
 			var str_unescape2=unescape(myJSON2).trim();
 
-			console.log('sscc_booking_save_carton.php?data='+unescape(str_unescape2)+'&bookingHeader='+b+'&containerHeader='+c+'&asinHeader='+$("#dg").datagrid("getData").rows[1].ASIN.trim());
+			console.log('sscc_booking_save_carton.php?data='+unescape(str_unescape2)+'&bookingHeader='+b+'&containerHeader='+c+'&asinHeader='+a);
 
 			$.post('sscc_booking_save_carton.php',{
 				data: unescape(str_unescape2),
 				bookingHeader: b,
 				containerHeader: c,
-				asinHeader: $('#dg').datagrid('getData').rows[1].ASIN.trim()
+				asinHeader: a
 			}).done(function(res){
 				$.messager.progress({
 	                title:'Please waiting',

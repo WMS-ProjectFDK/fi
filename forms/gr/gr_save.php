@@ -128,6 +128,16 @@ if (isset($_SESSION['id_wms'])){
 	            $msg .= "message: ".$error[ 'message']."<br/>";  
 	         }  
 	    }
+	}else{
+		$ins2 = "insert into ZTB_LOG_HISTORY_DTL 
+			VALUES ('".$_SESSION['id_wms']."', 
+					'".$_SESSION['name_wms']."', 
+					'GOODS RECEIVE', 
+					'UPDATE', 
+					'".$gr_no."', 
+					SYSDATETIME()
+				)";
+		$insert2 = sqlsrv_query($connect, $ins2);
 	}
 	
 	if($msg != ''){

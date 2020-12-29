@@ -170,13 +170,15 @@ h2 {
 				    {field:'SO_NO',title:'SALES ORDER<br/>NO.',width:60, halign: 'center', align: 'center'},
 				    {field:'CUSTOMER_PO_NO',title:'PO NO',width:60, halign: 'center', align: 'center'},
 				    {field:'EX_FACTORY',title:'EX-FACTORY',width:60, halign: 'center', align: 'center'},
-				    {field:'ITEM_NO',title:'ITEM', width:50, halign: 'center'},
+				    {field:'ITEM_NO',title:'ITEM', width:40, halign: 'center'},
                     {field:'DESCRIPTION',title:'DESCRIPTION', width:100, halign: 'center'},
-                    {field:'QTY',title:'QUANTITY', width:70, halign: 'center',align: 'right'},
+                    {field:'QTY',title:'QTY', width:70, halign: 'center',align: 'right'},
                     {field:'CUSTOMER',title:'CUSTOMER', width:100, halign: 'center'},
-                    {field:'INPUT',title:'INPUT', width:40, halign: 'center'},
-                    {field:'CONTAINER_NO',title:'CONTAINER', width:80, halign: 'center'},
-                    {field:'SEAL_NO',title:'SEAL', width:80, halign: 'center'}
+                    {field:'STS',title:'REMARK', width:130, halign: 'center'},
+                    {field:'THIS_INVENTORY',title:'WH QTY', width:70, halign: 'center', align: 'right'},
+                    {field:'INPUT',title:'INPUT', width:35, halign: 'center', align: 'center'},
+                    {field:'CONTAINER_NO',title:'CONTAINER', width:50, halign: 'center'},
+                    {field:'SEAL_NO',title:'SEAL', width:50, halign: 'center'}
 			    ]]
 				
 			})
@@ -228,7 +230,8 @@ h2 {
 				dataRows.push({
                     answer_no: rows[i].ANSWER_NO,
                     container_no: rows[i].CONTAINER_NO,
-                    seal_no: rows[i].SEAL_NO  
+                    seal_no: rows[i].SEAL_NO,
+					do_no: rows[i].DO_NO
                 });
 			}
             
@@ -254,7 +257,8 @@ h2 {
             for(i=0;i<rows.length;i++){
 				$('#dg').datagrid('endEdit',i);
 				dataRows.push({
-                    answer_no: rows[i].ANSWER_NO
+                    answer_no: rows[i].ANSWER_NO,
+					do_no: rows[i].DO_NO
                 });
 			}
             

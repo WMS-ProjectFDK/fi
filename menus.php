@@ -19,11 +19,11 @@ if(isset($_SESSION['id_wms'])){
 	<script>
 	$(document).ready(function(){
 		$('#listmenu').hide();
-		$('body').css("background-color","#ED1C24"); 
+		$('body').css("background-color","#0E76BC"); 
 		var xx = window.top.document.getElementsByTagName("frameset")[1];
 		var sideopen = false;
 		$(window.top.document.getElementsByTagName("frame")[1]).mouseover(function(){
-			$('body').css("background-color","#F4F4F4"); 
+			$('body').css("background-color","#FFFFFF"); 
 			sideopen = true;
 			var defside=20;
 			var sideEffect = setInterval(function(){
@@ -42,7 +42,7 @@ if(isset($_SESSION['id_wms'])){
 			sideopen=false;
 			xx.cols = "20,*";
 			$('#listmenu').hide();
-			$('body').css("background-color","#ED1C24"); 
+			$('body').css("background-color","#0E76BC"); 
 		});
 		$('#listmenu').click(function(){
 			$.post("sessionvalidation.php")
@@ -80,7 +80,7 @@ d = new dTree('d');
 d.config.target="right";		
 d.config.folderLinks = false;
 
-d.add(0,-1,'<B>FDK INDONESIA</B>','','WMS Version 2.1');
+d.add(0,-1,'<B>RAYOVAC BATTERY INDONESIA</B>','','WMS Version 2.1');
 
 <?php
 $user_name = $_SESSION['id_wms'];

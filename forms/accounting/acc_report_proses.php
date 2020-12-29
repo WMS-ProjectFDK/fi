@@ -1,0 +1,116 @@
+<?php
+// header('Content-Type: text/plain; charset="UTF-8"');
+header("Content-type: application/json");
+error_reporting(0);
+session_start();
+include("../../connect/conn.php");
+
+$period = isset($_REQUEST['period']) ? strval($_REQUEST['period']) : '';
+$jns_report = isset($_REQUEST['jns_report']) ? strval($_REQUEST['jns_report']) : '';
+
+if ($ck_date != "true"){
+    $gr_date = "grh.gr_date >= '$date_awal' and grh.gr_date <= '$date_akhir' and ";
+}else{
+    $gr_date = "";
+}
+
+$where ="where $gr_date $gr $supp $po $item grh.gr_no is not null";
+
+$response = array();        $response2 = array();
+$rowno=0;
+
+if (isset($_SESSION['id_wms'])){
+    $ip_res = '';
+    if ($IP != ''){
+        $ip_res = "and z.package_type in ('$IP')";
+    }
+
+    $sql = "select 
+        grh.gr_no,
+        grd.line_no gr_line_no,
+        grh.inv_no,
+        grd.po_no,
+        grd.po_line_no po_line_no,
+        CONVERT(varchar,grh.gr_date, 103) gr_date,
+        CONVERT(varchar,grh.inv_date, 103) inv_date,
+        CONVERT(varchar,grd.reg_date, 103) reg_date,
+        CONVERT(varchar,grd.upto_date, 103) upto_date,
+        grh.supplier_code,
+        c.company supplier,
+        cou2.country country_supplier,
+        grd.customer_part_no,
+        grd.item_no,
+        grd.origin_code,
+        i.description item,
+        cou.country,
+        grd.qty qty,
+        case grd.qty when 0 then un.unit
+                    when 1 then un.unit
+                    else un.unit_pl end as unit,
+        grd.u_price as u_price,
+        grh.curr_code,
+        grd.line_remark,
+        i.standard_price as standard_price,
+        cu.curr_mark,
+        cu2.curr_mark  curr_mark_sp,
+        grh.ex_rate as ex_rate,
+        grd.amt_o as amt_o,
+        (grd.amt_o * grh.ex_rate) as amt_l,
+        grh.slip_type,
+        x.slip_name,
+        grh.bc_no,
+        CONVERT(varchar,poh.po_date,103) po_date,
+        grh.bc_doc,
+        cls.class_1 + cls.class_2 class,
+        cs.cost_subject_code cost_subject_code,
+        cs.cost_subject_name cost_subject_name,
+        grh.bc_doc,
+        grh.bc_no,
+        grh.tax_inv_no,
+        CONVERT(varchar,grh.tax_inv_date, 103) tax_inv_date
+        
+        from gr_details grd
+        inner join gr_header grh on grd.gr_no = grh.gr_no
+        left outer join item i on grd.item_no = i.item_no --and grd.origin_code = i.origin_code
+        left outer join currency cu on grh.curr_code = cu.curr_code
+        left outer join currency cu2 on i.curr_code = cu2.curr_code
+        left outer join country cou on grd.origin_code = cou.country_code
+        left outer join unit un on i.uom_q = un.unit_code
+        left outer join company c on grh.supplier_code = c.company_code
+        left outer join sliptype x on grh.slip_type = x.slip_type
+        left outer join po_header poh on grd.po_no = poh.po_no
+        left outer join class cls on i.class_code = cls.class_code
+        left outer join costsubject cs on i.cost_subject_code = cs.cost_subject_code
+        left outer join country cou2 on c.country_code = cou2.country_code
+        
+        $where 
+        order by c.company,grh.gr_no,grd.line_no";
+
+    // echo $sql;
+    $data = sqlsrv_query($connect, strtoupper($sql));
+
+    if($data === false ) {
+        if( ($errors = sqlsrv_errors() ) != null) {  
+            foreach( $errors as $error){  
+                $msg .= $error[ 'message']."<br/>";  
+            }  
+        }
+    }
+
+    while($dt = sqlsrv_fetch_object($data)){
+        array_push($response, $dt);
+    }
+
+    $fp = fopen('acc_report_result.json', 'w');
+	fwrite($fp, json_encode($response));
+    fclose($fp);
+}else{
+	$msg .= 'Session Expired';
+}
+
+if($msg != ''){
+    echo json_encode($msg);
+}else{
+    echo json_encode('success');
+}
+?>

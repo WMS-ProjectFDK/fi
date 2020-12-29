@@ -53,12 +53,8 @@ $(document).ready(function(){
 </style>
 </head>
 <body leftmargin="0" topmargin="0">
-	<div style="width:100%;position:absolute;background:#272729;border-bottom:2px solid #ED1C24;">
-		<div style="float:left;background:url('images/logo-fdk-1.png') no-repeat;width:40%;height:90px;background-size:50% 100%;display:none;" id="logo">
-			<div style="width:25px;background:#272729;height:100%;opacity:0.3;filter:alpha(opacity=30);display:none;" id="splash"></div>
-		</div>
-		<div style="float:right;background:url('images/fid.jpg') no-repeat;width:250px;height:80px;background-size:100% 100%;"></div>
-		<!-- <image src="images/photo/<?php //echo $row_users[0]; ?>" width="90px" height="90px" align="right" /> -->
+	<div style="width:100%;position:absolute;background:#0E76BC;">
+		<div style="float:left;width:10%;height:30px;background-size:50% 100%;display:none;" id="logo"></div>
 	</div>
 	<div class="footer"></div>
 </body>

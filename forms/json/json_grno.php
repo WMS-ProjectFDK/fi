@@ -6,7 +6,7 @@
 	$yearplus = intval(date('Y')+1);
 	//echo $yearmin.$year.$yaerplus;
 	$sql = "select top 200 gr_no, gr_date from gr_header 
-		where CAST(gr_date as char(4)) between '2019' and '2020' 
+		where CAST(gr_date as char(4)) between '2019' and '2025' 
 		order by gr_date desc, gr_no asc";
 	//echo $sql;
 	$result = sqlsrv_query($connect, strtoupper($sql));

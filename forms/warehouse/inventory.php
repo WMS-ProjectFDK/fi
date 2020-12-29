@@ -66,8 +66,8 @@ h2 {
 <?php include ('../../ico_logout.php'); ?>
 
 <div id="toolbar" style="padding:3px 3px;">
-	<fieldset style="float:left;width:500px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong> PERIOD & ITEM FILTER </strong></span></legend>
-		<div style="width:500px;float:left">
+	<fieldset style="float:left;width:450px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong> PERIOD & ITEM FILTER </strong></span></legend>
+		<div style="width:450px;float:left">
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;">Search Item</span>
 				<input style="width:320px; height: 17px; border: 1px solid #0099FF;border-radius: 5px;" onkeypress="filter(event)" name="src" id="src" type="text" autofocus="" />
@@ -82,7 +82,7 @@ h2 {
 			</div>
 		</div>
 	</fieldset>
-	<fieldset style="position:absolute;margin-left:525px;border-radius:4px;width: 550px;height: 100px;"><legend><span class="style3"><strong> STOCK FILTER </strong></span></legend>
+	<fieldset style="position:absolute;margin-left:475px;border-radius:4px;width: 550px;height: 100px;"><legend><span class="style3"><strong> STOCK FILTER </strong></span></legend>
 	   <div id="select_stock">
 		<div class="fitem">
 		  <span style="width:180px;display:inline-block;"><input type="radio" name="status_stock" id="check_all" value="check_all"/> ALL</span>
@@ -101,13 +101,15 @@ h2 {
 		</div>
 	   </div>
 	</fieldset>
-	<fieldset style="margin-left: 1098px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>PRINT DATA</strong></span></legend>
+	<fieldset style="margin-left: 1048px;border-radius:4px;height: 100px;"><legend><span class="style3"><strong>PRINT DATA</strong></span></legend>
+		<div class="fitem" align="center" style="margin-top: 0px;">
+			<a href="javascript:void(0)" id="printxls_header" style="width: 200px;" class="easyui-linkbutton c2" onclick="print_header()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To Excel (HEADER) </a>
+		</div>
 		<div class="fitem" align="center" style="margin-top: -3px;">
 			<a href="javascript:void(0)" id="printxls" style="width: 200px;" class="easyui-linkbutton c2" onclick="print_xls()"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel (+DETAIL)</a>
 		</div>
-		<div class="fitem" align="center" style="margin-top: 13px;">
-			<a href="javascript:void(0)" id="printxls_header" style="width: 150px;" class="easyui-linkbutton c2" onclick="print_header()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Print To Excel </a>
-		</div>
+		<div class="fitem" align="center" style="margin-top: -3px;">
+			<a href="javascript:void(0)" id="printxls" style="width: 200px;" class="easyui-linkbutton c2" onclick="print_xls2()"><i class="fa fa-file-excel-o" aria-hidden="true"></i> print To Excel (ONLY DETAIL)</a>
 		</div>
 	</fieldset>
 </div>
@@ -174,7 +176,7 @@ h2 {
 		                {field:'SLIP_NO', title:'SLIP NO', halign:'center', width:100},
 		                {field:'SLIP_TYPE', title:'SLIP TYPE', halign:'center', width:100},
 		                {field:'COMPANY', title:'COMPANY', halign:'center', width:130},
-		                {field:'OHSAS', title:'DATE CODE', halign:'center', align:'center', width:50},
+		                {field:'WO_NO', title:'WO NO.', halign:'center', width:100},
 		                {field:'RECEIVE', title:'RECEIVE', halign:'center', align:'right', width:65},
 		                {field:'OTHER_RECEIVE', title:'OTHER<br/>RECEIVE', halign:'center', align:'right', width:65},
 		                {field:'ISSUE', title:'ISSUE', halign:'center', align:'right', width:65},
@@ -257,6 +259,14 @@ h2 {
 			$.messager.alert('Warning','Data not Found, please click filter data','warning');
 		}else{
 			window.open('inventory_excel.php'+pdf_url, '_blank');
+		}
+	}
+
+	function print_xls2(){
+		if(pdf_url=='') {
+			$.messager.alert('Warning','Data not Found, please click filter data','warning');
+		}else{
+			window.open('inventory_excel2.php'+pdf_url, '_blank');
 		}
 	}
 

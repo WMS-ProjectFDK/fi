@@ -96,7 +96,7 @@ if($dt->TRANSPORT_TYPE == 2){
 }
 
 if($dt->TRANSPORT_TYPE == 2){
-	if($dt->CARGO_TYPE == 0) {
+	if($dt->CARGO_TYPE2 == 0) {
 		$shipp1 = $shipp_method1;
 		$shipp2 = '';
 	}else{

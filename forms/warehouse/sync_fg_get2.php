@@ -45,9 +45,7 @@ if(ftp_get($conn_id, $local_file, $server_file, FTP_BINARY)) {
 	for($i=1;$i<=$arrayCount;$i++){
 		$id = trim($allDataInSheet[$i]["A"]);
 		
-		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag)
-			select $id,'$hr',0 from ztb_wh_kanban_trans_fg 
-			where not exists (select slip_no from ztb_wh_kanban_trans_fg where slip_no = '$id') ";
+		$sql ="insert into ztb_wh_kanban_trans_fg (slip_no,date_in,flag) VALUES ('$id','$hr',0)";
 		$sqlNya = sqlsrv_query($connect, $sql);
 		if( $sqlNya === false ) {
 			if( ($errors = sqlsrv_errors() ) != null) {

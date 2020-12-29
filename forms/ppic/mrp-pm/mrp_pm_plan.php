@@ -790,9 +790,10 @@ if ($sts == 'lower'){
                 msg: 'Value is null'
             });
 		}else{
+			console.log('../mrp-rm/mrp_rm_plan_info_PO.php?item_no='+d+'&tgl_plan='+tgl_plan)
 			$('#dlg_viewPO').dialog('open').dialog('setTitle','VIEW INFO PURCHASE ORDER ('+AddDateII(c)+')');
 			$('#dg_viewPO').datagrid({
-				url: 'mrp_rm_plan_info_PO.php?item_no='+d+'&tgl_plan='+tgl_plan,
+				url: '../mrp-rm/mrp_rm_plan_info_PO.php?item_no='+d+'&tgl_plan='+tgl_plan,
 				singleSelect: true,
 				rownumbers: true,
 			    columns:[[

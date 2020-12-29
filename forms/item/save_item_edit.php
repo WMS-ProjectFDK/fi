@@ -54,10 +54,12 @@ if (isset($_SESSION['id_wms'])){
     $item_type1 = (strlen(htmlspecialchars($_REQUEST['item_type1'])) == 0)? 'NULL' : "'".htmlspecialchars($_REQUEST['item_type1'])."'";
     $item_type2 = (strlen(htmlspecialchars($_REQUEST['item_type2'])) == 0)? 'NULL' : "'".htmlspecialchars($_REQUEST['item_type2'])."'";
     $package_unit_number = (strlen(htmlspecialchars($_REQUEST['package_unit_number'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['package_unit_number']);
+    $unit_package = (strlen(htmlspecialchars($_REQUEST['unit_package'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['unit_package']);
 
     $unit_price_o = (strlen(htmlspecialchars($_REQUEST['unit_price_o'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['unit_price_o']);
     $unit_price_rate = (strlen(htmlspecialchars($_REQUEST['unit_price_rate'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['unit_price_rate']);
     $unit_curr_code = (strlen(htmlspecialchars($_REQUEST['unit_curr_code'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['unit_curr_code']);
+    $grade_code = (strlen(htmlspecialchars($_REQUEST['grade_code'])) == 0)? 'NULL' : "'".htmlspecialchars($_REQUEST['grade_code'])."'";
     $customer_type = (strlen(htmlspecialchars($_REQUEST['customer_type'])) == 0)? 'NULL' : "'".htmlspecialchars($_REQUEST['customer_type'])."'";
     $package_type = (strlen(htmlspecialchars($_REQUEST['package_type'])) == 0)? 'NULL' : "'".htmlspecialchars($_REQUEST['package_type'])."'";
     $capacity = (strlen(htmlspecialchars($_REQUEST['capacity'])) == 0)? 'NULL' : htmlspecialchars($_REQUEST['capacity']);
@@ -139,10 +141,12 @@ if (isset($_SESSION['id_wms'])){
     $field .= "item_type1            = $item_type1,";
     $field .= "item_type2            = $item_type2,";
     $field .= "package_unit_number   = $package_unit_number,";
+    $field .= "unit_package          = $unit_package,";
 
     $field .= "unit_price_o          = $unit_price_o,";
     $field .= "unit_price_rate       = $unit_price_rate,";
     $field .= "unit_curr_code        = $unit_curr_code,";
+    $field .= "grade_code            = $grade_code,";
     $field .= "customer_type         = $customer_type,";
     $field .= "package_type          = $package_type,";
     $field .= "capacity              = $capacity,";

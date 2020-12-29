@@ -59,14 +59,14 @@
 <style>
 	.style4 {
 	font-size: 11px;
-	color: #CC0000;
+	color: #02AEEF;
 	}
 </style>
 
 <div style="margin: 0px 0px;">
 	<table width="100%">
 		<tr>
-			<td align="left" width="92%" valign="middle"><marquee><span class="style4"><?php echo "Welcome ".$nama.", you are login as ".$ty." PT FDK INDONESIA";?></span></marquee></td>
+			<td align="left" width="92%" valign="middle"><marquee><span class="style4"><?php echo "Welcome ".$nama.", you are login as ".$ty." PT RAYOVAC BATTERY INDONESIA";?></span></marquee></td>
 			<td align="right" width="8%"><span id='demo'></span></td>
 			<td align="right"><a href="../dashboard/dashboard.php" title="Home"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a></td>
 			<td align="right" width="2%" valign="middle"><a href="<?php echo $out; ?>" onClick="return confirmLogOut()" title="Sign-Out" target="_top"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a></td>

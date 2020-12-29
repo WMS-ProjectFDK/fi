@@ -4,7 +4,7 @@
 	$item_no = isset($_REQUEST['item_no']) ? strval($_REQUEST['item_no']) : '';
 	$supplier_code = isset($_REQUEST['supplier_code']) ? strval($_REQUEST['supplier_code']) : '';
     $rank = isset($_REQUEST['rank']) ? strval($_REQUEST['rank']) : '';
-	
+	$msg = '';
 	
 	$sql = "update itemmaker set alter_procedure = alter_procedure - 1 where item_no = '$item_no'  and alter_procedure > $rank";
     $sql2 = "delete from itemmaker where item_no = '$item_no' and supplier_code = '$supplier_code'";
@@ -36,7 +36,7 @@
 	if($msg != ''){
 		echo json_encode($msg);
 	}else{
-		echo json_encode("success");
+		echo 'OK';
 	}
 ?>
 

@@ -12,40 +12,44 @@ if (isset($_SESSION['id_wms'])){
     $msg = '';
 
     foreach($queries as $query){
-		$company_code = $query->company_code;
+        $company_code = $query->company_no;
 		$company_type = $query->company_type;
         $company_name = $query->company_name;
-        $ADDRESS1 = $query->ADDRESS1;
-		$ADDRESS2 = $query->ADDRESS2;
-        $ADDRESS3 = $query->ADDRESS3;
-        $ADDRESS4 = $query->ADDRESS4;
-		$ATTN = $query->ATTN;
-        $TEL_NO = $query->TEL_NO;
-        $FAX_NO = $query->FAX_NO;
-		$ZIP_CODE = $query->ZIP_CODE;
-        $COUNTRY_CODE = $query->COUNTRY_CODE;
-        $CURR_CODE = $query->CURR_CODE;
-		$TTERMS = $query->TTERMS;
-        $PDAYS = $query->PDAYS;
-        $CASE_MARK = $query->CASE_MARK;
-		$EDI_CODE = $query->EDI_CODE;
-        $VAT = $query->VAT;
-        $SUPPLY_TYPE = $query->SUPPLY_TYPE;
-		$SUBC_CODE = $query->SUBC_CODE;
-        $TRANSPORT_DAYS = $query->TRANSPORT_DAYS;
+        $ADDRESS1 = $query->company_address1;
+		$ADDRESS2 = $query->company_address2;
+        $ADDRESS3 = $query->company_address3;
+        $ADDRESS4 = $query->company_address4;
+		$ATTN = $query->attn;
+        $TEL_NO = $query->telno;
+        $FAX_NO = $query->faxno;
+		$ZIP_CODE = $query->zip_code;
+        $COUNTRY_CODE = $query->country;
+        $CURR_CODE = $query->currency;
+		$TTERMS = $query->tterms;
+        $PDAYS = $query->pday;
+        $PDESC = $query->pdesc;
+        $CASE_MARK = '';
+		$EDI_CODE = '';
+        $VAT = 0;
+        $SUPPLY_TYPE = $query->supply_type;
+		$SUBC_CODE = '';
+        $TRANSPORT_DAYS = $query->days_trans;
         
 
-        $CC = $query->CC;
-        $COMPANY_SHORT = $query->COMPANY_SHORT;
-        $TAXPAYER_NO = $query->TAXPAYER_NO;
-		$EMAIL = $query->EMAIL;
-        $QUOT_SALE_CODE = $query->QUOT_SALE_CODE;
-        $FORECAST_FLG = $query->FORECAST_FLG;
-		$ACCPAC_COMPANY_CODE = $query->ACCPAC_COMPANY_CODE;
-        $BONDED_TYPE = $query->BONDED_TYPE;
+        $CC = '';
+        $COMPANY_SHORT = $query->company_short_name;
+        $TAXPAYER_NO = $query->taxpayer;
+		$EMAIL = $query->email;
+        $QUOT_SALE_CODE = 0;
+        $FORECAST_FLG = 0;
+		$ACCPAC_COMPANY_CODE = $query->accpac;
+        $BONDED_TYPE = $query->bonded;
         
-        $BC_DOC = $query->BC_DOC;
-		$BC_DOC_REVERSE = $query->BC_DOC_REVERSE;
+        $BC_DOC = '';
+        $BC_DOC_REVERSE = '';
+        
+        
+        
 
 
         $sql  = " 
@@ -62,7 +66,7 @@ if (isset($_SESSION['id_wms'])){
                ZIP_CODE = '$ZIP_CODE',
                COUNTRY_CODE = '$COUNTRY_CODE',
                CURR_CODE = '$CURR_CODE',
-               TTERMS = '$TTERMS',
+               TTERM = '$TTERMS',
                PDAYS = '$PDAYS',
                PDESC = '$PDESC',
                CASE_MARK = '$CASE_MARK',
@@ -74,7 +78,7 @@ if (isset($_SESSION['id_wms'])){
                CC = '$CC',
                COMPANY_SHORT = '$COMPANY_SHORT',
                TAXPAYER_NO = '$TAXPAYER_NO',
-               EMAIL = '$EMAIL',
+               E_MAIL = '$EMAIL',
                QUOT_SALE_CODE = '$QUOT_SALE_CODE',
                FORECAST_FLG = '$FORECAST_FLG',
                ACCPAC_COMPANY_CODE = '$ACCPAC_COMPANY_CODE',
@@ -83,6 +87,7 @@ if (isset($_SESSION['id_wms'])){
                BC_DOC_REVERSE = '$BC_DOC_REVERSE'
         where company_code = $company_code
        " ;
+
 
         $data_save = sqlsrv_query($connect, strtoupper($sql));
         if($data_save === false ) {
@@ -142,7 +147,7 @@ if (isset($_SESSION['id_wms'])){
 if($msg != ''){
 	echo json_encode($msg);
 }else{
-	echo json_encode('success');
+	echo 'OK';
 }
 
 ?>

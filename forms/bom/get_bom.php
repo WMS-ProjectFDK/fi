@@ -21,7 +21,13 @@ if ($ck_item_low != "true"){
 	$item_low = "";
 }
 
-$sql  = "select DISTINCT s.UPPER_ITEM_NO,
+if($ck_item_no == "true" AND $ck_item_low == 'true'){
+	$top = "top 150";
+}else{
+	$top = "";
+}
+
+$sql  = "select DISTINCT $top s.UPPER_ITEM_NO,
 	i.ITEM,
 	i.[DESCRIPTION],
 	s.LEVEL_NO,

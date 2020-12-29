@@ -6,16 +6,16 @@ body {
 */  line-height: 130%;
   	width: 100%;
   	min-width: 970px;
-  	color: black;
+  	color: F7F7F7;
 }
 
 a {
-	color: #F30309;
+	color: #F7F7F7;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #590835;
+	color: #F7F7F7;
 }
 
 a img {
@@ -34,7 +34,7 @@ h2{
 	padding-top: 0;
 }
 
-.highlight {background-color:#FF9D9D;border-bottom:#F30 1px solid;border-top:#F30 1px solid;padding: 4px 10px}
+.highlight {background-color:#F7F7F7;border-bottom:#F30 1px solid;border-top:#F30 1px solid;padding: 4px 10px}
 
 /***** Main Layout ****/
 #container {

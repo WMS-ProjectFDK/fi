@@ -6,7 +6,7 @@
     $curr_code = isset($_REQUEST['curr_code']) ? strval($_REQUEST['curr_code']) : '';
 	$estimate_price = isset($_REQUEST['estimate_price']) ? strval($_REQUEST['estimate_price']) : '';
 	$leadtime = isset($_REQUEST['leadtime']) ? strval($_REQUEST['leadtime']) : '';
-	
+	$msg="";
 	
 	$sql = "IF NOT EXISTS(select * from itemmaker where item_no = '$item_no' and supplier_code = '$supplier_code') BEGIN 
 	        insert into itemmaker (create_date,
@@ -61,7 +61,7 @@
 	if($msg != ''){
 		echo json_encode($msg);
 	}else{
-		echo json_encode("success");
+		echo 'OK';
 	}
 ?>
 

@@ -97,7 +97,7 @@ if ($row_count > 0){
 
                 
                 if($col_a%3!=0){
-                    $marks .= "<tr/>"; 
+                    $marks .= "</tr>"; 
                 }
             }
             $rowNo++;
@@ -148,10 +148,7 @@ $dt_cou = sqlsrv_fetch_object($data_cou);
 if($state != 'packing_list'){
     $qry = "select  doh.customer_code, doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, doh.ship_name,
         doh.SHIP_NAME as shipped_per1, dod.ITEM_NO,
-        --substring(doh.ship_name,1,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)-1)  shipped_per1, 
-        --substring(doh.ship_name,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)+2) shipped_per2, 
         REPLACE(doh.remark, char(13),'<br/>') as remark, doh.notify, doh.attn  h_attn, 
-        --decode(isnull(dod.customer_part_no,''),'','','(' + dod.customer_part_no + ')')  customer_part_no, 
         dod.qty, dod.amt_o  amount, dod.u_price  unit_price, dod.remark2, dod.carved_stamp, doh.address_flg, c1.company, 
         c1.address1, c1.address2, c1.address3, c1.address4, c1.attn  com_attn, doh.port_loading port_of_loading, 
         doh.port_discharge port_of_discharge, doh.final_destination, CONVERT(varchar,doh.etd,103) etd, 
@@ -160,38 +157,81 @@ if($state != 'packing_list'){
         doh.pdays, doh.pdesc, doh.revise_flg, dod.description  class, dod.line_no, i.description   item, i.item   item_name, 
         i.customer_item_name + case   when i.customer_item_no is null then  ''  else '(' + i.customer_item_no + ')' end as customer_item,
         u.unit, u.unit_pl, u2.unit customer_unit, u2.unit_pl  customer_unit_pl, cur.curr_mark, doh.gst_amt_l, 
-        case when dat.carved_stamp_count=1 then 'PRINT' else '' end carved_stamp_type,
+        case when sum(case  when dod.carved_stamp is null then 0 else 1 end)=1 then 'PRINT' else '' end carved_stamp_type,
         bk.BANK, bk.ADDRESS1 as BANK_ADDR1, bk.ADDRESS2 as BANK_ADDR2, bk.ACCOUNT_NO,
         dod.CUSTOMER_PO_NO1,
         dod.qty,
         round(dod.qty / isnull(i.package_unit_number,1),0)  customer_package,
         round(isnull(dod.u_price,0) * isnull(i.package_unit_number,1),6) customer_u_price
-        from  do_header  doh, 
-        do_details dod, 
-        company c1, 
-        item i, 
-        unit u, 
-        unit u2, 
-        currency cur, 
-        country cou, 
-        (select  do_no, count(*)  data_count, sum(case  when carved_stamp is null then 0 else 1 end) carved_stamp_count
-        from do_details
-        where do_no = '$do'
-        group by do_no) dat,
-        (select * from BANK where BANK_SEQ <> 1 and delete_flag is null) bk
+        from  do_header  doh
+        LEFT JOIN do_details dod on doh.do_no = dod.do_no
+        LEFT JOIN company c1 on doh.customer_code = c1.company_code
+        LEFT JOIN item i on dod.item_no = i.item_no and dod.origin_code = i.origin_code
+        LEFT JOIN unit u on i.uom_q = u.unit_code
+        LEFT JOIN unit u2 on i.unit_package = u2.unit_code
+        LEFT JOIN currency cur on doh.curr_code = cur.curr_code 
+        LEFT JOIN country cou on dod.origin_code = cou.country_code 
+        LEFT JOIN BANK bk on doh.curr_code = bk.curr_code
         where doh.do_no = '$do'
-        and doh.do_no = dod.do_no
-        and doh.customer_code = c1.company_code
-        and dod.item_no = i.item_no
         and dod.item_no is not null
-        and dod.origin_code = i.origin_code
-        and dod.origin_code = cou.country_code
-        and i.uom_q = u.unit_code
-        and i.unit_package = u2.unit_code
-        and doh.curr_code = cur.curr_code
-        and doh.do_no = dat.do_no
-        and doh.curr_code = bk.curr_code
+        and bk.BANK_SEQ <> 1 
+        and bk.delete_flag is null
+        group by doh.customer_code, doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103), doh.ship_name,doh.SHIP_NAME, 
+        dod.ITEM_NO, doh.remark, doh.notify, doh.attn, dod.qty, dod.amt_o, dod.u_price, dod.remark2, dod.carved_stamp, doh.address_flg, 
+        c1.company, c1.address1, c1.address2, c1.address3, c1.address4, c1.attn, doh.port_loading, doh.port_discharge, 
+        doh.final_destination, CONVERT(varchar,doh.etd,103), CONVERT(varchar,doh.eta,103), doh.trade_term, doh.lc_no, 
+        CONVERT(varchar,doh.lc_date,103), doh.issuing_bank, CONVERT(varchar,doh.due_date,103), doh.pby, doh.pdays, doh.pdesc, 
+        doh.revise_flg, dod.description, dod.line_no, i.description, i.item, i.customer_item_no, i.customer_item_name, u.unit, 
+        u.unit_pl, u2.unit, u2.unit_pl, cur.curr_mark, doh.gst_amt_l, dod.carved_stamp, bk.BANK, bk.ADDRESS1, bk.ADDRESS2, bk.ACCOUNT_NO, 
+        dod.CUSTOMER_PO_NO1, dod.qty, dod.qty, i.package_unit_number, dod.u_price, i.package_unit_number
         order by dod.line_no";
+
+    // $qry = "select  doh.customer_code, doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_date, doh.ship_name,
+    //     doh.SHIP_NAME as shipped_per1, dod.ITEM_NO,
+    //     --substring(doh.ship_name,1,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)-1)  shipped_per1, 
+    //     --substring(doh.ship_name,dbo.INSTR(doh.ship_name,char(13)+char(10),1,1)+2) shipped_per2, 
+    //     REPLACE(doh.remark, char(13),'<br/>') as remark, doh.notify, doh.attn  h_attn, 
+    //     --decode(isnull(dod.customer_part_no,''),'','','(' + dod.customer_part_no + ')')  customer_part_no, 
+    //     dod.qty, dod.amt_o  amount, dod.u_price  unit_price, dod.remark2, dod.carved_stamp, doh.address_flg, c1.company, 
+    //     c1.address1, c1.address2, c1.address3, c1.address4, c1.attn  com_attn, doh.port_loading port_of_loading, 
+    //     doh.port_discharge port_of_discharge, doh.final_destination, CONVERT(varchar,doh.etd,103) etd, 
+    //     CONVERT(varchar,doh.eta,103) eta, doh.trade_term, doh.lc_no, CONVERT(varchar,doh.lc_date,103) lc_date, doh.issuing_bank, 
+    //     CONVERT(varchar,doh.due_date,103) due_date, doh.pby,
+    //     doh.pdays, doh.pdesc, doh.revise_flg, dod.description  class, dod.line_no, i.description   item, i.item   item_name, 
+    //     i.customer_item_name + case   when i.customer_item_no is null then  ''  else '(' + i.customer_item_no + ')' end as customer_item,
+    //     u.unit, u.unit_pl, u2.unit customer_unit, u2.unit_pl  customer_unit_pl, cur.curr_mark, doh.gst_amt_l, 
+    //     case when dat.carved_stamp_count=1 then 'PRINT' else '' end carved_stamp_type,
+    //     bk.BANK, bk.ADDRESS1 as BANK_ADDR1, bk.ADDRESS2 as BANK_ADDR2, bk.ACCOUNT_NO,
+    //     dod.CUSTOMER_PO_NO1,
+    //     dod.qty,
+    //     round(dod.qty / isnull(i.package_unit_number,1),0)  customer_package,
+    //     round(isnull(dod.u_price,0) * isnull(i.package_unit_number,1),6) customer_u_price
+    //     from  do_header  doh, 
+    //     do_details dod, 
+    //     company c1, 
+    //     item i, 
+    //     unit u, 
+    //     unit u2, 
+    //     currency cur, 
+    //     country cou, 
+    //     (select  do_no, count(*)  data_count, sum(case  when carved_stamp is null then 0 else 1 end) carved_stamp_count
+    //     from do_details
+    //     where do_no = '$do'
+    //     group by do_no) dat,
+    //     (select * from BANK where BANK_SEQ <> 1 and delete_flag is null) bk
+    //     where doh.do_no = '$do'
+    //     and doh.do_no = dod.do_no
+    //     and doh.customer_code = c1.company_code
+    //     and dod.item_no = i.item_no
+    //     and dod.item_no is not null
+    //     and dod.origin_code = i.origin_code
+    //     and dod.origin_code = cou.country_code
+    //     and i.uom_q = u.unit_code
+    //     and i.unit_package = u2.unit_code
+    //     and doh.curr_code = cur.curr_code
+    //     and doh.do_no = dat.do_no
+    //     and doh.curr_code = bk.curr_code
+    //     order by dod.line_no";
 }else{
     $qry = "select h.do_no, h.pl_line_no, d1.counter, d.FDK_PART+'('+d.CUSTOMER_PART_NO+')' class, h.case_no,
         RTrim(LTrim(CAST(h.qty as varchar))) total_qty, u1.unit_pl as total_qty_uom,
@@ -430,7 +470,7 @@ if($state != 'packing_list'){
 $no=1;
 $bnk = '';          $bnk_addr1='';      $bnk_addr2='';      $account_no = '';
 $tot_amount = 0;    $tot_qty = 0;       $pl = '';           $rmk='';
-$tot_gw=0;          $tot_nw=0;
+$tot_gw=0;          $tot_nw=0;          $curr='';
 $uom_gw='';         $uom_nw='';
 
 if($state != 'packing_list'){
@@ -443,6 +483,7 @@ if($state != 'packing_list'){
         $tot_amount += $data->AMOUNT;
         $tot_qty += $data->QTY;
         $pl = $data->UNIT_PL;
+        $curr = $data->CURR_MARK;
 
         $content .= "     
             <tr>
@@ -564,7 +605,7 @@ if($state != 'packing_list'){
                         <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'></td>
                         <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'></td>
                         <td valign='middle' align='right' style='border:0px solid #ffffff;font-size:12px;width:108px;height:25px;'>
-                            ".number_format($tot_amount,2)."
+                            ".$curr.' '.number_format($tot_amount,2)."
                         </td>
                     </tr>
                     </table>
@@ -667,7 +708,7 @@ $content .=  "
                         $content .= "
                         </td>
                         <td colspan=2 valign='middle' align='center' style='border:0px solid #ffffff;font-size:12px;width:70%;'>
-                            PT FDK INDONESIA
+                            PT RAYOVAC BATTERY INDONESIA
                             <br/>
                             <br/>
                             <br/>

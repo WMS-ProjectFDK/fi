@@ -50,7 +50,7 @@ if($mrp == ""){
 		inner join item b on a.item_no=b.item_no 
 		inner join unit c on a.uom_q=c.unit_code
 		inner join ztb_safety_stock d on a.item_no=d.item_no
-		where a.di_no='$di' and d.period=$p and d.year='$y'
+		where a.di_no='$di'
 		order by b.description asc";
 }else{
 	$qry_item = "select distinct a.po_no, a.item_no, b.item, b.description, 

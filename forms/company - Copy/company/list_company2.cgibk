@@ -1,0 +1,226 @@
+# list_company2.pl
+require '/pglosas/init.pl';
+require '/pglosas/master/company/company_desc.pl';
+
+&html_header("Company Master Listing");
+&title();
+
+#
+# check formed value and make sql
+#
+if ($in{'submit1'} ne ""){
+
+	$submit_type = "Search";
+	if ($in{'keyword'} eq ""){
+
+		&err("Keyword is not specified.");
+
+	} else {
+
+		$keyword = $in{'keyword'};
+		$sql  = " select t.type_description,";
+		$sql .= " 		 c.company,";
+		$sql .= " 		 c.address1,";
+		$sql .= " 		 c.address2,";
+		$sql .= " 		 c.address3,";
+		$sql .= " 		 c.address4,";
+		$sql .= " 		 c.attn,";
+		$sql .= " 		 u.country,";
+		$sql .= " 		 c.curr_code,";
+		$sql .= " 		 c.tterm,";
+		$sql .= " 		 c.pdays,";
+		$sql .= " 		 c.pdesc,";
+		$sql .= "        con.tterm,";
+		$sql .= "        con.pdays,";
+		$sql .= "        con.pdesc,";
+		chop($sql);
+		$sql .= " from company_type t,";
+		$sql .= "	   company c,";
+		$sql .= "	   country u,";
+		$sql .= "      contract con,";
+		chop($sql);
+		$sql .= " where c.delete_type is null ";
+		$sql .= " and ";
+		$sql .= "       (company like '%$keyword%'";
+		$sql .= " 		or ";
+		$sql .= "		 address1 like '%$keyword%'";
+		$sql .= " 		or ";
+		$sql .= "		 address2 like '%$keyword%'";
+		$sql .= " 		or ";
+		$sql .= "		 address3 like '%$keyword%'";
+		$sql .= " 		or ";
+		$sql .= "		 address4 like '%$keyword%'";
+		$sql .= " 		or ";
+		$sql .= "		 attn like '%$keyword%'";
+		$sql .= "		) ";
+		$sql .= " and   u.country_code = c.country_code ";
+		$sql .= " and   t.company_type = c.company_type ";
+		$sql .= " and   c.company_code = con.company_code (+) ";
+
+	}
+
+} elsif ($in{'submit2'} ne ""){
+
+	$submit_type = "Select";
+	if ($in{'company_type'} eq ""){
+
+		&err("Company Type is not specified.");
+
+	} else {
+
+		$company_type = $in{'company_type'};
+		$sql  = " select t.type_description,";
+		$sql .= " 		 c.company,";
+		$sql .= " 		 c.address1,";
+		$sql .= " 		 c.address2,";
+		$sql .= " 		 c.address3,";
+		$sql .= " 		 c.address4,";
+		$sql .= " 		 c.attn,";
+		$sql .= " 		 u.country,";
+		$sql .= " 		 c.curr_code,";
+		$sql .= " 		 c.tterm,";
+		$sql .= " 		 c.pdays,";
+		$sql .= " 		 c.pdesc,";
+		$sql .= "        con.tterm,";
+		$sql .= "        con.pdays,";
+		$sql .= "        con.pdesc,";
+		chop($sql);
+		$sql .= " from company_type t,";
+		$sql .= "	   company c,";
+		$sql .= "	   country u,";
+		$sql .= "	   contract con,";
+		chop($sql);
+		$sql .= " where c.delete_type is null ";
+		$sql .= " and   c.company_type = $company_type ";
+		$sql .= " and   u.country_code = c.country_code ";
+		$sql .= " and   t.company_type = c.company_type ";
+		$sql .= " and   c.company_code = con.company_code (+)";
+
+	}
+
+} elsif ($in{'submit3'} ne ""){
+
+	$submit_type = "All";
+		$sql  = " select t.type_description,";
+		$sql .= " 		 c.company,";
+		$sql .= " 		 c.address1,";
+		$sql .= " 		 c.address2,";
+		$sql .= " 		 c.address3,";
+		$sql .= " 		 c.address4,";
+		$sql .= " 		 c.attn,";
+		$sql .= " 		 u.country,";
+		$sql .= " 		 c.curr_code,";
+		$sql .= " 		 c.tterm,";
+		$sql .= " 		 c.pdays,";
+		$sql .= " 		 c.pdesc,";
+		$sql .= "        con.tterm,";
+		$sql .= "        con.pdays,";
+		$sql .= "        con.pdesc,";
+		chop($sql);
+		$sql .= " from company_type t,";
+		$sql .= "	   company c,";
+		$sql .= "	   country u,";
+		$sql .= "	   contract con,";
+		chop($sql);
+		$sql .= " where c.delete_type is null ";
+		$sql .= " and   u.country_code = c.country_code ";
+		$sql .= " and   t.company_type = c.company_type ";
+		$sql .= " and   c.company_code = con.company_code (+) ";
+
+} else {
+
+	&err("No list.");
+
+}
+#
+# db open
+#
+$dbh = &db_open();
+
+&do_sql($sql);
+
+@coimpanies;
+while((@datas) = $cur->fetchrow){
+
+   $rec = {}; $j = 0;
+		$rec->{company_type} = $datas[$j]; $j ++;
+		$rec->{company} 	= $datas[$j]; $j ++;
+		$rec->{address1} 	= $datas[$j]; $j ++;
+		$rec->{address2} 	= $datas[$j]; $j ++;
+		$rec->{address3} 	= $datas[$j]; $j ++;
+		$rec->{address4} 	= $datas[$j]; $j ++;
+		$rec->{attn} 		= $datas[$j]; $j ++;
+		$rec->{country} 	= $datas[$j]; $j ++;
+		$rec->{curr_code} 	= $datas[$j]; $j ++;
+		$rec->{tterm} 		= $datas[$j]; $j ++;
+		$rec->{pdays} 		= $datas[$j]; $j ++;
+		$rec->{pdesc} 		= $datas[$j]; $j ++;
+		$rec->{con_tterm} 		= $datas[$j]; $j ++;
+		$rec->{con_pdays} 		= $datas[$j]; $j ++;
+		$rec->{con_pdesc} 		= $datas[$j]; $j ++;
+
+	push @companies,$rec;
+
+}
+
+if (defined @companies){
+
+print<<ENDOFTEXT;
+	<table border=1>
+	<tr bgcolor="LightGreen">
+	<th>TYPE</th>
+	<th>NAME</th>
+	<th>INI</th>
+	<th>ADDRESS</th>
+	<th>TRADE TERM</th>
+	<th>CONTRACT</th>
+	</tr>
+ENDOFTEXT
+   foreach $key (@companies){
+    if ($key->{company} eq $company_before){
+    print <<ENDOFTEXT;
+   	<tr>
+   	<td><BR></td>
+   	<td><BR></td>
+   	<td><BR></td>
+   	<td><BR></td>
+   	<td><BR></td>
+   	<td>$key->{con_tterm} $key->{con_pdays} $key->{con_pdesc}<BR></td>
+   	</tr>
+ENDOFTEXT
+    } else {
+    $company_before = $key->{company} ;
+    print <<ENDOFTEXT;
+   	<tr>
+   	<td>$key->{company_type}</td>
+   	<td>$key->{company}</td>
+   	<td>$key->{init}<BR></td>
+ENDOFTEXT
+   	print "<td>$key->{address1}";
+   	print "<BR>$key->{address2}" if ($key->{address2} ne "");
+   	print "<BR>$key->{address3}" if ($key->{address3} ne "");
+   	print "<BR>$key->{address4}" if ($key->{address4} ne "");
+   	print "<BR>$key->{attn}";
+   	print "</td>\n";
+print<<ENDOFTEXT
+   	<td>$key->{tterm} $key->{pdays} $key->{pdesc}<BR></td>
+   	<td>$key->{con_tterm} $key->{con_pdays} $key->{con_pdesc}<BR></td>
+   	</tr>
+ENDOFTEXT
+      }
+   }
+   print "</table>\n";
+
+} else {
+
+	print "No data was found";
+}
+
+print<<ENDOFTEXT;
+<HR>
+[<A HREF=/pglosas/main.asp?KEYWORD=$KEYWORD&menuType=master>Back to Main Menu</A>]
+</BODY>
+</HTML>
+ENDOFTEXT
+
+exit ;

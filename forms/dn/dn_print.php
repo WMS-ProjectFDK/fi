@@ -201,7 +201,7 @@ $content = "
 				<tr>
 					<td colspan=2 style='border:0px solid #ffffff'>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
-						PT. FDK INDONESIA
+						PT. RAYOVAC BATTERY INDONESIA
 						<br/><br/><br/><br/><br/>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<b><u>".$dt_h->SIGNATURE_NAME."</u></b>

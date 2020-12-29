@@ -295,9 +295,13 @@ h2 {
 	function print_xls(){
 		console.log('view_fg_print_process.php'+get_url);
 		$.post('view_fg_print_process.php'+get_url,{}).done(function(res){
-			url_download = 'view_fg_print_xls.php';
-			window.open(url_download);
+			download_excel();
 		})
+	}
+
+	function download_excel(){
+		url_download = 'view_fg_print_xls.php';
+		window.open(url_download);
 	}
 
 </script>

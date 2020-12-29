@@ -15,10 +15,12 @@ if($by == 'check_line'){
 	$order = "order by a.eta asc";
 }
 
-$sql_h = "select a.*, com.*, a.tterm as trade_term, cou.country, c.curr_short, c.curr_mark, 
+$sql_h = "select 
+SUPPLIER_CODE,PO_NO,cast(PO_DATE as varchar(10)) as PO_DATE,c.CURR_CODE,EX_RATE,a.TTERM,case when a.PDAYS = 0 then '' else cast(a.PDAYS as varchar(10)) end PDAYS,a.PDESC,REQ,ETA,MARKS1,REVISE,AMT_O,AMT_L,FDK_PERSON_CODE,a.ATTN,PERSON_CODE,a.CC,DATE_TYPE,PBY,a.UPTO_DATE,a.REG_DATE,SECTION_CODE,SHIPTO_CODE,TRANSPORT,DI_OUTPUT_TYPE,FREIGHT,a.VAT,BTT,NBT,a.UPTO_DATE,a.REG_DATE,c.DELETE_TYPE,c.COMPANY_CODE,COMPANY_TYPE,COMPANY,ADDRESS1,ADDRESS2,ADDRESS3,ADDRESS4,a.ATTN,TEL_NO,FAX_NO,ZIP_CODE,cou.COUNTRY_CODE,c.CURR_CODE,COMPANY_SHORT,TAXPAYER_NO,E_MAIL,QUOT_SALE_CODE,FORECAST_FLG,ACCPAC_COMPANY_CODE,BONDED_TYPE,BC_DOC,BC_DOC_REVERSE,
+a.tterm as trade_term, cou.country, c.curr_short, c.curr_mark, 
 	(select coalesce(count(CARVED_STAMP),0) from po_details s where s.po_no = a.po_no) as date_code,
-	replace(reason1,'chr(10)','<br/>') as reason1,
-	replace(remark1,'chr(10)','<br/>') as remark1,
+	replace(reason1,'CHAR(13)+CHAR(10)','<br/>') as reason1,
+	replace(remark1,'CHAR(13)+CHAR(10)','<br/>') as remark1,
   	(select count(*) from po_details where po_no=a.po_no) as jum_dtl,
   	case when a.REVISE is null then 'N' else a.revise end as revise
 	from po_header a
@@ -180,7 +182,7 @@ $content = "
 			            <tr>
 			              <td style='font-size:12px;border:0px solid #ffffff;'><b>PO DATE</b></td>
 			              <td style='font-size:12px;border:0px solid #ffffff;'>:</td>
-			              <td style='width:50px;font-size:12px;border:0px solid #ffffff;'></td>
+			              <td style='width:50px;font-size:12px;border:0px solid #ffffff;'>".$dt_h->PO_DATE."</td>
 			            </tr>
 			        </table>
 				</td>
@@ -191,7 +193,7 @@ $content = "
 			            <tr>
 			              <td style='border:0px solid #ffffff;'><b>SHIP TO</b></td>
 			              <td style='border:0px solid #ffffff;'>:</td>
-			              <td style='border:0px solid #ffffff;'>PT FDK INDONESIA</td>
+			              <td style='border:0px solid #ffffff;'>PT RAYOVAC BATTERY INDONESIA</td>
 			            </tr>
 			            <tr>
 			              <td style='border:0px solid #ffffff;'></td>
@@ -314,7 +316,7 @@ $content .= "
 			<tr>
 				<td style='width:40%; border:5px solid #ffffff;'><b>".$dt_h->COMPANY."</b></td>
 				<td style='width:5%; border:5px solid #ffffff;'></td>
-				<td style='width:30%; border:5px solid #ffffff;'><b>PT. FDK INDONESIA</b></td>
+				<td style='width:30%; border:5px solid #ffffff;'><b>PT RAYOVAC BATTERY INDONESIA</b></td>
 				<td style='width:25%; border:5px solid #ffffff;'></td>
 			</tr>
 			<tr>

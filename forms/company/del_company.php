@@ -2,7 +2,7 @@
 session_start();
 ini_set('max_execution_time', -1);
 include("../../connect/conn.php");
-
+$msg = "";
 $company_code = isset($_REQUEST['company_code']) ? strval($_REQUEST['company_code']) : '';
 
 
@@ -20,7 +20,7 @@ if($data_del === false ) {
 if($msg != ''){
 	echo json_encode($msg);
 }else{
-	echo json_encode('success');
+	echo 'OK';
 }
 
 ?>

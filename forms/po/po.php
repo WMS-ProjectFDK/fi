@@ -80,7 +80,7 @@ if ($varConn=='Y'){
 					$('#search_prf').linkbutton('enable');
 					$.ajax({
 						type: 'GET',
-						url: '../json/json_company_details.php?id='+rec.company_code,
+						url: '../json/json_company_details_po.php?id='+rec.company_code,
 						data: { kode:'kode' },
 						success: function(data){
 							$('#country_add').textbox('setValue',data[0].COUNTRY_CODE+'-'+data[0].COUNTRY);

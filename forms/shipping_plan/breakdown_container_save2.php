@@ -22,9 +22,6 @@ if (isset($_SESSION['id_wms'])){
 			}
 		}
 	};
-
-	print_r($msg, true);
-	echo $msg;
 }else{
 	echo json_encode(array('errorMsg'=>'Session Expired'));
 }

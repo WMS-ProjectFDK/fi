@@ -68,17 +68,17 @@
 		) main
 		left join mps_header mh on main.customer_po_no= mh.po_no and mh.po_line_no = CAST(main.customer_po_line_no as int)
 		order by main.ex_factory";
-		$add = "'add'";
+	$add = "'add'";
 	$data = sqlsrv_query($connect, strtoupper($rs));
-    $items = array();
+    $items = array();	
     
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
 		$ans = "'".$items[$rowno]->ANSWER_NO."'";
 		$ri = $items[$rowno]->REMARK_SHIPPING;
 		$plt = $items[$rowno]->PALLET;
-		$items[$rowno]->REMARK_SHIPPING = str_replace("1-UP","1-".ceil($plt),$ri);
-		$idxfield = $items[$rowno]->ROWNUMM;
+		$items[$rowno]->REMARK_SHIPPING = str_replace('<BR>', '<br>', str_replace("1-UP","1-".ceil($plt),$ri));
+		$idxfield = $rowno; //$items[$rowno]->ROWNUMM;
 		$stock_qty = $items[$rowno]->STK_QTY;
 		$items[$rowno]->STK_QTY = number_format($stock_qty);
 		// $plt = $items[$rowno]->PALLET;
