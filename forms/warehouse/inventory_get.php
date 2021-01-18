@@ -54,7 +54,16 @@
 		    from whinventory a
 			inner join item b on a.item_no=b.item_no
 			inner join unit c on b.uom_q=c.unit_code
-			$where order by b.item asc, b.description asc";	
+			$where 
+			and a.this_inventory +
+				a.receive1 +
+				a.other_receive1 +
+				a.issue1 +
+				a.other_issue1 + 
+				a.last_inventory <> 0
+				
+			order by b.item asc, b.description asc
+			";	
 		$data = sqlsrv_query($connect, strtoupper($sql));
 		
 	}else{
@@ -69,6 +78,12 @@
 			inner join item b on a.item_no=b.item_no
 			inner join unit c on b.uom_q=c.unit_code
 			$where
+			and a.last_inventory +
+				a.receive2 +
+				a.other_receive2 +
+				a.issue2 +
+				a.other_issue2 + 
+				a.last2_inventory <> 0
 			order by b.item asc, b.description asc";	
 		$data = sqlsrv_query($connect, strtoupper($sql));
 		

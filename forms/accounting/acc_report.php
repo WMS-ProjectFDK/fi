@@ -78,6 +78,7 @@ h2 {
                     <option value="" selected="true"></option>
                     <option value="J_PURC_IMP">JURNAL PURCHASE IMPORT</option>
                     <option value="J_PURC_LOC">JURNAL PURCHASE LOCAL</option>
+		    <option value="J_PURC_SP">JURNAL PURCHASE SPAREPARTS</option>
                     <option value="SALES_ACCPAC">SALES ACCPAC</option>
                     <option value="COST_OF_SALES">COST OF SALES</option>
                     <option value="FG_INCOME">FG INCOME</option>
@@ -144,6 +145,10 @@ h2 {
             }else if (cmb_report == 'MATERIAL_COST'){
                 console.log('MATERIAL_COST.php'+get_url);
                 window.open('MATERIAL_COST.php'+get_url);
+
+            }else if (cmb_report == 'J_PURC_SP'){
+                console.log('J_PURC_SP.php'+get_url);
+                window.open('J_PURC_SP.php'+get_url);
             }
         }
 	}

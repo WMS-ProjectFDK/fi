@@ -73,8 +73,8 @@ if (isset($_SESSION['id_wms'])){
 			$field_dtl .= "estimate_price,"     ; $value_dtl .= "$pu_s_price,"							;
 			$field_dtl .= "amt,"                ; $value_dtl .= "round($pu_qty * $pu_s_price,2),"		;
 			$field_dtl .= "require_date,"       ; $value_dtl .= "'$pu_require',"	;
-			$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"								;
-			$field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"								;
+			$field_dtl .= "upto_date,"          ; $value_dtl .= "getdate(),"							;
+			// $field_dtl .= "reg_date,"           ; $value_dtl .= "getdate(),"							;
 			$msg1 .= " Add New Item Process Error  : $ins2";
 			if($pu_sts=='1'){
 				$field_dtl .= "remainder_qty,"     ; $value_dtl .= "$pu_qty,"							;		
@@ -99,7 +99,7 @@ if (isset($_SESSION['id_wms'])){
 			$field_upd .= "amt=round($pu_qty * $pu_s_price,2),";
 			$field_upd .= "require_date='$pu_require',"; 
 			$field_upd .= "upto_date=getdate(),";
-			$field_upd .= "reg_date=getdate(),";
+			// $field_upd .= "reg_date=getdate(),";
 			
 			if($pu_sts=='1'){
 				$field_upd .= "remainder_qty=$pu_qty,";	

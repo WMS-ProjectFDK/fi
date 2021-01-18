@@ -59,14 +59,18 @@ if (isset($_SESSION['id_wms'])){
         $ip_res = "and z.package_type in ('$IP')";
     }
 
-    $sql = "select a.slip_no, cast(a.slip_date as varchar(10)) slip_date, a.item_no, a.item_name, a.item_description, 
-		cast(a.approval_date as varchar(10)) as approval_date, a.slip_quantity, a.wo_no, c.plt_no,
-		isnull(cast(b.date_in as varchar(10)),'BELUM DI SCAN') as scan
-		from production_income a
-		left join (select slip_no, date_in from ztb_wh_kanban_trans_fg) b on a.slip_no = b.slip_no
-	    left join (select cast(id as varchar(10)) as id, wo_no, plt_no from ztb_p_plan) c on a.slip_no = c.id
-		$where
-		order by a.item_no asc, a.slip_date asc  ";
+    $sql = "select slip_no, slip_date, item_no, item_name, item_description,
+        approval_date, slip_quantity, wo_no, plt_no 
+        from 
+        (select distinct a.slip_no, cast(a.slip_date as varchar(10)) slip_date, a.item_no, a.item_name, a.item_description, 
+                cast(a.approval_date as varchar(10)) as approval_date, a.slip_quantity, a.wo_no, c.plt_no--,
+                --isnull(cast(b.date_in as varchar(10)),'BELUM DI SCAN') as scan
+                from production_income a
+                left join (select slip_no, date_in from ztb_wh_kanban_trans_fg) b on a.slip_no = b.slip_no
+                left join (select cast(id as varchar(10)) as id, wo_no, plt_no from ztb_p_plan) c on a.slip_no = c.id
+        		$where
+        ) a
+        order by a.item_no asc, a.slip_date asc";
 
     // echo $sql;
     $data = sqlsrv_query($connect, strtoupper($sql));

@@ -102,12 +102,12 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('D1', 'UNIT')
             ->setCellValue('E1', 'MONTH')
             ->setCellValue('F1', 'STANDARD PRICE')
-            ->setCellValue('G1', 'THIS INVENTORY')
+            ->setCellValue('G1', 'LAST INVENTORY')
             ->setCellValue('H1', 'RECEIVE')
             ->setCellValue('I1', 'OTHER RECEIVE')
             ->setCellValue('J1', 'ISSUE')
             ->setCellValue('K1', 'OTHER ISSUE')
-            ->setCellValue('L1', 'LAST INVENTORY');
+            ->setCellValue('L1', 'THIS INVENTORY');
 
 cellColor('A1:L1', 'D2D2D2');
 $sheet->getStyle('A1:L1')->applyFromArray(
@@ -141,12 +141,12 @@ while ($data=sqlsrv_fetch_object($result)){
                 ->setCellValue('d'.$no, $data->UNIT)
                 ->setCellValue('E'.$no, $cmbBln_txt)
                 ->setCellValue('F'.$no, $data->STANDARD_PRICE)
-                ->setCellValue('G'.$no, $data->THIS_INVENTORY)
+                ->setCellValue('G'.$no, $data->LAST_INVENTORY)
                 ->setCellValue('H'.$no, $data->RECEIVE1)
                 ->setCellValue('I'.$no, $data->OTHER_RECEIVE1)
                 ->setCellValue('J'.$no, $data->ISSUE1)
                 ->setCellValue('K'.$no, $data->OTHER_ISSUE1)
-                ->setCellValue('L'.$no, $data->LAST_INVENTORY);
+                ->setCellValue('L'.$no, $data->THIS_INVENTORY);
     $sheet = $objPHPExcel->getActiveSheet();
 
     cellColor('A'.$no.':L'.$no, 'FFFFFF');

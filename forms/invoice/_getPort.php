@@ -13,9 +13,9 @@
 	$data = sqlsrv_query($connect, strtoupper($rs));
 	while($row = sqlsrv_fetch_object($data)) {
 		array_push($items, $row);
-		$pdy = $items[$rowno]->PDAYS;
-		$pds = $items[$rowno]->PDESC;
-		$items[$rowno]->PAYMENT = $pdy.'-'.$pds;
+		// $pdy = $items[$rowno]->PDAYS;
+		// $pds = $items[$rowno]->PDESC;
+		// $items[$rowno]->PAYMENT = $pdy.'-'.$pds;
 		$rowno++;
 	}
 	$result["rows"] = $items;

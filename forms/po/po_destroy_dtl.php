@@ -51,5 +51,7 @@ if ($Total <= 0 ) {
 	}else{
 		echo json_encode(array('errorMsg'=>'Some errors occured.'));
 	}
+}else{
+	echo json_encode(array('errorMsg'=>'PO already haave to receive'));
 }
 ?>

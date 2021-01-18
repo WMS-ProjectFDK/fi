@@ -78,7 +78,7 @@
         group by a.so_no, cast(a.so_date as varchar(10)), a.CUSTOMER_PO_NO,
         a.customer_code, c.COMPANY, a.CURR_CODE, cast(a.ex_rate as decimal(18,5)),
 		d.CURR_SHORT, a.REMARK, a.AMT_O, a.AMT_L, e.PERSON, a.CONSIGNEE_CODE, a.CONSIGNEE_NAME, a.case_mark, a.consignee_from_jp
-        order by cast(a.so_date as varchar(10)) desc";
+        order by cast(a.so_date as varchar(10)) desc, a.so_no desc";
 	$data = sqlsrv_query($connect, strtoupper($sql));
     // echo $sql;
 	$items = array();

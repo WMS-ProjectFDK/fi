@@ -1,7 +1,5 @@
 <?php
 	// error_reporting(0);
-
-	// http://localhost:8088/fi/forms/shipping_plan/shipping_plan_get.php?date_awal=2020-08-09?date_akhir=2020-08-09?ck_cr_dater=true?cmb_wo_nor=?ck_wo_nor=true?cmb_po_nor=?ck_po_nor=true?cmb_item_nor=?ck_item_nor=true?cmb_ppber=?ck_ppber=true?flagr=6?ck_sir=true?cmb_si_no=
 	session_start();
 	$date_awal = isset($_REQUEST['date_awal']) ? strval($_REQUEST['date_awal']) : '';
 	$date_akhir = isset($_REQUEST['date_akhir']) ? strval($_REQUEST['date_akhir']) : '';
@@ -19,8 +17,11 @@
 	$cmb_si_no = isset($_REQUEST['cmb_si_no']) ? strval($_REQUEST['cmb_si_no']) : '';
 	$ck_sample = isset($_REQUEST['ck_sample']) ? strval($_REQUEST['ck_sample']) : '';
 
+
+	// http://localhost:8088/fi/forms/shipping_plan/shipping_plan_get.php?date_awal=2020-12-23&date_akhir=2020-12-23&ck_cr_date=false&cmb_wo_no=&ck_wo_no=true&cmb_po_no=0016660&ck_po_no=true&cmb_item_no=&ck_item_no=true&cmb_ppbe=&ck_ppbe=true&flag=15&ck_si=true&ck_sample=false&cmb_si_no=
+
 	if ($ck_cr_date != "true"){
-		$date = "cr_date between '$date_awal' and '$date_akhir' AND ";
+		$date = "mh.cr_date between '$date_awal' and '$date_akhir' AND ";
 	}else{
 		$date = "";
 	}
@@ -53,8 +54,7 @@
 	// $date $prf $item_no $supp $ppbe
 	$where =" where $date  $prf $item_no $supp $ppbe
 		status = 'FM' 
-		--and case when ds.customer_po_no is not null then substring(po_line_no, 1, len(po_line_no)-1) else po_line_no end = line_no
-		and (isnull(substring(po_line_no, 1, len(po_line_no)-1), PO_LINE_NO) = LINE_NO OR po_line_no = line_no)";
+		--and case when ds.customer_po_no is not null then substring(po_line_no, 1, len(po_line_no)-1) else po_line_no end = line_no and (isnull(substring(po_line_no, 1, len(po_line_no)-1), PO_LINE_NO) = LINE_NO OR po_line_no = line_no)";
 	
 	include("../../connect/conn.php");
 	$s=0;
@@ -141,10 +141,11 @@
 					$where
 					order by so.line_no,cr_date";
 			}else{
-				$sql = "select distinct top 150 isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,CAST(cr_date as varchar(10)) as cr_date,batery_type,cell_grade,mh.item_no,item_name,
+				$sql = "select distinct top 150 isnull(ship,1) SHIPPING ,work_order,po_no,po_line_no,CAST(mh.cr_date as varchar(10)) as cr_date,batery_type,cell_grade,mh.item_no,item_name,
 						isnull(qty,0) Qty_order,isnull(qty_prod,0) Qty_Produksi,isnull(qty_plan,0) qty_plan, isnull(qty_invoiced,0) qty_invoiced,
-						inv.si_no,so_no,so.line_no,CAST(requested_etd as varchar(10)) etd, CAST(stuffy_date as varchar(10)) as stuffy_date, 
-						CAST(inv.etd as varchar(10)) as etd_ans, CAST(eta as varchar(10)) as eta, sh.shipping_type, 
+						inv.si_no,so_no,so.line_no, 
+						case when requested_etd = '1900-01-01' then '' else ISNULL(CAST(requested_etd as varchar(10)), '') end etd, 
+						CAST(stuffy_date as varchar(10)) as stuffy_date, CAST(inv.etd as varchar(10)) as etd_ans, CAST(eta as varchar(10)) as eta, sh.shipping_type, 
 					customer_code, so.curr_code, so.u_price, case when mh.item_no=zi.item_no then 'Y' else 'N' end as item_set, inv.crs_remark	
 					from mps_header mh
 						left join ztb_item zi on mh.item_no = zi.item_no
@@ -175,7 +176,7 @@
 	}
 
 
-	//echo $sql.'<br/>';
+	// echo $sql.'<br/>';
 	$data = sqlsrv_query($connect, strtoupper($sql));
 
 	$items = array();

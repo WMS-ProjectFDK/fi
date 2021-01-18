@@ -170,7 +170,9 @@ h2 {
 			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="edit" onclick="editBOM()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit BOM</a>
 			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="delete" onclick="deleteBOM()"><i class="fa fa-trash" aria-hidden="true"></i> Delete BOM</a>
 			<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="delete" onclick="downloadBOM()"><i class="fa fa-download" aria-hidden="true"></i> Download BOM</a>
-		</div>
+	<a href="javascript:void(0)" style="width: 200px;" class="easyui-linkbutton c2" id="delete" onclick="downloadBOMACC()"><i class="fa fa-download" aria-hidden="true"></i> Download BOM Accounting</a>
+				
+</div>
 		<div style="clear:both;"></div>
 	</div>
 
@@ -366,8 +368,22 @@ h2 {
 			}
 		}
 
+function downloadBOMACC(){
+			if (get_url != ''){
+				console.log('bom_download_proses_acc.php'+get_url);
+				$.post('bom_download_proses_acc.php'+get_url,{}).done(function(res){
+					download_excel_acc();
+				});
+			}
+		}
+
 		function download_excel(){
 			url_download = 'bom_download_xls.php';
+			window.open(url_download);
+		}
+
+function download_excel_acc(){
+			url_download = 'bom_download_xls_acc.php';
 			window.open(url_download);
 		}
 

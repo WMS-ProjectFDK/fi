@@ -152,14 +152,14 @@ h2 {
 			    {field:'DESCRIPTION',title:'DESCRIPTION',width:250, halign: 'center'},
 			    {field:'UNIT',title:'UNIT',width:50, halign: 'center', align: 'center'},
 			    {field:'PRD',title:'MONTH',width:65, halign: 'center', align: 'center'},
-			    {field:'THIS_MONTH',hidden: true},
-			    {field:'THIS_INVENTORY',title:'THIS INVENTORY',width:100, halign: 'center', align: 'right'},
+			    {field:'LAST_INVENTORY',title:'LAST INVENTORY', width:100, halign: 'center', align: 'right'},
+			    {field:'L_INVENTORY',hidden:true},
 			    {field:'RECEIVE1',title:'RECEIVE',width:100, halign: 'center',align: 'right'},
 			    {field:'OTHER_RECEIVE1',title:'OTHER RECEIVE', width:100, halign: 'center', align: 'right'},
 			    {field:'ISSUE1',title:'ISSUE', width:100, halign: 'center', align: 'right'},
 			    {field:'OTHER_ISSUE1',title:'OTHER ISSUE', width:100, halign: 'center', align: 'right'},
-			    {field:'LAST_INVENTORY',title:'LAST INVENTORY', width:100, halign: 'center', align: 'right'},
-			    {field:'L_INVENTORY',hidden:true}
+			    {field:'THIS_MONTH',hidden: true},
+			    {field:'THIS_INVENTORY',title:'THIS INVENTORY',width:100, halign: 'center', align: 'right'},
 		    ]],
 		    onDblClickRow:function(id,row){
 				$('#dlg_detail').dialog('open').dialog('setTitle','Inventory Detail ('+row.ITEM_NO+' - '+row.DESCRIPTION+')');

@@ -17,7 +17,8 @@ $Arr_sheet = array('INVOICES','INVOICE DETAILS','INVOICE PAYMENT SCHEDULE');
 $s=0;
 
 $sql1 = "select cnbtch, idvend, idinvc, '1' as texttrx, '12' as idtrx,
-    invcdesc, idacctset, dateinvc, fiscyr, fiscper, codecurn, EX_RATE as EXCHRATEHC, amtinvctot, duedate as DATEDUE
+    invcdesc, idacctset, dateinvc, fiscyr, fiscper, codecurn, EX_RATE as EXCHRATEHC, amtinvctot, duedate as DATEDUE,
+    hari, bulan, tahun
     from zvw_purchase_import
     where ACCOUNTING_MONTH='$period'";
 // echo $sql1;
@@ -102,7 +103,7 @@ while ($s < 3) {
                         ->setCellValue('G'.$no1, $row1->INVCDESC)
                         ->setCellValue('H'.$no1, '')
                         ->setCellValue('I'.$no1, $row1->IDACCTSET)
-                        ->setCellValue('J'.$no1, $row1->DATEINVC)
+                        ->setCellValue('J'.$no1, '=DATE('.$row1->TAHUN.','.$row1->BULAN.','.$row1->HARI.')')    //$row1->DATEINVC)
                         ->setCellValue('K'.$no1, $row1->FISCYR)
                         ->setCellValue('L'.$no1, $row1->FISCPER)
                         ->setCellValue('M'.$no1, $row1->CODECURN)

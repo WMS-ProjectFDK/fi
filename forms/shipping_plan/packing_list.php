@@ -195,6 +195,7 @@ h2 {
 		})
 		add();
 		link = "?ppbe="+$('#cmb_ppbe').combobox('getValue');
+		console.log('packing_list_get.php'+link);
 	}
 
 
@@ -260,7 +261,8 @@ h2 {
 				pl_gw: $('#dg').datagrid('getData').rows[i].GROSS,
 				pl_nw: $('#dg').datagrid('getData').rows[i].NET,
 				pl_msm: $('#dg').datagrid('getData').rows[i].MSM,
-				pl_pallet: $('#dg').datagrid('getData').rows[i].PALLET
+				pl_pallet: $('#dg').datagrid('getData').rows[i].PALLET,
+				pl_answer: $('#dg').datagrid('getData').rows[i].ANSWER_NO
 			});
 		}
 
@@ -293,9 +295,9 @@ h2 {
 					    msg:'removing data...'
 					});
 
-					console.log('packing_list_destroy.php?id='+row.ROW_ID);
+					console.log('packing_list_destroy.php?id='+row.ANSWER_NO);
 
-                    $.post('packing_list_destroy.php',{id:row.ROW_ID},function(result){
+                    $.post('packing_list_destroy.php',{id:row.ANSWER_NO},function(result){
                         if (result.success){
                         	$.messager.progress('close');
                             $('#dg').datagrid('reload');    // reload the user data

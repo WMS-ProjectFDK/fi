@@ -212,7 +212,11 @@ if ($varConn=='Y'){
         }
 
 		function addSI(){
-			location.href = 'si_form.php?sts=new&si_no=new&data=new';
+			//location.href = 'si_form.php?sts=new&si_no=new&data=new';
+			let a= document.createElement('a');
+			a.target= '_blank';
+			a.href= 'si_form.php?sts=new&si_no=new&data=new';
+			a.click();
 		}
 
 		function copySI(){
@@ -220,7 +224,11 @@ if ($varConn=='Y'){
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
 				console.log('si_form.php?sts=copy&si_no='+row.SI_NO);
-				location.href = 'si_form.php?sts=copy&si_no='+row.SI_NO;
+				//location.href = 'si_form.php?sts=copy&si_no='+row.SI_NO;
+				let a= document.createElement('a');
+				a.target= '_blank';
+				a.href= 'si_form.php?sts=copy&si_no='+row.SI_NO;
+				a.click();
 			}
 		}
 
@@ -229,7 +237,11 @@ if ($varConn=='Y'){
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
 				console.log('si_form.php?sts=edit&si_no='+row.SI_NO);
-				location.href = 'si_form.php?sts=edit&si_no='+row.SI_NO;
+				// location.href = 'si_form.php?sts=edit&si_no='+row.SI_NO;
+				let a= document.createElement('a');
+				a.target= '_blank';
+				a.href= 'si_form.php?sts=edit&si_no='+row.SI_NO;
+				a.click();
 			}
 		}
 

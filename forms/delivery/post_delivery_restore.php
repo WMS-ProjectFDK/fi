@@ -12,8 +12,7 @@ if (isset($_SESSION['id_wms'])){
     $msg = '';
 
     foreach($queries as $query){
-        $answer_no = $query->answer_no;
-        $do_no = $query->do_no;
+		$answer_no = $query->answer_no;
         
         $sql = "{call DELIVERY_RESTORE(?)}";		
         $params = array(  

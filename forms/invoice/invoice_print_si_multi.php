@@ -1,5 +1,5 @@
 <?php 
-// error_reporting(0);
+error_reporting(0);
 include("../../connect/conn.php");
 session_start();
 date_default_timezone_set('Asia/Jakarta');
@@ -11,54 +11,66 @@ $do = isset($_REQUEST['do']) ? strval($_REQUEST['do']) : '';
 $si_sts = isset($_REQUEST['si_sts']) ? strval($_REQUEST['si_sts']) : '';
 $print_mark = isset($_REQUEST['print_mark']) ? strval($_REQUEST['print_mark']) : '';
 
-// $do_multi = "'".$do_multi."'";
-
-// $do_multi = str_replace(",","','",$do_multi);
+$do_multi = "";
+$do_multi_no = "";
+$ppbe_multi = "";
+$ppbe_multi_no = ""; 
+$rowno=0;
 
 $result = array();
 
-// $sql_multi = "select ''''+do_no+''',' do_no,do_no + ',' do_no_multi, 
-// 	''''+description+''',' ppbe,description + ',' ppbe_multi
-// 	from do_header 
-// 	where si_no = '$si'";
-// //	where  description like (select substr(description, 0, 3) || '%' from do_header where do_no = '$do')";
-// $data = sqlsrv_query($connect, strtoupper($sql_multi));
-// $items = array();
+$sql_multi = "select ''''+do_no+''',' do_no,do_no + ',' do_no_multi, 
+	''''+description+''',' ppbe,description + ',' ppbe_multi
+	from do_header 
+	where si_no = '$si'";
+//	where  description like (select substr(description, 0, 3) || '%' from do_header where do_no = '$do')";
+$data = sqlsrv_query($connect, strtoupper($sql_multi));
+$items = array();
 
-// while($row = sqlsrv_fetch_object($data)) {
-//     $do_multi = $do_multi.$row->DO_NO;
-//     $do_multi_no = $do_multi_no.$row->DO_NO_MULTI;
-//     $ppbe_multi = $ppbe_multi.$row->PPBE;
-//     $ppbe_multi_no = $ppbe_multi_no.$row->PPBE_MULTI;
-//     $rowno++;
-// }
+while($row = sqlsrv_fetch_object($data)) {
+    $do_multi = $do_multi.$row->DO_NO;
+    $do_multi_no = $do_multi_no.$row->DO_NO_MULTI;
+    $ppbe_multi = $ppbe_multi.$row->PPBE;
+    $ppbe_multi_no = $ppbe_multi_no.$row->PPBE_MULTI;
+    $rowno++;
+}
 
-// $do_multi = substr($do_multi, 0, -1);
-// $do_multi_no = substr($do_multi_no, 0, -1);
-
-// $ppbe_multi = substr($ppbe_multi, 0, -1);
-// $ppbe_multi_no = substr($ppbe_multi_no, 0, -1);
+$do_multi = substr($do_multi, 0, -1);
+$do_multi_no = substr($do_multi_no, 0, -1);
+$ppbe_multi = substr($ppbe_multi, 0, -1);
+$ppbe_multi_no = substr($ppbe_multi_no, 0, -1);
 	
 if($si_sts == 'final_si'){
-	$sql_con = "select count( distinct case when container_no is null then '0' else container_no end)  || 'x' || containers  ContainerJum
+	$sql_con = "select cast(count(distinct case when container_no is null then '0' else container_no end) as char(2)) + 'x' + containers  ContainerJum
 		from ztb_shipping_detail where ppbe_no in 
 		(select distinct crs_remark from answer a inner join indication b on a.answer_no = b.answer_no where b.inv_no in ($do_multi))
 		group by containers";
+	// echo $sql_con;
 }else{
-	$sql_con = "select count( distinct container_no)  || 'x' || containers  ContainerJum
+	$sql_con = "select cast(count( distinct container_no) as char(2))  + 'x' + containers  ContainerJum
 		from ztb_shipping_detail where ppbe_no = '$do'
 		group by containers ";	
 }
 
 if($si_sts == 'final_si'){
-	$sql_h = "select distinct a.*,b.*,c.*, cs.description as desc_size, cm.description as desc_method
-		, LIST_COLLECT(ans.SI_NO, ', ') as si_no_fix,
-		replace(sdoc_bl.doc_detail,chr(10),'<br>') doc_detail_bl,
-	    replace(sdoc_co.doc_detail,chr(10),'<br>') doc_detail_co,
-	    replace(sdoc_iv.doc_detail,chr(10),'<br>') doc_detail_iv,
-		case when b.shipping_type <> 'LCL' then '' else rtrim(replace(b.special_info,chr(10),'<br>'),'|') end as special_info,
-		b.notify_name_2 ||'<br/>  '|| b.notify_addr1_2||'<br/>'|| b.notify_addr2_2||'<br/>'|| b.notify_addr3_2||'<br/>'||b.notify_tel_2||'<br/>'|| b.notify_fax_2||'<br/>'||b.notify_attn_2 NOTIFY_NAME_2, 
-		rtrim(replace(a.ship_name,chr(10),'<br>'),'|') as ship_name, ans.crs_remark
+	$sql_h = "select distinct a.DO_NO, a.INV_NO, cast(a.DO_DATE as varchar(10)) as DO_DATE, cast(a.INV_DATE as varchar(10)) as INV_DATE, 
+	a.CUSTOMER_CODE, a.CURR_CODE, a.ex_rate, a.DUE_DATE, a.PDAYS, a.PDESC,
+	b.SI_NO, b.NOTIFY_NAME, b.NOTIFY_ADDR1, b.NOTIFY_ADDR2, b.NOTIFY_ADDR3, b.NOTIFY_TEL, b.NOTIFY_FAX, b.NOTIFY_ATTN,
+	b.PAYMENT_TYPE, b.PAYMENT_REMARK, b.SHIPPING_TYPE, b.SHIPPER_NAME, b.SHIPPER_ADDR1, b.SHIPPER_ADDR2, b.SHIPPER_ADDR3,
+	b.CONSIGNEE_NAME, b.CONSIGNEE_ADDR1, b.CONSIGNEE_ADDR2, b.CONSIGNEE_ADDR3, b.CONSIGNEE_TEL,
+	b.FORWARDER_NAME, b.FORWARDER_TEL, b.FORWARDER_FAX, b.FORWARDER_ATTN, b.LOAD_PORT, b.DISCH_PORT, b.FINAL_DEST, 
+	b.EMKL_NAME, b.EMKL_TEL, b.EMKL_FAX, b.EMKL_ATTN, a.AMT_O,
+	c.do_no, c.CUSTOMER_CODE, c.forwarder_code, c.DOMESTIC_TRUCK_CODE, c.ANSWER_NO, c.TRANSPORT, c.SLIP_NO, c.BOOKING_NO, c.TRANSPORT_TYPE, 
+	c.CARGO_TYPE1, c.cargo_size1, c.CARGO_QTY1, c.CARGO_TYPE2, c.cargo_size2, c.CARGO_QTY2,
+		cs.description as desc_size, cm.description as desc_method
+		, --LIST_COLLECT(ans.SI_NO, ', ') 
+		'' as si_no_fix,
+		replace(sdoc_bl.doc_detail,char(13),'<br>') doc_detail_bl,
+		replace(sdoc_co.doc_detail,char(13),'<br>') doc_detail_co,
+		replace(sdoc_iv.doc_detail,char(13),'<br>') doc_detail_iv,
+		case when b.shipping_type <> 'LCL' then '' else replace(b.special_info,char(13),'<br>') end as special_info,
+		b.notify_name_2 + '<br/>  '+ b.notify_addr1_2+'<br/>'+ b.notify_addr2_2+'<br/>'+ b.notify_addr3_2+'<br/>'+b.notify_tel_2+'<br/>'+ b.notify_fax_2+'<br/>'+b.notify_attn_2 NOTIFY_NAME_2, 
+		replace(a.ship_name,char(13),'<br>') as ship_name, ans.crs_remark
 		from do_header a
 	  	inner join si_header b on a.si_no=b.si_no
 	  	left outer join (select si_no,doc_detail from si_doc where doc_type='BL')sdoc_bl on sdoc_bl.si_no = b.si_no
@@ -69,16 +81,15 @@ if($si_sts == 'final_si'){
 		left join cargo_method cm on c.cargo_type1 = cm.method_type
 		left outer join answer ans on b.si_no = ans.si_no
 		where a.do_no='$do' ";
-
-	$qry = "select  etd, max(eta) eta, port_loading, max(final_destination) final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
-		sum(ceil(carton)) as carton,
-		sum(ceil(pallet)) as pallet,
+	// echo $sql_h;
+	$qry = "select cast(etd as varchar(10)) etd, cast(max(eta) as varchar(10)) eta, port_loading, max(final_destination) final_destination, dod2.description,
+		sum(ceiling(carton)) as carton,
+		sum(ceiling(pallet)) as pallet,
 		sum(qty) as qty,
 		sum(round(gw,2)) as gw, uom_gw,
 		sum(round(nw,2)) as nw, uom_nw,
 		sum(msm) as msm from (
-		select doh.do_no, doh.etd, doh.eta, doh.port_loading, doh.final_destination, dod.answer_no1, dod.item_no, dod.description, 
-    	--zti.panjang_pallet, lebar_pallet, 
+		select doh.do_no, cast(doh.etd as varchar(10)) as etd, cast(doh.eta as varchar(10)) as eta, doh.port_loading, doh.final_destination, dod.answer_no1, dod.item_no, dod.description, 
     	plh.qty, zsi.carton, zsi.pallet, 
     	plh.gross as gw, un2.unit_pl as uom_gw, plh.net as nw, un1.unit_pl as uom_nw, plh.measurement as msm
 		from do_header doh
@@ -92,18 +103,17 @@ if($si_sts == 'final_si'){
 		) aa
 		left outer join (select do_no, description from do_details where do_no in ($do_multi)
 		and description is not null) dod2 on aa.do_no = dod2.do_no
-		group by  etd, port_loading, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
-		uom_nw, uom_gw";
+		group by  etd, port_loading, dod2.description, uom_nw, uom_gw";
 	
-
-	$qry_pallet = "select distinct 'Pallet Dimension : '|| panjang_pallet ||' x '|| lebar_pallet || '<br>' as pallet
+	// echo $qry;
+	$qry_pallet = "select distinct 'Pallet Dimension : '+ cast(panjang_pallet as char) +' x '+ cast(lebar_pallet as char) + '' as pallet 
 		from ztb_item where item_no in (select distinct  item_no from do_details where do_no='$do')";
-
-	$qry_remark = "select '&nbsp;&nbsp;&nbsp;' || rtrim(replace(marks,chr(10),'<br>&nbsp;&nbsp;&nbsp;'),'|') as remark 
+	// echo $qry_pallet;
+	$qry_remark = "select '&nbsp;&nbsp;&nbsp;' + replace(cast(marks as varchar(100)),'1','') as remark 
 		from do_marks 
 		where do_no='$do'
 		order by mark_no asc";
-
+	// echo $qry_remark;
 	$sts_doc = 'F I N A L&nbsp;&nbsp;&nbsp;&nbsp;S I';
 	$inv_no = $do;
 	
@@ -136,7 +146,7 @@ if($si_sts == 'final_si'){
 		sum(round(gw,2)) as gw, uom_gw,
 		sum(round(nw,2)) as nw, uom_nw,
 		sum(msm) as msm from (
-			select '-' as do_no, ans.ETD, ans.ETA, sih.load_port as port_loading, sih.final_dest as final_destination, ans.stuffy_date,
+			select '-' as do_no, cast(ans.ETD as varchar(10) ETD, ans.ETA, sih.load_port as port_loading, sih.final_dest as final_destination, ans.stuffy_date,
 			replace(sih.goods_name,'  ','<br/>&nbsp;&nbsp;&nbsp;')  as description, --panjang_pallet, lebar_pallet, 
 			zsi.carton, zsi.pallet, zsi.qty, 
 			zsi.gw, 30 as gross_uom, un2.unit_pl as uom_gw, zsi.nw, 30 as net_uom, un1.unit_pl as uom_nw, zsi.msm 
@@ -156,7 +166,7 @@ if($si_sts == 'final_si'){
 		CAST(CAST(lebar_pallet as int) as varchar) + '<br>' as pallet
 		from ztb_item 
 		where item_no in (select item_no from answer where crs_remark='$do')";
-
+	// echo $qry_pallet;
 	$sts_doc = '';
 	$inv_no = '&nbsp;&nbsp;&nbsp;/FILR/'.date('y');
 	
@@ -170,6 +180,7 @@ if($si_sts == 'final_si'){
 		from answer ans
 		inner join so_details sd on ans.so_no = sd.so_no and ans.so_line_no = sd.line_no
 		where crs_remark='$do' ";
+	// echo $qry_remark;
 }
 
 $ArrREmark = array();		$ArrPallet = array();
@@ -325,7 +336,7 @@ $content = "
 	</style>
 	<page>
 		<div style='position:absolute;margin-top:0px;'>
-			<img src='../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
+			<img src='../../images/logo-print4.png' alt='#' style='width:300px;height: 70px'/><br/>
 		</div>	
 
 		<div style='margin-top:0;margin-left:620px;font-size:9px'>
@@ -595,7 +606,7 @@ $content .= "
 	</div>
 </page>";
 
-require_once(dirname(__FILE__).'/../class/html2pdf/html2pdf.class.php');
+require_once(dirname(__FILE__).'/../../class/html2pdf/html2pdf.class.php');
 $html2pdf = new HTML2PDF('P','A4','en');
 $html2pdf->WriteHTML($content);
 $html2pdf->Output('INVOICE-SI-MULTI-'.$do.'.pdf');

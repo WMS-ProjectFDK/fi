@@ -345,16 +345,16 @@ h2 {
 		});
 	}
 
-	var ck_sample = "false";
-	var ck_cr_date = "false";
-	var ck_po_no = "false";
-	var ck_wo_no = "false";
-	var ck_item_no = "false";
-	var ck_si = "false";
-	var ck_ppbe = "false";
-	var flag = 0;
-
 	function filterData(){			
+		var ck_sample = "false";
+		var ck_cr_date = "false";
+		var ck_po_no = "false";
+		var ck_wo_no = "false";
+		var ck_item_no = "false";
+		var ck_si = "false";
+		var ck_ppbe = "false";
+		var flag = 0;
+
 		if ($('#ck_sample').attr("checked")) {
 			ck_sample = "true";
 		};
@@ -1161,8 +1161,12 @@ h2 {
 						ANSWER_NO: row.ANSWER_NO
 					}).done(function(res){
 						console.log(res);
+						if (res.length < 10){
+							$.messager.alert('INFORMATION','DELETE DATA SUCCESS','info');
+						}else{
+							$.messager.alert('ERROR',res,'warning');
+						}
 					});
-					$.messager.alert('INFORMATION','DELETE DATA SUCCESS','info');
 					$('#dg').datagrid('reload');
 				}	
 			});

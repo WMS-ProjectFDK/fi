@@ -8,6 +8,7 @@ $nama_user = $_SESSION['name_wms'];
 
 $do = isset($_REQUEST['do']) ? strval($_REQUEST['do']) : '';
 $state = isset($_REQUEST['state']) ? strval($_REQUEST['state']) : '';
+$note = isset($_REQUEST['note']) ? strval($_REQUEST['note']) : '';
 
 if($state == 'packing_list'){
     $name = "PACKING LIST";
@@ -21,7 +22,8 @@ $sql_h = "select doh.do_no, doh.inv_no, CONVERT(varchar,doh.inv_date,103) inv_da
     replace(doh.ship_name,char(13),'<br/>') as ship_name,
     doh.revise_flg, sih.PERSON_NAME,
     replace(doh.remark,char(13),'<br/>') as remark,
-    doh.notify, doh.attn  h_attn, doh.address_flg, c1.company, c1.address1, c1.address2, c1.address3, c1.address4,
+    replace(doh.notify,char(13),'<br/>') as notify,
+    doh.attn  h_attn, doh.address_flg, c1.company, c1.address1, c1.address2, c1.address3, c1.address4,
     c1.attn  com_attn, doh.port_loading port_of_loading, doh.port_discharge port_of_discharge, doh.final_destination,
     CONVERT(varchar,doh.etd,103) etd, CONVERT(varchar,doh.eta,103) eta, doh.trade_term, doh.lc_no,
     CONVERT(varchar,doh.lc_date,103) lc_date, doh.issuing_bank, 
@@ -38,7 +40,7 @@ $params = array();
 $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
 
 $sql_marks = "select dm2.max_value  max_no, 'SHIPPING MARKS '+CAST(dm1.mark_no as char(2))+' :' as mark_no,
-    REPLACE(CONVERT(varchar(max),dm1.MARKS),'&lt;BR&gt;','<br/>') as marks
+    REPLACE(CONVERT(varchar(max),dm1.MARKS),char(13),'<br/>') as marks
     from do_marks  dm1,
     (select max(mark_no) max_value,do_no from do_marks group by do_no) dm2 
     where dm1.do_no = dm2.do_no
@@ -122,11 +124,9 @@ $sql_gw = "select case when d1.total_net = NULL then '0' else LTrim(CAST(d1.tota
     (select sum(isnull(h.net,0)) total_net,net_uom, 
             sum(isnull(h.gross,0)) total_gross,gross_uom, 
             sum(isnull(h.measurement,0)) total_measurement 
-    from do_pl_header h, 
-        do_pl_details d 
+    from do_pl_header h
+    left join do_pl_details d on h.do_no = d.do_no and h.pl_line_no = d.pl_line_no 
     where h.do_no = '$do'
-    and h.do_no = d.do_no 
-    and h.pl_line_no = d.pl_line_no 
     group by h.gross_uom, h.net_uom) d1, 
     unit  u1,
     unit  u2 
@@ -240,25 +240,17 @@ if($state != 'packing_list'){
         LTrim(RTrim(CAST(h.gross as varchar))) gross, u3.unit_pl gross_uom, 
         h.measurement, isnull(RTrim(LTrim(CAST(d.qty as varchar))),0)  case_qty, u4.unit_pl case_uom_q,
         isnull(d.inner_quantity,0)  inner_quantity, isnull(d.inner_package * h.case_total,0) inner_package, u6.unit_pl inner_uom_p
-        from do_pl_header h,
-        do_pl_details d,
-        (select pl_line_no,isnull(count(pl_line_no),0) counter from do_pl_details where do_no = '$do' group by pl_line_no) d1,
-        unit  u1,
-        unit  u2,
-        unit  u3,
-        unit  u4,
-        unit  u5,
-        unit  u6 
+        from do_pl_header h
+        left join do_pl_details d on h.do_no = d.do_no and h.pl_line_no = d.pl_line_no 
+        left join (select pl_line_no,isnull(count(pl_line_no),0) counter from do_pl_details where do_no = '$do' group by pl_line_no) d1
+		on h.pl_line_no = d1.pl_line_no 
+        left join unit u1 on d.uom_q = u1.unit_code
+        left join unit u2 on h.uom_p = u2.unit_code
+        left join unit u3 on h.gross_uom = u3.unit_code
+        left join unit u4 on d.uom_q = u4.unit_code
+        left join unit u5 on h.net_uom = u5.unit_code
+        left join unit u6 on d.inner_uom_p = u6.unit_code
         where h.do_no = '$do'
-        and h.do_no = d.do_no 
-        and h.pl_line_no = d.pl_line_no 
-        and h.pl_line_no = d1.pl_line_no 
-        and d.uom_q = u1.unit_code
-        and h.uom_p = u2.unit_code
-        and h.gross_uom = u3.unit_code
-        and d.uom_q = u4.unit_code
-        and h.net_uom = u5.unit_code
-        and d.inner_uom_p = u6.unit_code
         order by h.do_no,h.pl_line_no";
 }
 
@@ -375,7 +367,7 @@ $content = "
                         </tr>
                         <tr>
                           <td style='border:0px solid #ffffff;width:10px;'></td>
-                          <td style='border:0px solid #ffffff;'>".wordwrap($dt_h->NOTIFY, 30, '<br />', true)."</td>
+                          <td style='border:0px solid #ffffff;'>".$dt_h->NOTIFY."</td>
                         </tr>
 			        </table>
 				</td>
@@ -712,7 +704,7 @@ $content .=  "
                             <br/>
                             <br/>
                             <br/>
-                            <p><u>___AGUSMAN SURYA___</u></p>
+                            <p><u>___".strtoupper($note)."___</u></p>
                         </td>
                     </tr>
                     </table>

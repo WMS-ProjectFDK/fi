@@ -77,8 +77,8 @@ h2 {
                                 <option value="2" >CUSTOMER / VENDOR</option>
                                 <option value="3" >VENDOR</option>
                                 <option value="4" >SUB CONTRACTOR</option>
-                                <option value="5" >SHIP TO</option>
-                                <option value="7" >PLANT</option>
+                                <option value="5" >PLANT</option>
+                                <option value="7" >SHIP TO</option>
                 </select>
             </div>
             <div class="fitem">
@@ -261,8 +261,8 @@ h2 {
                                 <option value="2" >CUSTOMER / VENDOR</option>
                                 <option value="3" >VENDOR</option>
                                 <option value="4" >SUB CONTRACTOR</option>
-                                <option value="5" >SHIP TO</option>
-                                <option value="7" >PLANT</option>
+                                <option value="5" >PLANT</option>
+                                <option value="7" >SHIP TO</option>
                 </select>
             </div>
             <div class="fitem">

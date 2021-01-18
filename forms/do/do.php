@@ -82,7 +82,7 @@ h2 {
 			</div>
 			<div class="fitem">
 				<span style="width:110px;display:inline-block;">Slip Type</span>
-				<select style="width:300px;" name="cmb_slip_type" id="cmb_slip_type" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'auto'"></select>
+				<select style="width:300px;" name="cmb_slip_type" id="cmb_slip_type" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'100px;'"></select>
 				<label><input type="checkbox" name="ck_slip_type" id="ck_slip_type" checked="true">All</input></label>
 			</div>
 		</div>
@@ -138,7 +138,7 @@ h2 {
 			<input style="width:100px;" name="slip_no_add" id="slip_no_add" class="easyui-textbox" data-options="formatter:myformatter,parser:myparser" disabled=""/>
 			<span style="width:100px;display:inline-block;"></span>
 			<span style="width:80px;display:inline-block;">SLIP TYPE</span>
-			<select style="width:250px;" name="cmb_slip_type_add" id="cmb_slip_type_add" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'auto'" required=""></select>
+			<select style="width:250px;" name="cmb_slip_type_add" id="cmb_slip_type_add" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'100px;'" required=""></select>
 		</div>
 		<div class="fitem">
 			<span style="width:80px;display:inline-block;">SLIP DATE</span>
@@ -207,7 +207,7 @@ h2 {
 			<input style="width:100px;" name="slip_no_edit" id="slip_no_edit" class="easyui-textbox" data-options="formatter:myformatter,parser:myparser" disabled=""/>
 			<span style="width:100px;display:inline-block;"></span>
 			<span style="width:80px;display:inline-block;">SLIP TYPE</span>
-			<select style="width:250px;" name="cmb_slip_type_edit" id="cmb_slip_type_edit" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'auto'" disabled=""></select>
+			<select style="width:250px;" name="cmb_slip_type_edit" id="cmb_slip_type_edit" class="easyui-combobox" data-options=" url:'../json/json_sliptype.php', method:'get', valueField:'id', textField:'name', panelHeight:'100px;'" disabled=""></select>
 		</div>
 		<div class="fitem">
 			<span style="width:80px;display:inline-block;">SLIP DATE</span>

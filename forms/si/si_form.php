@@ -150,10 +150,49 @@ h2 {
 	}
 
 	function backForm(){
-		window.history.back();
+		//window.history.back();
+		window.close();
+	}
+
+	function validate(){
+		var hasil=0;
+		var msg='';
+
+		if($('#SPECIAL_INST').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if ( $('#SPECIAL_INFO').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if($('#detail_bl_doc').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if($('#detail_certificate').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if($('#detail_inv').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if($('#detail_pack').textbox('getValue').length > 999){
+			msg = 'Please enter a value notify between 0 and 999';
+			hasil=1;
+		}else if($('#CUST_SI_NO').textbox('getValue').length > 499){
+			msg = 'Please enter a value notify between 0 and 499';
+			hasil=1;
+		}else if($('#SINO_FROM_CUST').textbox('getValue').length > 499){
+			msg = 'Please enter a value notify between 0 and 499';
+			hasil=1;
+		}else if($('#GOODS_NAME').textbox('getValue').length > 199){
+			msg = 'Please enter a value notify between 0 and 199';
+			hasil=1;
+		}
+
+		return [hasil,msg];
 	}
 
 	function save(){
+		var valid = validate();
+
 		if('<?=$sts?>' == 'new'){
 			$.ajax({
 				type: 'GET',
@@ -164,21 +203,27 @@ h2 {
 						$.messager.alert('INFORMATION','kode SI Error..!!','info');
 					}else{
 						$('#SI_NO').numberbox('setValue', data[0].kode);
-						$('#add').form('submit',{
-							onSubmit: function(){
-								return $(this).form ('validate');
-							},
-							success:function(data){
-								$.messager.confirm('Confirm','Add Data '+data+' ..!!<br/>SI No. New : '+$('#SI_NO').numberbox('getValue'),function(r){
-									if (r){
+						if (valid[0] != 1) {
+							$('#add').form('submit',{
+								onSubmit: function(){
+									return $(this).form ('validate');
+								},
+								success:function(data){
+									$.messager.confirm('Confirm','Add Data '+data+' ..!!<br/>SI No. New : '+$('#SI_NO').numberbox('getValue'),function(r){
+										if (r){
+											console.log(data);
+											//window.history.back();
+											window.close();		
+										}
 										console.log(data);
-										window.history.back();		
-									}
-									console.log(data);
-									window.history.back();
-								});
-							}
-						});
+										//window.history.back();
+										window.close();
+									});
+								}
+							});
+						}else{
+							$.messager.alert('WARNING',valid[1],'warning');
+						}
 					}
 				}
 			});
@@ -192,40 +237,52 @@ h2 {
 						$.messager.alert('INFORMATION','kode SI Error..!!','info');
 					}else{
 						$('#SI_NO').numberbox('setValue', data[0].kode);
-						$('#add').form('submit',{
-							onSubmit: function(){
-								return $(this).form ('validate');
-							},
-							success:function(data){
-								$.messager.confirm('Confirm','Copy Data '+data+' ..!!<br/>SI No. New : '+$('#SI_NO').numberbox('getValue'),function(r){
-									if (r){
+						if (valid[0] != 1){
+							$('#add').form('submit',{
+								onSubmit: function(){
+									return $(this).form ('validate');
+								},
+								success:function(data){
+									$.messager.confirm('Confirm','Copy Data '+data+' ..!!<br/>SI No. New : '+$('#SI_NO').numberbox('getValue'),function(r){
+										if (r){
+											console.log(data);
+											//window.history.back();
+											window.close();		
+										}
 										console.log(data);
-										window.history.back();		
-									}
-									console.log(data);
-									window.history.back();
-								});
-							}
-						});
+										//window.history.back();
+										window.close();
+									});
+								}
+							});
+						}else{
+							$.messager.alert('WARNING',valid[1],'warning');
+						}
 					}
 				}
 			});
 		}else{
-			$('#add').form('submit',{
-				onSubmit: function(){
-					return $(this).form ('validate');
-				},
-				success:function(data){
-					$.messager.confirm('Confirm',data,function(r){
-						if (r){
+			if (valid[0] != 1){
+				$('#add').form('submit',{
+					onSubmit: function(){
+						return $(this).form ('validate');
+					},
+					success:function(data){
+						$.messager.confirm('Confirm',data,function(r){
+							if (r){
+								console.log(data);
+								//window.history.back();
+								window.close();		
+							}
 							console.log(data);
-							window.history.back();		
-						}
-						console.log(data);
-						window.history.back();
-					});
-				}
-			});
+							//window.history.back();
+							window.close();
+						});
+					}
+				});
+			}else{
+				$.messager.alert('WARNING',valid[1],'warning');
+			}
 		}
 	}
 
@@ -233,7 +290,6 @@ h2 {
 		var sts = '<?=$sts?>';
 		$('#LOAD_PORT_CODE').textbox('setValue','TPP');
 		$('#LOAD_PORT').textbox('setValue','TANJUNG PRIOK, JAKARTA');
-
 		if (sts == 'new'){
 			$('#KET').textbox('setValue', 'CREATE');
 		}else{
@@ -358,19 +414,19 @@ h2 {
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">CUSTOMER PO NO.</span>
-				<input style="width:1001px;height: 80px;" name="SINO_FROM_CUST" id="SINO_FROM_CUST" class="easyui-textbox" multiline="true"/>
+				<input style="width:1001px;height: 80px;" name="SINO_FROM_CUST" id="SINO_FROM_CUST" class="easyui-textbox" multiline="true" data-options="validType:'length[0,499]'"/>
 				<a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="SET_cust_po_no('CUSTOMER. PO NO')">SET</a>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">SI NO. FROM CUST</span>
-				<input style="width:457px;" name="CUST_SI_NO" id="CUST_SI_NO" class="easyui-textbox"/> 
+				<input style="width:457px;" name="CUST_SI_NO" id="CUST_SI_NO" class="easyui-textbox" data-options="validType:'length[0,499]'"/> 
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">PERSON IN CHARGE</span>
 				<input style="width:397px;" name="PERSON_NAME" id="PERSON_NAME" class="easyui-textbox"/> 
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">DESCRIPTION OF GOODS</span>
-				<input style="width:1036px;" name="GOODS_NAME" id="GOODS_NAME" class="easyui-textbox"/> 
+				<input style="width:1036px;" name="GOODS_NAME" id="GOODS_NAME" class="easyui-textbox" data-options="validType:'length[0,199]'"/> 
 			</div>
 		</fieldset>
 		<fieldset style="border:1px solid #d0d0d0; border-radius:4px; width:97%; float:left;height: auto;padding:15px 15px;">
@@ -569,7 +625,7 @@ h2 {
 			<legend><span class="style3"><strong>DOCUMENT</strong></span></legend>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">SPECIAL INSTRUCTION</span>
-				<input style="width:1035px;" name="SPECIAL_INST" id="SPECIAL_INST" class="easyui-textbox"/>
+				<input style="width:1035px;" name="SPECIAL_INST" id="SPECIAL_INST" class="easyui-textbox" data-options="validType:'length[0,999]'"/>
 			</div>
 			<div class="fitem">	
 				<span style="width:180px;display:inline-block;">SHIPPING METHOD</span>
@@ -601,7 +657,7 @@ h2 {
 				<input style="width:50px;" name="sheet_bl_doc" id="sheet_bl_doc" class="easyui-numberbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:580px;" name="detail_bl_doc" id="detail_bl_doc" class="easyui-textbox" data-options="multiline:true"/>
+				<input style="width:580px;" name="detail_bl_doc" id="detail_bl_doc" class="easyui-textbox" data-options="multiline:true" data-options="validType:'length[0,999]'"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">CERTIFICATE OF ORIGIN</span>
@@ -612,7 +668,7 @@ h2 {
 				<input style="width:50px;" name="sheet_certificate" id="sheet_certificate" class="easyui-numberbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:580px;" name="detail_certificate" id="detail_certificate" class="easyui-textbox" data-options="multiline:true"/>
+				<input style="width:580px;" name="detail_certificate" id="detail_certificate" class="easyui-textbox" data-options="multiline:true" data-options="validType:'length[0,999]'"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;"></span>
@@ -622,7 +678,7 @@ h2 {
 				<input style="width:50px;" name="shett_inv" id="shett_inv" class="easyui-numberbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:580px;" name="detail_inv" id="detail_inv" class="easyui-textbox" data-options="multiline:true"/>
+				<input style="width:580px;" name="detail_inv" id="detail_inv" class="easyui-textbox" data-options="multiline:true" data-options="validType:'length[0,999]'"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;"></span>
@@ -632,11 +688,11 @@ h2 {
 				<input style="width:50px;" name="sheet_pack" id="sheet_pack" class="easyui-numberbox"/>
 				<span style="width:20px;display:inline-block;"></span>
 				<span style="width:150px;display:inline-block;">DETAIL SENDING DOC.</span>
-				<input style="width:580px;" name="detail_pack" id="detail_pack" class="easyui-textbox" data-options="multiline:true"/>
+				<input style="width:580px;" name="detail_pack" id="detail_pack" class="easyui-textbox" data-options="multiline:true" data-options="validType:'length[0,999]'"/>
 			</div>
 			<div class="fitem">
 				<span style="width:180px;display:inline-block;">SPECIAL INFORMATION</span>
-				<input style="width:1035px;height:60px;" name="SPECIAL_INFO" id="SPECIAL_INFO" class="easyui-textbox" data-options="multiline:true"/>
+				<input style="width:1035px;height:60px;" name="SPECIAL_INFO" id="SPECIAL_INFO" class="easyui-textbox" data-options="multiline:true, validType:'length[0,999]'"/>
 			</div>
 		</fieldset>
 	</form>

@@ -14,8 +14,7 @@ if (isset($_SESSION['id_wms'])){
     foreach($queries as $query){
 		$answer_no = $query->answer_no;
 		$container_no = $query->container_no;
-        $seal_no = $query->seal_no;
-        $do_no = $query->do_no;
+		$seal_no = $query->seal_no;
         
         $sql = "{call DELIVERY_UPDATE(?,?,?)}";		
         $params = array(  
@@ -43,8 +42,6 @@ if (isset($_SESSION['id_wms'])){
                     )";
             $insert2 = sqlsrv_query($connect, $ins2);
         }
-
-
     }
 
 }else{

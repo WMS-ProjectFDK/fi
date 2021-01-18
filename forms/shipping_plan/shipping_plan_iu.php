@@ -22,24 +22,49 @@ if (isset($_SESSION['id_wms'])){
 	
 	if($type == "DEL"){
 		//delete ztb_answer
-		$sql1  = "delete from answer where answer_no = '$ANSWER_NO' " ;
-	    $data_del1 = sqlsrv_query($connect, $sql1);
+		$sql1  = "
+		IF EXISTS(select * from INDICATION where answer_no = '$ANSWER_NO' and INV_NO is null) BEGIN
+			delete from answer where answer_no = '$ANSWER_NO'; 
+			
+			delete from ztb_shipping_plan where row_id = '$id';
+
+			delete from grpans_out
+			where (customer_po_no + cast(customer_line_no as varchar(20))) 
+					in (select customer_po_no + cast(customer_po_line_no as varchar(10))
+						from so_header soh,so_details sod where sod.so_no = soh.so_no 
+						and sod.so_no   = '$SO_NO'
+						and sod.line_no = '$LN' 
+			)
+		END ELSE BEGIN RAISERROR('INVOICE EXISTS, PLEASE DELETE INVOICE FIRST',16,1) END" ;
+		$data_del = sqlsrv_query($connect, $sql1);
+		if($data_del === false ) {
+			if(($errors = sqlsrv_errors()) != null) {  
+				foreach( $errors as $error){  
+				 $msg .= $error[ 'message']."<br/>";  
+				 //$msg .= $sql1;
+				}
+			}
+		}	
 
 		//delete ztb_shipping_plan
-		$sql  = "delete from ztb_shipping_plan where row_id = '$id' ";
-		$data_del = sqlsrv_query($connect, $sql);
+		// $sql  = "delete from ztb_shipping_plan where row_id = '$id' ";
+		// $data_del = sqlsrv_query($connect, $sql);
 		
-		$sql2  = " delete from grpans_out " ;
-	  	$sql2 .= " where  (customer_po_no,customer_line_no)  = " ;
-		$sql2 .= "	(select customer_po_no,customer_po_line_no " ;
-		$sql2 .= "	 from so_header soh,so_details sod " ;
-		$sql2 .= "	 where sod.so_no   = soh.so_no " ;
-		$sql2 .= "	   and sod.so_no   = '$SO_NO' " ;
-		$sql2 .= "	   and sod.line_no = '$LN' " ;
-		$sql2 .= "	 ) " ;
-	  	$data_del2 = sqlsrv_query($connect, $sql2);
-
-		echo json_encode(array('successMsg'=>$type));
+		// $sql2  = " delete from grpans_out " ;
+	  	// $sql2 .= " where  (customer_po_no,customer_line_no)  = " ;
+		// $sql2 .= "	(select customer_po_no,customer_po_line_no " ;
+		// $sql2 .= "	 from so_header soh,so_details sod " ;
+		// $sql2 .= "	 where sod.so_no   = soh.so_no " ;
+		// $sql2 .= "	   and sod.so_no   = '$SO_NO' " ;
+		// $sql2 .= "	   and sod.line_no = '$LN' " ;
+		// $sql2 .= "	 ) " ;
+	  	// $data_del2 = sqlsrv_query($connect, $sql2);
+		if($msg != ''){
+			echo json_encode($msg);
+		}else{
+			echo json_encode(array('successMsg'=>$type));
+		}
+		
 	}else{
 		$real_integer = filter_var($QTY, FILTER_SANITIZE_NUMBER_INT);
 		//update ztb_answer

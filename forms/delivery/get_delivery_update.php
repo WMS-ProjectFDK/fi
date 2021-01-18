@@ -33,8 +33,15 @@ $sql .= "  ind.qty," ;
 $sql .= "  ind.container_no," ; #(add Ver1.0)
 $sql .= "  ind.seal_no," ;      #(add Ver1.0)
 $sql .= "  un.unit," ;
+
 $sql .= "  wh.this_inventory," ;
-$sql .= "  case when wh.this_inventory < ind.qty then 'BELUM BISA DI PROSES' else 'SUDAH BISA DIPROSES' END STS," ;
+$sql .= "  case when wh.this_inventory < ind.qty then 'BELUM BISA DI PROSES' else 'SUDAH BISA DIPROSES' END STS_INV," ;
+$sql .= "  case when wh.this_inventory < ind.qty then 0 else 1 END V_INV," ;
+
+$sql .= "  isnull(trn.kuraire_perWO,0) as kuraire_perWO," ;
+$sql .= "  case when isnull(trn.kuraire_perWO,0) < ind.qty then 'BELUM BISA DI PROSES' else 'SUDAH BISA DIPROSES' END STS_KUR," ;
+$sql .= "  case when isnull(trn.kuraire_perWO,0) < ind.qty then 0 else 1 END V_KUR," ;
+
 $sql .= "  soh.customer_code," ;
 $sql .= "  c.company customer " ;
 $sql .= "  from indication ind " ;
@@ -46,9 +53,13 @@ $sql .= "  left join     company  c on soh.customer_code = c.company_code " ;
 $sql .= "  left join     item     i on sod.item_no = i.item_no " ;
 $sql .= "  left join     unit     un on i.uom_q = un.unit_code " ;
 $sql .= "  left join     whinventory     wh on wh.item_no = i.item_no " ;
-$sql .= "  where ind.commit_date is null " ;
+$sql .= "  left join	   answer ans on ind.ANSWER_NO = ans.ANSWER_NO " ;
+$sql .= "  left join	   (select item_no, wo_no, isnull(sum(slip_quantity),0) as kuraire_perWO from [TRANSACTION] " ;
+$sql .= "  				    where SLIP_TYPE=80 " ;
+$sql .= "  				    group by item_no, wo_no) trn on ans.WORK_NO=trn.WO_NO and sod.item_no=trn.item_no " ;
+$sql .= "  where ind.commit_date is null and dos.do_no is not null " ;
 $sql .= "  and ind.ex_factory BETWEEN '$ex_factory' AND '$ex_factory_z' ";
-$sql .= "  order by c.company,dos.do_no,ind.answer_no" ; #(mod Ver1.0)
+$sql .= "  order by c.company,dos.do_no,ind.answer_no" ;
 //echo $sql;
 
 $data_cek = sqlsrv_query($connect, strtoupper($sql));
@@ -58,20 +69,37 @@ $rowno=0;
 
 while($row = sqlsrv_fetch_object($data_cek)){
 	array_push($items, $row);
-	$wh = $items[$rowno]->THIS_INVENTORY; 
-	$items[$rowno]->THIS_INVENTORY = number_format($wh);
 
 	$q = $items[$rowno]->QTY; 
 	$items[$rowno]->QTY = number_format($q);
 
+	$wh = $items[$rowno]->THIS_INVENTORY; 
+	$items[$rowno]->THIS_INVENTORY = number_format($wh);
+
+	$kr = $items[$rowno]->KURAIRE_PERWO; 
+	$items[$rowno]->KURAIRE_PERWO = number_format($kr);
+
 	$it = "'".$items[$rowno]->ANSWER_NO."'";
 	$items[$rowno]->INPUT = '<a href="javascript:void(0)" onclick="input_container('.$it.')">SET</a>';
-	$a = $items[$rowno]->STS;
-	if($a=='SUDAH BISA DIPROSES'){
-			$items[$rowno]->STS = '<span style="color:blue;font-size:11px;"><b>'.$a.'</b></span>';
+
+	$a = $items[$rowno]->STS_KUR;
+
+	$kur = $items[$rowno]->V_KUR;
+
+	if ($kur != '0'){
+		$items[$rowno]->INPUT = '<a href="javascript:void(0)" onclick="input_container('.$it.')">SET</a>';
+		$items[$rowno]->STS = '<span style="color:blue;font-size:11px;"><b>'.$a.'</b></span>';
 	}else{
-			$items[$rowno]->STS = '<span style="color:red;font-size:11px;"><b>'.$a.'</b></span>';
+		$items[$rowno]->INPUT = '';
+		$items[$rowno]->STS = '<span style="color:red;font-size:11px;"><b>'.$a.'</b></span>';
 	}
+
+
+	// if($a=='SUDAH BISA DIPROSES'){
+	// 		$items[$rowno]->STS = '<span style="color:blue;font-size:11px;"><b>'.$a.'</b></span>';
+	// }else{
+	// 		$items[$rowno]->STS = '<span style="color:red;font-size:11px;"><b>'.$a.'</b></span>';
+	// }
 	
 	$rowno++;
 }

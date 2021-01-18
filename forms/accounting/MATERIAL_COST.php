@@ -264,6 +264,6 @@ $objPHPExcel->setActiveSheetIndex(0);
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 header('Content-type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename="FG-IN-TRANSIT-'.$period.'.xlsx"');
+header('Content-Disposition: attachment; filename="MATERIAL-COST'.$period.'.xlsx"');
 $objWriter->save('php://output');
 ?>

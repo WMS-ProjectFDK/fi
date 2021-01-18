@@ -3,7 +3,7 @@
 	include("../../connect/conn.php");
 	header("Content-type: application/json");
 	
-	$sql = "select com.company_code supplier_code,coalesce(poh.di_output_type,0) di_output_type,poh.section_code,poh.fdk_person_code,com.attn,poh.cc,
+	$sql = "select top 1 com.company_code supplier_code,coalesce(poh.di_output_type,0) di_output_type,poh.section_code,poh.fdk_person_code,com.attn,poh.cc,
 	poh.po_no,cast(poh.po_date as varchar(10)) as po_date,com.curr_code,poh.req requestor,isnull(poh.ex_rate,1) ex_rate,
 	com.tterm,poh.pby,coalesce(com.pdays, poh.pdays) pdays,coalesce(com.pdesc, poh.pdesc) pdesc, poh.revise,poh.date_type,
 	poh.shipto_code,replace(poh.remark1,'char(13)','') remark1,replace(poh.marks1,'char(13)','') shipping_mark,replace(poh.reason1,'char(13)','') reason,

@@ -5,17 +5,14 @@
 	$rowno=0;
 	include("../../connect/conn.php");
 	
-	$sql = "select rowid ROW_ID, 'OLD' as sts, a.so_no, a.wo_no, c.description, a.item_no,
-	a.qty, a.pallet, a.carton, a.carton_non_full,
-	a.gw gross, 
-	a.nw net, 
-	msm,
-	a.answer_no, a.start_box, a.end_box
-	from ztb_shipping_ins a
-	inner join item c on a.item_no = c.item_no
-		where a.remarks='$ppbe'
-		order by line_no asc";
-
+	$sql = "select distinct '0' ROW_ID, 'OLD' as sts, a.so_no, a.wo_no, c.description, a.item_no,
+		a.qty, a.pallet, a.carton, a.carton_non_full, a.gw gross,  a.nw net,  msm,
+		a.answer_no, a.start_box, a.end_box
+		from ztb_shipping_ins a
+		inner join item c on a.item_no = c.item_no
+		where a.remarks='$ppbe' and start_box is not null and end_box is not null";
+		// order by line_no asc";
+	// echo $sql;
 	$data = sqlsrv_query($connect, strtoupper($sql));
 	while($row = sqlsrv_fetch_object($data)){
 		array_push($items, $row);

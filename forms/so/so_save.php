@@ -18,7 +18,7 @@ if (isset($_SESSION['id_wms'])){
 	$str = preg_replace('/\\\\\"/',"\"", $dt);
 	$queries = json_decode($str);
     $msg = '';
-    
+
     foreach($queries as $query){
         $so_sts = $query->so_sts;
         $so_cust = $query->so_cust;
@@ -45,6 +45,7 @@ if (isset($_SESSION['id_wms'])){
         $so_po_line_no = $query->so_po_line_no;
         $so_asin = $query->so_asin;
         $so_amz_po_no = $query->so_amz_po_no;
+        $so_amz_plt_m = $query->so_amz_po_no;
         $so_category_mark = $query->so_category_mark;
         $so_in_mps = $query->so_in_mps;
 
@@ -86,16 +87,35 @@ if (isset($_SESSION['id_wms'])){
             $pesan = sqlsrv_errors($data_ins1);
             $msg .= $pesan['message'];
         }else{
-            $exp_p_mark = explode('<br/>',$so_p_mark);
-            for ($p=0; $p<count($exp_p_mark) ; $p++) { 
-                $pmark_f .= $plt[$p].',';
-                $pmark_v .= "'".$exp_p_mark[$p]."',";
+
+            // PALLET MARK
+            $rep_p_mark = str_replace('<BR/>','<br/>',$so_p_mark);
+            $exp_p_mark = explode('<br/>',$rep_p_mark);
+            if(count($exp_p_mark) != 0){
+                for ($p=0; $p<count($exp_p_mark) ; $p++) { 
+                    $pmark_f .= $plt[$p].',';
+                    $pmark_v .= "'".$exp_p_mark[$p]."',";
+                }
+            }else{
+                for ($p=0; $p<10; $p++) { 
+                    $pmark_f .= $plt[$p].',';
+                    $pmark_v .= "NULL,";
+                }
             }
 
-            $exp_c_mark = explode('<br/>',$so_c_mark);
-            for ($q=0; $q<count($exp_p_mark) ; $q++) { 
-                $cmark_f .= $cs[$q].',';
-                $cmark_v .= "'".$exp_c_mark[$q]."',";
+            // CASE MARK
+            $rep_c_mark = str_replace('<BR/>','<br/>',$so_c_mark);
+            $exp_c_mark = explode('<br/>',$rep_c_mark);
+            if(count($exp_c_mark) != 0){
+                for ($q=0; $q<count($exp_c_mark) ; $q++) { 
+                    $cmark_f .= $cs[$q].',';
+                    $cmark_v .= "'".$exp_c_mark[$q]."',";
+                }
+            }else{
+                for ($q=0; $q10; $q++) { 
+                    $cmark_f .= $cs[$q].',';
+                    $cmark_v .= "NULL,";
+                }
             }
 
             #INSERT SO_DETAILS
@@ -121,30 +141,11 @@ if (isset($_SESSION['id_wms'])){
             $field_sod .= "aging_day,"              ; $value_sod .= "'$so_aging_day'," ;
             $field_sod .= $pmark_f                  ; $value_sod .= $pmark_v;
             $field_sod .= $cmark_f                  ; $value_sod .= $cmark_v;
-            // $field_sod .= "pallet_mark_1,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[0] . "'," ;
-            // $field_sod .= "pallet_mark_2,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[1] . "'," ;
-            // $field_sod .= "pallet_mark_3,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[2] . "'," ;
-            // $field_sod .= "pallet_mark_4,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[3] . "'," ;
-            // $field_sod .= "pallet_mark_5,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[4] . "'," ;
-            // $field_sod .= "pallet_mark_6,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[5] . "'," ;
-            // $field_sod .= "pallet_mark_7,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[6] . "'," ;
-            // $field_sod .= "pallet_mark_8,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[7] . "'," ;
-            // $field_sod .= "pallet_mark_9,"          ; $value_sod .= "'" . @PALLMARK_VAL_LIST[8] . "'," ;
-            // $field_sod .= "pallet_mark_10,"         ; $value_sod .= "'" . @PALLMARK_VAL_LIST[9] . "'," ;
-            // $field_sod .= "case_mark_1,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[0] . "'," ;
-            // $field_sod .= "case_mark_2,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[1] . "'," ;
-            // $field_sod .= "case_mark_3,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[2] . "'," ;
-            // $field_sod .= "case_mark_4,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[3] . "'," ;
-            // $field_sod .= "case_mark_5,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[4] . "'," ;
-            // $field_sod .= "case_mark_6,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[5] . "'," ;
-            // $field_sod .= "case_mark_7,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[6] . "'," ;
-            // $field_sod .= "case_mark_8,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[7] . "'," ;
-            // $field_sod .= "case_mark_9,"            ; $value_sod .= "'" . @CASEMARK_VAL_LIST[8] . "'," ;
-            // $field_sod .= "case_mark_10,"           ; $value_sod .= "'" . @CASEMARK_VAL_LIST[9] . "'," ;
             $field_sod .= "date_code,"              ; $value_sod .= "'$so_date_code'," ;
             $field_sod .= "in_mps,"                 ; $value_sod .= "'3'," ;//1=status sudah diupload, 3=belum masuk MPS
             $field_sod .= "asin,"                   ; $value_sod .= "'$so_asin'," ;
-            $field_sod .= "amazon_po_no"            ; $value_sod .= "'$so_amz_po_no'" ;
+            $field_sod .= "amazon_po_no,"           ; $value_sod .= "'$so_amz_po_no'," ;
+            $field_sod .= "amz_pallet_mark"         ; $value_sod .= "'$so_amz_plt_m'" ;
             chop($field_sod) ;                      chop($value_sod) ;
 
             $ins  = "insert into so_details ($field_sod) select $value_sod from item i 

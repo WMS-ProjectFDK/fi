@@ -53,12 +53,12 @@ if($si_sts == 'final_si'){
 
 	$qry = "select aa.do_no, CONVERT(varchar,etd, 103) as etd, CONVERT(varchar, eta, 103) as eta, 
 		port_loading, final_destination, dod2.description, --aa.panjang_pallet, aa.lebar_pallet,
-		sum(ceiling(carton)) as carton,
-		sum(ceiling(pallet)) as pallet,
-		sum(qty) as qty,
-		sum(round(gw,2)) as gw, uom_gw,
-		sum(round(nw,2)) as nw, uom_nw,
-		sum(msm) as msm from (
+		isnull(sum(ceiling(carton)),0) as carton,
+		isnull(sum(ceiling(pallet)),0) as pallet,
+		isnull(sum(qty),0) as qty,
+		isnull(sum(round(gw,2)),0) as gw, uom_gw,
+		isnull(sum(round(nw,2)),0) as nw, uom_nw,
+		isnull(sum(msm),0) as msm from (
 		select doh.do_no, doh.etd, doh.eta, doh.port_loading, doh.final_destination, dod.answer_no1, dod.item_no, dod.description, 
     	--zti.panjang_pallet, lebar_pallet, 
     	plh.qty, zsi.carton, zsi.pallet, 

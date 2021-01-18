@@ -15,7 +15,7 @@ foreach(range('A','F') as $columnID) {
 }
 
 include("../../connect/conn.php");
-$sql = "select item_no, format(getdate(),'MM') as period, format(getdate(),'yyyy') as year, 0 as qty, upload, sts_bundle, bundle_qty
+$sql = "select item_no, format(getdate(),'MM') as period, format(getdate(),'yyyy') as year, qty, upload, sts_bundle, bundle_qty
     from ztb_safety_stock 
     where year = 'MSTR'
     order by item_no asc";

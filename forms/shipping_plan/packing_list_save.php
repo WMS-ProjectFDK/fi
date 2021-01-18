@@ -24,6 +24,7 @@ if (isset($_SESSION['id_wms'])){
 		$pl_nw = $query->pl_nw;
 		$pl_msm = $query->pl_msm;
 		$pl_pallet = $query->pl_pallet;
+		$pl_answer = $query->pl_answer;
 
 		if ($pl_sts == 'NEW') {
 			$field  = "so_no,"       	 ; $value  = "so_no,"				;
@@ -39,13 +40,12 @@ if (isset($_SESSION['id_wms'])){
 			$field .= "carton,"          ; $value .= "$pl_carton,"         	;
 			$field .= "carton_non_full," ; $value .= "$pl_carton_non_full,"	;
 			$field .= "remarks,"         ; $value .= "remarks,"        		;
-			$field .= "answer_no,"       ; $value .= "answer_no,"      		;
 			$field .= "start_box,"       ; $value .= "$pl_start,"      		;
 			$field .= "end_box,"         ; $value .= "$pl_end,"        		;
 			$field .= "box_pcs"          ; $value .= "box_pcs"         		;
 			chop($field_dtl) ;             chop(d_dtl) ;
 
-			$ins = "insert into ztb_shipping_ins ($field) select $value from ztb_shipping_ins where rowid='$pl_rowid' ";
+			$ins = "insert into ztb_shipping_ins ($field) select $value from ztb_shipping_ins where answer_no='$pl_answer' ";
 			$data_ins = sqlsrv_query($connect, $ins);
 			if($data_ins === false ) {
 				if(($errors = sqlsrv_errors() ) != null) {  
@@ -54,8 +54,6 @@ if (isset($_SESSION['id_wms'])){
 					}  
 				}
 			}
-			// $pesan = oci_error($data_ins);
-			// $msg = $pesan['message'];
 
 			if($msg != ''){
 				$msg .= " New Packing list Process Error : $ins";
@@ -72,7 +70,7 @@ if (isset($_SESSION['id_wms'])){
 					carton_non_full=$pl_carton_non_full, 
 					start_box=$pl_start, 
 					end_box=$pl_end
-				where rowid = '$pl_rowid' ";
+				where answer_no='$pl_answer' ";
 			$data_upd = sqlsrv_query($connect, $upd);
 			if($data_upd === false ) {
 				if(($errors = sqlsrv_errors() ) != null) {  
@@ -81,8 +79,6 @@ if (isset($_SESSION['id_wms'])){
 					}  
 				}
 			}
-			// $pesan = oci_error($data_upd);
-			// $msg = $pesan['message'];
 
 			if($msg != ''){
 				$msg .= " update Packing list Process Error : $upd";

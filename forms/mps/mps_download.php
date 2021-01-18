@@ -9,7 +9,7 @@ $user_name = $_SESSION['id_wms'];
     <html>
     <head>
     <meta charset="UTF-8">
-    <title>MRP</title>
+    <title>MPS DOWNLOAD</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
 	<script language="javascript">
  		function confirmLogOut(){

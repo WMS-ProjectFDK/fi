@@ -56,6 +56,7 @@ if (isset($_SESSION['id_wms'])){
         update COMPANY set 
                upto_Date = getdate(),
                COMPANY = '$company_name',
+               COMPANY_TYPE = $company_type,
                ADDRESS1 = '$ADDRESS1',
                ADDRESS2 = '$ADDRESS2',
                ADDRESS3 = '$ADDRESS3',

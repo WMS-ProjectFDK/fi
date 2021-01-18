@@ -198,7 +198,6 @@ if ($varConn=='Y'){
 
 		<div id="dlg-buttons-add">
 			<input class="easyui-linkbutton c6" iconCls="icon-ok" type="submit" value="Save" onclick="savePo()" style="width:90px; height: 30px;">
-			<!-- <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="savePo()" style="width:90px">Save</a> -->
 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_add').dialog('close')" style="width:90px">Cancel</a>
 		</div>
 	  </form>
@@ -219,7 +218,7 @@ if ($varConn=='Y'){
 					$('#search_prf_edit').linkbutton('enable');
 					$.ajax({
 						type: 'GET',
-						url: '../json/json_company_details.php?id='+rec.company_code,
+						url: '../json/json_company_details_po.php?id='+rec.company_code,
 						data: { kode:'kode' },
 						success: function(data){
 							$('#country_add').textbox('setValue',data[0].COUNTRY_CODE+'-'+data[0].COUNTRY);
@@ -1781,7 +1780,7 @@ if ($varConn=='Y'){
 				var myJSON_e=JSON.stringify(dataRows_Edit);
 				var str_unescape_e=unescape(myJSON_e);
 
-				console.log(dataRows_Edit);
+				console.log('po_edit.php?data='+unescape(str_unescape_e));
 				$.post('po_edit.php',{
 					data: unescape(str_unescape_e)
 				}).done(function(res){

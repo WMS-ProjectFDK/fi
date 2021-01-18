@@ -53,7 +53,7 @@ $content = "
 										<td style='width:110px;height:55px;border:0px solid #ffffff;border-bottom:1px solid #000000;border-right:1px solid #000000;'>
 											SHIP FROM :<br/>
 											<p style='font-size: 8px;width: 95%;'>
-												PT. FDK INDONESIA<br/>KAWASAN INDUSTRI, BLOK MM-1, <br/>CIKARANG NDONESIA. 17520
+												PT. Rayovac Battery Indonesia<br/>KAWASAN INDUSTRI, BLOK MM-1, <br/>CIKARANG NDONESIA. 17520
 											</p>
 										</td>
 										<td style='width:110px;height:55px;border:0px solid #ffffff;border-bottom:1px solid #000000;'>

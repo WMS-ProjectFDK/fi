@@ -16,11 +16,11 @@
 		s.GOODS_NAME, a.VESSEL, CAST(a.ETD as varchar) as ETD_F, CAST(a.ETA as varchar) as ETA_F, f1.FORWARDER_CODE as FORWARDER_CODE, 
 		f2.FORWARDER_CODE as EMKL_CODE, c.METHOD_TYPE as SHIPPING_TYPE_CODE,
 		dbo.LIST_COLLECT(a.SI_NO, ', ') as PO_NO,
-		ISNULL(s.CONSIGNEE_NAME,'') + CHAR(10) + 
-		ISNULL(s.CONSIGNEE_ADDR1,'') + CHAR(10) + 
-		ISNULL(s.CONSIGNEE_ADDR2,'') + CHAR(10) + 
-		ISNULL(s.CONSIGNEE_ADDR3,'') + CHAR(10) + 
-		ISNULL(s.CONSIGNEE_ATTN,'') + CHAR(10) + 
+		ISNULL(s.CONSIGNEE_NAME,'') + '<br/>' + 
+		ISNULL(s.CONSIGNEE_ADDR1,'') + '<br/>' + 
+		ISNULL(s.CONSIGNEE_ADDR2,'') + '<br/>' + 
+		ISNULL(s.CONSIGNEE_ADDR3,'') + '<br/>' + 
+		ISNULL(s.CONSIGNEE_ATTN,'') + '<br/>' + 
 		ISNULL(s.CONSIGNEE_TEL,'') as CONSIGNEE_FULL,
 		s.PAYMENT_TYPE, s.PAYMENT_REMARK, CAST(a.stuffy_date as varchar) as EX_FACT_DATE, a_sub.rmk as REMARK, s.CREATE_DATE
 		FROM (select a.SI_NO, min(a.ANSWER_NO) as ANSWER_NO_MIN, sum(a.QTY) as QTY_SUM, b.rmk, a.crs_remark 
@@ -41,8 +41,13 @@
 	$arrNo = 0;
 	while ($row=sqlsrv_fetch_object($result)){
 		array_push($arrData, $row);
+
 		$po = $arrData[$arrNo]->PO_NO;
 		$arrData[$arrNo]->PO_NO = str_replace(",", "<br>", $po);
+		
+		$consg = $arrData[$arrNo]->CONSIGNEE_FULL;
+		$arrData[$arrNo]->CONSIGNEE_FULL = str_replace('<BR/>', '<br>', $consg);
+
 		$arrNo++;
 	}
 	echo json_encode($arrData);

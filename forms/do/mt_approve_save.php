@@ -54,6 +54,7 @@ if (isset($_SESSION['id_wms'])){
 					)";
 			$insert2 = sqlsrv_query($connect, $ins2);
 		}
+
 	}
 
 	if($msg == ''){

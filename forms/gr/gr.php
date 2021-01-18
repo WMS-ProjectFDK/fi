@@ -142,8 +142,8 @@ $dt_q = sqlsrv_fetch_object($data_q);
 	    		<a href="javascript:void(0)" style="width: 150px;" id="edit" class="easyui-linkbutton c2" onclick="edit_gr()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Goods Receive</a>
 	    		<a href="javascript:void(0)" style="width: 170px;" id="delete" class="easyui-linkbutton c2" onclick="delete_gr()"><i class="fa fa-trash" aria-hidden="true"></i> Remove Goods Receive</a>
 	    		<?php } ?>
-	    		<a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2" onclick="print_gr()"><i class="fa fa-print" aria-hidden="true"></i> Print Goods Receive</a>
-	    		<!-- <a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="upload_bc_show()"><i class="fa fa-upload" aria-hidden="true"></i> Upload Data BC</a>
+	    		<!-- <a href="javascript:void(0)" style="width: 150px;" id="print" class="easyui-linkbutton c2" onclick="print_gr()"><i class="fa fa-print" aria-hidden="true"></i> Print Goods Receive</a>
+	    		<a href="javascript:void(0)" style="width: 150px;" class="easyui-linkbutton c2" onclick="upload_bc_show()"><i class="fa fa-upload" aria-hidden="true"></i> Upload Data BC</a>
 				<a href="javascript:void(0)" style="width: 170px;" class="easyui-linkbutton c2" onclick="upload_bc_show_sp()"><i class="fa fa-upload" aria-hidden="true"></i> Upload Data BC Sparts</a> -->
 	    	</div></div>
 		</div>

@@ -67,7 +67,7 @@
 			where id.inv_no is null and soh.customer_code = '$cust' and ans.si_no='$si' --and sod.bal_qty > 0 
 		) main
 		left join mps_header mh on main.customer_po_no= mh.po_no and mh.po_line_no = CAST(main.customer_po_line_no as int)
-		order by main.ex_factory";
+		order by main.line_no, main.ex_factory";
 	$add = "'add'";
 	$data = sqlsrv_query($connect, strtoupper($rs));
     $items = array();	

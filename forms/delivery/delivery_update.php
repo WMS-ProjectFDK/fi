@@ -1,4 +1,4 @@
-<?php 
+		<?php 
 session_start();
 require_once('../___loginvalidation.php');
 $user_name = $_SESSION['id_wms'];
@@ -121,7 +121,7 @@ h2 {
 		</div>
 	</div>
 
-	<table id="dg" title="DELIVERY UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" fitColumns="true" style="width:100%;height:590px;"></table>
+	<table id="dg" title="DELIVERY UPDATE/RESTORE" toolbar="#toolbar" class="easyui-datagrid" rownumbers="true" style="width:100%;height:590px;"></table>
 
 	<script type="text/javascript">
 		var flagTipe = "";
@@ -165,19 +165,20 @@ h2 {
 			    columns:[[
 				    {field:'CK', checkbox:true, width:30, halign: 'center'},
                     {field:'DO_NO',title:'INV NO.',width:75, halign: 'center', align: 'center'},
-				    {field:'DO_DATE',title:'INV DATE',width:60, halign: 'center', align: 'center'},
+				    {field:'DO_DATE',title:'INV DATE',width:75, halign: 'center', align: 'center'},
 				    {field:'ANSWER_NO',title:'ANSWER NO.',width:75, halign: 'center', align: 'center', hidden: true},
-				    {field:'SO_NO',title:'SALES ORDER<br/>NO.',width:60, halign: 'center', align: 'center'},
-				    {field:'CUSTOMER_PO_NO',title:'PO NO',width:60, halign: 'center', align: 'center'},
-				    {field:'EX_FACTORY',title:'EX-FACTORY',width:60, halign: 'center', align: 'center'},
-				    {field:'ITEM_NO',title:'ITEM', width:40, halign: 'center'},
-                    {field:'DESCRIPTION',title:'DESCRIPTION', width:100, halign: 'center'},
-                    {field:'QTY',title:'QTY', width:70, halign: 'center',align: 'right'},
-                    {field:'CUSTOMER',title:'CUSTOMER', width:100, halign: 'center'},
-                    {field:'STS',title:'REMARK', width:130, halign: 'center'},
-                    {field:'THIS_INVENTORY',title:'WH QTY', width:70, halign: 'center', align: 'right'},
-                    {field:'INPUT',title:'INPUT', width:35, halign: 'center', align: 'center'},
-                    {field:'CONTAINER_NO',title:'CONTAINER', width:50, halign: 'center'},
+				    {field:'SO_NO',title:'SO NO.',width:75, halign: 'center', align: 'center'},
+				    {field:'CUSTOMER_PO_NO',title:'PO NO',width:100, halign: 'center'},
+				    {field:'EX_FACTORY',title:'EX-FACT<br/>DATE',width:75, halign: 'center', align: 'center'},
+				    {field:'ITEM_NO',title:'ITEM', width:50, halign: 'center'},
+                    {field:'DESCRIPTION',title:'DESCRIPTION', width:130, halign: 'center'},
+                    {field:'CUSTOMER',title:'CUSTOMER', width:130, halign: 'center'},
+                    {field:'QTY',title:'QTY<br/>ORDER', width:75, halign: 'center',align: 'right'},
+                    {field:'THIS_INVENTORY',title:'QTY WH<br/>TOTAL', width:75, halign: 'center', align: 'right'},
+                    {field:'KURAIRE_PERWO',title:'QTY KURAIRE<br/>PER WO', width:75, halign: 'center', align: 'right'},
+                    {field:'STS',title:'REMARK', width:170, halign: 'center'},
+                    {field:'INPUT',title:'INPUT', width:50, halign: 'center', align: 'center'},
+                    {field:'CONTAINER_NO',title:'CONT', width:50, halign: 'center'},
                     {field:'SEAL_NO',title:'SEAL', width:50, halign: 'center'}
 			    ]]
 				

@@ -7,10 +7,11 @@ $kode='O.PRF-'.date('y')."-";
 $arrData = array();
 $arrNo = 0;
 
-$sql = "select '$kode' + REPLACE(STR(max(substring(prf_no,10,5))+1,5),' ','0') as PRF_NO
-from prf_header where prf_no like '%$kode%'";
+$sql = "select '$kode' + ISNULL(REPLACE(STR(max(substring(prf_no,10,5))+1,5),' ','0'),'00001') as PRF_NO
+    from prf_header 
+    where SUBSTRING(PRF_NO,1,9) = '$kode' ";
 
-
+// echo $sql;
 
 $data = sqlsrv_query($connect, $sql);
 

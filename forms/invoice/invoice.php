@@ -269,13 +269,13 @@ if ($varConn=='Y'){
 			  	</div>
 			  	<div class="fitem">
 			  		<span style="width:100px;display:inline-block;">NOTIFY<br/>(CONSIGNEE)<br/><a href="javascript:void(0)" onclick="sett_notify('add')">SET</a></span>
-					<input style="width: 280px; height: 50px;" name="notify_add" id="notify_add"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,9999]'" disabled=""/>
+					<input style="width: 280px; height: 50px;" name="notify_add" id="notify_add"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,249]'" disabled=""/>
 			  	</div>
 			  </div>
 			  <div style="margin-left: 810px; width:450px; height: 130px;">
 			  	<div class="fitem">
 			  		<span style="width:100px;display:inline-block;">REMARKS<br/><!-- <a href="javascript:void(0)" onclick="sett_rmk('add')" disable="true" >SET</a> --></span>
-					<input style="width: 330px; height: 56px;" name="remark_add" id="remark_add"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,299]'" disabled=""/>
+					<input style="width: 330px; height: 56px;" name="remark_add" id="remark_add"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,999]'" disabled=""/>
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Transport</span>
@@ -374,7 +374,7 @@ if ($varConn=='Y'){
 				<a href="javascript:void(0)" id="remove_so_part" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_part_SO('add')" disabled="true">REMOVE ITEM</a>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
-                <a class="easyui-linkbutton c2" id="savebtn" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveDO('add')" style="width:140px" disabled="true"> SAVE </a>
+                <a class="easyui-linkbutton c2" type="submit" id="savebtn" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveDO('add')" style="width:140px" disabled="true"> SAVE </a>
                 <!-- <a class="easyui-linkbutton c2" id="packbtn" href="javascript:void(0)" onclick="openPacking()" style="width:140px" disabled="true"><i class="fa fa-cubes" aria-hidden="true"></i> PACKING </a> -->
                 <a class="easyui-linkbutton c2" id="clsbtn" href="javascript:void(0)" onclick="javascript:$('#win_add').window('close')" style="width:140px"><i class="fa fa-ban" aria-hidden="true"></i> Cancel </a>
             </div>
@@ -526,13 +526,13 @@ if ($varConn=='Y'){
 			  	</div>
 			  	<div class="fitem">
 			  		<span style="width:100px;display:inline-block;">NOTIFY<br/>(CONSIGNEE)<br/><a href="javascript:void(0)" onclick="sett_notify('add')">SET</a></span>
-					<input style="width: 280px; height: 50px;" name="notify_edit" id="notify_edit"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,9999]'"/>
+					<input style="width: 280px; height: 50px;" name="notify_edit" id="notify_edit"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,249]'"/>
 			  	</div>
 			  </div>
 			  <div style="margin-left: 810px; width:450px; height: 130px;">
 			  	<div class="fitem">
 			  		<span style="width:100px;display:inline-block;">REMARKS<br/><!-- <a href="javascript:void(0)" onclick="sett_rmk('add')" disable="true" >SET</a> --></span>
-					<input style="width: 330px; height: 56px;" name="remark_edit" id="remark_edit"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,299]'"/>
+					<input style="width: 330px; height: 56px;" name="remark_edit" id="remark_edit"  multiline="true" class="easyui-textbox" data-options="validType:'length[0,999]'"/>
 				</div>
 				<div class="fitem">
 					<span style="width:100px;display:inline-block;">Transport</span>
@@ -615,7 +615,7 @@ if ($varConn=='Y'){
 				<a href="javascript:void(0)" id="remove_so_part_edit" iconCls='icon-cancel' class="easyui-linkbutton" onclick="remove_part_SO('edit')">REMOVE ITEM</a>
 			</div>
 			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
-                <a class="easyui-linkbutton c2" id="savebtn" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveDO('edit')" style="width:140px" > SAVE </a>
+                <a class="easyui-linkbutton c2" type="submit" id="savebtn" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="saveDO('edit')" style="width:140px" > SAVE </a>
                 <!-- <a class="easyui-linkbutton c2" id="packbtn" href="javascript:void(0)" onclick="openPacking()" style="width:140px" disabled="true"><i class="fa fa-cubes" aria-hidden="true"></i> PACKING </a> -->
                 <a class="easyui-linkbutton c2" id="clsbtn" href="javascript:void(0)" onclick="javascript:$('#win_edit').window('close')" style="width:140px"><i class="fa fa-ban" aria-hidden="true"></i> Cancel </a>
             </div>
@@ -723,6 +723,18 @@ if ($varConn=='Y'){
 		</div>
 		<!-- END -->
 
+		<!-- PRINT SETT INVOICE -->
+		<div id="dlg_print_inv" class="easyui-dialog" style="width: 450px;height: 100px;border:4px;" closed="true" data-options="modal:true">
+			<div class="fitem">
+				<span style="width:120px;display:inline-block;">APPROVAL NAME</span>
+				<input style="width: 220px; height: 20px;" name="note_inv" id="note_inv" class="easyui-textbox" value="AGUSMAN SURYA" data-options="validType:'length[0,100]'"/>
+			</div>
+			<div class="fitem" align="center">
+				<a href="javascript:void(0)" style="width: 120px;" class="easyui-linkbutton c2" id="print_ppbe" onclick="print_invNya()"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+			</div>
+		</div>
+		<!-- END -->
+
 		<!-- CONTRACT SETT -->
 		<div id="dlg_contract" class="easyui-dialog" style="width: 750px;height: 150px;" closed="true" data-options="modal:true">
 			<table id="dg_contract" class="easyui-datagrid" style="width:100%;height:100%;border-radius: 10px;" rownumbers="true"></table>
@@ -776,7 +788,7 @@ if ($varConn=='Y'){
 			<table id="dg_shipping_mark" class="easyui-datagrid" style="width:99%;height:auto;border-radius: 10px;" rownumbers="true"></table>
 			<div data-options="region:'south',border:false" style="text-align:center;padding:10px 0 0;">
 				<input style="width: 430px; height: 56px;" name="shipping_mark_result" id="shipping_mark_result"  multiline="true" class="easyui-textbox" />
-				<div hidden="true"><input style="width: 200px;" name="kode_shipping_mark" id="kode_shipping_mark" class="easyui-textbox" disabled="true"/></div>
+				<div hidden="true"><input style="width: 200px;" name="kode_shipping_mark" id="kode_shipping_mark" class="easyui-textbox"/></div>
 				<div style="clear:both;padding:10px 0 0;"></div>
 				<a class="easyui-linkbutton c2" href="javascript:void(0)" onclick="save_sett_ship_mark()" style="width:100px">
 					<i class="fa fa-save" aria-hidden="true"></i> Save </a>
@@ -1136,57 +1148,60 @@ if ($varConn=='Y'){
 					var total = t.length;
 
 					if($('#customer_add').combobox('getValue')==''){
-						msg = $.messager.alert('Warning','Please select customer','warning');
+						msg = 'Please select customer';
 						hasil=1;
 					}else if($('#do_no_add').textbox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','Invoice No. Not Found','info');
+						msg = 'Invoice No. Not Found';
 						hasil=1;
 					}else if($('#do_date_add').datebox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','Invoice date Not Found','info');
+						msg = 'Invoice date Not Found';
 						hasil=1;
 					}else if($('#GST_add').textbox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','GST rate Not Found','info');
+						msg = 'GST rate Not Found';
 						hasil=1;
 					}else if($('#sino_add').combogrid('getValue')==''){
-						msg = $.messager.alert('INFORMATION','SI No. Not Found','info');
+						msg = 'SI No. Not Found';
 						hasil=1;
 					}else if ($('#trans_add').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Transport Not Found','info');
+						msg = 'Transport Not Found';
 						hasil=1;
-					}else if($('#remark_add').textbox('getValue').length >= 299){
-						msg = $.messager.alert('INFORMATION','Please enter a value remark between 0 and 299','info');
+					}else if($('#notify_add').textbox('getValue').length >= 249){
+						msg = 'Please enter a value notify between 0 and 249';
+						hasil=1;
+					}else if($('#remark_add').textbox('getValue').length >= 999){
+						msg = 'Please enter a value remark between 0 and 299';
 						hasil=1;
 					}
 					/*else if ($('#transport1_add').textbox('getValue') =='undefined-undefined-undefined' || $('#transport1_add').textbox('getValue') == '' || $('#transport1_add').textbox('getValue') == '--'){
-						msg = $.messager.alert('INFORMATION','Sett Container Not Found','info');
+						msg = 'Sett Container Not Found';
 						hasil=1;
 						$('#trans_add').combobox('setValue','');
 						$('#transport1_add').textbox('setValue','');
 						$('#transport2_add').textbox('setValue','');
 					}*/else if ($('#forwarder_add').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Forwarder Not Found','info');
+						msg = 'Forwarder Not Found';
 						hasil=1;
 					}else if ($('#truck_add').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Sett Truck Not Found','info');
+						msg = 'Sett EMKL Not Found';
 						hasil=1;
 					}else if($('#book_no_add').textbox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Booking No. Not Found','info');
+						msg = 'Booking No. Not Found';
 						hasil=1;
 					}else if($('#book_no_add').textbox('getValue').length >= 25){
-						msg = $.messager.alert('INFORMATION','Please enter a value remark between 0 and 25','info');
+						msg = 'Please enter a value remark between 0 and 25';
 						hasil=1;
 					}else if($('#ppbe_no').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','PPBE No. Not Found','info');
+						msg = 'PPBE No. Not Found';
 						hasil=1;
 					}
 
 					for(i2=0;i2<total;i2++){
 						$('#dg_add').datagrid('endEdit',i2);
 						if ($('#dg_add').datagrid('getData').rows[i2].U_PRICE == ''){
-							msg = $.messager.alert('INFORMATION','Price not Found','info');
+							msg = 'Price not Found';
 							hasil=1;		
 						}else if($('#dg_add').datagrid('getData').rows[i2].DATE_CODE == ''){
-							msg = $.messager.alert('INFORMATION','Date Code not found','info');
+							msg = 'Date Code not found';
 							hasil=1;
 						}
 					}
@@ -1195,61 +1210,64 @@ if ($varConn=='Y'){
 					var total = t.length;
 
 					if($('#customer_edit').combobox('getValue')==''){
-						msg = $.messager.alert('Warning','Please select customer','warning');
+						msg = 'Please select customer';
 						hasil=1;
 					}else if($('#do_no_edit').textbox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','Invoice No. Not Found','info');
+						msg = 'Invoice No. Not Found';
 						hasil=1;
 					}else if($('#do_date_edit').datebox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','Invoice date Not Found','info');
+						msg = 'Invoice date Not Found';
 						hasil=1;
 					}else if($('#GST_edit').textbox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','GST rate Not Found','info');
+						msg = 'GST rate Not Found';
 						hasil=1;
 					}else if($('#sino_edit').combobox('getValue')==''){
-						msg = $.messager.alert('INFORMATION','SI No. Not Found','info');
+						msg = 'SI No. Not Found';
 						hasil=1;
 					}else if ($('#trans_edit').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Transport Not Found','info');
+						msg = 'Transport Not Found';
 						hasil=1;
-					}else if($('#remark_edit').textbox('getValue').length >= 299){
-						msg = $.messager.alert('INFORMATION','Please enter a value remark between 0 and 299 char','info');
+					}else if($('#notify_edit').textbox('getValue').length >= 249){
+						msg = 'Please enter a value notify between 0 and 249';
+						hasil=1;
+					}else if($('#remark_edit').textbox('getValue').length >= 999){
+						msg = 'Please enter a value remark between 0 and 999 char';
 						hasil=1;
 					}/*else if ($('#transport1_edit').textbox('getValue') =='undefined-undefined-undefined' || $('#transport1_edit').textbox('getValue') == '' || $('#transport1_edit').textbox('getValue') == '--'){
-						msg = $.messager.alert('INFORMATION','Sett Container Not Found','info');
+						msg = 'Sett Container Not Found';
 						hasil=1;
 						$('#trans_edit').combobox('setValue','');
 						$('#transport1_edit').textbox('setValue','');
 						$('#transport2_edit').textbox('setValue','');
 					}*/else if ($('#forwarder_edit').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Forwarder Not Found','info');
+						msg = 'Forwarder Not Found';
 						hasil=1;
 					}else if ($('#truck_edit').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Sett Truck Not Found','info');
+						msg = 'Sett EMKL Not Found';
 						hasil=1;
 					}else if($('#book_no_edit').textbox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','Booking No. Not Found','info');
+						msg = 'Booking No. Not Found';
 						hasil=1;
 					}else if($('#book_no_edit').textbox('getValue').length >= 25){
-						msg = $.messager.alert('INFORMATION','Please enter a value remark between 0 and 25','info');
+						msg = 'Please enter a value remark between 0 and 25';
 						hasil=1;
 					}else if($('#ppbe_no_edit').combobox('getValue') == ''){
-						msg = $.messager.alert('INFORMATION','PPBE No. Not Found','info');
+						msg = 'PPBE No. Not Found';
 						hasil=1;
 					}
 
 					for(i2=0;i2<total;i2++){
 						$('#dg_edit').datagrid('endEdit',i2);
 						if ($('#dg_edit').datagrid('getData').rows[i2].U_PRICE == ''){
-							msg = $.messager.alert('INFORMATION','Price not Found','info');
+							msg = 'Price not Found';
 							hasil=1;		
 						}else if($('#dg_edit').datagrid('getData').rows[i2].DATE_CODE == ''){
-							msg = $.messager.alert('INFORMATION','Date Code not found','info');
+							msg = 'Date Code not found';
 							hasil=1;
 						}
 					}
 				}
-			return hasil;
+			return [hasil,msg];
 		}
 
 		function default_set(value){
@@ -1418,8 +1436,8 @@ if ($varConn=='Y'){
 
 			    	$('#vessel_add').textbox('setValue', r.VESSEL);
 			    	$('#etd_date_add').datebox('setValue', r.ETD_F);
-			    	$('#eta_date_add').datebox('setValue', r.ETA_F);
-			    	$('#notify_add').textbox('setValue', r.CONSIGNEE_FULL);
+					$('#eta_date_add').datebox('setValue', r.ETA_F);
+			    	$('#notify_add').textbox('setValue', r.CONSIGNEE_FULL.replace(/<br>/gi,"\n"));
 			    	$('#goods_names_add').textbox('setValue',r.GOODS_NAME);
 			    	$('#attn_add').textbox('setValue',r.PERSON_NAME);
 			    	$('#do_date_add').datebox('setValue', r.EX_FACT_DATE);
@@ -1488,10 +1506,6 @@ if ($varConn=='Y'){
 			var tot_amt_o = 0;		var tot_amt_l = 0;		var jmrow=1;
 			var t = $('#dg_add').datagrid('getRows');
 			var total = t.length;
-
-			//for(i=0;i<total;i++){
-			//	alert($('#dg_add').datagrid('getData').rows[i].REMARK_SHIPPING);
-			//}
 
 			for(i=0;i<total;i++){
 				var amt_o = 0;
@@ -1647,12 +1661,13 @@ if ($varConn=='Y'){
 		}
 
 		function saveDO(value){
+			var valid = validate(value);
 			if(value == 'add'){
-				if (validate('add') != 1){
+				if (valid[0] != 1){
 					$.messager.progress({
-		                title:'Please waiting',
-		                msg:'Loading data...'
-		            });
+						title:'Please waiting',
+						msg:'Loading data...'
+					});
 					$.ajax({
 						type: 'GET',
 						url: '../json/json_kode_do.php?do='+$('#do_no_add').textbox('getValue'),
@@ -1672,28 +1687,32 @@ if ($varConn=='Y'){
 							}
 						}
 					});
+				}else{
+					$.messager.alert('WARNING',valid[1],'warning');
 				}
 			}else if (value == 'edit'){
-				if (validate('edit') != 1){
-		            $.messager.progress({
-		                title:'Please waiting',
-		                msg:'Loading data...'
-		            });
+				if (valid[0] != 1){
+					$.messager.progress({
+						title:'Please waiting',
+						msg:'Loading data...'
+					});
 					$.post('invoice_destroy.php',{do_no: $('#do_no_edit').textbox('getValue')},function(result){
 						if (result.successMsg){
 							$.messager.progress('close');
-		                  	simpan_edit();
+							simpan_edit();
 							$('#win_edit').window('close');
 							$('#dg').datagrid('reload');
 							$.messager.alert('INFORMATION','Update Success','info');
-		                }else{
-		                	$.messager.progress('close');
-		                    $.messager.show({
-		                        title: 'Error',
-		                        msg: result.errorMsg
-		                    });
-		                }
+						}else{
+							$.messager.progress('close');
+							$.messager.show({
+								title: 'Error',
+								msg: result.errorMsg
+							});
+						}
 					},'json');
+				}else{
+					$.messager.alert('WARNING',valid[1],'warning');
 				}
 			}
 		}
@@ -2276,10 +2295,19 @@ if ($varConn=='Y'){
 					window.open('../images/CAUTION_MARK.pdf');
 				}else{
 					$('#dlg_print').dialog('close');
-					window.open('invoice_print.php?do='+no_do+'&state='+s_type);
+					$('#dlg_print_inv').dialog('open').dialog('setTitle','Print Properties');
+
+					// $('#dlg_print').dialog('close');
+					// window.open('invoice_print.php?do='+no_do+'&state='+s_type);
 				}
 
 			}
+		}
+
+		function print_invNya(){
+			var note_inv = $('#note_inv').textbox('getValue');
+			$('#dlg_print_inv').dialog('close');
+			window.open('invoice_print.php?do='+no_do+'&state='+s_type+'&note='+note_inv);
 		}
 
 		function print_ppbeNya(){
@@ -2595,7 +2623,7 @@ if ($varConn=='Y'){
 										U_PRICE: row.U_PRICE,
 										DATE_CODE: row.DATE_CODE,
 										ORIGIN_CODE: row.ORIGIN_CODE,
-										//REMARK_SHIPPING: row.REMARK_SHIPPING,
+										REMARK_SHIPPING: row.REMARK_SHIPPING,
 										SHIPPING_SET: '<a href="javascript:void(0)" onclick="sett_shipping_mark('+n+','+ans+','+idxfield+')">SET</a>'
 									}
 								});
@@ -2685,7 +2713,7 @@ if ($varConn=='Y'){
 										U_PRICE: row.U_PRICE,
 										DATE_CODE: row.DATE_CODE,
 										ORIGIN_CODE: row.ORIGIN_CODE,
-										//REMARK_SHIPPING: row.REMARK_SHIPPING,
+										// REMARK_SHIPPING: row.REMARK_SHIPPING,
 										SHIPPING_SET: '<a href="javascript:void(0)" onclick="sett_shipping_mark('+n+','+ans+','+idxfield+')">SET</a>'
 									}
 								});
@@ -2739,10 +2767,12 @@ if ($varConn=='Y'){
 			$('#dlg_shipping_mark').dialog('open').dialog('setTitle','SHIPPING MARK SETTING');
 			$('#kode_shipping_mark').textbox('setValue',a+'/'+b+'/'+c);
 			
-			var v = $('#dg_add').datagrid('getRows')[c].REMARK_SHIPPING;
-			var v2 = v.replace(/<br\s*\/?>/mg,"\n");
-			$('#shipping_mark_result').textbox('setValue',v2);
-			
+			if (a == 'add'){
+				var v = $('#dg_add').datagrid('getRows')[c].REMARK_SHIPPING;
+				console(v);
+				var v2 = v.replace(/<br\s*\/?>/mg,"\n");
+				$('#shipping_mark_result').textbox('setValue',v2);
+			}
 
 			$('#dg_shipping_mark').datagrid({
 				url: 'invoice_get_shipping_mark.php?answer='+b,
@@ -2762,8 +2792,6 @@ if ($varConn=='Y'){
 	            	$('#shipping_mark_result').textbox('setValue',arrS.join(""));
 				}
 		    });
-
-
 		}
 
 		function save_sett_ship_mark(){

@@ -2,7 +2,7 @@
 $id = strval($_REQUEST['id']);
 include("../../connect/conn.php");
 
-$sql = "delete from ztb_shipping_ins where rowid='$id'";
+$sql = "delete from ztb_shipping_ins where answer_no='$id'";
 $result = sqlsrv_query($connect, $sql);
 
 if ($result){
